@@ -1,4 +1,4 @@
-# Some things to do with this directory:
+# Hint: type 'make' to get the usage message.
 
 # Variables to be overridden from the command line:
 #
@@ -20,7 +20,7 @@ TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 HTACCESS_BACKUP := $(TIMESTAMP).htaccess.backup 
 HTACCESS_TGT := $(SERVER):$(SERVER_DIR).htaccess
 
-.PHONY: help deploy
+.PHONY: help deploy test
 .DEFAULT_GOAL: help
 
 help:
