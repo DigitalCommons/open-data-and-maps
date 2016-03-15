@@ -14,7 +14,8 @@ AddType application/rdf+xml .rdf
 
 # Rewrite engine setup
 RewriteEngine On
-RewriteBase /experimental
+#RewriteBase /experimental
+RewriteBase /
 
 # Rewrite rule to serve HTML content from the vocabulary URI if requested
 RewriteCond %{HTTP_ACCEPT} !application/rdf\+xml.*(text/html|application/xhtml\+xml)
