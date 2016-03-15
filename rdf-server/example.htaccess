@@ -1,0 +1,46 @@
+# This .htaccess file is based on https://www.w3.org/TR/swbp-vocab-pub/#recipe4
+
+# Turn off MultiViews
+Options -MultiViews
+
+# Directive to ensure *.rdf files served as appropriate content type,
+# if not present in main apache config
+AddType application/rdf+xml .rdf
+# It is configured to use HTTP 303 (See other) and content negotiation so that:
+#
+# Requested URI: http://whatever.org/experimental/id/bla 
+# If 'Accept' header indicates html, then serve http://whatever.org/experimental/doc/bla.html.
+# If 'Accept' header indicates rdf, then serve http://whatever.org/experimental/doc/bla.rdf.
+
+# Rewrite engine setup
+RewriteEngine On
+RewriteBase /experimental
+
+# Rewrite rule to serve HTML content from the vocabulary URI if requested
+RewriteCond %{HTTP_ACCEPT} !application/rdf\+xml.*(text/html|application/xhtml\+xml)
+RewriteCond %{HTTP_ACCEPT} text/html [OR]
+RewriteCond %{HTTP_ACCEPT} application/xhtml\+xml [OR]
+RewriteCond %{HTTP_USER_AGENT} ^Mozilla/.*
+RewriteRule ^id/(.+)$ doc/$1.html [R=303]
+
+# Rewrite rule to serve directed HTML content from class/prop URIs
+#RewriteCond %{HTTP_ACCEPT} !application/rdf\+xml.*(text/html|application/xhtml\+xml)
+#RewriteCond %{HTTP_ACCEPT} text/html [OR]
+#RewriteCond %{HTTP_ACCEPT} application/xhtml\+xml [OR]
+#RewriteCond %{HTTP_USER_AGENT} ^Mozilla/.*
+#RewriteRule ^example4/(.+) example4-content/2005-10-31.html#$1 [R=303,NE]
+
+# Rewrite rule to serve RDF/XML content if requested
+RewriteCond %{HTTP_ACCEPT} application/rdf\+xml
+RewriteRule ^id/(.+) doc/$1.rdf [R=303]
+
+# Choose the default response
+# ---------------------------
+
+# Rewrite rule to serve RDF/XML content by default
+RewriteRule ^id/(.+) doc/$1.rdf [R=303]
+
+# Rewrite rules to serve HTML content by default (disabled)
+# (To enable this option, uncomment the rewrite rules below,
+# and comment out the rewrite rule directly above)
+# RewriteRule ^id/(.+)$ doc/$1.html [R=303]

@@ -1,2 +1,5 @@
 # For Vim users:
 *.swp
+
+# rdf-server/Makefile creates local backups copies of the server's .htaccess file:
+rdf-server/*.backup
