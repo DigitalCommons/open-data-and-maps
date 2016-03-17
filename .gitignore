@@ -3,3 +3,6 @@
 
 # rdf-server/Makefile creates local backups copies of the server's .htaccess file:
 rdf-server/*.backup
+
+# data/co-ops-uk/2015-06/Makefile creates a directory for output:
+data/co-ops-uk/2015-06/generated-data

@@ -7,6 +7,9 @@
 SERVER ?= parecco
 SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
 DATA_SERVER_URL ?= http://data.solidarityeconomics.org
+URI_PATTERN ?= id/sse/co-ops-uk/
+
+URI_BASE := $(DATA_SERVER_URL)/$(URI_PATTERN)
 TEST_ID ?= id/sse/ise 
 
 # Programs used within this makefile:
@@ -18,6 +21,14 @@ RUBY := ruby
 # Source files:
 COOPS_UK_CSV := Cooperative_Economy_Open_Dataset_2015_06.csv
 
+# Programs/scripts:
+GEN_TRIPLES := generate-triples.rb
+
+# Directories
+TGT_DIR := generated-data/
+
+$(TGT_DIR):
+	mkdir -p $@
 
 # Misc:
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
@@ -31,5 +42,5 @@ help:
 	@echo "make generate-data"
 	@echo 
 
-generate-data:
-	echo foo
+generate-data: | $(TGT_DIR)
+	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(TGT_DIR) $(URI_BASE)
