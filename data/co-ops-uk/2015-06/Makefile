@@ -42,5 +42,5 @@ help:
 	@echo "make generate-data"
 	@echo 
 
-generate-data: | $(TGT_DIR)
+generate-data: $(GEN_TRIPLES) | $(TGT_DIR)
 	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(TGT_DIR) $(URI_BASE)

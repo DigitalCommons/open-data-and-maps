@@ -24,6 +24,11 @@ class Initiative
     prefixes = {vcard: RDF::Vocab::VCARD.to_uri.to_s, essglobal: essglobal.to_uri.to_s, gr: RDF::Vocab::GR.to_uri.to_s}
     RDF::RDFXML::Writer.open(filename, prefixes: prefixes) {|writer| writer << make_graph }
   end
+  def save_ttl(output_dir)
+    filename = "#{output_dir}#{@id}.ttl"
+    prefixes = {vcard: RDF::Vocab::VCARD.to_uri.to_s, essglobal: essglobal.to_uri.to_s, gr: RDF::Vocab::GR.to_uri.to_s}
+    RDF::Turtle::Writer.open(filename, prefixes: prefixes) {|writer| writer << make_graph }
+  end
   private
   def essglobal
     @@essglobal
@@ -37,6 +42,7 @@ class Initiative
     graph.insert([initiative , RDF.type, essglobal["SSEInitiative"]])
     graph.insert([initiative, RDF::Vocab::GR.name, @defn["name"]])
     graph.insert([initiative, essglobal.hasAddress, make_address(graph)])
+    graph.insert([initiative, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
   end
   def make_address(graph)
     addr = RDF::Node.new
@@ -56,5 +62,6 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
       "country-name" => row["UK Nation"]
     )
     initiative.save_rdf($output_dir)
+    initiative.save_ttl($output_dir)
   end
 end
