@@ -52,7 +52,7 @@ $(GEN_DATA_DIR):
 # Misc:
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 
-generate-data: $(GEN_TRIPLES) | $(GEN_DATA_DIR)
+generate-data: $(GEN_TRIPLES) $(COOPS_UK_CSV) | $(GEN_DATA_DIR)
 	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(GEN_DATA_DIR) $(URI_BASE)
 
 # To deploy the generated data on the server, we need to 
