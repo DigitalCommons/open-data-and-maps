@@ -24,8 +24,13 @@ DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 SERVER_CMD = ssh $(SERVER) $(1)
 
 # See https://github.com/p6data-coop/ise-linked-open-data/wiki/URIs for a discussion about "experimental"
-IDENTIFIER_PATH ?= experimental/co-ops-uk/
+#IDENTIFIER_PATH ?= experimental/co-ops-uk/
+IDENTIFIER_PATH ?= experimental/
+DATASET ?= co-ops-uk
+
+# Following data.gov.uk principles, URIs for real-world objects are under `id`, ...
 URI_PATTERN ?= id/$(IDENTIFIER_PATH)
+# ... and those for the documents about them are under `doc`:
 SERVER_DOC_DIR ?= doc/$(IDENTIFIER_PATH)
 
 URI_BASE := $(DATA_SERVER_URL)/$(URI_PATTERN)
@@ -45,15 +50,16 @@ GEN_TRIPLES := generate-triples.rb
 
 # Directories
 GEN_DATA_DIR := generated-data/
+DATA_DIR := $(GEN_DATA_DIR)/$(DATASET)
 
-$(GEN_DATA_DIR):
+$(DATA_DIR):
 	mkdir -p $@
 
 # Misc:
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 
-generate-data: $(GEN_TRIPLES) $(COOPS_UK_CSV) | $(GEN_DATA_DIR)
-	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(GEN_DATA_DIR) $(URI_BASE)
+generate-data: $(GEN_TRIPLES) $(COOPS_UK_CSV) | $(DATA_DIR)
+	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DATASET)
 
 # To deploy the generated data on the server, we need to 
 #  - make sure the target directory exists on the server

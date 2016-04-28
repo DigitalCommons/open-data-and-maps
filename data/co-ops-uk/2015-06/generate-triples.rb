@@ -2,7 +2,14 @@ require 'csv'
 require 'linkeddata'
 require 'rdf/vocab'
 
-$input_csv, $output_dir, $uri_base  = $ARGV
+$input_csv, $output_dir, $uri_base, $dataset  = $ARGV
+
+# Function for generating xml (used here for html).
+def xml(ele, attr = {})
+  "<#{ele}#{attr.keys.map{|k| " #{k}=\"#{attr[k]}\""}.join}>" + # Element opening tag with attributes.
+    (block_given? ? yield : "") +	# Element contents.
+    "</#{ele}>"	# Element closing tag.
+end
 
 def save_rdf(opts)
   filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.rdf"
@@ -11,6 +18,13 @@ end
 def save_ttl(opts)
   filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.ttl"
   RDF::Turtle::Writer.open(filename, prefixes: opts[:prefixes]) {|writer| writer << opts[:graph] }
+end
+def save_html(opts)
+  filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.html"
+  File.open(filename, "w") {|f|
+    f.puts "<!DOCTYPE html>"
+    f.puts opts[:html]
+  }
 end
 
 class Collection < Array	# of Initiatives
@@ -28,11 +42,45 @@ class Collection < Array	# of Initiatives
   def graph
     make_graph
   end
+  def html
+    xml(:html) {
+      xml(:head) +
+      xml(:body) {
+	xml(:h1) { "Co-ops UK - experimental dataset" } +
+	xml(:p) { "The URI for this list is: " + uri.to_s } +
+	xml(:table) {
+	  xml(:thead) {
+	    xml(:tr) {
+	      xml(:th) { "Co-op name" } + xml(:th) { "URI" }
+	    }
+	  } +
+	  xml(:tbody) {
+	    sort {|a, b| a.name <=> b.name}
+	    .map {|i|
+	      xml(:tr) {
+		xml(:td) { i.name } + xml(:td) { 
+		  xml(:a, :href => i.uri.to_s) { i.uri.to_s }
+		}
+	      }
+	    }.join
+	  }
+	}
+      }
+    }
+  end
+  def html_fragment
+    xml(:div) {
+      xml(:p) {
+	"The URI for the whole list is: " +
+	xml(:a, :href => uri.to_s) { uri.to_s }
+      }
+    }
+  end
   def prefixes
     {}
   end
   def basename
-    "collection"
+    $dataset
   end
   private
   def collection_class
@@ -44,11 +92,10 @@ class Collection < Array	# of Initiatives
   def uri
     RDF::URI("#{$uri_base}#{basename}")
   end
-
 end
 
 class Initiative
-  attr_reader :id
+  attr_reader :id, :name
   @@last_id = 0
   @@essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
   def initialize(opts)
@@ -60,6 +107,7 @@ class Initiative
       badopts = opts.keys
       raise ArgumentError, "Unrecognized: #{(opts.keys - dflts.keys).join(', ')}"
     end
+    @name = @defn["name"]
     @@last_id += 1
     @id = @@last_id
   end
@@ -70,10 +118,30 @@ class Initiative
     {vcard: RDF::Vocab::VCARD.to_uri.to_s, essglobal: essglobal.to_uri.to_s, gr: RDF::Vocab::GR.to_uri.to_s}
   end
   def basename	# for output files
-    id
+    "#{$dataset}/#{@id}"
   end
   def uri
-    RDF::URI("#{$uri_base}#{@id}")
+    RDF::URI("#{$uri_base}#{basename}")
+  end
+  def html(collection_fragment)
+    xml(:html) {
+      xml(:head) +
+      xml(:body) {
+	xml(:h1) { @defn["name"] } +
+	xml(:table) {
+	  xml(:tr) {
+	    xml(:td) { "URI" } + xml(:td) { uri.to_s }
+	  } +
+	  xml(:tr) {
+	    xml(:td) { "Postcode" } + xml(:td) { @defn["postal-code"] }
+	  } +
+	  xml(:tr) {
+	    xml(:td) { "Country" } + xml(:td) { @defn["country-name"] }
+	  }
+	} +
+	collection_fragment	# with link back to list of all.
+      }
+    }
   end
   private
   def essglobal
@@ -96,6 +164,19 @@ class Initiative
   end
 end
 
+class Vocab
+  @@vocabs = []
+  attr_reader :pref, :vocab
+  def initialize(vocab)
+    @vocab = vocab
+    @pref, @vocab = vocab[:pref], vocab[:vocab]
+    @@vocabs << self
+  end
+end
+vocabs = [ 
+  {pref: "essglobal", vocab: RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")}
+].map {|v| Vocab.new(v)}
+
 collection = Collection.new
 CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
   # There may be rows for previous years' accounts - we ignore these:
@@ -108,12 +189,12 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     graph = initiative.graph
     save_rdf(:basename => initiative.basename, :prefixes => initiative.prefixes, :graph => graph);
     save_ttl(:basename => initiative.basename, :prefixes => initiative.prefixes, :graph => graph);
-    #initiative.save_rdf($output_dir)
-    #initiative.save_ttl($output_dir)
+    save_html(:basename => initiative.basename, :html => initiative.html(collection.html_fragment));
     collection << initiative
+    break if initiative.id > 10
   end
 end
 graph = collection.graph
 save_rdf(:basename => collection.basename, :prefixes => collection.prefixes, :graph => graph);
 save_ttl(:basename => collection.basename, :prefixes => collection.prefixes, :graph => graph);
-#collection.save_rdf($output_dir)
+save_html(:basename => collection.basename, :html => collection.html);
