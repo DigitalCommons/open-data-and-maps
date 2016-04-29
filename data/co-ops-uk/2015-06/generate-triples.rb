@@ -164,6 +164,7 @@ class Initiative
   end
 end
 
+# TODO: make some use of the Vocab class!
 class Vocab
   @@vocabs = []
   attr_reader :pref, :vocab
@@ -172,10 +173,17 @@ class Vocab
     @pref, @vocab = vocab[:pref], vocab[:vocab]
     @@vocabs << self
   end
+  def self.prefixes(prefs)
+    Hash[ *@@vocabs.select{ |x| prefs.include?(x.pref)}.map {|x| [x.pref, x.vocab.to_uri.to_s]}.flatten]
+  end
 end
 vocabs = [ 
-  {pref: "essglobal", vocab: RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")}
+  {pref: :essglobal, vocab: RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")},
+  {pref: :vcard, vocab: RDF::Vocab::VCARD},
+  {pref: :gr, vocab: RDF::Vocab::GR}
 ].map {|v| Vocab.new(v)}
+
+puts Vocab.prefixes([:essglobal, :vcard])
 
 collection = Collection.new
 CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
@@ -191,7 +199,7 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     save_ttl(:basename => initiative.basename, :prefixes => initiative.prefixes, :graph => graph);
     save_html(:basename => initiative.basename, :html => initiative.html(collection.html_fragment));
     collection << initiative
-    break if initiative.id > 10
+    #break if initiative.id > 10
   end
 end
 graph = collection.graph
