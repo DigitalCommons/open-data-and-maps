@@ -1,8 +1,11 @@
+require 'cgi'
 require 'csv'
 require 'linkeddata'
 require 'rdf/vocab'
 
 $input_csv, $output_dir, $uri_base, $dataset  = $ARGV
+$essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
+$prefixes = {vcard: RDF::Vocab::VCARD.to_uri.to_s, essglobal: $essglobal.to_uri.to_s, gr: RDF::Vocab::GR.to_uri.to_s}
 
 # Function for generating xml (used here for html).
 def xml(ele, attr = {})
@@ -11,13 +14,26 @@ def xml(ele, attr = {})
     "</#{ele}>"	# Element closing tag.
 end
 
+def html_fragment_for_inserted_code(heading, filename)
+  xml(:div) {
+    xml(:h2) {
+      heading
+    } +
+    xml(:pre) {
+      CGI.escapeHTML(File.open(filename, "rb").read)
+    }
+  }
+end
+
 def save_rdf(opts)
   filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.rdf"
   RDF::RDFXML::Writer.open(filename, prefixes: opts[:prefixes]) {|writer| writer << opts[:graph] }
+  filename
 end
 def save_ttl(opts)
   filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.ttl"
   RDF::Turtle::Writer.open(filename, prefixes: opts[:prefixes]) {|writer| writer << opts[:graph] }
+  filename
 end
 def save_html(opts)
   filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.html"
@@ -25,6 +41,7 @@ def save_html(opts)
     f.puts "<!DOCTYPE html>"
     f.puts opts[:html]
   }
+  filename
 end
 
 class Collection < Array	# of Initiatives
@@ -33,9 +50,9 @@ class Collection < Array	# of Initiatives
     # TODO: should we be using parseType="Collection"?
     # https://www.w3.org/TR/rdf-syntax-grammar/#section-Syntax-parsetype-Collection
     # Not sure how to do that with RDF.rb.
-    graph.insert([uri, RDF.type, collection_class])
+    # graph.insert([uri, RDF.type, collection_class])
     each {|i|	# each initiative in the collection
-      graph.insert([uri, contains, i.uri])
+      graph.insert([i.uri, RDF.type, Initiative.type_uri])
     }
     return graph
   end
@@ -68,16 +85,13 @@ class Collection < Array	# of Initiatives
       }
     }
   end
-  def html_fragment
+  def html_fragment_for_link
     xml(:div) {
       xml(:p) {
 	"The URI for the whole list is: " +
 	xml(:a, :href => uri.to_s) { uri.to_s }
       }
     }
-  end
-  def prefixes
-    {}
   end
   def basename
     $dataset
@@ -97,7 +111,6 @@ end
 class Initiative
   attr_reader :id, :name
   @@last_id = 0
-  @@essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
   def initialize(opts)
     # All expected params mus be listed in dflts, to enable error checking for unrecognized params:
     dflts = {"name" => "", "postal-code" => "", "country-name" => ""}
@@ -114,16 +127,13 @@ class Initiative
   def graph
     make_graph
   end
-  def prefixes
-    {vcard: RDF::Vocab::VCARD.to_uri.to_s, essglobal: essglobal.to_uri.to_s, gr: RDF::Vocab::GR.to_uri.to_s}
-  end
   def basename	# for output files
     "#{$dataset}/#{@id}"
   end
   def uri
     RDF::URI("#{$uri_base}#{basename}")
   end
-  def html(collection_fragment)
+  def html(rdf_filename, ttl_filename, collection_fragment)
     xml(:html) {
       xml(:head) +
       xml(:body) {
@@ -139,19 +149,26 @@ class Initiative
 	    xml(:td) { "Country" } + xml(:td) { @defn["country-name"] }
 	  }
 	} +
-	collection_fragment	# with link back to list of all.
+	collection_fragment +	# with link back to list of all.
+	html_fragment_for_inserted_code("RDF document", rdf_filename) +
+	html_fragment_for_inserted_code("Turtle document", ttl_filename)
       }
     }
   end
+  def self.type_uri
+    $essglobal["SSEInitiative"]
+  end
   private
   def essglobal
-    @@essglobal
+    $essglobal
   end
   def make_graph
     graph = RDF::Graph.new
-    graph.insert([uri, RDF.type, essglobal["SSEInitiative"]])
+    graph.insert([uri, RDF.type, Initiative.type_uri])
     graph.insert([uri, RDF::Vocab::GR.name, @defn["name"]])
     graph.insert([uri, essglobal.hasAddress, make_address(graph)])
+    # legal-form/L2 is a co-operative.
+    # Is everything in the co-ops UK open dataset actually a co-operative?
     graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
     return graph
   end
@@ -195,14 +212,14 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
       "country-name" => row["UK Nation"]
     )
     graph = initiative.graph
-    save_rdf(:basename => initiative.basename, :prefixes => initiative.prefixes, :graph => graph);
-    save_ttl(:basename => initiative.basename, :prefixes => initiative.prefixes, :graph => graph);
-    save_html(:basename => initiative.basename, :html => initiative.html(collection.html_fragment));
+    rdf_filename = save_rdf(:basename => initiative.basename, :prefixes => $prefixes, :graph => graph);
+    ttl_filename = save_ttl(:basename => initiative.basename, :prefixes => $prefixes, :graph => graph);
+    html_filename = save_html(:basename => initiative.basename, :html => initiative.html(rdf_filename, ttl_filename, collection.html_fragment_for_link));
     collection << initiative
-    #break if initiative.id > 10
+    break if initiative.id > 10
   end
 end
 graph = collection.graph
-save_rdf(:basename => collection.basename, :prefixes => collection.prefixes, :graph => graph);
-save_ttl(:basename => collection.basename, :prefixes => collection.prefixes, :graph => graph);
-save_html(:basename => collection.basename, :html => collection.html);
+rdf_filename = save_rdf(:basename => collection.basename, :prefixes => $prefixes, :graph => graph);
+ttl_filename = save_ttl(:basename => collection.basename, :prefixes => $prefixes, :graph => graph);
+html_filename = save_html(:basename => collection.basename, :html => collection.html);
