@@ -48,10 +48,6 @@ end
 class Collection < Array	# of Initiatives
   def make_graph
     graph = RDF::Graph.new
-    # TODO: should we be using parseType="Collection"?
-    # https://www.w3.org/TR/rdf-syntax-grammar/#section-Syntax-parsetype-Collection
-    # Not sure how to do that with RDF.rb.
-    # graph.insert([uri, RDF.type, collection_class])
     each {|i|	# each initiative in the collection
       graph.insert([i.uri, RDF.type, Initiative.type_uri])
     }
@@ -62,7 +58,8 @@ class Collection < Array	# of Initiatives
       xml(:head) +
       xml(:body) {
 	xml(:h1) { "Co-ops UK - experimental dataset" } +
-	xml(:p) { "The URI for this list is: " + uri.to_s } +
+	xml(:p) { "The URI for this list is: " + xml(:a, href: uri.to_s) {uri.to_s} } +
+	xml(:p) { "See: " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + "." } +
 	xml(:table) {
 	  xml(:thead) {
 	    xml(:tr) {
@@ -83,7 +80,33 @@ class Collection < Array	# of Initiatives
       }
     }
   end
-  def basename
+  def about_html
+    xml(:html) {
+      xml(:head) +
+      xml(:body) {
+	xml(:h1) { "About this dataset"} +
+	xml(:p) { "Base URI: " + xml(:a, href: uri.to_s) {uri.to_s} } +
+	xml(:p) { 
+	  "This is an experimental dataset, generated as part of the p6data project, which can be found " + 
+	  xml(:a, href: "https://github.com/p6data-coop") { "on GitHub" } +
+	  ". Its experimental nature means that"
+	} +
+	xml(:ul) {
+	  xml(:li) { "No test has been used to check if the items in this dataset are part of the solidarity economy." } +
+	  xml(:li) { "There's no guarantee that the URIs will be persistent. In fact it is most unlikely that they will be so." } +
+	  xml(:li) { "The triples included in the linked data have been chosen for the purpose of testing." }
+	}
+      }
+    }
+  end
+  def self.about_basename
+    "#{basename}/about"
+  end
+  def self.about_uri
+    RDF::URI("#{$uri_base}#{about_basename}")
+  end
+
+  def self.basename
     $dataset
   end
   def duplicate_ids
@@ -104,25 +127,20 @@ class Collection < Array	# of Initiatives
       n += 1
       $stdout.write "\r#{n} (#{100*n/todo}%)"
       graph = i.make_graph
-      rdf_filename = save_rdf(:basename => i.basename, :prefixes => $prefixes, :graph => graph);
-      ttl_filename = save_ttl(:basename => i.basename, :prefixes => $prefixes, :graph => graph);
-      html_filename = save_html(:basename => i.basename, :html => i.html(rdf_filename, ttl_filename, html_fragment_for_link));
+      rdf_filename = save_rdf(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
+      ttl_filename = save_ttl(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
+      html_filename = save_html(:basename => i.basename, :html => i.html(rdf_filename, ttl_filename, html_fragment_for_link))
     }
     puts "\nCreating RDF, Turtle and HTML files for the collection of initiatives..."
     graph = make_graph
-    rdf_filename = save_rdf(:basename => basename, :prefixes => $prefixes, :graph => graph);
-    ttl_filename = save_ttl(:basename => basename, :prefixes => $prefixes, :graph => graph);
-    html_filename = save_html(:basename => basename, :html => html);
+    rdf_filename = save_rdf(:basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
+    ttl_filename = save_ttl(:basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
+    html_filename = save_html(:basename => Collection.basename, :html => html)
+    html_filename = save_html(:basename => Collection.about_basename, :html => about_html)
   end
   private
-  def collection_class
-    RDF::URI("#{$uri_base}SSECollection")
-  end
-  def contains
-    RDF::URI("#{$uri_base}contains")
-  end
   def uri
-    RDF::URI("#{$uri_base}#{basename}")
+    RDF::URI("#{$uri_base}#{Collection.basename}")
   end
   def html_fragment_for_link
     xml(:div) {
@@ -162,6 +180,7 @@ class Initiative
       xml(:head) +
       xml(:body) {
 	xml(:h1) { @defn["name"] } +
+	xml(:p) { "This dataset is experimental. See: " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
 	xml(:table) {
 	  xml(:tr) {
 	    xml(:td) { "URI" } + xml(:td) { uri.to_s }
@@ -245,9 +264,8 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
       $stderr.puts "WARNING! " + row.to_s
     end
 
-    #if collection.size > 10
-      #break;
-    #end
+    # For rapidly testing on subset:
+    #break if collection.size > 10
   end
 end
 collection.create_files
