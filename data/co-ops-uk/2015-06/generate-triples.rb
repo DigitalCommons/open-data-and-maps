@@ -147,9 +147,9 @@ class Initiative
     end
     @name = @defn["name"]
     @id = @defn["id"]
-  end
-  def self.ids
-    @@ids
+    if @id.empty?
+      raise "ERROR!   Id is empty. " + @defn.to_s
+    end
   end
   def basename	# for output files
     "#{$dataset}/#{@id}"
@@ -231,6 +231,7 @@ puts "Reading #{$input_csv}..."
 CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
   # There may be rows for previous years' accounts - we ignore these:
   if row["Is Most Recent"] == "1"
+    begin
     initiative = Initiative.new(
       "name" => row["Organisation Name"],
       "postal-code" => row["Registered Postcode"],
@@ -238,8 +239,13 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
       "id" => row["Co-ops UK Identifier"]
     )
     collection << initiative
-    #if initiative.id > 10
-      #collection << initiative	# Generate duplicate for testing!
+    rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
+      $stderr.puts "WARNING! Could not create Initiative from CSV: e.message"
+      $stderr.puts "WARNING! CSV data:"
+      $stderr.puts "WARNING! " + row.to_s
+    end
+
+    #if collection.size > 10
       #break;
     #end
   end
