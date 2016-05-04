@@ -1,3 +1,4 @@
+require 'pp'
 require 'cgi'
 require 'csv'
 require 'linkeddata'
@@ -56,9 +57,6 @@ class Collection < Array	# of Initiatives
     }
     return graph
   end
-  def graph
-    make_graph
-  end
   def html
     xml(:html) {
       xml(:head) +
@@ -85,16 +83,36 @@ class Collection < Array	# of Initiatives
       }
     }
   end
-  def html_fragment_for_link
-    xml(:div) {
-      xml(:p) {
-	"The URI for the whole list is: " +
-	xml(:a, :href => uri.to_s) { uri.to_s }
-      }
-    }
-  end
   def basename
     $dataset
+  end
+  def duplicate_ids
+    ids = map{|i| i.id}
+    ids.select{ |e| ids.count(e) > 1 }.uniq
+  end
+  def create_files
+    dup_ids = duplicate_ids
+    if dup_ids.size > 0
+      $stderr.puts("WARNING! The dataset has the following duplicate ids:\nWARNING! " + dup_ids.join(", ") + "\nWARNING! Duplicates are being removed from the dataset. This may not be what you want!")
+    end
+    #remove elements with duplicate ids
+    uniq!{|e| e.id}
+    todo = size
+    n = 0
+    puts "Creating RDF, Turtle and HTML files for each initiative..."
+    each {|i|
+      n += 1
+      $stdout.write "\r#{n} (#{100*n/todo}%)"
+      graph = i.make_graph
+      rdf_filename = save_rdf(:basename => i.basename, :prefixes => $prefixes, :graph => graph);
+      ttl_filename = save_ttl(:basename => i.basename, :prefixes => $prefixes, :graph => graph);
+      html_filename = save_html(:basename => i.basename, :html => i.html(rdf_filename, ttl_filename, html_fragment_for_link));
+    }
+    puts "\nCreating RDF, Turtle and HTML files for the collection of initiatives..."
+    graph = make_graph
+    rdf_filename = save_rdf(:basename => basename, :prefixes => $prefixes, :graph => graph);
+    ttl_filename = save_ttl(:basename => basename, :prefixes => $prefixes, :graph => graph);
+    html_filename = save_html(:basename => basename, :html => html);
   end
   private
   def collection_class
@@ -106,26 +124,32 @@ class Collection < Array	# of Initiatives
   def uri
     RDF::URI("#{$uri_base}#{basename}")
   end
+  def html_fragment_for_link
+    xml(:div) {
+      xml(:p) {
+	"The URI for the whole list is: " +
+	xml(:a, :href => uri.to_s) { uri.to_s }
+      }
+    }
+  end
 end
 
 class Initiative
   attr_reader :id, :name
-  @@last_id = 0
   def initialize(opts)
-    # All expected params mus be listed in dflts, to enable error checking for unrecognized params:
-    dflts = {"name" => "", "postal-code" => "", "country-name" => ""}
+    # All expected params must be listed in dflts, to enable error checking for unrecognized params:
+    dflts = {"id" => "", "name" => "", "postal-code" => "", "country-name" => ""}
     @defn = dflts.merge(opts)
     @defn.each {|k, v| @defn[k] = dflts[k] if @defn[k].nil? }
-    unless @defn.size == dflts.size	# i.e. nothing in opts not mentioned in dflts
+    unless @defn.size == dflts.size	# i.e. unless nothing in opts not mentioned in dflts
       badopts = opts.keys
       raise ArgumentError, "Unrecognized: #{(opts.keys - dflts.keys).join(', ')}"
     end
     @name = @defn["name"]
-    @@last_id += 1
-    @id = @@last_id
+    @id = @defn["id"]
   end
-  def graph
-    make_graph
+  def self.ids
+    @@ids
   end
   def basename	# for output files
     "#{$dataset}/#{@id}"
@@ -158,10 +182,6 @@ class Initiative
   def self.type_uri
     $essglobal["SSEInitiative"]
   end
-  private
-  def essglobal
-    $essglobal
-  end
   def make_graph
     graph = RDF::Graph.new
     graph.insert([uri, RDF.type, Initiative.type_uri])
@@ -171,6 +191,10 @@ class Initiative
     # Is everything in the co-ops UK open dataset actually a co-operative?
     graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
     return graph
+  end
+  private
+  def essglobal
+    $essglobal
   end
   def make_address(graph)
     addr = RDF::Node.new
@@ -200,26 +224,24 @@ vocabs = [
   {pref: :gr, vocab: RDF::Vocab::GR}
 ].map {|v| Vocab.new(v)}
 
-puts Vocab.prefixes([:essglobal, :vcard])
+#puts Vocab.prefixes([:essglobal, :vcard])
 
 collection = Collection.new
+puts "Reading #{$input_csv}..."
 CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
   # There may be rows for previous years' accounts - we ignore these:
   if row["Is Most Recent"] == "1"
     initiative = Initiative.new(
       "name" => row["Organisation Name"],
       "postal-code" => row["Registered Postcode"],
-      "country-name" => row["UK Nation"]
+      "country-name" => row["UK Nation"],
+      "id" => row["Co-ops UK Identifier"]
     )
-    graph = initiative.graph
-    rdf_filename = save_rdf(:basename => initiative.basename, :prefixes => $prefixes, :graph => graph);
-    ttl_filename = save_ttl(:basename => initiative.basename, :prefixes => $prefixes, :graph => graph);
-    html_filename = save_html(:basename => initiative.basename, :html => initiative.html(rdf_filename, ttl_filename, collection.html_fragment_for_link));
     collection << initiative
-    break if initiative.id > 10
+    #if initiative.id > 10
+      #collection << initiative	# Generate duplicate for testing!
+      #break;
+    #end
   end
 end
-graph = collection.graph
-rdf_filename = save_rdf(:basename => collection.basename, :prefixes => $prefixes, :graph => graph);
-ttl_filename = save_ttl(:basename => collection.basename, :prefixes => $prefixes, :graph => graph);
-html_filename = save_html(:basename => collection.basename, :html => collection.html);
+collection.create_files
