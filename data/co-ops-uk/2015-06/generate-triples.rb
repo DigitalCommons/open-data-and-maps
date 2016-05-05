@@ -6,7 +6,15 @@ require 'rdf/vocab'
 
 $input_csv, $output_dir, $uri_base, $dataset  = $ARGV
 $essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
-$prefixes = {vcard: RDF::Vocab::VCARD.to_uri.to_s, essglobal: $essglobal.to_uri.to_s, gr: RDF::Vocab::GR.to_uri.to_s}
+$solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
+$ospostcode = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
+$prefixes = {
+  vcard: RDF::Vocab::VCARD.to_uri.to_s,
+  essglobal: $essglobal.to_uri.to_s,
+  solecon: $solecon.to_uri.to_s,
+  gr: RDF::Vocab::GR.to_uri.to_s,
+  ospostcode: $ospostcode.to_uri.to_s
+}
 
 # Function for generating xml (used here for html).
 def xml(ele, attr = {})
@@ -190,6 +198,15 @@ class Initiative
 	  } +
 	  xml(:tr) {
 	    xml(:td) { "Country" } + xml(:td) { @defn["country-name"] }
+	  } +
+	  xml(:tr) {
+	    xml(:td) { "postcode URI" } + xml(:td) { 
+	      begin
+		xml(:a, href: ospostcode_uri.to_uri.to_s) { ospostcode_uri.to_uri.to_s }
+	      rescue
+		"none available"
+	      end
+	    }
 	  }
 	} +
 	collection_fragment +	# with link back to list of all.
@@ -201,6 +218,13 @@ class Initiative
   def self.type_uri
     $essglobal["SSEInitiative"]
   end
+  def ospostcode_uri
+    # Return an ordnance survey postcode URI
+    # TODO - raise an exception if there's not postcode URI for this postcode (e.g. Northern Irish ones??)
+    postcode = @defn["postal-code"].gsub(/\s+/, "")
+    raise "Empty postcode" if postcode.empty?
+    $ospostcode[postcode]
+  end
   def make_graph
     graph = RDF::Graph.new
     graph.insert([uri, RDF.type, Initiative.type_uri])
@@ -209,6 +233,19 @@ class Initiative
     # legal-form/L2 is a co-operative.
     # Is everything in the co-ops UK open dataset actually a co-operative?
     graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
+
+    begin
+      postcode_uri = ospostcode_uri
+      geolocation = RDF::Node.new	# Blank node, as we have no lat/long information.
+      # The use of the solecon vocabulary is a temporary measure, until we figure out how to do this properly!
+      # It may be that we should be looking at something along the lines of the examples (section 1.5)
+      # presented at https://www.w3.org/2011/02/GeoSPARQL.pdf.
+      graph.insert([geolocation, RDF.type, $solecon.GeoLocation])
+      graph.insert([uri, $solecon.hasGeoLocation, geolocation])
+      graph.insert([geolocation, $solecon.within, ospostcode_uri])
+    rescue StandardError => e
+      $stderr.puts e.message
+    end
     return graph
   end
   private
@@ -244,6 +281,11 @@ vocabs = [
 ].map {|v| Vocab.new(v)}
 
 #puts Vocab.prefixes([:essglobal, :vcard])
+#
+# The design of this module "hopes" that everything above this line is about the generation
+# of RDF, Turtle and HTML that is independent of the input dataset.
+# So, when the dataset format changes next year, the changes will hopefully be restricted
+# to what is below this line. New argument to the script may also be needed.
 
 collection = Collection.new
 puts "Reading #{$input_csv}..."
@@ -259,7 +301,7 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     )
     collection << initiative
     rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
-      $stderr.puts "WARNING! Could not create Initiative from CSV: e.message"
+      $stderr.puts "WARNING! Could not create Initiative from CSV: #{e.message}"
       $stderr.puts "WARNING! CSV data:"
       $stderr.puts "WARNING! " + row.to_s
     end
