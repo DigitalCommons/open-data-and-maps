@@ -50,16 +50,25 @@ GEN_TRIPLES := generate-triples.rb
 
 # Directories
 GEN_DATA_DIR := generated-data/
-DATA_DIR := $(GEN_DATA_DIR)/$(DATASET)
+DATA_DIR := $(GEN_DATA_DIR)$(DATASET)
+CSS_SRC_DIR := css/
+CSS_GEN_DIR := $(GEN_DATA_DIR)$(DATASET)/css/
+CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 
 $(DATA_DIR):
 	mkdir -p $@
 
+# Any css file in the source CSS dir will be copied to the corresponding geenrated_data dir.
+# The list of CSS_FILES will be passed to the GEN_TRIPLES ruby script for linking in HTML.
+$(CSS_GEN_DIR):
+	mkdir -p $@
+	cp -r $(CSS_SRC_DIR) $(CSS_GEN_DIR)
+
 # Misc:
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 
-generate-data: $(GEN_TRIPLES) $(COOPS_UK_CSV) | $(DATA_DIR)
-	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DATASET)
+generate-data: $(GEN_TRIPLES) $(COOPS_UK_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
+	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DATASET) '$(CSS_FILES)'
 
 # To deploy the generated data on the server, we need to 
 #  - make sure the target directory exists on the server

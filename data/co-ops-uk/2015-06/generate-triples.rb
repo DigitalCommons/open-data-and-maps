@@ -4,7 +4,8 @@ require 'csv'
 require 'linkeddata'
 require 'rdf/vocab'
 
-$input_csv, $output_dir, $uri_base, $dataset  = $ARGV
+$input_csv, $output_dir, $uri_base, $dataset, $css_files  = $ARGV
+$css_files_array = $css_files.split.map{|f| $dataset + "/" + f}
 $essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
 $solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
 $ospostcode = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
@@ -52,6 +53,10 @@ def save_html(opts)
   }
   filename
 end
+def warning(msgs)
+  msgs = msgs.kind_of?(Array) ? msgs : [msgs]
+  $stderr.puts msgs.map{|m| "\nWARNING! #{m}"}.join 
+end
 
 class Collection < Array	# of Initiatives
   def make_graph
@@ -63,7 +68,12 @@ class Collection < Array	# of Initiatives
   end
   def html
     xml(:html) {
-      xml(:head) +
+      xml(:head) {
+	xml(:title) { "Co-ops UK experimental dataset" } +
+	$css_files_array.map {|f|
+	  xml(:link, rel: "stylesheet", type: "text/css", href: f)
+	}.join
+      } +
       xml(:body) {
 	xml(:h1) { "Co-ops UK - experimental dataset" } +
 	xml(:p) { "The URI for this list is: " + xml(:a, href: uri.to_s) {uri.to_s} } +
@@ -90,7 +100,12 @@ class Collection < Array	# of Initiatives
   end
   def about_html
     xml(:html) {
-      xml(:head) +
+      xml(:head) {
+	xml(:title) { "Co-ops UK experimental dataset" } +
+	$css_files_array.map {|f|
+	  xml(:link, rel: "stylesheet", type: "text/css", href: "../#{f}")
+	}.join
+      } +
       xml(:body) {
 	xml(:h1) { "About this dataset"} +
 	xml(:p) { "Base URI: " + xml(:a, href: uri.to_s) {uri.to_s} } +
@@ -124,7 +139,8 @@ class Collection < Array	# of Initiatives
   def create_files
     dup_ids = duplicate_ids
     if dup_ids.size > 0
-      $stderr.puts("WARNING! The dataset has the following duplicate ids:\nWARNING! " + dup_ids.join(", ") + "\nWARNING! Duplicates are being removed from the dataset. This may not be what you want!")
+      #$stderr.puts("WARNING! The dataset has the following duplicate ids:\nWARNING! " + dup_ids.join(", ") + "\nWARNING! Duplicates are being removed from the dataset. This may not be what you want!")
+      warning(["The dataset has the following duplicate ids:", dup_ids.join(", "), "Duplicates are being removed from the dataset. This may not be what you want!"])
     end
     #remove elements with duplicate ids
     uniq!{|e| e.id}
@@ -185,33 +201,45 @@ class Initiative
   end
   def html(rdf_filename, ttl_filename, collection_fragment)
     xml(:html) {
-      xml(:head) +
+      xml(:head) {
+	xml(:title) { "Co-ops UK experimental dataset" } +
+	$css_files_array.map {|f|
+	  xml(:link, rel: "stylesheet", type: "text/css", href: "../#{f}")
+	}.join
+      } +
       xml(:body) {
 	xml(:h1) { @defn["name"] } +
-	xml(:p) { "This dataset is experimental. See: " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
-	xml(:table) {
-	  xml(:tr) {
-	    xml(:td) { "URI" } + xml(:td) { uri.to_s }
-	  } +
-	  xml(:tr) {
-	    xml(:td) { "Postcode" } + xml(:td) { @defn["postal-code"] }
-	  } +
-	  xml(:tr) {
-	    xml(:td) { "Country" } + xml(:td) { @defn["country-name"] }
-	  } +
-	  xml(:tr) {
-	    xml(:td) { "postcode URI" } + xml(:td) { 
-	      begin
-		xml(:a, href: ospostcode_uri.to_uri.to_s) { ospostcode_uri.to_uri.to_s }
-	      rescue
-		"none available"
-	      end
-	    }
-	  }
-	} +
+	xml(:p) { "This data is from an experimental dataset. See " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
 	collection_fragment +	# with link back to list of all.
+	html_fragment_for_data_table +
 	html_fragment_for_inserted_code("RDF document", rdf_filename) +
 	html_fragment_for_inserted_code("Turtle document", ttl_filename)
+      }
+    }
+  end
+  def html_fragment_for_data_table
+    xml(:h2) { "Data for this initiative" } +
+    xml(:table) {
+      xml(:tr) {
+	xml(:td) { "Name" } + xml(:td) { @defn["name"] }
+      } +
+      xml(:tr) {
+	xml(:td) { "URI (for RDF and HTML)" } + xml(:td) { xml(:a, href: uri.to_s) { uri.to_s } }
+      } +
+      xml(:tr) {
+	xml(:td) { "Postcode" } + xml(:td) { @defn["postal-code"] }
+      } +
+      xml(:tr) {
+	xml(:td) { "Country" } + xml(:td) { @defn["country-name"] }
+      } +
+      xml(:tr) {
+	xml(:td) { "postcode URI" } + xml(:td) { 
+	  begin
+	    xml(:a, href: ospostcode_uri.to_uri.to_s) { ospostcode_uri.to_uri.to_s }
+	  rescue
+	    "none available"
+	  end
+	}
       }
     }
   end
@@ -242,9 +270,9 @@ class Initiative
       # presented at https://www.w3.org/2011/02/GeoSPARQL.pdf.
       graph.insert([geolocation, RDF.type, $solecon.GeoLocation])
       graph.insert([uri, $solecon.hasGeoLocation, geolocation])
-      graph.insert([geolocation, $solecon.within, ospostcode_uri])
+      graph.insert([geolocation, $solecon.within, postcode_uri])
     rescue StandardError => e
-      $stderr.puts e.message
+      warning([e.message, @defn.to_s])
     end
     return graph
   end
@@ -301,9 +329,10 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     )
     collection << initiative
     rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
-      $stderr.puts "WARNING! Could not create Initiative from CSV: #{e.message}"
-      $stderr.puts "WARNING! CSV data:"
-      $stderr.puts "WARNING! " + row.to_s
+      #$stderr.puts "WARNING! Could not create Initiative from CSV: #{e.message}"
+      #$stderr.puts "WARNING! CSV data:"
+      #$stderr.puts "WARNING! " + row.to_s
+      warning(["Could not create Initiative from CSV: #{e.message}", "CSV data:", row.to_s])
     end
 
     # For rapidly testing on subset:
