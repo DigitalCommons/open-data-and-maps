@@ -9,11 +9,11 @@ pre {
   max-width: 1000px;
   padding: 10px;
   overflow-x: auto;
-  background-color: #C7E7F2;
+  background-color: #C7F2E7;
 }
 tr:nth-child(even) {
-  background: #C7E7F2;
+  background: #C7F2E7;
 }
 tr:nth-child(odd) {
-  background: #C7F2E8;
+  background: #D8F2EB;
 }

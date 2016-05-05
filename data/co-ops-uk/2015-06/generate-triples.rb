@@ -139,7 +139,6 @@ class Collection < Array	# of Initiatives
   def create_files
     dup_ids = duplicate_ids
     if dup_ids.size > 0
-      #$stderr.puts("WARNING! The dataset has the following duplicate ids:\nWARNING! " + dup_ids.join(", ") + "\nWARNING! Duplicates are being removed from the dataset. This may not be what you want!")
       warning(["The dataset has the following duplicate ids:", dup_ids.join(", "), "Duplicates are being removed from the dataset. This may not be what you want!"])
     end
     #remove elements with duplicate ids
@@ -155,7 +154,7 @@ class Collection < Array	# of Initiatives
       ttl_filename = save_ttl(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
       html_filename = save_html(:basename => i.basename, :html => i.html(rdf_filename, ttl_filename, html_fragment_for_link))
     }
-    puts "\nCreating RDF, Turtle and HTML files for the collection of initiatives..."
+    puts "\nCreating RDF, Turtle and HTML files for the collection as a whole..."
     graph = make_graph
     rdf_filename = save_rdf(:basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
     ttl_filename = save_ttl(:basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
@@ -178,19 +177,22 @@ end
 
 class Initiative
   attr_reader :id, :name
-  def initialize(opts)
-    # All expected params must be listed in dflts, to enable error checking for unrecognized params:
-    dflts = {"id" => "", "name" => "", "postal-code" => "", "country-name" => ""}
-    @defn = dflts.merge(opts)
-    @defn.each {|k, v| @defn[k] = dflts[k] if @defn[k].nil? }
-    unless @defn.size == dflts.size	# i.e. unless nothing in opts not mentioned in dflts
-      badopts = opts.keys
-      raise ArgumentError, "Unrecognized: #{(opts.keys - dflts.keys).join(', ')}"
-    end
+  # Map names used in this class to names of columns in the csv row
+  @@field_map = {
+      "name" => "Organisation Name",
+      "postal-code" => "Registered Postcode",
+      "country-name" => "UK Nation",
+      "id" => "Co-ops UK Identifier"
+  }
+  def initialize(csv_row)
+    @csv_row = csv_row
+    # Populate the defn hash with keys from @@field_map and values from the corresponding column in the csv_row:
+    # Note that empty columns are assigned the empty string, instead of nil
+    @defn = Hash[ *@@field_map.keys.collect { |e| [e, csv_row[ @@field_map[e] ] || "" ] }.flatten ]
     @name = @defn["name"]
     @id = @defn["id"]
     if @id.empty?
-      raise "ERROR!   Id is empty. " + @defn.to_s
+      raise "Id is empty. " + @defn.to_s
     end
   end
   def basename	# for output files
@@ -211,14 +213,28 @@ class Initiative
 	xml(:h1) { @defn["name"] } +
 	xml(:p) { "This data is from an experimental dataset. See " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
 	collection_fragment +	# with link back to list of all.
-	html_fragment_for_data_table +
-	html_fragment_for_inserted_code("RDF document", rdf_filename) +
-	html_fragment_for_inserted_code("Turtle document", ttl_filename)
+	xml(:h3) { "Contents" } +
+	xml(:ul) {
+	  xml(:li) { xml(:a, href: "#table") { @@heading[:table] } } +
+	  xml(:li) { xml(:a, href: "#csv") { @@heading[:csv] } } +
+	  xml(:li) { xml(:a, href: "#rdf") { @@heading[:rdf] } } +
+	  xml(:li) { xml(:a, href: "#ttl") { @@heading[:ttl] } }
+	} + 
+	xml(:a, id: "table") + html_fragment_for_data_table +
+	xml(:a, id: "csv") + html_fragment_for_csv_row +
+	xml(:a, id: "rdf") + html_fragment_for_inserted_code(@@heading[:rdf], rdf_filename) +
+	xml(:a, id: "ttl") + html_fragment_for_inserted_code(@@heading[:ttl], ttl_filename)
       }
     }
   end
+  @@heading = {
+    table: "Summary of generated linked data",
+    csv: "Original CSV data",
+    rdf: "RDF document",
+    ttl: "Turtle document"
+  }
   def html_fragment_for_data_table
-    xml(:h2) { "Data for this initiative" } +
+    xml(:h2) { @@heading[:table] } +
     xml(:table) {
       xml(:tr) {
 	xml(:td) { "Name" } + xml(:td) { @defn["name"] }
@@ -241,6 +257,18 @@ class Initiative
 	  end
 	}
       }
+    }
+  end
+  def html_fragment_for_csv_row
+    xml(:h2) { @@heading[:csv] } +
+    xml(:table) {
+      @csv_row.headers.map {|h|
+	v = @csv_row[h]
+	hv = v.nil? ? "" : CGI.escapeHTML(v)
+	xml(:tr) {
+	  xml(:td) { CGI.escapeHTML(h) } + xml(:td) { hv } 
+	}
+      }.join
     }
   end
   def self.type_uri
@@ -321,18 +349,10 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
   # There may be rows for previous years' accounts - we ignore these:
   if row["Is Most Recent"] == "1"
     begin
-    initiative = Initiative.new(
-      "name" => row["Organisation Name"],
-      "postal-code" => row["Registered Postcode"],
-      "country-name" => row["UK Nation"],
-      "id" => row["Co-ops UK Identifier"]
-    )
+    initiative = Initiative.new(row)
     collection << initiative
     rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
-      #$stderr.puts "WARNING! Could not create Initiative from CSV: #{e.message}"
-      #$stderr.puts "WARNING! CSV data:"
-      #$stderr.puts "WARNING! " + row.to_s
-      warning(["Could not create Initiative from CSV: #{e.message}", "CSV data:", row.to_s])
+      warning(["Could not create Initiative from CSV: #{e.message}", "The following row from the CSV data will be ignored:", row.to_s])
     end
 
     # For rapidly testing on subset:
