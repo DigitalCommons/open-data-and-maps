@@ -1,0 +1,113 @@
+/*
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0 }
+*/
+
+/* The classes left, right, col, row, header and footer are taken from 
+/* http://stevesanderson.github.io/fixed-height-layouts-demo/two-columns.html, 
+ * and an example from the article:
+ * http://blog.stevensanderson.com/2011/10/05/full-height-app-layouts-a-css-trick-to-make-it-easier/
+ */
+/* Pane configuration */
+.left.col { width: 350px; }
+.right.col { left: 350px; right: 0; }
+.header.row { height: 35px; line-height: 35px; }
+.body.row { top: 35px; bottom: 25px; }
+.footer.row { height: 25px; bottom: 0; line-height: 25px; }
+
+#tabs-control { position: absolute; left:0; right: 0; top: 0; height: 50px; line-height:50px;}
+#tabs-content { position: absolute; left:0; right: 0; top: 50px; bottom: 0; }
+.tab-content { position: absolute; left:0; right: 0; top: 0; display: none; }
+.tab-content.selected { display: block; }
+
+/* CSS for tabs copied from https://css-tricks.com/better-tabs-with-round-out-borders/
+ */
+.tabrow {
+	text-align: center;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	line-height: 24px;
+}
+.tabrow li {
+	margin: 0 10px;
+	padding: 0 10px;
+	border: 1px solid #AAA;
+	background: #ECECEC;
+	display: inline-block;
+	cursor: pointer;
+}
+.tabrow li.selected {
+  background: #FFF;
+  color: #000;
+}
+
+/* There are some style 'options' that can be set within leaflet. See http://leafletjs.com/reference.html#path-options
+ * However, the correspondence between those and the CSS properties required here is unclear!
+ * Bare in mind that these are SVG styles. Perhaps look at the SVG spec? https://www.w3.org/TR/SVG/propidx.html
+ */
+tr.selected {
+	background-color: #EE2100;
+}
+tr.hovered {
+	background-color: #20EE00;
+}
+tr.selected.hovered {
+	background-color: #0040EE;
+}
+
+#menubar {
+	/* Without 'overflow: visible', the dropdown menus are clipped inside the menubar: */
+	overflow: visible;
+}
+/* CSS for dropdown menus taken from http://www.w3schools.com/howto/howto_css_dropdown.asp */
+/* The dropdown menus are created in view/menu.js and presenter/menu.js */
+/* Dropdown Button */
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	z-index: 10;	/* Put it on top of other content. */
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 6px 6px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}

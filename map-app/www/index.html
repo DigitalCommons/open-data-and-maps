@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>SE LOD Map</title>
+
+		<link rel="stylesheet" href="styles/panes.css">
+		<link rel="stylesheet" href="styles/style.css">
+		<link rel="stylesheet" href="styles/leaflet.1.0.0.rc1.css">
+		<link rel="stylesheet" href="styles/leaflet.contextmenu.css">
+		<link rel="stylesheet" href="styles/MarkerCluster.css">
+		<link rel="stylesheet" href="styles/MarkerCluster.Default.css">
+		<link rel="stylesheet" href="lib/font-awesome-4.6.1/css/font-awesome.min.css">
+		<link rel="stylesheet" href="styles/leaflet.awesome-markers.css">
+
+		<!-- OPTION 1 - Load scripts before body: -->
+		<!-- data-main attribute tells require.js to load app.js after require.js loads. -->
+		<!--
+		<script data-main="app" src="lib/require.js"></script>
+		-->
+		<!-- TODO: Consider splitting the app into two modules: one to be loaded here in head, 
+		the other to be loaded after the body: -->
+	</head>
+	<body>
+		<!-- The use of classes left, right, col, row, header, footer are based on the article -->
+		<!--     http://stevesanderson.github.io/fixed-height-layouts-demo/two-columns.html,  -->
+		<!-- and the example -->
+		<!--     http://blog.stevensanderson.com/2011/10/05/full-height-app-layouts-a-css-trick-to-make-it-easier/. -->
+		<!-- and this file: -->
+		<!--     http://stevesanderson.github.io/fixed-height-layouts-demo/two-columns.html -->
+        <div class="left col">
+            <div class="header row" id="menubar"></div>
+            <div class="body row">
+				<div id="tabs-control"></div>
+				<div id="tabs-content" class="scroll-y"></div>
+			</div>
+			<div class="footer row">
+                Icons go here
+            </div>
+		</div>
+        <div class="right col">
+            <div class="header row"></div>
+            <div class="body row scroll-y" id="map"></div>
+			<div class="footer row">
+                Icons go here
+            </div>
+		</div>
+		<!-- OPTION 2 - Load scripts after body: -->
+		<!-- data-main attribute tells require.js to load app.js after require.js loads. -->
+		<script data-main="app" src="lib/require.js"></script>
+	</body>
+</html>
