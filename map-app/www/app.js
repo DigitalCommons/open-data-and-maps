@@ -14,6 +14,7 @@ requirejs.config({
 		presenter: "../app/presenter",
 		data: "../app/data",
 
+		//jQuery: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min",
 		// If we want to load D3 from a local source:
 		//d3: "d3.v3.min"
 		//topojson: "http://d3js.org/topojson.v1.min",

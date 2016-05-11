@@ -1,10 +1,14 @@
-define( [], function() {
+define( ["model/rdf"], function(rdfModel) {
 	"use strict";
 
 	var view;
 
-	function loadDataFromUri() {
-		console.log("Load data from URI - not yet implemented");
+	function loadRdfFromUri() {
+		var uri = "http://data.solidarityeconomics.org/doc/experimental/co-ops-uk.rdf";
+		//var uri = "http://data.solidarityeconomics.org/id/experimental/co-ops-uk";
+		console.log("Load data from URI - hard-coded URI:");
+		console.log(uri);
+		rdfModel.loadUri(uri);
 	}
 
 	function registerView(v) {
@@ -14,7 +18,7 @@ define( [], function() {
 				{
 					text: "File",
 					items: [
-						{ text: "Load data from URI", click: loadDataFromUri }
+						{ text: "Load RDF from URI", click: loadRdfFromUri }
 					]
 				},
 				{
