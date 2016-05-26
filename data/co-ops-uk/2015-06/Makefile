@@ -1,3 +1,12 @@
+# Update: June 2016:
+# This file is for processing the Co-ops UK open dataset dated 2015-06.
+# There is now a new dataset dated 2016-06, and this file has been cloned into the directory for processing that new dataset.
+# Given that, with the avaiability of the new dataset, we don't need to work further on the 2015 dataset, 
+# this file should be regarded as OBSOLETE.
+# All ongoing work will be carried out on the 2016 (and later) datasets.
+# If there turns out to be a requirement to continue to work on the 2015 dataset in parallel with the new dataset, 
+# then the source code could be restructured to factor out the code that is common to both datasets.
+
 # Hint: type 'make' to get the usage message.
 
 .PHONY: help generate-data deploy
