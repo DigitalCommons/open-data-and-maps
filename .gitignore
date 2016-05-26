@@ -6,6 +6,7 @@ rdf-server/*.backup
 
 # data/co-ops-uk/2015-06/Makefile creates a directory for output:
 data/co-ops-uk/2015-06/generated-data
+data/co-ops-uk/2016-06/generated-data
 
 # This is the taraget directory for the application build:
 map-app/www-built

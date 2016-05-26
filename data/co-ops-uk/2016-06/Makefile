@@ -43,7 +43,7 @@ RSYNC := rsync -avz
 # N.B. http://unix.stackexchange.com/questions/94421/how-to-use-ssh-config-setting-for-each-server-by-rsync
 
 # Source files:
-COOPS_UK_CSV := Cooperative_Economy_Open_Dataset_2015_06.csv
+COOPS_UK_CSV := Pre-release/open_data_outlets.csv
 
 # Programs/scripts:
 GEN_TRIPLES := generate-triples.rb

@@ -176,25 +176,35 @@ class Collection < Array	# of Initiatives
 end
 
 class Initiative
-  attr_reader :id, :name
+  attr_reader :id, :name, :postcode_text, :postcode_normalized
   # Map names used in this class to names of columns in the csv row
-  @@field_map = {
-      "name" => "Organisation Name",
-      "postal-code" => "Registered Postcode",
-      "country-name" => "UK Nation",
-      "id" => "Co-ops UK Identifier"
-  }
+  #@@field_map = {
+      #"outlet-name" => "Outlet Name",
+      #"postal-code" => "Postcode",
+      ##"country-name" => "UK Nation",
+      #"orgid" => "CUK Organisation ID"
+  #}
   def initialize(csv_row)
     @csv_row = csv_row
     # Populate the defn hash with keys from @@field_map and values from the corresponding column in the csv_row:
-    # Note that empty columns are assigned the empty string, instead of nil
-    @defn = Hash[ *@@field_map.keys.collect { |e| [e, csv_row[ @@field_map[e] ] || "" ] }.flatten ]
-    @name = @defn["name"]
-    @id = @defn["id"]
+    #@defn = Hash[ *@@field_map.keys.collect { |e| [e, csv_row[ @@field_map[e] ] || "" ] }.flatten ]
+    @name = source("Outlet Name")
+    @postcode_text = source("Postcode").upcase
+    @postcode_normalized = postcode_text.gsub(/\s+/, "")
+    # There may be many outlets with the same CUK Organisation ID, so we add the postcode to (hopefilly!) create a unique ID.
+    @id = source("CUK Organisation ID") + postcode_normalized
     if @id.empty?
-      raise "Id is empty. " + @defn.to_s
+      raise "Id is empty. " + source_as_str
     end
   end
+  def source(fld)
+    # Note that empty columns are assigned the empty string, instead of nil
+    @csv_row[fld] || ""
+  end
+  def source_as_str
+    @csv_row.to_s
+  end
+
   def basename	# for output files
     "#{$dataset}/#{@id}"
   end
@@ -210,7 +220,7 @@ class Initiative
 	}.join
       } +
       xml(:body) {
-	xml(:h1) { @defn["name"] } +
+	xml(:h1) { name } +
 	xml(:p) { "This data is from an experimental dataset. See " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
 	collection_fragment +	# with link back to list of all.
 	xml(:h3) { "Contents" } +
@@ -237,16 +247,16 @@ class Initiative
     xml(:h2) { @@heading[:table] } +
     xml(:table) {
       xml(:tr) {
-	xml(:td) { "Name" } + xml(:td) { @defn["name"] }
+	xml(:td) { "Name" } + xml(:td) { name }
       } +
       xml(:tr) {
 	xml(:td) { "URI (for RDF and HTML)" } + xml(:td) { xml(:a, href: uri.to_s) { uri.to_s } }
       } +
       xml(:tr) {
-	xml(:td) { "Postcode" } + xml(:td) { @defn["postal-code"] }
+	xml(:td) { "Postcode" } + xml(:td) { postcode_text }
       } +
       xml(:tr) {
-	xml(:td) { "Country" } + xml(:td) { @defn["country-name"] }
+	xml(:td) { "Country" } + xml(:td) { country_name }
       } +
       xml(:tr) {
 	xml(:td) { "postcode URI" } + xml(:td) { 
@@ -263,8 +273,9 @@ class Initiative
     xml(:h2) { @@heading[:csv] } +
     xml(:table) {
       @csv_row.headers.map {|h|
-	v = @csv_row[h]
-	hv = v.nil? ? "" : CGI.escapeHTML(v)
+	#v = @csv_row[h]
+	#hv = v.nil? ? "" : CGI.escapeHTML(v)
+	hv = CGI.escapeHTML(source(h))
 	xml(:tr) {
 	  xml(:td) { CGI.escapeHTML(h) } + xml(:td) { hv } 
 	}
@@ -274,17 +285,20 @@ class Initiative
   def self.type_uri
     $essglobal["SSEInitiative"]
   end
+  def country_name
+    "UK"
+  end
   def ospostcode_uri
     # Return an ordnance survey postcode URI
     # TODO - raise an exception if there's not postcode URI for this postcode (e.g. Northern Irish ones??)
-    postcode = @defn["postal-code"].gsub(/\s+/, "")
+    postcode = postcode_normalized
     raise "Empty postcode" if postcode.empty?
-    $ospostcode[postcode]
+    $ospostcode[postcode]	# Convert it to RDF URI, using $ospostcode vocab.
   end
   def make_graph
     graph = RDF::Graph.new
     graph.insert([uri, RDF.type, Initiative.type_uri])
-    graph.insert([uri, RDF::Vocab::GR.name, @defn["name"]])
+    graph.insert([uri, RDF::Vocab::GR.name, name])
     graph.insert([uri, essglobal.hasAddress, make_address(graph)])
     # legal-form/L2 is a co-operative.
     # Is everything in the co-ops UK open dataset actually a co-operative?
@@ -300,7 +314,7 @@ class Initiative
       graph.insert([uri, $solecon.hasGeoLocation, geolocation])
       graph.insert([geolocation, $solecon.within, postcode_uri])
     rescue StandardError => e
-      warning([e.message, @defn.to_s])
+      warning([e.message, source_as_str])
     end
     return graph
   end
@@ -311,8 +325,8 @@ class Initiative
   def make_address(graph)
     addr = RDF::Node.new
     graph.insert([addr, RDF.type, essglobal["Address"]])
-    graph.insert([addr, RDF::Vocab::VCARD["postal-code"], @defn["postal-code"]])
-    graph.insert([addr, RDF::Vocab::VCARD["country-name"], @defn["country-name"]])
+    graph.insert([addr, RDF::Vocab::VCARD["postal-code"], postcode_text])
+    graph.insert([addr, RDF::Vocab::VCARD["country-name"], country_name])
     return addr
   end
 end
@@ -347,7 +361,7 @@ collection = Collection.new
 puts "Reading #{$input_csv}..."
 CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
   # There may be rows for previous years' accounts - we ignore these:
-  if row["Is Most Recent"] == "1"
+  #if row["Is Most Recent"] == "1"
     begin
     initiative = Initiative.new(row)
     collection << initiative
@@ -356,7 +370,7 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     end
 
     # For rapidly testing on subset:
-    #break if collection.size > 10
-  end
+    break if collection.size > 10
+  #end
 end
 collection.create_files
