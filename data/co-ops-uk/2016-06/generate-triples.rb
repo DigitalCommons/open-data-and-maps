@@ -34,6 +34,13 @@ def html_fragment_for_inserted_code(heading, filename)
     }
   }
 end
+def save_html_file(html, filename)
+  File.open(filename, "w") {|f|
+    f.puts "<!DOCTYPE html>"
+    f.puts html
+  }
+  filename
+end
 
 def save_rdf(opts)
   filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.rdf"
@@ -47,10 +54,7 @@ def save_ttl(opts)
 end
 def save_html(opts)
   filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.html"
-  File.open(filename, "w") {|f|
-    f.puts "<!DOCTYPE html>"
-    f.puts opts[:html]
-  }
+  save_html_file(opts[:html], filename)
   filename
 end
 def warning(msgs)
@@ -132,6 +136,126 @@ class Collection < Array	# of Initiatives
   def self.basename
     $dataset
   end
+  def to_hash
+    # Create a hash that maps each id to an array of initiatives (an array, because of duplicate ids). 
+    h = Hash.new { |h, k| h[k] = [] }
+    each {|i| h[i.id] << i }
+    h
+  end
+  def resolve_duplicates
+    # Currently, this method does not resolve duplicates, but reports on them.
+    # The HTML report produced by method duplicates_html may be a better choice than this.
+    outlets_headers = ["CUK Organisation ID", "Registered Name", "Outlet Name", "Street", "City", "State/Province", "Postcode", "Description", "Phone", "Website"]
+    h = to_hash
+    dups = h.select {|k, v| v.count > 1}
+    pp dups
+    dups.each {|k, v| 
+      common, different = outlets_headers.partition{|x|
+	v.map { |i| i.csv_row[x] }.uniq.count == 1
+      }
+      puts common.map { |x| "#{x}: #{v[0].csv_row[x]}" }.join("; ")
+      puts v.map { |i| "    #{different.map { |x| "#{x}: #{i.csv_row[x]}" }.join("; ")}\n"}.join
+
+      if v.uniq.count == 1
+	puts "Duplicate entries in source data:"
+	pp v
+      end
+    }
+  end
+  def duplicates_html
+    # Column headers from the Outlets CSV file:
+    id_headers = ["CUK Organisation ID", "Postcode"]
+    outlets_headers = ["Registered Name", "Outlet Name", "Street", "City", "State/Province", "Description", "Phone", "Website"]
+
+    # hash ( id => Initiative ) of all Initiatives with duplicate ids:
+    dups = to_hash.select {|k, v| v.count > 1}
+    css = <<'ENDCSS'
+td {vertical-align: top; }
+td.common { background-color: #BFB; }
+td.different { background-color: #FBB; } 
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+td.first {
+    border-top: 5px solid black;
+}
+ENDCSS
+    xml(:html) {
+      xml(:head) {
+	xml(:title) { "Duplicates" }  +
+	xml(:style) { css }
+      } +
+      xml(:body) {
+	xml(:h1) { "Outlets with the same CUK ID and Postcode" } +
+	xml(:p) {
+	  "The table shows all outlets with the same CUK Organisation ID and Postcode.
+	  The other cells are coloured green if all outlets with the same CUK ID and Postcode have the same value, 
+	  and red if they are differnt values."
+	} +
+	xml(:p) {
+	  "Green cells in the Outlet Name column may mean that the are genuine duplicates, which need to be cleaned"
+	} +
+	xml(:p) {
+	  "Something else revealed by this (nothing to do with duplicate outlets) is that some rows of the CSV have the Description column missing, so that the phone number becomes the description. Search for Long Sutton Post Office, for example."
+	} +
+	xml(:table) {
+	  # Header row:
+	  xml(:tr) {
+	    id_headers.map {|h| xml(:th) { h } }.join +
+	    outlets_headers.map {|h| xml(:th) { h } }.join
+	  } +
+
+	  # Body rows:
+	  dups.map {|k, v|
+	    #common, different = outlets_headers.partition{|x|
+	      #v.map { |i| i.csv_row[x] }.uniq.count  < v.count
+	    #}
+	    first = true
+	    v.map {|i|  
+	      xml(:tr) {
+		classes = []
+		if first
+		  # First row of a set of Initiatives with the same ID is different - 
+		  # The ID columns span the whole set:
+		  # TODO - take this out of (above) the v.map loop, maybe
+		  first = false
+		  classes << "first"
+		  id_headers.map { |h|
+		    xml(:td, :class => classes.join(" "), :rowspan => v.count) { "#{i.csv_row[h]}" }
+		  }.join
+		else
+		  ""
+		end +
+
+		outlets_headers.map {|h|
+		  value = i.csv_row[h]
+
+		  # An array of values for column h of the CSV for each Initiative with the same duplicated id:
+		  all_values = v.map { |j| j.csv_row[h] }
+
+		  # Now select out of all_values just those values equal to the value
+		  # of this column for Initiative i:
+		  same_values = all_values.select{ |j| j == value }
+
+		  # We want to colour the background of the cell depending on whether or not Initiative i
+		  # has the same value in column h as any other Initiative with the same id as i.
+		  # To find this out, we just count up the number of elments in same:
+		  td_classes = classes + [same_values.count > 1 ? "common" : "different"]
+
+		  #xml(:td, :class => common.include?(h) ? "common" : "different") { "#{i.csv_row[h]}" }
+		  xml(:td, :class => td_classes.join(" ")) { "#{i.csv_row[h]}" }
+		}.join
+	      }
+	    }.join
+	  }.join
+	}
+      }
+    }
+  end
   def duplicate_ids
     ids = map{|i| i.id}
     ids.select{ |e| ids.count(e) > 1 }.uniq
@@ -176,7 +300,7 @@ class Collection < Array	# of Initiatives
 end
 
 class Initiative
-  attr_reader :id, :name, :postcode_text, :postcode_normalized
+  attr_reader :id, :name, :postcode_text, :postcode_normalized, :csv_row
   # Map names used in this class to names of columns in the csv row
   #@@field_map = {
       #"outlet-name" => "Outlet Name",
@@ -352,10 +476,6 @@ vocabs = [
 
 #puts Vocab.prefixes([:essglobal, :vcard])
 #
-# The design of this module "hopes" that everything above this line is about the generation
-# of RDF, Turtle and HTML that is independent of the input dataset.
-# So, when the dataset format changes next year, the changes will hopefully be restricted
-# to what is below this line. New argument to the script may also be needed.
 
 collection = Collection.new
 puts "Reading #{$input_csv}..."
@@ -370,7 +490,11 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     end
 
     # For rapidly testing on subset:
-    break if collection.size > 10
+    #break if collection.size > 10
   #end
 end
+dups_html_file = "duplicates.html"
+puts "Saving table of duplicates to #{dups_html_file} ..."
+save_html_file(collection.duplicates_html, "duplicates.html")
+#collection.resolve_duplicates
 collection.create_files

@@ -1,13 +1,22 @@
 # For Vim users:
 *.swp
 
+# General:
+*.zip
+
 # rdf-server/Makefile creates local backups copies of the server's .htaccess file:
 rdf-server/*.backup
 
 # data/co-ops-uk/2015-06/Makefile creates a directory for output:
 data/co-ops-uk/2015-06/generated-data
+
+# data/co-ops-uk/2016-06/Makefile creates a directory for output:
 data/co-ops-uk/2016-06/generated-data
+# data/co-ops-uk/2016-06/generate-triples.rb creates a report on duplicates:
+data/co-ops-uk/2016-06/duplicates.html
 
 # This is the taraget directory for the application build:
 map-app/www-built
 
+# Mac OS/X cruft:
+.DS_Store
