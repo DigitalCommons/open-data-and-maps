@@ -14,6 +14,7 @@ $prefixes = {
   essglobal: $essglobal.to_uri.to_s,
   solecon: $solecon.to_uri.to_s,
   gr: RDF::Vocab::GR.to_uri.to_s,
+  foaf: RDF::Vocab::FOAF.to_uri.to_s,
   ospostcode: $ospostcode.to_uri.to_s
 }
 
@@ -22,6 +23,9 @@ def xml(ele, attr = {})
   "<#{ele}#{attr.keys.map{|k| " #{k}=\"#{attr[k]}\""}.join}>" + # Element opening tag with attributes.
     (block_given? ? yield : "") +	# Element contents.
     "</#{ele}>"	# Element closing tag.
+end
+def link_to(url)
+  xml(:a, href: url) { url } 
 end
 
 def html_fragment_for_inserted_code(heading, filename)
@@ -80,7 +84,7 @@ class Collection < Array	# of Initiatives
       } +
       xml(:body) {
 	xml(:h1) { "Co-ops UK - experimental dataset" } +
-	xml(:p) { "The URI for this list is: " + xml(:a, href: uri.to_s) {uri.to_s} } +
+	xml(:p) { "The URI for this list is: " + link_to(uri.to_s) } +
 	xml(:p) { "See: " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + "." } +
 	xml(:table) {
 	  xml(:thead) {
@@ -93,7 +97,7 @@ class Collection < Array	# of Initiatives
 	    .map {|i|
 	      xml(:tr) {
 		xml(:td) { i.name } + xml(:td) { 
-		  xml(:a, :href => i.uri.to_s) { i.uri.to_s }
+		  link_to(i.uri.to_s)
 		}
 	      }
 	    }.join
@@ -112,7 +116,7 @@ class Collection < Array	# of Initiatives
       } +
       xml(:body) {
 	xml(:h1) { "About this dataset"} +
-	xml(:p) { "Base URI: " + xml(:a, href: uri.to_s) {uri.to_s} } +
+	xml(:p) { "Base URI: " + link_to(uri.to_s) } +
 	xml(:p) { 
 	  "This is an experimental dataset, generated as part of the p6data project, which can be found " + 
 	  xml(:a, href: "https://github.com/p6data-coop") { "on GitHub" } +
@@ -293,29 +297,25 @@ ENDCSS
     xml(:div) {
       xml(:p) {
 	"The URI for the whole list is: " +
-	xml(:a, :href => uri.to_s) { uri.to_s }
+	link_to(uri.to_s)
       }
     }
   end
 end
 
 class Initiative
-  attr_reader :id, :name, :postcode_text, :postcode_normalized, :csv_row
-  # Map names used in this class to names of columns in the csv row
-  #@@field_map = {
-      #"outlet-name" => "Outlet Name",
-      #"postal-code" => "Postcode",
-      ##"country-name" => "UK Nation",
-      #"orgid" => "CUK Organisation ID"
-  #}
+  attr_reader :id, :name, :postcode_text, :postcode_normalized, :csv_row, :homepage 
   def initialize(csv_row)
     @csv_row = csv_row
-    # Populate the defn hash with keys from @@field_map and values from the corresponding column in the csv_row:
-    #@defn = Hash[ *@@field_map.keys.collect { |e| [e, csv_row[ @@field_map[e] ] || "" ] }.flatten ]
     @name = source("Outlet Name")
+    @homepage = source("Website")
     @postcode_text = source("Postcode").upcase
     @postcode_normalized = postcode_text.gsub(/\s+/, "")
     # There may be many outlets with the same CUK Organisation ID, so we add the postcode to (hopefilly!) create a unique ID.
+    # In fact, this leaves many duplicate IDs.
+    # The Collection.duplicates_html method generates an HTML table which may be illuminating!
+
+    # TODO - this ID is not good enough :-(
     @id = source("CUK Organisation ID") + postcode_normalized
     if @id.empty?
       raise "Id is empty. " + source_as_str
@@ -374,7 +374,10 @@ class Initiative
 	xml(:td) { "Name" } + xml(:td) { name }
       } +
       xml(:tr) {
-	xml(:td) { "URI (for RDF and HTML)" } + xml(:td) { xml(:a, href: uri.to_s) { uri.to_s } }
+	xml(:td) { "URI (for RDF and HTML)" } + xml(:td) { link_to(uri.to_s) }
+      } +
+      xml(:tr) {
+	xml(:td) { "Website" } + xml(:td) { link_to(homepage) }
       } +
       xml(:tr) {
 	xml(:td) { "Postcode" } + xml(:td) { postcode_text }
@@ -385,7 +388,7 @@ class Initiative
       xml(:tr) {
 	xml(:td) { "postcode URI" } + xml(:td) { 
 	  begin
-	    xml(:a, href: ospostcode_uri.to_uri.to_s) { ospostcode_uri.to_uri.to_s }
+	    link_to(ospostcode_uri.to_uri.to_s)
 	  rescue
 	    "none available"
 	  end
@@ -423,6 +426,7 @@ class Initiative
     graph = RDF::Graph.new
     graph.insert([uri, RDF.type, Initiative.type_uri])
     graph.insert([uri, RDF::Vocab::GR.name, name])
+    graph.insert([uri, RDF::Vocab::FOAF.homepage, homepage])
     graph.insert([uri, essglobal.hasAddress, make_address(graph)])
     # legal-form/L2 is a co-operative.
     # Is everything in the co-ops UK open dataset actually a co-operative?
