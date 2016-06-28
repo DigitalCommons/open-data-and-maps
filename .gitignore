@@ -12,8 +12,9 @@ data/co-ops-uk/2015-06/generated-data
 
 # data/co-ops-uk/2016-06/Makefile creates a directory for output:
 data/co-ops-uk/2016-06/generated-data
-# data/co-ops-uk/2016-06/generate-triples.rb creates a report on duplicates:
+# data/co-ops-uk/2016-06/generate-triples.rb creates some reports:
 data/co-ops-uk/2016-06/duplicates.html
+data/co-ops-uk/2016-06/websites.html
 
 # This is the taraget directory for the application build:
 map-app/www-built
