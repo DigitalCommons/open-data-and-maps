@@ -142,7 +142,35 @@ $valid_url_regex = '/.*/';
 
 // ############################################################################
 
+ini_set("log_errors", 1);
+ini_set("error_log", "/tmp/php-error.log");
+error_log( "server/proxy.php" );
+
 $url = $_GET['url'];
+
+
+function HandleHeaderLine( $curl, $header_line ) {
+	// See http://tools.ietf.org/html/draft-ietf-httpbis-p1-messaging-14#section-7.1.3
+	// See http://php.net/manual/en/function.header.php for why "Location is here"
+	$headers_to_squash = array("location", "connection", "keep-alive", "proxy-authenticate", "proxy-authorization", "te", "trailer", "transfer-encoding", "upgrade");	// MUSE BE LOWER CASE!!
+	
+	$trimmed = trim( $header_line );
+	if (strlen($trimmed) > 0) {	// Ignore the separator between 2 sets of headers (e.g. with 303)
+		$h = explode(":", $trimmed, 2);
+		if ( in_array(strtolower($h[0]), $headers_to_squash) ) {
+			error_log( "Squashing  Header Line: " . $trimmed . "(" . $h[0]);
+		}
+		else {
+			// The idea is that when we get two sets of headers (e.g. for a 303 redirect)
+			// then the most recent headers (from the final response) replace the earlier headers (from the 303 Response)
+			header( $trimmed );
+			error_log( "Preserving Header Line: " . $trimmed . "(" . $h[0]);
+		}
+	}
+
+    return strlen($header_line);
+}
+	
 
 if ( !$url ) {
   
@@ -180,11 +208,28 @@ if ( !$url ) {
     //
     //curl_setopt( $ch, CURLOPT_COOKIE, $cookie );
   //}
+
+  // IMPORTANT TODO!!
+  // This "proxy" is not passing on important header information, e.g. Accept-bla: application/rdf+xml
+  //
+  $request_headers = array();
+  $request_headers_to_preserve = array("accept");	// All in lower case!!
+  foreach ( getallheaders() as $name => $value ) {
+	  if (in_array(strtolower($name), $request_headers_to_preserve) ) {
+		  array_push($request_headers, $name . ": " . $value );
+		  error_log( "Preserving Request header: " . $name . ": " . $value );
+	  }
+	  else {
+		  error_log( "Ignoring   Request header: " . $name . ": " . $value );
+	  }
+  }
+
   
+  curl_setopt( $ch, CURLOPT_HTTPHEADER, $request_headers);
   curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-  curl_setopt( $ch, CURLOPT_HEADER, true );
+  //curl_setopt( $ch, CURLOPT_HEADER, true );
   curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-  
+  curl_setopt($ch, CURLOPT_HEADERFUNCTION, "HandleHeaderLine");
   // TODO - on localhost/~matt these GET lookups are causing errors to appear in the output.
   //        Perhaps that's becasue of some debuggin PHP settings??
   //        Try uncommenting this when deployed to data.solidarityeconomics.org.
@@ -192,28 +237,42 @@ if ( !$url ) {
   //curl_setopt( $ch, CURLOPT_USERAGENT, $_GET['user_agent'] ? $_GET['user_agent'] : $_SERVER['HTTP_USER_AGENT'] );
   curl_setopt( $ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
   
-  list( $header, $contents ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+  $contents = curl_exec( $ch );
+  error_log( "Response: " . $contents );
+  error_log( "CURLINFO_HTTP_CODE: " . curl_getinfo($ch, CURLINFO_HTTP_CODE));
+  error_log( "CURLINFO_CONTENT_TYPE: " . curl_getinfo($ch, CURLINFO_CONTENT_TYPE));
+  $first_line = strtok($contents, "\n");
+  error_log( "Line One: " . $first_line);
+  // We're using CURLOPT_HEADERFUNCTION, so we can dispense with this:
+  //list( $header, $contents ) = preg_split( '/([\r\n][\r\n])\\1/', $contents, 2 );
+  
+  //list( $header, $contents ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
   
   $status = curl_getinfo( $ch );
   
   curl_close( $ch );
+
+  //error_log( "Status: " . $status );
+  //error_log( "Header: " . $header );
+  //error_log( "Content: " . $contents );
 }
 
 // Split header text into an array.
-$header_text = preg_split( '/[\r\n]+/', $header );
+//$header_text = preg_split( '/[\r\n]+/', $header );
 
 if ( $_GET['mode'] == 'native' ) {
-  if ( !$enable_native ) {
-    $contents = 'ERROR: invalid mode';
-    $status = array( 'http_code' => 'ERROR' );
-  }
+  //if ( !$enable_native ) {
+    //$contents = 'ERROR: invalid mode';
+    //$status = array( 'http_code' => 'ERROR' );
+  //}
   
   // Propagate headers to response.
-  foreach ( $header_text as $header ) {
-    if ( preg_match( '/^(?:Content-Type|Content-Language|Set-Cookie):/i', $header ) ) {
-      header( $header );
-    }
-  }
+  //foreach ( $header_text as $header ) {
+    //if ( preg_match( '/^(?:Content-Type|Content-Language|Set-Cookie):/i', $header ) ) {
+		//error_log("Propagate header: " . $header);
+      //header( $header );
+    //}
+  //}
   
   print $contents;
   
