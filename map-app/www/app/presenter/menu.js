@@ -1,4 +1,4 @@
-define( ["model/rdf"], function(rdfModel) {
+define( ["d3", "model/rdf"], function(d3, rdfModel) {
 	"use strict";
 
 	var view;
@@ -13,6 +13,17 @@ define( ["model/rdf"], function(rdfModel) {
 		console.log(uri);
 		rdfModel.loadUri(uri);
 	}
+	function loadFromWebService() {
+		d3.json("services/getdata.php", function(error, json) {
+			if (error) {
+				console.warn(error);
+			}
+			else {
+				console.log(json);
+			}
+		});
+
+	}
 
 	function registerView(v) {
 		view = v;
@@ -21,7 +32,8 @@ define( ["model/rdf"], function(rdfModel) {
 				{
 					text: "File",
 					items: [
-						{ text: "Load RDF from URI", click: loadRdfFromUri }
+						{ text: "Load RDF from URI (obsolete?)", click: loadRdfFromUri },
+						{ text: "Load data", click: loadFromWebService }
 					]
 				},
 				{
