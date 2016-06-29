@@ -3,6 +3,7 @@ require 'cgi'
 require 'csv'
 require 'linkeddata'
 require 'rdf/vocab'
+require "net/http"
 
 $input_csv, $output_dir, $uri_base, $dataset, $css_files  = $ARGV
 $css_files_array = $css_files.split.map{|f| $dataset + "/" + f}
@@ -64,6 +65,27 @@ end
 def warning(msgs)
   msgs = msgs.kind_of?(Array) ? msgs : [msgs]
   $stderr.puts msgs.map{|m| "\nWARNING! #{m}"}.join 
+end
+
+class UrlRes
+  attr_reader :url, :http_code
+  @@results = []
+  def initialize(url)
+    @url = url
+    begin 
+      u = URI.parse(url)
+      req = Net::HTTP.new(u.host, u.port)
+      res = req.request_head(u.path)
+      @http_code = res.code || ""
+    rescue
+      @http_code = "Network error"
+    end
+    #puts "#{@http_code}: #{@url}"
+    @@results << self
+  end
+  def self.all
+    @@results
+  end
 end
 
 class Collection < Array	# of Initiatives
@@ -166,6 +188,55 @@ class Collection < Array	# of Initiatives
       end
     }
   end
+  def websites_html
+    # Report on the Websites.
+    css = <<'ENDCSS'
+td {vertical-align: top; }
+td.common { background-color: #BFB; }
+td.different { background-color: #FBB; } 
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+td.first {
+    border-top: 5px solid black;
+}
+ENDCSS
+    todo = size
+    n = 0
+    each {|i|
+      $stdout.write "\r#{n += 1} (#{100*n/todo}%)"
+      UrlRes.new(i.homepage) if (i.homepage.length > 0)
+    }
+    xml(:html) {
+      xml(:head) {
+	xml(:title) { "Websites" }  +
+	xml(:style) { css }
+      } + "\n" +
+      xml(:body) {
+	xml(:h1) { "Websites included in the Co-ops UK open dataset of June 2016" } +
+	xml(:p) { ""
+	} + "\n" +
+	xml(:table) {
+	  # Header row:
+	  xml(:tr) {
+	    xml(:th) { "URL" } + xml(:th) { "HTTP code" }
+	  } +
+
+	  # Body rows:
+	  UrlRes.all
+	  .sort{|a, b| a.http_code <=> b.http_code}
+	  .map {|r|
+	    #pp r
+	    xml(:tr) { xml(:td) { r.url } + xml(:td) { r.http_code } }
+	  }.join("\n")
+	}
+      }
+    }
+  end
   def duplicates_html
     # Column headers from the Outlets CSV file:
     id_headers = ["CUK Organisation ID", "Postcode"]
@@ -192,7 +263,7 @@ ENDCSS
       xml(:head) {
 	xml(:title) { "Duplicates" }  +
 	xml(:style) { css }
-      } +
+      } + "\n" +
       xml(:body) {
 	xml(:h1) { "Outlets with the same CUK ID and Postcode" } +
 	xml(:p) {
@@ -205,7 +276,7 @@ ENDCSS
 	} +
 	xml(:p) {
 	  "Something else revealed by this (nothing to do with duplicate outlets) is that some rows of the CSV have the Description column missing, so that the phone number becomes the description. Search for Long Sutton Post Office, for example."
-	} +
+	} + "\n" +
 	xml(:table) {
 	  # Header row:
 	  xml(:tr) {
@@ -254,8 +325,8 @@ ENDCSS
 		  xml(:td, :class => td_classes.join(" ")) { "#{i.csv_row[h]}" }
 		}.join
 	      }
-	    }.join
-	  }.join
+	    }.join("\n")
+	  }.join("\n")
 	}
       }
     }
@@ -494,11 +565,16 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     end
 
     # For rapidly testing on subset:
-    #break if collection.size > 10
+    #break if collection.size > 500
   #end
 end
+website_html_file = "websites.html"
+puts "Saving table of websites to #{website_html_file} ..."
+save_html_file(collection.websites_html, website_html_file)
+
 dups_html_file = "duplicates.html"
 puts "Saving table of duplicates to #{dups_html_file} ..."
-save_html_file(collection.duplicates_html, "duplicates.html")
+save_html_file(collection.duplicates_html, dups_html_file)
+
 #collection.resolve_duplicates
 collection.create_files
