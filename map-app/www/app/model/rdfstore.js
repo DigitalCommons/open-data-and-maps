@@ -1,9 +1,10 @@
 define(["rdflib"], function(rdflib) {
 	"use strict";
 
+	var ESSGLOBAL = rdflib.Namespace("http://purl.org/essglobal/vocab/");
+	var RDF = rdflib.Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 	/*
 var GR = rdflib.Namespace("http://purl.org/goodrelations/v1#");
-var ESSGLOBAL = rdflib.Namespace("http://purl.org/essglobal/vocab/");
 var VCARD = rdflib.Namespace("http://www.w3.org/2006/vcard/ns#");
 var WGS84 = rdflib.Namespace("http://www.w3.org/2003/01/geo/wgs84_pos#");
 var getCoop = function(id) {
@@ -42,6 +43,9 @@ var getCoop = function(id) {
 	Store.prototype.save = function(uri, graph) {
 		console.log("Store.save:" + uri);
 		console.log(graph);
+		var initiatives = graph.each(undefined, RDF("type"), ESSGLOBAL('SSEInitiative'));
+		console.log("SSEInitiatives: " + initiatives.length);
+		console.log(initiatives[37].uri);
 	};
 
 	var pub = {
