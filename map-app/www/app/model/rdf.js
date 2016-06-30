@@ -1,3 +1,5 @@
+// This module will probably become OBSOLETE, because the javascript app will not be loading RDF directly itself.
+// It's just too fiddly (Cross Origin issues) and slow (we need to query a triple store in which the results have been cached).
 define(["rdflib", "app/eventbus", "model/uriqueue", "model/urifetcher", "model/rdfstore"], function(rdflib, eventbus, uriQueue, uriFetcher, rdfStore) {
 	"use strict";
 

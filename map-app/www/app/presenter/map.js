@@ -76,11 +76,19 @@ define(["app/eventbus", "model/markers"], function(eventbus, markerModel) {
 	function onPointRemove(data/*, envelope*/) {
 		data.point.getUserData("mapView").destroy();
 	}
+	function onInitiativeNew(data/*, envelope*/) {
+		var initiative = data;
+		var latlng = [initiative.lat, initiative.lng];
+		var eventHandlers = {};
+		var options = {hovertext: initiative.name};
+		view.addMarker(latlng, options, eventHandlers);
+	}
 
 	function init() {
 		// subscribe to events published by the model:
 		eventbus.subscribe({topic: "Point.add", callback: onPointAdd});
 		eventbus.subscribe({topic: "Point.remove", callback: onPointRemove});
+		eventbus.subscribe({topic: "Initiative.new", callback: onInitiativeNew});
 	}
 	var pub = {
 		registerView: registerView,

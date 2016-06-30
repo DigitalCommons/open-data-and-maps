@@ -1,4 +1,4 @@
-define( ["d3", "model/rdf"], function(d3, rdfModel) {
+define( ["d3", "model/sse_initiative", "model/rdf"], function(d3, initiativeModel, rdfModel) {
 	"use strict";
 
 	var view;
@@ -20,6 +20,7 @@ define( ["d3", "model/rdf"], function(d3, rdfModel) {
 			}
 			else {
 				console.log(json);
+				initiativeModel.add(json);
 			}
 		});
 
