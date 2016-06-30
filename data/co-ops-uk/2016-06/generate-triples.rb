@@ -3,6 +3,7 @@ require 'cgi'
 require 'csv'
 require 'linkeddata'
 require 'rdf/vocab'
+require 'rdf'
 require "net/http"
 
 $input_csv, $output_dir, $uri_base, $dataset, $css_files  = $ARGV
@@ -38,6 +39,12 @@ def html_fragment_for_inserted_code(heading, filename)
       CGI.escapeHTML(File.open(filename, "rb").read)
     }
   }
+end
+def save_file(contents, filename)
+  File.open(filename, "w") {|f|
+    f.puts contents
+  }
+  filename
 end
 def save_html_file(html, filename)
   File.open(filename, "w") {|f|
@@ -331,17 +338,64 @@ ENDCSS
       }
     }
   end
+  def map_app_json
+    "[\n" +
+      map {|i|
+      graph = RDF::Graph.new
+      begin
+	graph.load(i.ospostcode_uri)
+	#pp(graph)
+	query = RDF::Query.new({
+	  :stuff => {
+	    RDF::URI("http://www.w3.org/2000/01/rdf-schema#label") => :postcode,
+	    RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#lat") => :lat,
+	    RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#long") => :lng
+	  }
+	})
+	res = query.execute(graph)
+	raise "No results from query" unless res.size == 1
+	raise "No lat from query" unless res[0][:lat]
+	lat = res[0][:lat]
+	raise "No lng from query" unless res[0][:lng]
+	lng = res[0][:lng]
+
+	res.each {|r|
+
+	  puts "#{$0}: Postcode #{r[:postcode]}:\tLatitude: #{r[:lat]}\tLongitude: #{r[:lng]}"
+	}
+
+	"{" +
+	  {
+	  name: i.name,
+	  uri: i.uri,
+	  loc_uri: i.ospostcode_uri,
+	  lat: lat,
+	  lng: lng,
+	  www: i.homepage
+
+	}.map{|k, v| "\"#{k}\": \"#{v}\""}.join(", ") +
+	  "}"
+      rescue => e
+	$stderr.puts "Failed to load and read #{i.ospostcode_uri}, #{e.message}"
+	nil
+      end
+    }.compact.join(",\n") +
+      "\n]\n"
+  end
   def duplicate_ids
     ids = map{|i| i.id}
     ids.select{ |e| ids.count(e) > 1 }.uniq
   end
-  def create_files
+  def remove_duplicate_ids
     dup_ids = duplicate_ids
     if dup_ids.size > 0
       warning(["The dataset has the following duplicate ids:", dup_ids.join(", "), "Duplicates are being removed from the dataset. This may not be what you want!"])
     end
     #remove elements with duplicate ids
     uniq!{|e| e.id}
+  end
+  def create_files
+    remove_duplicate_ids
     todo = size
     n = 0
     puts "Creating RDF, Turtle and HTML files for each initiative..."
@@ -565,16 +619,23 @@ CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     end
 
     # For rapidly testing on subset:
-    #break if collection.size > 500
+    #break if collection.size > 10
   #end
 end
-website_html_file = "websites.html"
-puts "Saving table of websites to #{website_html_file} ..."
-save_html_file(collection.websites_html, website_html_file)
+#website_html_file = "websites.html"
+#puts "Saving table of websites to #{website_html_file} ..."
+#save_html_file(collection.websites_html, website_html_file)
 
-dups_html_file = "duplicates.html"
-puts "Saving table of duplicates to #{dups_html_file} ..."
-save_html_file(collection.duplicates_html, dups_html_file)
+#dups_html_file = "duplicates.html"
+#puts "Saving table of duplicates to #{dups_html_file} ..."
+#save_html_file(collection.duplicates_html, dups_html_file)
+
+# From here on, we're working with the collection after having duplicate IDs removed:
+collection.remove_duplicate_ids
+
+map_app_json_file = "initiatives.json"
+puts "Saving map-app data to #{map_app_json_file} ..."
+save_file(collection.map_app_json, map_app_json_file)
 
 #collection.resolve_duplicates
 collection.create_files
