@@ -7,6 +7,9 @@ define(
 		var map;
 		var priv = {
 			init: function() {
+				var openCycleMapUrl = "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png";
+				var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+				var osmAttrib = "Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>";
 				var i, eventHandlers = presenter.getMapEventHandlers();
 				var k = Object.keys(eventHandlers);
 				// For the contextmenu docs, see https://github.com/aratcliffe/Leaflet.contextmenu.
@@ -21,10 +24,7 @@ define(
 					map.on(k[i], eventHandlers[k[i]]);
 				}
 
-				leaflet.tileLayer("http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png", {
-					attribution: "Map data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>",
-					maxZoom: 18
-				}).addTo(map);
+				leaflet.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 18}).addTo(map);
 
 				markerView.init(map);
 			}
