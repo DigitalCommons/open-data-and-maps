@@ -13,10 +13,9 @@ define(
 				map = leaflet.map("map", {
 					contextmenu: true,
 					contextmenuWidth: 140,
-					contextmenuItems: presenter.getContextmenuItems(),
-					center: [51.505, -0.09],
-					zoom: 13
+					contextmenuItems: presenter.getContextmenuItems()
 				});
+				map.fitBounds([[49.5, 9], [61, -2]]);
 
 				for (i = 0; i < k.length; ++i) {
 					map.on(k[i], eventHandlers[k[i]]);
