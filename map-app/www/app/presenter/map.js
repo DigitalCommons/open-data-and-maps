@@ -80,7 +80,7 @@ define(["app/eventbus", "model/markers"], function(eventbus, markerModel) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
 		var eventHandlers = {};
-		var options = {hovertext: initiative.name};
+		var options = {hovertext: initiative.name, cluster: true};
 		view.addMarker(latlng, options, eventHandlers);
 	}
 
