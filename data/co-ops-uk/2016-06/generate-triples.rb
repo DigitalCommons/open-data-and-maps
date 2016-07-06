@@ -661,6 +661,10 @@ vocabs = [
 #puts Vocab.prefixes([:essglobal, :vcard])
 #
 
+# --------------------------------
+# Here we load data from CSV files.
+# --------------------------------
+# For testing, we can load just a smaller set of test_rows from each CSV file (if short_test_run is true)
 short_test_run = true
 short_test_run = false
 test_rows = 2
@@ -670,6 +674,7 @@ puts "Reading #{$outlets_csv}..."
 rows_tested = 0;
 CSV.foreach($outlets_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
   begin
+    # See comments below about encoding.
     row.headers.each {|h| row[h].encode!(Encoding::ASCII_8BIT) unless row[h].nil? }
     initiative = Initiative.from_outlet(row)
     collection << initiative
@@ -704,10 +709,16 @@ CSV.foreach($orgs_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
     break if rows_tested > test_rows
   end
 end
+# -------------------------------------------------------------------------
+# From this point on, we control exactly what is generated from this script.
+# -------------------------------------------------------------------------
+
+# Generating the websites.html is expensive - each URL is accessed to check it's HTTP response code.
 #website_html_file = "websites.html"
 #puts "Saving table of websites to #{website_html_file} ..."
 #save_html_file(collection.websites_html, website_html_file)
 
+# Generate a report about diplicate IDs:
 #dups_html_file = "duplicates.html"
 #puts "Saving table of duplicates to #{dups_html_file} ..."
 #save_html_file(collection.duplicates_html, dups_html_file)
@@ -715,6 +726,7 @@ end
 # From here on, we're working with the collection after having duplicate IDs removed:
 collection.remove_duplicate_ids
 
+# Generate a json file that can be used by the map-app, as an alternative to loading the data from, for example, a sparkle endpoint.
 map_app_json_file = "initiatives.json"
 puts "Saving map-app data to #{map_app_json_file} ..."
 save_file(collection.map_app_json, map_app_json_file)
