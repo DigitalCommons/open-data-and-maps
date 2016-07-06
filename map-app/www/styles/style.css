@@ -9,11 +9,20 @@ body { height: 100%; margin: 0; padding: 0 }
  * http://blog.stevensanderson.com/2011/10/05/full-height-app-layouts-a-css-trick-to-make-it-easier/
  */
 /* Pane configuration */
+/* This configuration makes the header, footer and left col invisible */
+.left.col { width: 0; }
+.right.col { left: 0; right: 0; }
+.header.row { height: 0; line-height: 0; }
+.body.row { top: 0; bottom: 0; }
+.footer.row { height: 0; bottom: 0; line-height: 0; }
+/*
+ * This is a configuration to make the header, footer and left col visible:
 .left.col { width: 350px; }
 .right.col { left: 350px; right: 0; }
 .header.row { height: 35px; line-height: 35px; }
 .body.row { top: 35px; bottom: 25px; }
 .footer.row { height: 25px; bottom: 0; line-height: 25px; }
+*/
 
 #tabs-control { position: absolute; left:0; right: 0; top: 0; height: 50px; line-height:50px;}
 #tabs-content { position: absolute; left:0; right: 0; top: 50px; bottom: 0; }

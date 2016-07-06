@@ -5,6 +5,7 @@ define(["app/eventbus", "app/console", "app/view", "app/debug"], function(eventb
 	function init() {
 		console.log("TODO - Check the use of console here. Is this the mechanism by which app/copnsole gets used by the rest of the app?");
 		console.log("TODO - Check why is app/debug being loaded here - probably a leftover from clone origin.");
+		console.log("header, footer and left column have been reduce to zero in style.css.");
 
 		// The code for each view is loaded by www/app/view.js
 		// Initialize the views:
