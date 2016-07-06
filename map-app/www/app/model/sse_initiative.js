@@ -20,8 +20,22 @@ define(["app/eventbus"], function(eventbus) {
 			new Initiative(e.name, e.uri, e.lat, e.lng, e.www);
 		});
 	}
+	function loadFromWebService() {
+		d3.json("services/getdata.php", function(error, json) {
+			if (error) {
+				console.warn(error);
+			}
+			else {
+				console.log(json);
+				add(json);
+			}
+		});
+	}
 	var pub = {
-		add: add
+		add: add,
+		loadFromWebService: loadFromWebService
 	};
+	// Automatically load the data when the app is ready:
+	eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});
 	return pub;
 });

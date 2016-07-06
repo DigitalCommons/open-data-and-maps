@@ -24,6 +24,7 @@ define( ["d3", "presenter/menu"], function(d3, presenter) {
 	var pub = {
 		init: priv.init
 	};
+	// The settings give us the data structure for the menus:
 	settings = presenter.registerView(pub);
 	return pub;
 });

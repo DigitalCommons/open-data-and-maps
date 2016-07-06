@@ -13,18 +13,6 @@ define( ["d3", "model/sse_initiative", "model/rdf"], function(d3, initiativeMode
 		console.log(uri);
 		rdfModel.loadUri(uri);
 	}
-	function loadFromWebService() {
-		d3.json("services/getdata.php", function(error, json) {
-			if (error) {
-				console.warn(error);
-			}
-			else {
-				console.log(json);
-				initiativeModel.add(json);
-			}
-		});
-
-	}
 
 	function registerView(v) {
 		view = v;
@@ -33,8 +21,10 @@ define( ["d3", "model/sse_initiative", "model/rdf"], function(d3, initiativeMode
 				{
 					text: "File",
 					items: [
-						{ text: "Load RDF from URI (obsolete?)", click: loadRdfFromUri },
-						{ text: "Load data", click: loadFromWebService }
+						//{ text: "Load RDF from URI (obsolete?)", click: loadRdfFromUri },
+						// The data is now loaded automatically whe the "Main.ready" event is published.
+						// TODO - remove this?
+						//{ text: "Load data (obsolete?)", click: initiativeModel.loadFromWebService }
 					]
 				},
 				{
