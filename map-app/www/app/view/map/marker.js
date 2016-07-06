@@ -14,7 +14,7 @@ define(["leaflet", "leafletAwesomeMarkers", "leaflet.markercluster"], function(l
 
 	function Marker(map, latlng, options, eventHandlers) {
 
-		var popuptext = "Popup text goes here <a href=\"http://www.google.co.uk\" target=\"_blank\">Google?</a>.";
+		var popuptext = options.popuptext || hovertext || "Sorry. Popup text missing!";
 		var hovertext = options.hovertext || "Hover text goes here.";
 
 		// options argument overrides our default options:
