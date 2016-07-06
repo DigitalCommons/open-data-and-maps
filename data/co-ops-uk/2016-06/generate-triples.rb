@@ -1,12 +1,13 @@
 require 'pp'
 require 'cgi'
 require 'csv'
+require 'json'
 require 'linkeddata'
 require 'rdf/vocab'
 require 'rdf'
 require "net/http"
 
-$input_csv, $output_dir, $uri_base, $dataset, $css_files  = $ARGV
+$orgs_csv, $outlets_csv, $output_dir, $uri_base, $dataset, $css_files  = $ARGV
 $css_files_array = $css_files.split.map{|f| $dataset + "/" + f}
 $essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
 $solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
@@ -339,30 +340,53 @@ ENDCSS
     }
   end
   def map_app_json
-    "[\n" +
+    # Re-read previous results, so we don't have to do unnecessary queries:
+    osres_file = "os_postcode_cache.json"
+    failure_value = 0
+    begin
+      f = File.open(osres_file, "rb")
+    rescue => e
+      puts "Failed to read #{osres_file}"
+      f = nil
+    end
+    osres = f ? JSON.parse(f.read) : {}
+    #pp osres
+    todo = size
+    n = 0
+    res = "[\n" +
       map {|i|
-      graph = RDF::Graph.new
+      $stdout.write "\r#{n += 1} (#{100*n/todo}%)"
+
       begin
-	graph.load(i.ospostcode_uri)
-	#pp(graph)
-	query = RDF::Query.new({
-	  :stuff => {
-	    RDF::URI("http://www.w3.org/2000/01/rdf-schema#label") => :postcode,
-	    RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#lat") => :lat,
-	    RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#long") => :lng
-	  }
-	})
-	res = query.execute(graph)
-	raise "No results from query" unless res.size == 1
-	raise "No lat from query" unless res[0][:lat]
-	lat = res[0][:lat]
-	raise "No lng from query" unless res[0][:lng]
-	lng = res[0][:lng]
-
-	res.each {|r|
-
-	  puts "#{$0}: Postcode #{r[:postcode]}:\tLatitude: #{r[:lat]}\tLongitude: #{r[:lng]}"
-	}
+	r = osres[i.ospostcode_uri.to_s]
+	#pp i.ospostcode_uri.to_s
+	#pp r
+	if (r == failure_value)
+	  raise "#{osres_file} records error result"
+	elsif (r)
+	  source = "cache"
+	  lat, lng = r
+	else
+	  source = "network"
+	  graph = RDF::Graph.new
+	  graph.load(i.ospostcode_uri)
+	  #pp(graph)
+	  query = RDF::Query.new({
+	    :stuff => {
+	      RDF::URI("http://www.w3.org/2000/01/rdf-schema#label") => :postcode,
+	      RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#lat") => :lat,
+	      RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#long") => :lng
+	    }
+	  })
+	  res = query.execute(graph)
+	  raise "No results from query" unless res.size == 1
+	  raise "No lat from query" unless res[0][:lat]
+	  lat = res[0][:lat]
+	  raise "No lng from query" unless res[0][:lng]
+	  lng = res[0][:lng]
+	  osres[i.ospostcode_uri.to_s] = [lat, lng]
+	  puts "#{$0}: from #{source} Postcode #{i.ospostcode_uri}:\tLatitude: #{lat}\tLongitude: #{lng}"
+	end
 
 	"{" +
 	  {
@@ -376,11 +400,15 @@ ENDCSS
 	}.map{|k, v| "\"#{k}\": \"#{v}\""}.join(", ") +
 	  "}"
       rescue => e
-	$stderr.puts "Failed to load and read #{i.ospostcode_uri}, #{e.message}"
+	$stderr.puts "Failed to load and read #{i.ospostcode_uri}, #{e.message}" unless source == "cache"
+	osres[i.ospostcode_uri.to_s] = failure_value	# To save this error in the osres_file
 	nil
       end
-    }.compact.join(",\n") +
-      "\n]\n"
+    }.compact.join(",\n") + "\n]\n"
+      f.close if f
+      File.open(osres_file, "w") {|f| f.write(JSON.pretty_generate(osres))}
+      return res
+
   end
   def duplicate_ids
     ids = map{|i| i.id}
@@ -403,9 +431,14 @@ ENDCSS
       n += 1
       $stdout.write "\r#{n} (#{100*n/todo}%)"
       graph = i.make_graph
-      rdf_filename = save_rdf(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
-      ttl_filename = save_ttl(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
-      html_filename = save_html(:basename => i.basename, :html => i.html(rdf_filename, ttl_filename, html_fragment_for_link))
+      begin
+	rdf_filename = save_rdf(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
+	ttl_filename = save_ttl(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
+	html_filename = save_html(:basename => i.basename, :html => i.html(rdf_filename, ttl_filename, html_fragment_for_link))
+      rescue => e
+	$stderr.puts "Error [#{e.message}] saving \n#{i.csv_row}"
+	$stderr.puts e.backtrace.join("\n")
+      end
     }
     puts "\nCreating RDF, Turtle and HTML files for the collection as a whole..."
     graph = make_graph
@@ -430,18 +463,40 @@ end
 
 class Initiative
   attr_reader :id, :name, :postcode_text, :postcode_normalized, :csv_row, :homepage 
-  def initialize(csv_row)
-    @csv_row = csv_row
-    @name = source("Outlet Name")
-    @homepage = source("Website")
-    @postcode_text = source("Postcode").upcase
-    @postcode_normalized = postcode_text.gsub(/\s+/, "")
-    # There may be many outlets with the same CUK Organisation ID, so we add the postcode to (hopefilly!) create a unique ID.
-    # In fact, this leaves many duplicate IDs.
-    # The Collection.duplicates_html method generates an HTML table which may be illuminating!
+  def self.from_outlet(csv_row)
+    postcode_text = csv_row["Postcode"].upcase
+    postcode_normalized = postcode_text.gsub(/\s+/, "")
+    Initiative.new(csv_row, {
+      name: csv_row["Outlet Name"],
+      homepage: csv_row["Website"],
+      postcode_text: postcode_text,
+      postcode_normalized: postcode_normalized,
+      # There may be many outlets with the same CUK Organisation ID, so we add the postcode to (hopefilly!) create a unique ID.
+      # In fact, this leaves many duplicate IDs.
+      # The Collection.duplicates_html method generates an HTML table which may be illuminating!
 
-    # TODO - this ID is not good enough :-(
-    @id = source("CUK Organisation ID") + postcode_normalized
+      # TODO - this ID is not good enough :-(
+      id: csv_row["CUK Organisation ID"] + postcode_normalized
+    })
+  end
+  def self.from_org(csv_row)
+    postcode_text = csv_row["Registered Postcode"].upcase
+    postcode_normalized = postcode_text.gsub(/\s+/, "")
+    Initiative.new(csv_row, {
+      name: csv_row["Trading Name"],
+      homepage: nil,
+      postcode_text: postcode_text,
+      postcode_normalized: postcode_normalized,
+      id: csv_row["CUK Organisation ID"]
+    })
+  end
+  def initialize(csv_row, opts)
+    @csv_row = csv_row
+    @name = opts[:name] || ""
+    @homepage = opts[:homepage] || ""
+    @postcode_text = opts[:postcode_text] || ""
+    @postcode_normalized = opts[:postcode_normalized] || ""
+    @id = opts[:id] || ""
     if @id.empty?
       raise "Id is empty. " + source_as_str
     end
@@ -606,21 +661,48 @@ vocabs = [
 #puts Vocab.prefixes([:essglobal, :vcard])
 #
 
+short_test_run = true
+short_test_run = false
+test_rows = 2
 collection = Collection.new
-puts "Reading #{$input_csv}..."
-CSV.foreach($input_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
-  # There may be rows for previous years' accounts - we ignore these:
-  #if row["Is Most Recent"] == "1"
-    begin
-    initiative = Initiative.new(row)
-    collection << initiative
-    rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
-      warning(["Could not create Initiative from CSV: #{e.message}", "The following row from the CSV data will be ignored:", row.to_s])
-    end
 
-    # For rapidly testing on subset:
-    #break if collection.size > 10
-  #end
+puts "Reading #{$outlets_csv}..."
+rows_tested = 0;
+CSV.foreach($outlets_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
+  begin
+    row.headers.each {|h| row[h].encode!(Encoding::ASCII_8BIT) unless row[h].nil? }
+    initiative = Initiative.from_outlet(row)
+    collection << initiative
+  rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
+    warning(["Could not create Initiative from CSV [$outlets_csv]: #{e.message}", "The following row from the CSV data will be ignored:", row.to_s])
+  end
+
+  # For rapidly testing on subset:
+  if short_test_run
+    rows_tested += 1
+    break if rows_tested > test_rows
+  end
+end
+
+puts "Reading #{$orgs_csv}..."
+rows_tested = 0;
+CSV.foreach($orgs_csv, :encoding => "ISO-8859-1", :headers => true) do |row|
+  begin
+    # Change encoding! This is a workaround for a problem that emerged when processing the orgs_csv file.
+    row.headers.each {|h| row[h].encode!(Encoding::ASCII_8BIT) unless row[h].nil? }
+    # Why does it not work with UTF-8? 
+    #row.headers.each {|h| row[h].encode!(Encoding::UTF_8) unless row[h].nil? }
+    initiative = Initiative.from_org(row)
+    collection << initiative
+  rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
+    warning(["Could not create Initiative from CSV [$orgs_csv]: #{e.message}", "The following row from the CSV data will be ignored:", row.to_s])
+  end
+
+  # For rapidly testing on subset:
+  if short_test_run
+    rows_tested += 1
+    break if rows_tested > test_rows
+  end
 end
 #website_html_file = "websites.html"
 #puts "Saving table of websites to #{website_html_file} ..."

@@ -7,7 +7,7 @@ help:
 	@echo USAGE
 	@echo -----
 	@echo "make generate-data"
-	@echo "\tGenerate RDF/XML and turtle data from the Co-ops UK file $(COOPS_UK_CSV)."
+	@echo "\tGenerate RDF/XML and turtle data from the Co-ops UK files $(COOPS_UK_ORGS_CSV), $(COOPS_UK_OUTLETS_CSV)."
 	@echo "\tresults are stored in the local directory $(GEN_DATA_DIR)." 
 	@echo "make deploy"
 	@echo "\tDeploy the generated data to the data server."
@@ -43,7 +43,8 @@ RSYNC := rsync -avz
 # N.B. http://unix.stackexchange.com/questions/94421/how-to-use-ssh-config-setting-for-each-server-by-rsync
 
 # Source files:
-COOPS_UK_CSV := co-operativeeconomy_opendataextract2016/2016open_data_outlets.csv
+COOPS_UK_OUTLETS_CSV := co-operativeeconomy_opendataextract2016/2016open_data_outlets.csv
+COOPS_UK_ORGS_CSV := co-operativeeconomy_opendataextract2016/2016open_data_organisations.csv
 
 # Programs/scripts:
 GEN_TRIPLES := generate-triples.rb
@@ -67,8 +68,8 @@ $(CSS_GEN_DIR):
 # Misc:
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 
-generate-data: $(GEN_TRIPLES) $(COOPS_UK_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
-	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DATASET) '$(CSS_FILES)'
+generate-data: $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
+	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DATASET) '$(CSS_FILES)'
 
 # To deploy the generated data on the server, we need to 
 #  - make sure the target directory exists on the server
