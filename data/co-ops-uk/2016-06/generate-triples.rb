@@ -7,7 +7,10 @@ require 'rdf/vocab'
 require 'rdf'
 require "net/http"
 
-$orgs_csv, $outlets_csv, $output_dir, $uri_base, $dataset, $css_files  = $ARGV
+# Command line args.
+# Make sure these match the corresponding ones in the Makefile.
+$orgs_csv, $outlets_csv, $output_dir, $uri_base, $doc_url_base, $dataset, $css_files  = $ARGV
+
 $css_files_array = $css_files.split.map{|f| $dataset + "/" + f}
 $essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
 $solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
@@ -515,6 +518,15 @@ class Initiative
   def uri
     RDF::URI("#{$uri_base}#{basename}")
   end
+  def turtle_url
+    RDF::URI("#{$doc_url_base}#{basename}.ttl")
+  end
+  def html_url
+    RDF::URI("#{$doc_url_base}#{basename}.html")
+  end
+  def rdf_url
+    RDF::URI("#{$doc_url_base}#{basename}.rdf")
+  end
   def html(rdf_filename, ttl_filename, collection_fragment)
     xml(:html) {
       xml(:head) {
@@ -555,6 +567,15 @@ class Initiative
       } +
       xml(:tr) {
 	xml(:td) { "URI (for RDF and HTML)" } + xml(:td) { link_to(uri.to_s) }
+      } +
+      xml(:tr) {
+	xml(:td) { "RDF/XML URL" } + xml(:td) { link_to(rdf_url.to_s) }
+      } +
+      xml(:tr) {
+	xml(:td) { "Turle URL" } + xml(:td) { link_to(turtle_url.to_s) }
+      } +
+      xml(:tr) {
+	xml(:td) { "HTML URL" } + xml(:td) { link_to(html_url.to_s) }
       } +
       xml(:tr) {
 	xml(:td) { "Website" } + xml(:td) { link_to(homepage) }
@@ -665,8 +686,8 @@ vocabs = [
 # Here we load data from CSV files.
 # --------------------------------
 # For testing, we can load just a smaller set of test_rows from each CSV file (if short_test_run is true)
-short_test_run = true
 short_test_run = false
+short_test_run = true
 test_rows = 2
 collection = Collection.new
 

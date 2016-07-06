@@ -34,6 +34,7 @@ URI_PATTERN ?= id/$(IDENTIFIER_PATH)
 SERVER_DOC_DIR ?= doc/$(IDENTIFIER_PATH)
 
 URI_BASE := $(DATA_SERVER_URL)/$(URI_PATTERN)
+DOC_URL_BASE := $(DATA_SERVER_URL)/$(SERVER_DOC_DIR)
 
 # Programs used within this makefile:
 SCP := scp
@@ -69,7 +70,7 @@ $(CSS_GEN_DIR):
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 
 generate-data: $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
-	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DATASET) '$(CSS_FILES)'
+	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DOC_URL_BASE) $(DATASET) '$(CSS_FILES)'
 
 # To deploy the generated data on the server, we need to 
 #  - make sure the target directory exists on the server
