@@ -566,16 +566,16 @@ class Initiative
 	xml(:td) { "Name" } + xml(:td) { name }
       } +
       xml(:tr) {
-	xml(:td) { "URI (for RDF and HTML)" } + xml(:td) { link_to(uri.to_s) }
+	xml(:td) { "URI for RDF and HTML" } + xml(:td) { link_to(uri.to_s) }
       } +
       xml(:tr) {
-	xml(:td) { "RDF/XML URL" } + xml(:td) { link_to(rdf_url.to_s) }
+	xml(:td) { "URL for RDF/XML" } + xml(:td) { link_to(rdf_url.to_s) }
       } +
       xml(:tr) {
-	xml(:td) { "Turle URL" } + xml(:td) { link_to(turtle_url.to_s) }
+	xml(:td) { "URL for Turtle" } + xml(:td) { link_to(turtle_url.to_s) }
       } +
       xml(:tr) {
-	xml(:td) { "HTML URL" } + xml(:td) { link_to(html_url.to_s) }
+	xml(:td) { "URL for HTML" } + xml(:td) { link_to(html_url.to_s) }
       } +
       xml(:tr) {
 	xml(:td) { "Website" } + xml(:td) { link_to(homepage) }
@@ -686,8 +686,8 @@ vocabs = [
 # Here we load data from CSV files.
 # --------------------------------
 # For testing, we can load just a smaller set of test_rows from each CSV file (if short_test_run is true)
-short_test_run = false
 short_test_run = true
+short_test_run = false
 test_rows = 2
 collection = Collection.new
 
