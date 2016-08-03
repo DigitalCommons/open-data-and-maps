@@ -1,4 +1,4 @@
-define(["app/eventbus", "model/markers"], function(eventbus, markerModel) {
+define(["app/eventbus"], function(eventbus) {
 	"use strict";
 
 	var view;
@@ -87,8 +87,8 @@ define(["app/eventbus", "model/markers"], function(eventbus, markerModel) {
 
 	function init() {
 		// subscribe to events published by the model:
-		eventbus.subscribe({topic: "Point.add", callback: onPointAdd});
-		eventbus.subscribe({topic: "Point.remove", callback: onPointRemove});
+		//eventbus.subscribe({topic: "Point.add", callback: onPointAdd});
+		//eventbus.subscribe({topic: "Point.remove", callback: onPointRemove});
 		eventbus.subscribe({topic: "Initiative.new", callback: onInitiativeNew});
 	}
 	var pub = {
