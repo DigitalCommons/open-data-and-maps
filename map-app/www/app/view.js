@@ -1,5 +1,5 @@
 // This is the place where the various views are pulled into the application.
-define(["d3", "view/map", "view/menu", "view/tabs"], function(d3, map, menu, tabs) {
+define(["d3", "view/map"], function(d3, map) {
 	"use strict";
 
 	function init() {
@@ -8,10 +8,6 @@ define(["d3", "view/map", "view/menu", "view/tabs"], function(d3, map, menu, tab
 		.on("click", function() { window.open("https://github.com/p6data-coop/ise-linked-open-data/blob/master/map-app/README.md", "_blank");});
 
 		map.init();
-		menu.init();
-
-		// Initialize the tabs controls, and the content of each tab:
-		tabs.init();
 	}
 	var pub = {
 		init: init

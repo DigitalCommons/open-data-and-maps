@@ -1,5 +1,4 @@
-
-define(["app/eventbus", "app/console", "app/view", "app/debug"], function(eventbus, myconsole, view, debugging){
+define(["model/sse_initiative", "app/console", "app/view", "app/debug"], function(sseInitiative, myconsole, view, debugging){
 	"use strict";
 
 	function init() {
@@ -19,7 +18,7 @@ define(["app/eventbus", "app/console", "app/view", "app/debug"], function(eventb
 		// but the choice of 1000ms is an arbitrary hack.
 		// TODO: investigate leaflet.Map.load event. Is this what we want?
 		setTimeout(function() {
-			eventbus.publish({topic: "Main.ready"});
+			sseInitiative.loadFromWebService();
 		}, 1000);
 	}
 	var pub = {
