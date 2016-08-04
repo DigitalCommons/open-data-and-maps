@@ -56,26 +56,6 @@ define(["app/eventbus"], function(eventbus) {
 			click: function(e) { console.log("Map clicked" + e.latlng); }
 		};
 	}
-	function onPointAdd(data/*, envelope*/) {
-		var pt = data.point;
-		var latlng = [pt.lat, pt.lng];	// Understood by Leaflet.
-		// options properties are the options avaiable for Leaflet.awesome-markers.
-		// See https://github.com/lvoogdt/Leaflet.awesome-markers
-
-		var eventHandlers = {};
-		/*
-		// Test interaction between click event handlers and bound Popups:
-		var eventHandlers = {click: function(e) {
-			console.log("click");
-			console.log(e);
-		}};
-		*/
-
-		pt.setUserData("mapView", view.addMarker(latlng, data.options, eventHandlers));
-	}
-	function onPointRemove(data/*, envelope*/) {
-		data.point.getUserData("mapView").destroy();
-	}
 	function onInitiativeNew(data/*, envelope*/) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
@@ -87,8 +67,6 @@ define(["app/eventbus"], function(eventbus) {
 
 	function init() {
 		// subscribe to events published by the model:
-		//eventbus.subscribe({topic: "Point.add", callback: onPointAdd});
-		//eventbus.subscribe({topic: "Point.remove", callback: onPointRemove});
 		eventbus.subscribe({topic: "Initiative.new", callback: onInitiativeNew});
 	}
 	var pub = {
