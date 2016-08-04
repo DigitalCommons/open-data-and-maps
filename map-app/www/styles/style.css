@@ -9,12 +9,20 @@ body { height: 100%; margin: 0; padding: 0 }
  * http://blog.stevensanderson.com/2011/10/05/full-height-app-layouts-a-css-trick-to-make-it-easier/
  */
 /* Pane configuration */
-/* This configuration makes the header, footer and left col invisible */
-.left.col { width: 0; }
-.right.col { left: 0; right: 0; }
+
+/* Left col has width 100px: */
+.left.col { width: 100px; }
+.right.col { left: 100px; right: 0; }
+
+/* Set height of header row (both height and line-height should be the same): */
 .header.row { height: 0; line-height: 0; }
+
+/* body: top should match header row height, bottom should match footer row height: */
 .body.row { top: 0; bottom: 0; }
+
+/* Set height of footer row (both height and line-height should be the same): */
 .footer.row { height: 0; bottom: 0; line-height: 0; }
+
 /*
  * This is a configuration to make the header, footer and left col visible:
 .left.col { width: 350px; }
@@ -24,6 +32,43 @@ body { height: 100%; margin: 0; padding: 0 }
 .footer.row { height: 25px; bottom: 0; line-height: 25px; }
 */
 
+/* Palette URL: http://paletton.com/#uid=13x0u0kllllaFw0g0qFqFg0w0aF */
+
+/* As hex codes */
+
+.color-primary-0 { color: #29506D }	/* Main Primary color */
+.color-primary-1 { color: #718EA4 }
+.color-primary-2 { color: #496D89 }
+.color-primary-3 { color: #123652 }
+.color-primary-4 { color: #042037 }
+
+/* As RGBa codes */
+
+.rgba-primary-0 { color: rgba( 41, 80,109,1) }	/* Main Primary color */
+.rgba-primary-1 { color: rgba(113,142,164,1) }
+.rgba-primary-2 { color: rgba( 73,109,137,1) }
+.rgba-primary-3 { color: rgba( 18, 54, 82,1) }
+.rgba-primary-4 { color: rgba(  4, 32, 55,1) }
+
+
+.main-btn {
+	height: 40px;
+	width: 100%;
+	background-color: #29506D;
+	color: #718EA4;
+	border: 1px solid #042037;
+	padding: 4px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.main-btn:hover {
+	background-color: #123652;
+}
+/* :active must come after :hover (ffs) */
+.main-btn:active {
+	background-color: #718EA4;
+	color: #29506D;
+}
 #tabs-control { position: absolute; left:0; right: 0; top: 0; height: 50px; line-height:50px;}
 #tabs-content { position: absolute; left:0; right: 0; top: 50px; bottom: 0; }
 .tab-content { position: absolute; left:0; right: 0; top: 0; display: none; }
