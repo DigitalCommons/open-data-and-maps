@@ -4,15 +4,15 @@ This [web application](http://data.solidarityeconomics.org/map-app/) displays So
 This version displays information taken from the [Co-ops UK open dataset 2016](http://www.uk.coop/resources/co-operative-economy-open-dataset-2016). 
 The data has been converted into Linked Open Data; see [software for LOD conversion on GitHub](https://github.com/p6data-coop/ise-linked-open-data/tree/master/data/co-ops-uk/2016-06).
 
-## The Linked Open Data
-The URI for the index into the dataset is http://data.solidarityeconomics.org/id/experimental/co-ops-uk.
-URIs for individual co-ops look like this: http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807.
-If you point a browser [there](http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807), you'll get back HTML;
-if you ask for RDF/XML, then that is what you'll get - try this:
+## Using the map-app
 
-```
-curl  -H "Accept: application/rdf+xml" -L http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807
-```
+[Run it](http://data.solidarityeconomics.org/map-app/), and it will start up, then load the data. This may take a short time, depending on the usual set of things that influence web speed.
+Once the data has loaded, you'll see a UK map, with a bunch of numbers in circles.
+Each circle is a cluster of co-ops, the number tells you how many co-ops are in the cluster.
+Click on numbered circles until you get down to icons without numbers. 
+These are the individual co-ops.
+Click on a co-op to see some information in a pop-up. 
+The pop-up includes a link that will open up the full data (HTML version) for that co-op.
 
 ## Where does the app get its data?
 
@@ -34,15 +34,15 @@ Instead, it is intended to achieve the following goals:
 * Data is retrieved from external datasets via the SPARQL query (we get lat/long from Ordnance Survey via the co-op's postcode URI).
 * The dataset is big enough to explore basic performance issues, with over 10,000 co-ops.
 
-## Using the map-app
+## The Linked Open Data
+The URI for the index into the dataset is http://data.solidarityeconomics.org/id/experimental/co-ops-uk.
+URIs for individual co-ops look like this: http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807.
+If you point a browser [there](http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807), you'll get back HTML;
+if you ask for RDF/XML, then that is what you'll get - try this:
 
-[Run it](http://data.solidarityeconomics.org/map-app/), and it will start up, then load the data. This may take a short time, depending on the usual set of things that influence web speed.
-Once the data has loaded, you'll see a UK map, with a bunch of numbers in circles.
-Each circle is a cluster of co-ops, the number tells you how many co-ops are in the cluster.
-Click on numbered circles until you get down to icons without numbers. 
-These are the individual co-ops.
-Click on a co-op to see some information in a pop-up. 
-The pop-up includes a link that will open up the full data (HTML version) for that co-op.
+```
+curl  -H "Accept: application/rdf+xml" -L http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807
+```
 
 ## Limitations
 
