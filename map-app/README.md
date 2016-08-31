@@ -1,4 +1,4 @@
-# map-app
+# map-ap
 
 This [web application](http://data.solidarityeconomics.org/map-app/) displays Solidarity Economy initiatives on a map. It is provided as an experimental demonstration platform to exercise linked open data being developed as part of the [P6Data](https://github.com/p6data-coop) project.
 This version displays information taken from the [Co-ops UK open dataset 2016](http://www.uk.coop/resources/co-operative-economy-open-dataset-2016). 
@@ -16,7 +16,7 @@ The pop-up includes a link that will open up the full data (HTML version) for th
 
 ## Where does the app get its data?
 
-The [data](http://data.solidarityeconomics.org/id/experimental/co-ops-uk.html) has been loaded into an [Ontowiki](http://aksw.org/Projects/OntoWiki.html) instance. 
+The [data](http://data.solidarityeconomics.org/id/experimental/co-ops-uk) has been loaded into an [Ontowiki](http://aksw.org/Projects/OntoWiki.html) instance. 
 Ontowiki provides a [triple store](https://en.wikipedia.org/wiki/Triplestore), and supports [SPARQL](https://en.wikipedia.org/wiki/SPARQL) queries. 
 When the map-app runs:
 
