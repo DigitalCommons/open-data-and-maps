@@ -158,7 +158,8 @@ class Collection < Array	# of Initiatives
 	xml(:ul) {
 	  xml(:li) { "No test has been used to check if the items in this dataset are part of the solidarity economy." } +
 	  xml(:li) { "There's no guarantee that the URIs will be persistent. In fact it is most unlikely that they will be so." } +
-	  xml(:li) { "The triples included in the linked data have been chosen for the purpose of testing." }
+	  xml(:li) { "The triples included in the linked data have been chosen for the purpose of testing." } +
+	  xml(:li) { "Date is not included for co-ops in Northern Ireland, because the Ordnance Survey linked data for postcodes does not cover Northern Ireland." }
 	}
       }
     }
