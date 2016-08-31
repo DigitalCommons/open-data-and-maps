@@ -53,3 +53,4 @@ endef
 
 deploy: build
 	$(call DEPLOY_DIR,$(BUILT_DIR),$(SERVER_APP_DIR))
+	@echo "HAVE YOU CHECKED THAT www/services/initiatives.json IS UP TO DATE?"
