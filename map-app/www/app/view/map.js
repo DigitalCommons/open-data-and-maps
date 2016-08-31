@@ -18,6 +18,9 @@ define(
 					contextmenuWidth: 140,
 					contextmenuItems: presenter.getContextmenuItems()
 				});
+				// Lat/long box for Scotland, England and Wales
+				// (part of a nation that was called the United Kingdom before it voted for Brexit, 
+				// which led to Scotland becoming independent):
 				map.fitBounds([[49.5, 9], [61, -2]]);
 
 				for (i = 0; i < k.length; ++i) {
