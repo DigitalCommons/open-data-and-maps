@@ -3,6 +3,7 @@ define(["app/eventbus"], function(eventbus) {
 	"use strict";
 
 	var objects = [];
+	var initiativesToLoad = [];
 
 	function Initiative(name, uri, lat, lng, www) {
 		Object.defineProperties(this, {
@@ -15,10 +16,26 @@ define(["app/eventbus"], function(eventbus) {
 		objects.push(this);
 		eventbus.publish({topic: "Initiative.new", data: this});
 	}
+	function loadNextInitiatives() {
+		var i, e;
+		var maxInitiativesToLoadPerFrame = 100;
+		// By loading the initiatives in chunks, we keep the UI responsive
+		for (i = 0; i < maxInitiativesToLoadPerFrame; ++i) {
+			e = initiativesToLoad.pop();
+			if (e !== undefined) {
+				new Initiative(e.name, e.uri, e.lat, e.lng, e.www);
+			}
+		}
+		// If there's still more to load, we do so after returning to the event loop:
+		if (e !== undefined) {
+			setTimeout(function() {
+				loadNextInitiatives();
+			});
+		}
+	}
 	function add(json) {
-		json.forEach(function(e) {
-			new Initiative(e.name, e.uri, e.lat, e.lng, e.www);
-		});
+		initiativesToLoad = initiativesToLoad.concat(json);
+		loadNextInitiatives();
 	}
 	function loadFromWebService() {
 		var service = "services/getdata.php";
