@@ -1,6 +1,6 @@
 define(
-	["leaflet", "leaflet.contextmenu", "presenter/map", "view/map/marker"],
-	function(leaflet, contextmenu, presenter, markerView) {
+	["d3", "leaflet", "leaflet.contextmenu", "presenter/map", "view/map/marker"],
+	function(d3, leaflet, contextmenu, presenter, markerView) {
 		"use strict";
 
 		var settings;
@@ -35,8 +35,17 @@ define(
 		function addMarker(latlng, options, eventHandlers) {
 			return new markerView.Marker(map, latlng, options, eventHandlers);
 		}
+		function clearProtectingVeil() {
+			d3.select("#protectingVeil").style("display", "none");
+		}
+		function showProtectingVeil(msg) {
+			d3.select("#protectingVeil").style("display", "inline");
+			d3.select("#protectingVeilMessage").text(msg);
+		}
 		var pub = {
 			init: priv.init,
+			clearProtectingVeil: clearProtectingVeil,
+			showProtectingVeil: showProtectingVeil,
 			addMarker: addMarker
 		};
 		settings = presenter.registerView(pub);

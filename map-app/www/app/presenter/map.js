@@ -64,10 +64,19 @@ define(["app/eventbus"], function(eventbus) {
 		var options = {popuptext: popuptext, hovertext: initiative.name, cluster: true};
 		view.addMarker(latlng, options, eventHandlers);
 	}
+	function onInitiativeLoadComplete() {
+		view.clearProtectingVeil();
+	}
+	function onInitiativeLoadMessage(data/*, envelope*/) {
+		view.showProtectingVeil(data.message);
+	}
 
 	function init() {
 		// subscribe to events published by the model:
 		eventbus.subscribe({topic: "Initiative.new", callback: onInitiativeNew});
+		eventbus.subscribe({topic: "Initiative.loadComplete", callback: onInitiativeLoadComplete});
+		eventbus.subscribe({topic: "Initiative.loadStarted", callback: onInitiativeLoadMessage});
+		eventbus.subscribe({topic: "Initiative.loadFailed", callback: onInitiativeLoadMessage});
 	}
 	var pub = {
 		registerView: registerView,

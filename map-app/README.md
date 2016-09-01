@@ -1,4 +1,4 @@
-# map-ap
+# map-app
 
 This [web application](http://data.solidarityeconomics.org/map-app/) displays Solidarity Economy initiatives on a map. It is provided as an experimental demonstration platform to exercise linked open data being developed as part of the [P6Data](https://github.com/p6data-coop) project.
 This version displays information taken from the [Co-ops UK open dataset 2016](http://www.uk.coop/resources/co-operative-economy-open-dataset-2016). 

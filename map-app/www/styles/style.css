@@ -50,7 +50,41 @@ body { height: 100%; margin: 0; padding: 0 }
 .rgba-primary-3 { color: rgba( 18, 54, 82,1) }
 .rgba-primary-4 { color: rgba(  4, 32, 55,1) }
 
-
+div.protectingVeil
+{
+	/* This code was taken from http://stackoverflow.com/a/159962/685715 */
+    background-color: white;
+    filter:alpha(opacity=50); /* IE */
+    opacity: 0.5; /* Safari, Opera */
+    -moz-opacity:0.50; /* FireFox */
+	z-index: 20;
+    height: 100%;
+    width: 100%;
+    background-repeat:no-repeat;
+    background-position:center;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+	/* The display property will be set from within the javascript to control the showinghiding of the protectingVeil: */
+	display: none;
+}
+div#map {
+	z-index: 10;	/* lower than z-index of protectingVeil. */
+}
+div.protectingVeilMessageContainer {
+	position:relative;
+	height: 100%;
+}
+div.protectingVeilMessageContainer p {
+	/* Code taken from https://www.w3.org/Style/Examples/007/center.en.html */
+	margin: 0;
+	font-size: 250%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
 .main-btn {
 	height: 40px;
 	width: 100%;

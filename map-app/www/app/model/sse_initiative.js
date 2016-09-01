@@ -21,15 +21,26 @@ define(["app/eventbus"], function(eventbus) {
 		});
 	}
 	function loadFromWebService() {
-		d3.json("services/getdata.php", function(error, json) {
-			if (error) {
-				console.warn(error);
-			}
-			else {
-				console.log(json);
-				add(json);
-			}
-		});
+		var service = "services/getdata.php";
+		eventbus.publish({topic: "Initiative.loadStarted", data: {message: "Loading data via " + service}});
+		// We want to allow the effects of publishing the above event to take place in the UI before
+		// continuing with the loading of the data, so we allow the event queue to be processed:
+		setTimeout(function() {
+			d3.json(service, function(error, json) {
+				if (error) {
+					console.warn(error);
+					eventbus.publish({
+						topic: "Initiative.loadFailed",
+						data: {message: error.status + ": " + error.statusText + ": " + error.responseURL}
+					});
+				}
+				else {
+					console.log(json);
+					add(json);
+					eventbus.publish({topic: "Initiative.loadComplete"});
+				}
+			});
+		}, 0);
 	}
 	var pub = {
 		add: add,

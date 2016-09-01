@@ -46,12 +46,19 @@
                 Icons go here
             </div>
 		</div>
-        <div class="right col">
-            <div class="header row"></div>
-			<div class="body row scroll-y" id="map"></div>
+		<div class="right col">
+			<div class="header row"></div>
+			<div class="mapAndProtectingVeilContainer">
+				<div class="body row scroll-y" id="map"></div>
+				<div id="protectingVeil" class="protectingVeil">
+					<div class="protectingVeilMessageContainer">
+						<p id="protectingVeilMessage">Loading data...</p>
+					</div>
+				</div>
+			</div>
 			<div class="footer row">
-                Icons go here
-            </div>
+				Icons go here
+			</div>
 		</div>
 		<!-- OPTION 2 - Load scripts after body: -->
 		<!-- data-main attribute tells require.js to load app.js after require.js loads. -->
