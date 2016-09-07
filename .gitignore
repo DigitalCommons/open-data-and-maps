@@ -16,6 +16,9 @@ data/co-ops-uk/2016-06/generated-data
 data/co-ops-uk/2016-06/duplicates.html
 data/co-ops-uk/2016-06/websites.html
 
+# data/co-ops-uk/2016-06/generate-triples.rb creates JSON of initiatives, as temporary measure until SPARQL is in place to return these results:
+data/co-ops-uk/2016-06/initiatives.json
+
 # This is the taraget directory for the application build:
 map-app/www-built
 
