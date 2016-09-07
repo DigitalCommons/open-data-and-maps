@@ -11,8 +11,8 @@ body { height: 100%; margin: 0; padding: 0 }
 /* Pane configuration */
 
 /* Left col has width 100px: */
-.left.col { width: 100px; }
-.right.col { left: 100px; right: 0; }
+.left.col { width: 0; }
+.right.col { left: 0; right: 0; }
 
 /* Set height of header row (both height and line-height should be the same): */
 .header.row { height: 0; line-height: 0; }
@@ -85,11 +85,20 @@ div.protectingVeilMessageContainer p {
     margin-right: -50%;
     transform: translate(-50%, -50%)
 }
+div.buttonBox {
+	top: 0px;
+	right: 0px;
+	width: 100px;
+	margin: 0;
+	position:absolute;
+	z-index: 30;
+}
 .main-btn {
 	height: 40px;
 	width: 100%;
 	background-color: #29506D;
 	color: #718EA4;
+	font-size: 100%;	/* CSS mystery: why is this necesary? Without it, font size is small. */
 	border: 1px solid #042037;
 	padding: 4px;
 	margin-top: 0px;
