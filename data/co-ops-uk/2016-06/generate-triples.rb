@@ -23,6 +23,8 @@ $lib_dir = "../../../lib/p6/"
 require_relative $lib_dir + 'xml'
 require_relative $lib_dir + 'html'
 require_relative $lib_dir + 'file'
+require_relative $lib_dir + 'rdfxml'
+require_relative $lib_dir + 'turtle'
 
 # Command line args.
 # Make sure these match the corresponding ones in the Makefile.
@@ -42,21 +44,6 @@ $prefixes = {
 }
 
 
-def save_rdf(opts)
-  filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.rdf"
-  RDF::RDFXML::Writer.open(filename, prefixes: opts[:prefixes]) {|writer| writer << opts[:graph] }
-  filename
-end
-def save_ttl(opts)
-  filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.ttl"
-  RDF::Turtle::Writer.open(filename, prefixes: opts[:prefixes]) {|writer| writer << opts[:graph] }
-  filename
-end
-def save_html(opts)
-  filename = "#{opts[:dir] || $output_dir}#{opts[:basename]}.html"
-  P6::Html.save_file(opts[:html], filename)
-  filename
-end
 def warning(msgs)
   msgs = msgs.kind_of?(Array) ? msgs : [msgs]
   $stderr.puts msgs.map{|m| "\nWARNING! #{m}"}.join 
@@ -420,9 +407,9 @@ ENDCSS
       $stdout.write "\r#{n} (#{100*n/todo}%)"
       graph = i.make_graph
       begin
-	rdf_filename = save_rdf(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
-	ttl_filename = save_ttl(:basename => i.basename, :prefixes => $prefixes, :graph => graph)
-	html_filename = P6::Html.save_file(i.html(rdf_filename, ttl_filename, html_fragment_for_link), P6::File.name($output_dir, i.basename, "html"))
+	rdf_filename = P6::RdfXml.save_file(dir: $output_dir, :basename => i.basename, :prefixes => $prefixes, :graph => graph)
+	ttl_filename = P6::Turtle.save_file(dir: $output_dir, :basename => i.basename, :prefixes => $prefixes, :graph => graph)
+	html_filename = P6::Html.save_file(html: i.html(rdf_filename, ttl_filename, html_fragment_for_link), dir: $output_dir, basename: i.basename)
       rescue => e
 	$stderr.puts "Error [#{e.message}] saving \n#{i.csv_row}"
 	$stderr.puts e.backtrace.join("\n")
@@ -430,10 +417,10 @@ ENDCSS
     }
     puts "\nCreating RDF, Turtle and HTML files for the collection as a whole..."
     graph = make_graph
-    rdf_filename = save_rdf(:basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
-    ttl_filename = save_ttl(:basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
-    html_filename = save_html(:basename => Collection.basename, :html => html)
-    html_filename = save_html(:basename => Collection.about_basename, :html => about_html)
+    rdf_filename = P6::RdfXml.save_file(dir: $output_dir, :basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
+    ttl_filename = P6::Turtle.save_file(dir: $output_dir, :basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
+    html_filename = P6::Html.save_file(dir: $output_dir, basename: Collection.basename, html: html)
+    html_filename = P6::Html.save_file(dir: $output_dir, basename: Collection.about_basename, html: about_html)
   end
   private
   def uri
@@ -720,14 +707,14 @@ end
 # -------------------------------------------------------------------------
 
 # Generating the websites.html is expensive - each URL is accessed to check it's HTTP response code.
-#website_html_file = "websites.html"
-#puts "Saving table of websites to #{website_html_file} ..."
-#P6::Html.save_file(collection.websites_html, website_html_file)
+website_html_file = "websites.html"
+puts "Saving table of websites to #{website_html_file} ..."
+P6::Html.save_file(html: collection.websites_html, filename: website_html_file)
 
 # Generate a report about diplicate IDs:
-#dups_html_file = "duplicates.html"
-#puts "Saving table of duplicates to #{dups_html_file} ..."
-#P6::Html.save_file(collection.duplicates_html, dups_html_file)
+dups_html_file = "duplicates.html"
+puts "Saving table of duplicates to #{dups_html_file} ..."
+P6::Html.save_file(html: collection.duplicates_html, filename: dups_html_file)
 
 # From here on, we're working with the collection after having duplicate IDs removed:
 collection.remove_duplicate_ids

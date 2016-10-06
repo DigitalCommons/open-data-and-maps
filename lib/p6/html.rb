@@ -17,8 +17,10 @@ module P6
 	}
       }
     end
-    def Html.save_file(html, filename) 
-      P6::File.save("<!DOCTYPE html>\n" + html, filename)
+    def Html.save_file(opts)	# named params :html, :dir, :basename, :filename
+      # Only use :dir and :basename if :filename is missing:
+      filename = opts[:filename] || P6::File.name(opts[:dir], opts[:basename], "html")
+      P6::File.save("<!DOCTYPE html>\n" + opts[:html], filename)
     end
   end
 end

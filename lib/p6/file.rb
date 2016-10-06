@@ -8,7 +8,7 @@ module P6
       filename
     end
     def File.name(dir, base, ext)
-      dir + base + "." +ext
+      dir + base + "." + ext
     end
   end
 end
