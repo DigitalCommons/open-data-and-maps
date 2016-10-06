@@ -4,8 +4,8 @@ require_relative 'file'
 
 module P6
   module Html
-    def Html.link_to(url)
-      P6::Xml.xml(:a, href: url) { url } 
+    def Html.link_to(href, text = nil)
+      P6::Xml.xml(:a, href: href) { text || href } 
     end
     def Html.html_fragment_for_inserted_code(heading, filename)
       P6::Xml.xml(:div) {

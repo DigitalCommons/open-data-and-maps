@@ -89,7 +89,7 @@ class Collection < Array	# of Initiatives
       P6::Xml.xml(:body) {
 	P6::Xml.xml(:h1) { "Co-ops UK - experimental dataset" } +
 	P6::Xml.xml(:p) { "The URI for this list is: " + P6::Html.link_to(uri.to_s) } +
-	P6::Xml.xml(:p) { "See: " + P6::Xml.xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + "." } +
+	P6::Xml.xml(:p) { "See: " + P6::Html.link_to(Collection.about_uri.to_s, " about this dataset") + "." } +
 	P6::Xml.xml(:table) {
 	  P6::Xml.xml(:thead) {
 	    P6::Xml.xml(:tr) {
@@ -123,7 +123,7 @@ class Collection < Array	# of Initiatives
 	P6::Xml.xml(:p) { "Base URI: " + P6::Html.link_to(uri.to_s) } +
 	P6::Xml.xml(:p) { 
 	  "This is an experimental dataset, generated as part of the p6data project, which can be found " + 
-	  P6::Xml.xml(:a, href: "https://github.com/p6data-coop") { "on GitHub" } +
+	  P6::Html.link_to("https://github.com/p6data-coop", "on GitHub") +
 	  ". Its experimental nature means that"
 	} +
 	P6::Xml.xml(:ul) {
@@ -509,14 +509,18 @@ class Initiative
       } +
       P6::Xml.xml(:body) {
 	P6::Xml.xml(:h1) { name } +
-	P6::Xml.xml(:p) { "This data is from an experimental dataset. See " + P6::Xml.xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
+	P6::Xml.xml(:p) { 
+	  "This data is from an experimental dataset. See " + 
+	  P6::Html.link_to(Collection.about_uri.to_s, " about this dataset") +
+	  " for more information."
+	} +
 	collection_fragment +	# with link back to list of all.
 	P6::Xml.xml(:h3) { "Contents" } +
 	P6::Xml.xml(:ul) {
-	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#table") { @@heading[:table] } } +
-	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#csv") { @@heading[:csv] } } +
-	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#rdf") { @@heading[:rdf] } } +
-	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#ttl") { @@heading[:ttl] } }
+	  P6::Xml.xml(:li) { P6::Html.link_to("#table", @@heading[:table]) } +
+	  P6::Xml.xml(:li) { P6::Html.link_to("#csv", @@heading[:csv]) } +
+	  P6::Xml.xml(:li) { P6::Html.link_to("#rdf", @@heading[:rdf]) } +
+	  P6::Xml.xml(:li) { P6::Html.link_to("#ttl", @@heading[:ttl]) }
 	} + 
 	P6::Xml.xml(:a, id: "table") + html_fragment_for_data_table +
 	P6::Xml.xml(:a, id: "csv") + html_fragment_for_csv_row +
