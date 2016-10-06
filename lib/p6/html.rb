@@ -22,5 +22,24 @@ module P6
       filename = opts[:filename] || P6::File.name(opts[:dir], opts[:basename], "html")
       P6::File.save("<!DOCTYPE html>\n" + opts[:html], filename)
     end
+    def Html.table(opts)
+      # Named params
+      #   :rows - Array of Arrays of columns
+      #   :headers - Array of column headings
+
+      thead = opts[:headers] ? P6::Xml.xml(:thead) { P6::Xml.xml(:tr) { opts[:headers].map {|h| P6::Xml.xml(:th) { h } }.join } } : ""
+      P6::Xml.xml(:table) {
+	thead +
+	P6::Xml.xml(:tbody) {
+	  opts[:rows].map {|row|
+	    P6::Xml.xml(:tr) {
+	      row.map {|col|
+		P6::Xml.xml(:td) { col }
+	      }.join
+	    }
+	  }.join
+	}
+      }
+    end
   end
 end

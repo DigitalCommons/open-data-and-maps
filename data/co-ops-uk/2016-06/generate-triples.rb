@@ -90,23 +90,10 @@ class Collection < Array	# of Initiatives
 	P6::Xml.xml(:h1) { "Co-ops UK - experimental dataset" } +
 	P6::Xml.xml(:p) { "The URI for this list is: " + P6::Html.link_to(uri.to_s) } +
 	P6::Xml.xml(:p) { "See: " + P6::Html.link_to(Collection.about_uri.to_s, " about this dataset") + "." } +
-	P6::Xml.xml(:table) {
-	  P6::Xml.xml(:thead) {
-	    P6::Xml.xml(:tr) {
-	      P6::Xml.xml(:th) { "Co-op name" } + P6::Xml.xml(:th) { "URI" }
-	    }
-	  } +
-	  P6::Xml.xml(:tbody) {
-	    sort {|a, b| a.name <=> b.name}
-	    .map {|i|
-	      P6::Xml.xml(:tr) {
-		P6::Xml.xml(:td) { i.name } + P6::Xml.xml(:td) { 
-		  P6::Html.link_to(i.uri.to_s)
-		}
-	      }
-	    }.join
-	  }
-	}
+	P6::Html.table(
+	  headers: ["Co-op name", "URI" ],
+	  rows: sort {|a, b| a.name <=> b.name}.map {|i| [i.name, P6::Html.link_to(i.uri.to_s)] }
+	)
       }
     }
   end
@@ -203,20 +190,10 @@ ENDCSS
 	P6::Xml.xml(:h1) { "Websites included in the Co-ops UK open dataset of June 2016" } +
 	P6::Xml.xml(:p) { ""
 	} + "\n" +
-	P6::Xml.xml(:table) {
-	  # Header row:
-	  P6::Xml.xml(:tr) {
-	    P6::Xml.xml(:th) { "URL" } + P6::Xml.xml(:th) { "HTTP code" }
-	  } +
-
-	  # Body rows:
-	  UrlRes.all
-	  .sort{|a, b| a.http_code <=> b.http_code}
-	  .map {|r|
-	    #pp r
-	    P6::Xml.xml(:tr) { P6::Xml.xml(:td) { r.url } + P6::Xml.xml(:td) { r.http_code } }
-	  }.join("\n")
-	}
+	P6::Html.table(
+	  headers: ["URL", "HTTP code"],
+	  rows: UrlRes.all.sort { |a, b| a.http_code <=> b.http_code }.map { |r| [r.url, r.http_code] }
+	)
       }
     }
   end
@@ -537,54 +514,21 @@ class Initiative
   }
   def html_fragment_for_data_table
     P6::Xml.xml(:h2) { @@heading[:table] } +
-    P6::Xml.xml(:table) {
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "Name" } + P6::Xml.xml(:td) { name }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "URI for RDF and HTML" } + P6::Xml.xml(:td) { P6::Html.link_to(uri.to_s) }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "URL for RDF/XML" } + P6::Xml.xml(:td) { P6::Html.link_to(rdf_url.to_s) }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "URL for Turtle" } + P6::Xml.xml(:td) { P6::Html.link_to(turtle_url.to_s) }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "URL for HTML" } + P6::Xml.xml(:td) { P6::Html.link_to(html_url.to_s) }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "Website" } + P6::Xml.xml(:td) { P6::Html.link_to(homepage) }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "Postcode" } + P6::Xml.xml(:td) { postcode_text }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "Country" } + P6::Xml.xml(:td) { country_name }
-      } +
-      P6::Xml.xml(:tr) {
-	P6::Xml.xml(:td) { "postcode URI" } + P6::Xml.xml(:td) { 
-	  begin
-	    P6::Html.link_to(ospostcode_uri.to_uri.to_s)
-	  rescue
-	    "none available"
-	  end
-	}
-      }
-    }
+      P6::Html.table(rows: [
+	["Name", name],
+	["URI for RDF and HTML", P6::Html.link_to(uri.to_s)],
+	["URL for RDF/XML", P6::Html.link_to(rdf_url.to_s)],
+	["URL for Turtle", P6::Html.link_to(turtle_url.to_s)],
+	["URL for HTML", P6::Html.link_to(html_url.to_s)],
+	["Website", P6::Html.link_to(homepage)],
+	["Postcode", postcode_text],
+	["Country", country_name],
+	["postcode URI", ospostcode_uri ? P6::Html.link_to(ospostcode_uri.to_uri.to_s) : "none available"]
+    ])
   end
   def html_fragment_for_csv_row
     P6::Xml.xml(:h2) { @@heading[:csv] } +
-    P6::Xml.xml(:table) {
-      @csv_row.headers.map {|h|
-	#v = @csv_row[h]
-	#hv = v.nil? ? "" : CGI.escapeHTML(v)
-	hv = CGI.escapeHTML(source(h))
-	P6::Xml.xml(:tr) {
-	  P6::Xml.xml(:td) { CGI.escapeHTML(h) } + P6::Xml.xml(:td) { hv } 
-	}
-      }.join
-    }
+      P6::Html.table(rows: @csv_row.headers.map { |h| [  CGI.escapeHTML(h), CGI.escapeHTML(source(h)) ] })
   end
   def self.type_uri
     $essglobal["SSEInitiative"]
