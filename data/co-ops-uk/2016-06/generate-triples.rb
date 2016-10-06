@@ -5,7 +5,9 @@ require 'json'
 require 'linkeddata'
 require 'rdf/vocab'
 require 'rdf'
-require "net/http"
+require 'net/http'
+$lib_dir = "../../../lib/p6/"
+require_relative $lib_dir + 'xml'
 
 # Command line args.
 # Make sure these match the corresponding ones in the Makefile.
@@ -24,22 +26,16 @@ $prefixes = {
   ospostcode: $ospostcode.to_uri.to_s
 }
 
-# Function for generating xml (used here for html).
-def xml(ele, attr = {})
-  "<#{ele}#{attr.keys.map{|k| " #{k}=\"#{attr[k]}\""}.join}>" + # Element opening tag with attributes.
-    (block_given? ? yield : "") +	# Element contents.
-    "</#{ele}>"	# Element closing tag.
-end
 def link_to(url)
-  xml(:a, href: url) { url } 
+  P6::Xml.xml(:a, href: url) { url } 
 end
 
 def html_fragment_for_inserted_code(heading, filename)
-  xml(:div) {
-    xml(:h2) {
+  P6::Xml.xml(:div) {
+    P6::Xml.xml(:h2) {
       heading
     } +
-    xml(:pre) {
+    P6::Xml.xml(:pre) {
       CGI.escapeHTML(File.open(filename, "rb").read)
     }
   }
@@ -108,28 +104,28 @@ class Collection < Array	# of Initiatives
     return graph
   end
   def html
-    xml(:html) {
-      xml(:head) {
-	xml(:title) { "Co-ops UK experimental dataset" } +
+    P6::Xml.xml(:html) {
+      P6::Xml.xml(:head) {
+	P6::Xml.xml(:title) { "Co-ops UK experimental dataset" } +
 	$css_files_array.map {|f|
-	  xml(:link, rel: "stylesheet", type: "text/css", href: f)
+	  P6::Xml.xml(:link, rel: "stylesheet", type: "text/css", href: f)
 	}.join
       } +
-      xml(:body) {
-	xml(:h1) { "Co-ops UK - experimental dataset" } +
-	xml(:p) { "The URI for this list is: " + link_to(uri.to_s) } +
-	xml(:p) { "See: " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + "." } +
-	xml(:table) {
-	  xml(:thead) {
-	    xml(:tr) {
-	      xml(:th) { "Co-op name" } + xml(:th) { "URI" }
+      P6::Xml.xml(:body) {
+	P6::Xml.xml(:h1) { "Co-ops UK - experimental dataset" } +
+	P6::Xml.xml(:p) { "The URI for this list is: " + link_to(uri.to_s) } +
+	P6::Xml.xml(:p) { "See: " + P6::Xml.xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + "." } +
+	P6::Xml.xml(:table) {
+	  P6::Xml.xml(:thead) {
+	    P6::Xml.xml(:tr) {
+	      P6::Xml.xml(:th) { "Co-op name" } + P6::Xml.xml(:th) { "URI" }
 	    }
 	  } +
-	  xml(:tbody) {
+	  P6::Xml.xml(:tbody) {
 	    sort {|a, b| a.name <=> b.name}
 	    .map {|i|
-	      xml(:tr) {
-		xml(:td) { i.name } + xml(:td) { 
+	      P6::Xml.xml(:tr) {
+		P6::Xml.xml(:td) { i.name } + P6::Xml.xml(:td) { 
 		  link_to(i.uri.to_s)
 		}
 	      }
@@ -140,26 +136,26 @@ class Collection < Array	# of Initiatives
     }
   end
   def about_html
-    xml(:html) {
-      xml(:head) {
-	xml(:title) { "Co-ops UK experimental dataset" } +
+    P6::Xml.xml(:html) {
+      P6::Xml.xml(:head) {
+	P6::Xml.xml(:title) { "Co-ops UK experimental dataset" } +
 	$css_files_array.map {|f|
-	  xml(:link, rel: "stylesheet", type: "text/css", href: "../#{f}")
+	  P6::Xml.xml(:link, rel: "stylesheet", type: "text/css", href: "../#{f}")
 	}.join
       } +
-      xml(:body) {
-	xml(:h1) { "About this dataset"} +
-	xml(:p) { "Base URI: " + link_to(uri.to_s) } +
-	xml(:p) { 
+      P6::Xml.xml(:body) {
+	P6::Xml.xml(:h1) { "About this dataset"} +
+	P6::Xml.xml(:p) { "Base URI: " + link_to(uri.to_s) } +
+	P6::Xml.xml(:p) { 
 	  "This is an experimental dataset, generated as part of the p6data project, which can be found " + 
-	  xml(:a, href: "https://github.com/p6data-coop") { "on GitHub" } +
+	  P6::Xml.xml(:a, href: "https://github.com/p6data-coop") { "on GitHub" } +
 	  ". Its experimental nature means that"
 	} +
-	xml(:ul) {
-	  xml(:li) { "No test has been used to check if the items in this dataset are part of the solidarity economy." } +
-	  xml(:li) { "There's no guarantee that the URIs will be persistent. In fact it is most unlikely that they will be so." } +
-	  xml(:li) { "The triples included in the linked data have been chosen for the purpose of testing." } +
-	  xml(:li) { "Date is not included for co-ops in Northern Ireland, because the Ordnance Survey linked data for postcodes does not cover Northern Ireland." }
+	P6::Xml.xml(:ul) {
+	  P6::Xml.xml(:li) { "No test has been used to check if the items in this dataset are part of the solidarity economy." } +
+	  P6::Xml.xml(:li) { "There's no guarantee that the URIs will be persistent. In fact it is most unlikely that they will be so." } +
+	  P6::Xml.xml(:li) { "The triples included in the linked data have been chosen for the purpose of testing." } +
+	  P6::Xml.xml(:li) { "Date is not included for co-ops in Northern Ireland, because the Ordnance Survey linked data for postcodes does not cover Northern Ireland." }
 	}
       }
     }
@@ -223,19 +219,19 @@ ENDCSS
       $stdout.write "\r#{n += 1} (#{100*n/todo}%)"
       UrlRes.new(i.homepage) if (i.homepage.length > 0)
     }
-    xml(:html) {
-      xml(:head) {
-	xml(:title) { "Websites" }  +
-	xml(:style) { css }
+    P6::Xml.xml(:html) {
+      P6::Xml.xml(:head) {
+	P6::Xml.xml(:title) { "Websites" }  +
+	P6::Xml.xml(:style) { css }
       } + "\n" +
-      xml(:body) {
-	xml(:h1) { "Websites included in the Co-ops UK open dataset of June 2016" } +
-	xml(:p) { ""
+      P6::Xml.xml(:body) {
+	P6::Xml.xml(:h1) { "Websites included in the Co-ops UK open dataset of June 2016" } +
+	P6::Xml.xml(:p) { ""
 	} + "\n" +
-	xml(:table) {
+	P6::Xml.xml(:table) {
 	  # Header row:
-	  xml(:tr) {
-	    xml(:th) { "URL" } + xml(:th) { "HTTP code" }
+	  P6::Xml.xml(:tr) {
+	    P6::Xml.xml(:th) { "URL" } + P6::Xml.xml(:th) { "HTTP code" }
 	  } +
 
 	  # Body rows:
@@ -243,7 +239,7 @@ ENDCSS
 	  .sort{|a, b| a.http_code <=> b.http_code}
 	  .map {|r|
 	    #pp r
-	    xml(:tr) { xml(:td) { r.url } + xml(:td) { r.http_code } }
+	    P6::Xml.xml(:tr) { P6::Xml.xml(:td) { r.url } + P6::Xml.xml(:td) { r.http_code } }
 	  }.join("\n")
 	}
       }
@@ -271,29 +267,29 @@ td.first {
     border-top: 5px solid black;
 }
 ENDCSS
-    xml(:html) {
-      xml(:head) {
-	xml(:title) { "Duplicates" }  +
-	xml(:style) { css }
+    P6::Xml.xml(:html) {
+      P6::Xml.xml(:head) {
+	P6::Xml.xml(:title) { "Duplicates" }  +
+	P6::Xml.xml(:style) { css }
       } + "\n" +
-      xml(:body) {
-	xml(:h1) { "Outlets with the same CUK ID and Postcode" } +
-	xml(:p) {
+      P6::Xml.xml(:body) {
+	P6::Xml.xml(:h1) { "Outlets with the same CUK ID and Postcode" } +
+	P6::Xml.xml(:p) {
 	  "The table shows all outlets with the same CUK Organisation ID and Postcode.
 	  The other cells are coloured green if all outlets with the same CUK ID and Postcode have the same value, 
 	  and red if they are differnt values."
 	} +
-	xml(:p) {
+	P6::Xml.xml(:p) {
 	  "Green cells in the Outlet Name column may mean that the are genuine duplicates, which need to be cleaned"
 	} +
-	xml(:p) {
+	P6::Xml.xml(:p) {
 	  "Something else revealed by this (nothing to do with duplicate outlets) is that some rows of the CSV have the Description column missing, so that the phone number becomes the description. Search for Long Sutton Post Office, for example."
 	} + "\n" +
-	xml(:table) {
+	P6::Xml.xml(:table) {
 	  # Header row:
-	  xml(:tr) {
-	    id_headers.map {|h| xml(:th) { h } }.join +
-	    outlets_headers.map {|h| xml(:th) { h } }.join
+	  P6::Xml.xml(:tr) {
+	    id_headers.map {|h| P6::Xml.xml(:th) { h } }.join +
+	    outlets_headers.map {|h| P6::Xml.xml(:th) { h } }.join
 	  } +
 
 	  # Body rows:
@@ -303,7 +299,7 @@ ENDCSS
 	    #}
 	    first = true
 	    v.map {|i|  
-	      xml(:tr) {
+	      P6::Xml.xml(:tr) {
 		classes = []
 		if first
 		  # First row of a set of Initiatives with the same ID is different - 
@@ -312,7 +308,7 @@ ENDCSS
 		  first = false
 		  classes << "first"
 		  id_headers.map { |h|
-		    xml(:td, :class => classes.join(" "), :rowspan => v.count) { "#{i.csv_row[h]}" }
+		    P6::Xml.xml(:td, :class => classes.join(" "), :rowspan => v.count) { "#{i.csv_row[h]}" }
 		  }.join
 		else
 		  ""
@@ -333,8 +329,8 @@ ENDCSS
 		  # To find this out, we just count up the number of elments in same:
 		  td_classes = classes + [same_values.count > 1 ? "common" : "different"]
 
-		  #xml(:td, :class => common.include?(h) ? "common" : "different") { "#{i.csv_row[h]}" }
-		  xml(:td, :class => td_classes.join(" ")) { "#{i.csv_row[h]}" }
+		  #P6::Xml.xml(:td, :class => common.include?(h) ? "common" : "different") { "#{i.csv_row[h]}" }
+		  P6::Xml.xml(:td, :class => td_classes.join(" ")) { "#{i.csv_row[h]}" }
 		}.join
 	      }
 	    }.join("\n")
@@ -456,8 +452,8 @@ ENDCSS
     RDF::URI("#{$uri_base}#{Collection.basename}")
   end
   def html_fragment_for_link
-    xml(:div) {
-      xml(:p) {
+    P6::Xml.xml(:div) {
+      P6::Xml.xml(:p) {
 	"The URI for the whole list is: " +
 	link_to(uri.to_s)
       }
@@ -529,28 +525,28 @@ class Initiative
     RDF::URI("#{$doc_url_base}#{basename}.rdf")
   end
   def html(rdf_filename, ttl_filename, collection_fragment)
-    xml(:html) {
-      xml(:head) {
-	xml(:title) { "Co-ops UK experimental dataset" } +
+    P6::Xml.xml(:html) {
+      P6::Xml.xml(:head) {
+	P6::Xml.xml(:title) { "Co-ops UK experimental dataset" } +
 	$css_files_array.map {|f|
-	  xml(:link, rel: "stylesheet", type: "text/css", href: "../#{f}")
+	  P6::Xml.xml(:link, rel: "stylesheet", type: "text/css", href: "../#{f}")
 	}.join
       } +
-      xml(:body) {
-	xml(:h1) { name } +
-	xml(:p) { "This data is from an experimental dataset. See " + xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
+      P6::Xml.xml(:body) {
+	P6::Xml.xml(:h1) { name } +
+	P6::Xml.xml(:p) { "This data is from an experimental dataset. See " + P6::Xml.xml(:a, href: Collection.about_uri.to_s) { " about this dataset"} + " for more information." } +
 	collection_fragment +	# with link back to list of all.
-	xml(:h3) { "Contents" } +
-	xml(:ul) {
-	  xml(:li) { xml(:a, href: "#table") { @@heading[:table] } } +
-	  xml(:li) { xml(:a, href: "#csv") { @@heading[:csv] } } +
-	  xml(:li) { xml(:a, href: "#rdf") { @@heading[:rdf] } } +
-	  xml(:li) { xml(:a, href: "#ttl") { @@heading[:ttl] } }
+	P6::Xml.xml(:h3) { "Contents" } +
+	P6::Xml.xml(:ul) {
+	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#table") { @@heading[:table] } } +
+	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#csv") { @@heading[:csv] } } +
+	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#rdf") { @@heading[:rdf] } } +
+	  P6::Xml.xml(:li) { P6::Xml.xml(:a, href: "#ttl") { @@heading[:ttl] } }
 	} + 
-	xml(:a, id: "table") + html_fragment_for_data_table +
-	xml(:a, id: "csv") + html_fragment_for_csv_row +
-	xml(:a, id: "rdf") + html_fragment_for_inserted_code(@@heading[:rdf], rdf_filename) +
-	xml(:a, id: "ttl") + html_fragment_for_inserted_code(@@heading[:ttl], ttl_filename)
+	P6::Xml.xml(:a, id: "table") + html_fragment_for_data_table +
+	P6::Xml.xml(:a, id: "csv") + html_fragment_for_csv_row +
+	P6::Xml.xml(:a, id: "rdf") + html_fragment_for_inserted_code(@@heading[:rdf], rdf_filename) +
+	P6::Xml.xml(:a, id: "ttl") + html_fragment_for_inserted_code(@@heading[:ttl], ttl_filename)
       }
     }
   end
@@ -561,34 +557,34 @@ class Initiative
     ttl: "Turtle document"
   }
   def html_fragment_for_data_table
-    xml(:h2) { @@heading[:table] } +
-    xml(:table) {
-      xml(:tr) {
-	xml(:td) { "Name" } + xml(:td) { name }
+    P6::Xml.xml(:h2) { @@heading[:table] } +
+    P6::Xml.xml(:table) {
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "Name" } + P6::Xml.xml(:td) { name }
       } +
-      xml(:tr) {
-	xml(:td) { "URI for RDF and HTML" } + xml(:td) { link_to(uri.to_s) }
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "URI for RDF and HTML" } + P6::Xml.xml(:td) { link_to(uri.to_s) }
       } +
-      xml(:tr) {
-	xml(:td) { "URL for RDF/XML" } + xml(:td) { link_to(rdf_url.to_s) }
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "URL for RDF/XML" } + P6::Xml.xml(:td) { link_to(rdf_url.to_s) }
       } +
-      xml(:tr) {
-	xml(:td) { "URL for Turtle" } + xml(:td) { link_to(turtle_url.to_s) }
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "URL for Turtle" } + P6::Xml.xml(:td) { link_to(turtle_url.to_s) }
       } +
-      xml(:tr) {
-	xml(:td) { "URL for HTML" } + xml(:td) { link_to(html_url.to_s) }
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "URL for HTML" } + P6::Xml.xml(:td) { link_to(html_url.to_s) }
       } +
-      xml(:tr) {
-	xml(:td) { "Website" } + xml(:td) { link_to(homepage) }
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "Website" } + P6::Xml.xml(:td) { link_to(homepage) }
       } +
-      xml(:tr) {
-	xml(:td) { "Postcode" } + xml(:td) { postcode_text }
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "Postcode" } + P6::Xml.xml(:td) { postcode_text }
       } +
-      xml(:tr) {
-	xml(:td) { "Country" } + xml(:td) { country_name }
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "Country" } + P6::Xml.xml(:td) { country_name }
       } +
-      xml(:tr) {
-	xml(:td) { "postcode URI" } + xml(:td) { 
+      P6::Xml.xml(:tr) {
+	P6::Xml.xml(:td) { "postcode URI" } + P6::Xml.xml(:td) { 
 	  begin
 	    link_to(ospostcode_uri.to_uri.to_s)
 	  rescue
@@ -599,14 +595,14 @@ class Initiative
     }
   end
   def html_fragment_for_csv_row
-    xml(:h2) { @@heading[:csv] } +
-    xml(:table) {
+    P6::Xml.xml(:h2) { @@heading[:csv] } +
+    P6::Xml.xml(:table) {
       @csv_row.headers.map {|h|
 	#v = @csv_row[h]
 	#hv = v.nil? ? "" : CGI.escapeHTML(v)
 	hv = CGI.escapeHTML(source(h))
-	xml(:tr) {
-	  xml(:td) { CGI.escapeHTML(h) } + xml(:td) { hv } 
+	P6::Xml.xml(:tr) {
+	  P6::Xml.xml(:td) { CGI.escapeHTML(h) } + P6::Xml.xml(:td) { hv } 
 	}
       }.join
     }
@@ -687,8 +683,8 @@ vocabs = [
 # Here we load data from CSV files.
 # --------------------------------
 # For testing, we can load just a smaller set of test_rows from each CSV file (if short_test_run is true)
-short_test_run = true
 short_test_run = false
+short_test_run = true
 test_rows = 2
 collection = Collection.new
 
