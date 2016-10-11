@@ -4,6 +4,10 @@
 # General:
 *.zip
 
+# Convention for old files held temporarily in local filesystem:
+*.old
+junk
+
 # rdf-server/Makefile creates local backups copies of the server's .htaccess file:
 rdf-server/*.backup
 
