@@ -26,5 +26,8 @@ data/co-ops-uk/2016-06/initiatives.json
 # This is the taraget directory for the application build:
 map-app/www-built
 
+# vocab/generate-vocab.rb creates an output directory:
+vocab/generated-vocab
+
 # Mac OS/X cruft:
 .DS_Store
