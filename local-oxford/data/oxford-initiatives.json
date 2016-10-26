@@ -1,0 +1,54 @@
+{
+	"nameOfInitiative": "Cultivate",
+	"address": {
+		"streetAddress": "The Earth Trust",
+		"town" : "Little Wittenham"
+		},
+	"pointsOfSale": [
+		{
+			"name": "Rusty Bike",
+			"location":{
+				"latitude": 51.742836,
+				"longitude": -1.234130,
+				},
+			"openingHours": "Th 15:00-20:00"
+		},
+		{
+			"name": "Little Clarendon Street",
+			"location":{
+				"latitude": 51.758330,
+				"longitude": -1.262276,
+				},
+			"openingHours": "Fr 12:00-18:00"
+		},
+		{
+			"name": "Barclays Bank",
+			"location":{
+				"latitude": 51.760217,
+				"longitude": -1.211059,
+				},
+			"openingHours": "Sa 9:30-15:00"
+		},
+		{
+			"name": "Summertown Market",
+			"location":{
+				"latitude": 51.777644,
+				"longitude": -1.264857,
+				},
+			"openingHours": "Su 10:00-14:30"
+		}
+		],
+	"organisationType(?)": "Community Benefit Society",
+	"typeOfWork(tmap)": [
+		{"provides":"food\/drink"}
+		],
+	"identity(tmap)": NULL
+	"interaction(tmap)": "buying\/selling",
+	"principlesDescription(?): "Our main priority is bringing locally grown produce this means lower food miles and more money going into the local economy. We partener with many local growers to bring a wide range of produce to the people of Oxford. Ethical = We only stock produce that we are happy has been produced in an ecologically-friendly and sustainable way. This means that most of our produce is Organic. If we have to look outside the local area for our produce we ensure it’s organic and that’s it’s transported in the most environmentally friendly way", possible. 
+	"url": "http:\/\/cultivateoxford.org",
+	"jobVacancy(?)":NULL,
+	"volunteerVacancy(?):"http:\/\/cultivateoxford.org\/get-involved",
+	"investmentVacancy(?)":"http:\/\/cultivateoxford.org\/get-involved",
+	"newsLinks(?)":"http://www.oxfordmail.co.uk/news/14728022.Making_every_tomato_count__tackling_the_waste_issue_at_Cultivate/",
+	"email": "info@cultivateoxford.org"
+}
