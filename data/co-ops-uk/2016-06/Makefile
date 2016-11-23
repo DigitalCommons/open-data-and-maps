@@ -1,16 +1,25 @@
 # Hint: type 'make' to get the usage message.
 
-.PHONY: help generate-data deploy
-.DEFAULT_GOAL: help
+GENERATE_target := generate
+DEPLOY_target := deploy
+HELP_target := help
+TEST_target := test
+.PHONY: $(HELP_target) $(GENERATE_target) $(DEPLOY_target) $(TEST_target)
+.DEFAULT_GOAL: $(HELP_target)
 
-help:
+$(HELP_target):
 	@echo USAGE
 	@echo -----
-	@echo "make generate-data"
-	@echo "\tGenerate RDF/XML and turtle data from the Co-ops UK files $(COOPS_UK_ORGS_CSV), $(COOPS_UK_OUTLETS_CSV)."
-	@echo "\tresults are stored in the local directory $(GEN_DATA_DIR)." 
-	@echo "make deploy"
-	@echo "\tDeploy the generated data to the data server."
+	@echo "make $(GENERATE_target)"
+	@echo "\tGenerate RDF/XML and turtle data from the Co-ops UK files"
+	@echo "\t  $(COOPS_UK_ORGS_CSV)"
+	@echo "\t  $(COOPS_UK_OUTLETS_CSV)"
+	@echo "\tResults are stored in the local directory $(GEN_DATA_DIR)." 
+	@echo "make $(DEPLOY_target)"
+	@echo "\tDeploy the generated data to the data server using the command"
+	@echo "\t  $(RSYNC_CMD)"
+	@echo "\tAfter deployment, assuming content negotiation is configured properly, data can be accessed at this URI:"
+	@echo "\t  $(URI_BASE)$(DATASET)"
 
 # Variables to be overridden from the command line:
 #
@@ -25,7 +34,7 @@ SERVER_CMD = ssh $(SERVER) $(1)
 
 # See https://github.com/p6data-coop/ise-linked-open-data/wiki/URIs for a discussion about "experimental"
 #IDENTIFIER_PATH ?= experimental/co-ops-uk/
-IDENTIFIER_PATH ?= experimental/
+IDENTIFIER_PATH ?= experimental/test1/
 DATASET ?= co-ops-uk
 
 # Following data.gov.uk principles, URIs for real-world objects are under `id`, ...
@@ -51,7 +60,7 @@ COOPS_UK_ORGS_CSV := co-operativeeconomy_opendataextract2016/2016open_data_organ
 GEN_TRIPLES := generate-triples.rb
 
 # Directories
-GEN_DATA_DIR := generated-data/
+GEN_DATA_DIR := generated-data/$(IDENTIFIER_PATH)
 DATA_DIR := $(GEN_DATA_DIR)$(DATASET)
 CSS_SRC_DIR := css/
 CSS_GEN_DIR := $(GEN_DATA_DIR)$(DATASET)/css/
@@ -69,14 +78,26 @@ $(CSS_GEN_DIR):
 # Misc:
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 
-generate-data: $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
-	$(RUBY) $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(GEN_DATA_DIR) $(URI_BASE) $(DOC_URL_BASE) $(DATASET) '$(CSS_FILES)'
+# Standard GNU make trick - see http://stackoverflow.com/a/7531247/685715
+nullstring :=
+space := $(nullstring) # end of the line
+comma := ,
+
+$(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
+	$(RUBY) $(GEN_TRIPLES) --organizations-csv $(COOPS_UK_ORGS_CSV) \
+		--outlets-csv $(COOPS_UK_OUTLETS_CSV) \
+		--output-dir $(GEN_DATA_DIR) \
+		--uri-base $(URI_BASE) \
+		--doc-url-base $(DOC_URL_BASE) \
+		--dataset $(DATASET) \
+		--css-files '$(subst $(space),$(comma),$(CSS_FILES))'
 
 # To deploy the generated data on the server, we need to 
 #  - make sure the target directory exists on the server
 #  - copy the generated data to the server
-deploy:
-	@echo deploy
+RSYNC_CMD := $(RSYNC) $(GEN_DATA_DIR) $(SERVER):$(SERVER_DIR)$(SERVER_DOC_DIR)
+$(DEPLOY_target):
+	@echo $(DEPLOY_target)
 	$(call SERVER_CMD,'cd $(SERVER_DIR) && mkdir -p $(SERVER_DOC_DIR)')
-	$(RSYNC) $(GEN_DATA_DIR) $(SERVER):$(SERVER_DIR)$(SERVER_DOC_DIR)
+	$(RSYNC_CMD)
 
