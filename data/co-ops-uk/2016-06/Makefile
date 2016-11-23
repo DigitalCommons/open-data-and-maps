@@ -10,16 +10,21 @@ TEST_target := test
 $(HELP_target):
 	@echo USAGE
 	@echo -----
-	@echo "make $(GENERATE_target)"
-	@echo "\tGenerate RDF/XML and turtle data from the Co-ops UK files"
-	@echo "\t  $(COOPS_UK_ORGS_CSV)"
-	@echo "\t  $(COOPS_UK_OUTLETS_CSV)"
-	@echo "\tResults are stored in the local directory $(GEN_DATA_DIR)." 
-	@echo "make $(DEPLOY_target)"
-	@echo "\tDeploy the generated data to the data server using the command"
-	@echo "\t  $(RSYNC_CMD)"
-	@echo "\tAfter deployment, assuming content negotiation is configured properly, data can be accessed at this URI:"
-	@echo "\t  $(URI_BASE)$(DATASET)"
+	@echo "make $(HELP_target)"
+	@echo "\tPrints help."
+	@echo "make $(HELP_target) edition=x"
+	@echo "\tPrints help about a edition."
+	@echo "\tValid editions are: {$(EDITIONS)}"
+	@echo "make $(GENERATE_target) edition=x"
+	@echo "\tGenerates RDF/XML and turtle data from the Co-ops UK files:"
+	@echo "\t    $(COOPS_UK_ORGS_CSV)"
+	@echo "\t    $(COOPS_UK_OUTLETS_CSV)"
+	@$(call echo_if_edition_ok,"\\tResults are stored in the local directory $(GEN_DATA_DIR).")
+	@echo "make $(DEPLOY_target) edition=x"
+	@echo "\tDeploys the generated data to the data server $(SERVER)"
+	@$(call echo_if_edition_ok,"\\tLocal directory $(GEN_DATA_DIR) is copied to $(SERVER_PATH).")
+	@$(call echo_if_edition_ok,"\\tAfter deployment \(assuming content negotiation is configured properly\) data can be accessed at this URI:")
+	@$(call echo_if_edition_ok,"\\t    $(URI_BASE)$(DATASET)")
 
 # Variables to be overridden from the command line:
 #
@@ -29,12 +34,31 @@ SERVER ?= parecco
 SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
 DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 
-# Define function for executing commands on the server (here using ssh):
-SERVER_CMD = ssh $(SERVER) $(1)
+# We maintain different editions of the data.
+# The 'edition' variable should be passed in as a command line argument.
+# Generated data for each edition is kept in it's own separate directory.
+EDITIONS := final test
+ifeq ($(edition),final)
+  ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
+  IDENTIFIER_PATH ?= experimental/
+else ifeq ($(edition),test)
+  ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
+  IDENTIFIER_PATH ?= experimental/$(edition)/
+else
+  edition_errmsg := Unrecognized edition - you must use 'make edition=x' where x is one of {$(EDITIONS)}
+  #$(warning $(edition_errmsg))
+  BAD_EDITION := yup
+endif
+
+define echo_if_edition_ok
+@[ -z "$(BAD_EDITION)" ] && echo "$(1)" || true
+endef
+define check_valid_edition
+@[ -z "$(BAD_EDITION)" ] || { echo "$(edition_errmsg)" && false; }
+endef
+
 
 # See https://github.com/p6data-coop/ise-linked-open-data/wiki/URIs for a discussion about "experimental"
-#IDENTIFIER_PATH ?= experimental/co-ops-uk/
-IDENTIFIER_PATH ?= experimental/test1/
 DATASET ?= co-ops-uk
 
 # Following data.gov.uk principles, URIs for real-world objects are under `id`, ...
@@ -60,18 +84,20 @@ COOPS_UK_ORGS_CSV := co-operativeeconomy_opendataextract2016/2016open_data_organ
 GEN_TRIPLES := generate-triples.rb
 
 # Directories
-GEN_DATA_DIR := generated-data/$(IDENTIFIER_PATH)
+GEN_DATA_DIR := generated-data/$(edition)/$(IDENTIFIER_PATH)
 DATA_DIR := $(GEN_DATA_DIR)$(DATASET)
 CSS_SRC_DIR := css/
 CSS_GEN_DIR := $(GEN_DATA_DIR)$(DATASET)/css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 
 $(DATA_DIR):
+	$(check_valid_edition)
 	mkdir -p $@
 
 # Any css file in the source CSS dir will be copied to the corresponding geenrated_data dir.
 # The list of CSS_FILES will be passed to the GEN_TRIPLES ruby script for linking in HTML.
 $(CSS_GEN_DIR):
+	$(check_valid_edition)
 	mkdir -p $@
 	cp -r $(CSS_SRC_DIR) $(CSS_GEN_DIR)
 
@@ -84,20 +110,26 @@ space := $(nullstring) # end of the line
 comma := ,
 
 $(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
+	$(check_valid_edition)
 	$(RUBY) $(GEN_TRIPLES) --organizations-csv $(COOPS_UK_ORGS_CSV) \
 		--outlets-csv $(COOPS_UK_OUTLETS_CSV) \
 		--output-dir $(GEN_DATA_DIR) \
 		--uri-base $(URI_BASE) \
 		--doc-url-base $(DOC_URL_BASE) \
 		--dataset $(DATASET) \
-		--css-files '$(subst $(space),$(comma),$(CSS_FILES))'
+		--css-files '$(subst $(space),$(comma),$(CSS_FILES))' \
+		--essglobal-uri $(ESSGLOBAL_URI)
+
+# Define function for executing commands on the server (here using ssh):
+SERVER_CMD = ssh $(SERVER) $(1)
+
+SERVER_PATH := $(SERVER_DIR)$(SERVER_DOC_DIR)
 
 # To deploy the generated data on the server, we need to 
 #  - make sure the target directory exists on the server
 #  - copy the generated data to the server
-RSYNC_CMD := $(RSYNC) $(GEN_DATA_DIR) $(SERVER):$(SERVER_DIR)$(SERVER_DOC_DIR)
 $(DEPLOY_target):
 	@echo $(DEPLOY_target)
 	$(call SERVER_CMD,'cd $(SERVER_DIR) && mkdir -p $(SERVER_DOC_DIR)')
-	$(RSYNC_CMD)
+	$(RSYNC) $(GEN_DATA_DIR) $(SERVER):$(SERVER_PATH)
 

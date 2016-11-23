@@ -40,6 +40,7 @@ class OptParse
     options.outlets_csv = nil
     options.output_dir = nil
     options.uri_base = nil
+    options.essglobal_uri = nil
     options.doc_url_base = nil
     options.dataset = nil
     options.css_files = []
@@ -96,6 +97,12 @@ class OptParse
         options.css_files = list
       end
 
+      # Mandatory argument.
+      opts.on("--essglobal-uri URI",
+	      "Base URI for the essglobal vocabulary. e.g. ") do |uri|
+        options.essglobal_uri = uri
+      end
+
       # Cast 'delay' argument to a Float.
       #opts.on("--delay N", Float, "Delay N seconds before executing") do |n|
         #options.delay = n
@@ -148,12 +155,15 @@ $options = OptParse.parse(ARGV)
 #$orgs_csv, $outlets_csv, $output_dir, $uri_base, $doc_url_base, $dataset, $css_files  = $ARGV
 
 $css_files_array = $options.css_files.map{|f| $options.dataset + "/" + f}
-$essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
+#$essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
+$essglobal = RDF::Vocabulary.new($options.essglobal_uri + "vocab/")
+$essglobal_standard = RDF::Vocabulary.new($options.essglobal_uri + "standard/")
 $solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
 $ospostcode = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
 $prefixes = {
   vcard: RDF::Vocab::VCARD.to_uri.to_s,
   essglobal: $essglobal.to_uri.to_s,
+  #essglobalstd: $essglobal_standard.to_uri.to_s,
   solecon: $solecon.to_uri.to_s,
   gr: RDF::Vocab::GR.to_uri.to_s,
   foaf: RDF::Vocab::FOAF.to_uri.to_s,
@@ -669,7 +679,8 @@ class Initiative
     graph.insert([uri, essglobal.hasAddress, make_address(graph)])
     # legal-form/L2 is a co-operative.
     # Is everything in the co-ops UK open dataset actually a co-operative?
-    graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
+    #graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
+    graph.insert([uri, essglobal.legalForm, $essglobal_standard["legal-form/L2"]])
 
     begin
       postcode_uri = ospostcode_uri
@@ -697,28 +708,6 @@ class Initiative
     return addr
   end
 end
-
-# TODO: make some use of the Vocab class!
-class Vocab
-  @@vocabs = []
-  attr_reader :pref, :vocab
-  def initialize(vocab)
-    @vocab = vocab
-    @pref, @vocab = vocab[:pref], vocab[:vocab]
-    @@vocabs << self
-  end
-  def self.prefixes(prefs)
-    Hash[ *@@vocabs.select{ |x| prefs.include?(x.pref)}.map {|x| [x.pref, x.vocab.to_uri.to_s]}.flatten]
-  end
-end
-vocabs = [ 
-  {pref: :essglobal, vocab: RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")},
-  {pref: :vcard, vocab: RDF::Vocab::VCARD},
-  {pref: :gr, vocab: RDF::Vocab::GR}
-].map {|v| Vocab.new(v)}
-
-#puts Vocab.prefixes([:essglobal, :vcard])
-#
 
 # --------------------------------
 # Here we load data from CSV files.
