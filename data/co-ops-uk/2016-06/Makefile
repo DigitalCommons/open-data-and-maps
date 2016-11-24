@@ -34,6 +34,8 @@ SERVER ?= parecco
 SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
 DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 
+CHECK_WEBSITES_FLAG := --no-check-websites
+
 # We maintain different editions of the data.
 # The 'edition' variable should be passed in as a command line argument.
 # Generated data for each edition is kept in it's own separate directory.
@@ -41,6 +43,8 @@ EDITIONS := final test
 ifeq ($(edition),final)
   ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
   IDENTIFIER_PATH ?= experimental/
+  # There is no max number of CSV rows:
+  MAX_CSV_ROWS := 
 else ifeq ($(edition),test)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
@@ -120,7 +124,8 @@ $(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) 
 		--dataset $(DATASET) \
 		--css-files '$(subst $(space),$(comma),$(CSS_FILES))' \
 		--essglobal-uri $(ESSGLOBAL_URI) \
-		--max-csv-rows $(MAX_CSV_ROWS)
+		--max-csv-rows $(MAX_CSV_ROWS) \
+		$(CHECK_WEBSITES_FLAG)
 
 # Define function for executing commands on the server (here using ssh):
 SERVER_CMD = ssh $(SERVER) $(1)

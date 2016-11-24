@@ -45,6 +45,7 @@ class OptParse
     options.dataset = nil
     options.css_files = []
     options.max_csv_rows = nil
+    options.check_websites = false
     # TODO - add control over which output files are generated.
     #        Particularly important for expensive ones like websites.html. 
 
@@ -107,6 +108,12 @@ class OptParse
       opts.on("--max-csv-rows [ROWS]", Integer,
 	      "Maximum number of rows of CSV to process from each input file, for testing") do |rows|
 	options.max_csv_rows = rows
+      end
+
+      # Boolean switch.
+      opts.on("--[no-]check-websites",
+	      "Send HTTP reqiuest to all websites to check the return code (very time consuming)") do |v|
+        options.check_websites = v
       end
 
       # Cast 'delay' argument to a Float.
@@ -766,10 +773,12 @@ end
 # From this point on, we control exactly what is generated from this script.
 # -------------------------------------------------------------------------
 
-# Generating the websites.html is expensive - each URL is accessed to check it's HTTP response code.
-website_html_file = "websites.html"
-puts "Saving table of websites to #{website_html_file} ..."
-P6::Html.save_file(html: collection.websites_html, filename: website_html_file)
+if $options.check_websites
+  # Generating the websites.html is expensive - each URL is accessed to check it's HTTP response code.
+  website_html_file = "websites.html"
+  puts "Saving table of websites to #{website_html_file} ..."
+  P6::Html.save_file(html: collection.websites_html, filename: website_html_file)
+end
 
 # Generate a report about diplicate IDs:
 dups_html_file = "duplicates.html"
