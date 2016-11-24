@@ -44,6 +44,7 @@ class OptParse
     options.doc_url_base = nil
     options.dataset = nil
     options.css_files = []
+    options.max_csv_rows = nil
     # TODO - add control over which output files are generated.
     #        Particularly important for expensive ones like websites.html. 
 
@@ -99,8 +100,13 @@ class OptParse
 
       # Mandatory argument.
       opts.on("--essglobal-uri URI",
-	      "Base URI for the essglobal vocabulary. e.g. ") do |uri|
+	      "Base URI for the essglobal vocabulary. e.g. http://purl.org/essglobal") do |uri|
         options.essglobal_uri = uri
+      end
+
+      opts.on("--max-csv-rows [ROWS]", Integer,
+	      "Maximum number of rows of CSV to process from each input file, for testing") do |rows|
+	options.max_csv_rows = rows
       end
 
       # Cast 'delay' argument to a Float.
@@ -713,9 +719,8 @@ end
 # Here we load data from CSV files.
 # --------------------------------
 # For testing, we can load just a smaller set of test_rows from each CSV file (if short_test_run is true)
-short_test_run = false
-short_test_run = true
-test_rows = 2
+short_test_run = !!$options.max_csv_rows
+test_rows = $options.max_csv_rows
 collection = Collection.new
 
 puts "Reading #{$options.outlets_csv}..."
