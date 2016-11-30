@@ -48,7 +48,8 @@ ifeq ($(edition),final)
 else ifeq ($(edition),test)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
-  MAX_CSV_ROWS := 5
+  MAX_CSV_ROWS := 10
+  CHECK_WEBSITES_FLAG := --check-websites
 else
   edition_errmsg := Unrecognized edition - you must use 'make edition=x' where x is one of {$(EDITIONS)}
   #$(warning $(edition_errmsg))

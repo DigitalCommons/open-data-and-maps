@@ -1,9 +1,8 @@
+# This script is usually called from the Makefile - look there for usage examples.
+#
 # Note on testing this script:
-#   Recall that output is written to a directory (e.g. 'generated-data').
-#   Note also that you can generate data from just the first few (below we have 2) lines of the CSV files
-#   by setting towards the bottom of this script:
-#     short_test_run = true
-#     test_rows = 2
+#   Recall that output is written to a directory (option --output-dir)
+#   Note also that you can generate data from just the first few lines of the CSV files (option --max-csv-rows)
 #   Before making changes, run the script (usually via `make generate-data`).
 #   Save the output dir:
 #     $ mv generated-data generated-data.old
@@ -26,6 +25,7 @@ require_relative $lib_dir + 'html'
 require_relative $lib_dir + 'file'
 require_relative $lib_dir + 'rdfxml'
 require_relative $lib_dir + 'turtle'
+require_relative $lib_dir + 'progress-counter'
 
 # Command line option parser based on https://docs.ruby-lang.org/en/2.1.0/OptionParser.html
 class OptParse
@@ -159,16 +159,10 @@ class OptParse
   end  # parse()
 end
 
+# Parse command line options:
 $options = OptParse.parse(ARGV)
-#pp $options
-#exit
-
-# Command line args.
-# Make sure these match the corresponding ones in the Makefile.
-#$orgs_csv, $outlets_csv, $output_dir, $uri_base, $doc_url_base, $dataset, $css_files  = $ARGV
 
 $css_files_array = $options.css_files.map{|f| $options.dataset + "/" + f}
-#$essglobal = RDF::Vocabulary.new("http://purl.org/essglobal/vocab/")
 $essglobal = RDF::Vocabulary.new($options.essglobal_uri + "vocab/")
 $essglobal_standard = RDF::Vocabulary.new($options.essglobal_uri + "standard/")
 $solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
@@ -176,7 +170,6 @@ $ospostcode = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeu
 $prefixes = {
   vcard: RDF::Vocab::VCARD.to_uri.to_s,
   essglobal: $essglobal.to_uri.to_s,
-  #essglobalstd: $essglobal_standard.to_uri.to_s,
   solecon: $solecon.to_uri.to_s,
   gr: RDF::Vocab::GR.to_uri.to_s,
   foaf: RDF::Vocab::FOAF.to_uri.to_s,
@@ -189,6 +182,7 @@ def warning(msgs)
   $stderr.puts msgs.map{|m| "\nWARNING! #{m}"}.join 
 end
 
+# For testing the response HTTP code for a URL:
 class UrlRes
   attr_reader :url, :http_code
   @@results = []
@@ -265,6 +259,10 @@ class Collection < Array	# of Initiatives
   def self.about_basename
     "#{basename}/about"
   end
+  # for forming the name of the one big file with all the data contained in it:
+  def self.one_big_file_basename
+    "#{basename}_all"
+  end
   def self.about_uri
     RDF::URI("#{$options.uri_base}#{about_basename}")
   end
@@ -298,7 +296,7 @@ class Collection < Array	# of Initiatives
       end
     }
   end
-  def websites_html
+  def websites_html(prog_ctr)
     # Report on the Websites.
     css = <<'ENDCSS'
 td {vertical-align: top; }
@@ -315,10 +313,8 @@ td.first {
     border-top: 5px solid black;
 }
 ENDCSS
-    todo = size
-    n = 0
     each {|i|
-      $stdout.write "\r#{n += 1} (#{100*n/todo}%)"
+      prog_ctr.step
       UrlRes.new(i.homepage) if (i.homepage.length > 0)
     }
     P6::Xml.xml(:html) {
@@ -431,7 +427,7 @@ ENDCSS
       }
     }
   end
-  def map_app_json
+  def map_app_json(prog_ctr)
     # Re-read previous results, so we don't have to do unnecessary queries:
     osres_file = "os_postcode_cache.json"
     failure_value = 0
@@ -443,11 +439,9 @@ ENDCSS
     end
     osres = f ? JSON.parse(f.read) : {}
     #pp osres
-    todo = size
-    n = 0
     res = "[\n" +
       map {|i|
-      $stdout.write "\r#{n += 1} (#{100*n/todo}%)"
+      prog_ctr.step
 
       begin
 	r = osres[i.ospostcode_uri.to_s]
@@ -517,12 +511,9 @@ ENDCSS
   def create_files
     # TODO - haven't we alreay removed duplicates before this function is called? Where best to do it?
     remove_duplicate_ids
-    todo = size
-    n = 0
-    puts "Creating RDF, Turtle and HTML files for each initiative..."
+    prog_ctr = P6::ProgressCounter.new("Creating RDF, Turtle and HTML files for each initiative... ", size)
     each {|i|
-      n += 1
-      $stdout.write "\r#{n} (#{100*n/todo}%)"
+      prog_ctr.step
       graph = i.make_graph
       begin
 	rdf_filename = P6::RdfXml.save_file(dir: $options.output_dir, :basename => i.basename, :prefixes => $prefixes, :graph => graph)
@@ -533,12 +524,21 @@ ENDCSS
 	$stderr.puts e.backtrace.join("\n")
       end
     }
-    puts "\nCreating RDF, Turtle and HTML files for the collection as a whole..."
+    puts "Creating RDF, Turtle and HTML files for the collection as a whole..."
     graph = make_graph
     rdf_filename = P6::RdfXml.save_file(dir: $options.output_dir, :basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
     ttl_filename = P6::Turtle.save_file(dir: $options.output_dir, :basename => Collection.basename, :prefixes => $prefixes, :graph => graph)
     html_filename = P6::Html.save_file(dir: $options.output_dir, basename: Collection.basename, html: html)
     html_filename = P6::Html.save_file(dir: $options.output_dir, basename: Collection.about_basename, html: about_html)
+
+    prog_ctr = P6::ProgressCounter.new("Creating RDF/XML and Turtle for all initiatives in one big file (for upload to OntoWiki)... ", size)
+    graph = RDF::Graph.new
+    each {|i|
+      prog_ctr.step
+      graph = i.populate_graph(graph)
+    }
+    rdf_filename = P6::RdfXml.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
+    ttl_filename = P6::Turtle.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
   end
   private
   def uri
@@ -686,6 +686,9 @@ class Initiative
   end
   def make_graph
     graph = RDF::Graph.new
+    populate_graph(graph)
+  end
+  def populate_graph(graph)
     graph.insert([uri, RDF.type, Initiative.type_uri])
     graph.insert([uri, RDF::Vocab::GR.name, name])
     graph.insert([uri, RDF::Vocab::FOAF.homepage, homepage])
@@ -776,8 +779,8 @@ end
 if $options.check_websites
   # Generating the websites.html is expensive - each URL is accessed to check it's HTTP response code.
   website_html_file = "websites.html"
-  puts "Saving table of websites to #{website_html_file} ..."
-  P6::Html.save_file(html: collection.websites_html, filename: website_html_file)
+  prog_ctr = P6::ProgressCounter.new("Saving table of websites to #{website_html_file} ... ", collection.size)
+  P6::Html.save_file(html: collection.websites_html(prog_ctr), filename: website_html_file)
 end
 
 # Generate a report about diplicate IDs:
@@ -791,8 +794,8 @@ collection.remove_duplicate_ids
 # TODO - should this be moved to create_files?
 # Generate a json file that can be used by the map-app, as an alternative to loading the data from, for example, a sparkle endpoint.
 map_app_json_file = "initiatives.json"
-puts "Saving map-app data to #{map_app_json_file} ..."
-P6::File.save(collection.map_app_json, map_app_json_file)
+prog_ctr = P6::ProgressCounter.new("Saving map-app data to #{map_app_json_file} ... ", collection.size)
+P6::File.save(collection.map_app_json(prog_ctr), map_app_json_file)
 
 #collection.resolve_duplicates
 collection.create_files
