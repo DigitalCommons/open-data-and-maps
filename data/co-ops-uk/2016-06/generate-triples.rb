@@ -46,6 +46,7 @@ class OptParse
     options.css_files = []
     options.max_csv_rows = nil
     options.check_websites = false
+    options.allow_blank_nodes = true
     # TODO - add control over which output files are generated.
     #        Particularly important for expensive ones like websites.html. 
 
@@ -114,6 +115,12 @@ class OptParse
       opts.on("--[no-]check-websites",
 	      "Send HTTP reqiuest to all websites to check the return code (very time consuming)") do |v|
         options.check_websites = v
+      end
+
+      # Boolean switch.
+      opts.on("--[no-]allow-blank-nodes",
+	      "Allow blank nodes in the generated RDF. Without blank nodes, extra URIs have to be minted.") do |v|
+        options.allow_blank_nodes = v
       end
 
       # Cast 'delay' argument to a Float.
@@ -608,6 +615,11 @@ class Initiative
   def uri
     RDF::URI("#{$options.uri_base}#{basename}")
   end
+  def address_uri
+    # We don't really weant to have to mint URIs for the Address, but OntoWiki doesn't seem to
+    # want to load the data inside blank URIs, so this is an experimental workaround:
+    RDF::URI("#{$options.uri_base}#{basename}Address")
+  end
   def turtle_url
     RDF::URI("#{$options.doc_url_base}#{basename}.ttl")
   end
@@ -717,7 +729,7 @@ class Initiative
     $essglobal
   end
   def make_address(graph)
-    addr = RDF::Node.new
+    addr = $options.allow_blank_nodes ? RDF::Node.new : address_uri
     graph.insert([addr, RDF.type, essglobal["Address"]])
     graph.insert([addr, RDF::Vocab::VCARD["postal-code"], postcode_text])
     graph.insert([addr, RDF::Vocab::VCARD["country-name"], country_name])

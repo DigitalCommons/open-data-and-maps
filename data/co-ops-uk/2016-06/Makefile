@@ -35,6 +35,7 @@ SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
 DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 
 CHECK_WEBSITES_FLAG := --no-check-websites
+ALLOW_BLANK_NODES_FLAG := --allow-blank-nodes
 
 # We maintain different editions of the data.
 # The 'edition' variable should be passed in as a command line argument.
@@ -50,6 +51,7 @@ else ifeq ($(edition),test)
   IDENTIFIER_PATH ?= experimental/$(edition)/
   MAX_CSV_ROWS := 10
   #CHECK_WEBSITES_FLAG := --check-websites
+  ALLOW_BLANK_NODES_FLAG := --no-allow-blank-nodes
 else
   edition_errmsg := Unrecognized edition - you must use 'make edition=x' where x is one of {$(EDITIONS)}
   #$(warning $(edition_errmsg))
@@ -126,7 +128,7 @@ $(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) 
 		--css-files '$(subst $(space),$(comma),$(CSS_FILES))' \
 		--essglobal-uri $(ESSGLOBAL_URI) \
 		--max-csv-rows $(MAX_CSV_ROWS) \
-		$(CHECK_WEBSITES_FLAG)
+		$(CHECK_WEBSITES_FLAG) $(ALLOW_BLANK_NODES_FLAG)
 
 # Define function for executing commands on the server (here using ssh):
 SERVER_CMD = ssh $(SERVER) $(1)
