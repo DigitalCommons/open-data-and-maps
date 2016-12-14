@@ -172,15 +172,18 @@ $options = OptParse.parse(ARGV)
 $css_files_array = $options.css_files.map{|f| $options.dataset + "/" + f}
 $essglobal = RDF::Vocabulary.new($options.essglobal_uri + "vocab/")
 $essglobal_standard = RDF::Vocabulary.new($options.essglobal_uri + "standard/")
-$solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
+#$solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
 $ospostcode = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
+$osspatialrelations = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/")
 $prefixes = {
   vcard: RDF::Vocab::VCARD.to_uri.to_s,
+  geo: RDF::Vocab::GEO.to_uri.to_s,
   essglobal: $essglobal.to_uri.to_s,
-  solecon: $solecon.to_uri.to_s,
+  #solecon: $solecon.to_uri.to_s,
   gr: RDF::Vocab::GR.to_uri.to_s,
   foaf: RDF::Vocab::FOAF.to_uri.to_s,
-  ospostcode: $ospostcode.to_uri.to_s
+  ospostcode: $ospostcode.to_uri.to_s,
+  osspatialrelations: $osspatialrelations.to_uri.to_s
 }
 
 
@@ -710,18 +713,18 @@ class Initiative
     #graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
     graph.insert([uri, essglobal.legalForm, $essglobal_standard["legal-form/L2"]])
 
-    begin
-      postcode_uri = ospostcode_uri
-      geolocation = RDF::Node.new	# Blank node, as we have no lat/long information.
-      # The use of the solecon vocabulary is a temporary measure, until we figure out how to do this properly!
-      # It may be that we should be looking at something along the lines of the examples (section 1.5)
-      # presented at https://www.w3.org/2011/02/GeoSPARQL.pdf.
-      graph.insert([geolocation, RDF.type, $solecon.GeoLocation])
-      graph.insert([uri, $solecon.hasGeoLocation, geolocation])
-      graph.insert([geolocation, $solecon.within, postcode_uri])
-    rescue StandardError => e
-      warning([e.message, source_as_str])
-    end
+#    begin
+#      postcode_uri = ospostcode_uri
+#      geolocation = RDF::Node.new	# Blank node, as we have no lat/long information.
+#      # The use of the solecon vocabulary is a temporary measure, until we figure out how to do this properly!
+#      # It may be that we should be looking at something along the lines of the examples (section 1.5)
+#      # presented at https://www.w3.org/2011/02/GeoSPARQL.pdf.
+#      graph.insert([geolocation, RDF.type, $solecon.GeoLocation])
+#      graph.insert([uri, $solecon.hasGeoLocation, geolocation])
+#      graph.insert([geolocation, $solecon.within, postcode_uri])
+#    rescue StandardError => e
+#      warning([e.message, source_as_str])
+#    end
     return graph
   end
   private
@@ -733,6 +736,17 @@ class Initiative
     graph.insert([addr, RDF.type, essglobal["Address"]])
     graph.insert([addr, RDF::Vocab::VCARD["postal-code"], postcode_text])
     graph.insert([addr, RDF::Vocab::VCARD["country-name"], country_name])
+    begin
+      postcode_uri = ospostcode_uri
+      # We can say that the addr is osspatialrelations.within the postcode_uri because:
+      #     addr is an instance of geosparql:SpatialObject
+      #     osspatialrelations.within is owl:equivalentProperty of geosparql:sfWithin
+      #     geosparql:sfWithin has domain geosparql:SpatialObject
+      #     In the above, geosparql is  <http://www.opengis.net/ont/geosparql>
+      graph.insert([addr, $osspatialrelations.within, postcode_uri])
+    rescue StandardError => e
+      warning([e.message, source_as_str])
+    end
     return addr
   end
 end
