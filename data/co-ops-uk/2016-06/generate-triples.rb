@@ -26,6 +26,7 @@ require_relative $lib_dir + 'file'
 require_relative $lib_dir + 'rdfxml'
 require_relative $lib_dir + 'turtle'
 require_relative $lib_dir + 'progress-counter'
+require_relative $lib_dir + 'rdf-cache'
 
 # Command line option parser based on https://docs.ruby-lang.org/en/2.1.0/OptionParser.html
 class OptParse
