@@ -50,7 +50,7 @@ class RdfCache
     File.open(@cache_file, "w") {|f| f.write(JSON.pretty_generate(@cache_hash))}
   end
   def get(subject_uri)
-    # Returns a hash of the values for this subject, or Failure_value if the query fails
+    # Returns a Results object, or nil if the query fails
     key = subject_uri.to_s
     if @cache_hash[key] == nil
       # key not found in cache_hash, so we need to query it.
@@ -66,20 +66,11 @@ class RdfCache
 	result = {}
 
 	@query_hash.keys.each {|k|
-	  #pp res[0][k]
-	  #pp res[0][k].has_datatype? ? res[0][k].datatype : "no datatype"
-	  #pp res[0][k].has_datatype? ? res[0][k].datatype.methods : "no datatype"
-	  #pp res[0][k].has_datatype? ? res[0][k].datatype.to_json : "no datatype"
-	  #pp res[0][k].has_datatype? ? res[0][k].datatype.to_uri.to_s : "no datatype"
-	  #puts "#{key} #{@query_hash[k]} #{res[0][k].to_s} #{res[0][k].has_datatype? ? res[0][k].datatype : "no datatype"}"
-#	  result[k] = {
-#	    value: res[0][k].to_s,
-#	    datatype: res[0][k].literal? && res[0][k].has_datatype? ? res[0][k].datatype.to_uri.to_s : nil,
-#	    language: res[0][k].literal? && res[0][k].has_language? ? res[0][k].language.to_uri.to_s : nil,
-#	  }
 	  field = result[k.to_s] = {}
 	  field["value"] = res[0][k].to_s
+
 	  if res[0][k].literal? 
+
 	    field["type"] = "literal"
 	    if (res[0][k].literal? && res[0][k].has_datatype?)
 	      field["datatype"] = res[0][k].datatype.to_uri.to_s
@@ -87,8 +78,11 @@ class RdfCache
 	    if (res[0][k].literal? && res[0][k].has_language?)
 	      field["language"] = res[0][k].language.to_uri.to_s
 	    end
+
 	  elsif res[0][k].uri? 
+
 	    field["type"] = "uri"
+
 	  else
 	    raise "Unexpected type of Term - we need to implement more types"
 	  end
