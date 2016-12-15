@@ -101,16 +101,34 @@ class RdfCache
 	@cache_hash[key] = Failure_value
       end
     end
-    return (@cache_hash[key] == Failure_value) ? nil : Result.new(@cache_hash[key])
+    return (@cache_hash[key] == Failure_value) ? nil : Results.new(@cache_hash[key])
   end
-  class Result
+  class Results
+    # Results for all fields in the @query_hash
+    # Access the result for one field by using that field's symbolic name as a method
     def initialize(h)
       @res = h
     end
-    def value(f)
-      puts f
-      pp @res[f.to_s]
-      @res[f.to_s]["value"]
+    def method_missing(m)
+      x = @res[m.to_s]
+      if x
+	return Result.new(x)
+      else
+	raise "Unknown method '#{m}' in Results class. Try one of these: #{@res.keys.map{|x| x.to_sym}}"
+      end
+    end
+  end
+  class Result
+    Methods = [:value, :datatype, :type, :language]
+    def initialize(x)
+      @x = x
+    end
+    def method_missing(m)
+      if Methods.include?(m)
+	return @x[m.to_s]
+      else
+	raise "Unknown method '#{m}' in Result class. Try one of these: #{Methods}"
+      end
     end
   end
 end
@@ -121,27 +139,47 @@ def test(cache_file, query, test_data)
     res = rdf_cache.get(RDF::URI(s))
     puts "Result returned by get(#{s}):"
     pp res
-    if (res)
-      query.keys.each {|k|
-	puts "Value returned by get(#{s}): #{res.value(k)}"
-      }
+  }
+end
+def test1
+  test("foo.json", {
+    lat: "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
+    lng: "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+  },
+  [
+    "http://data.ordnancesurvey.co.uk/id/postcodeunit/PE37PR",
+    "http://data.ordnancesurvey.co.uk/id/postcodeunit/JE24TR"
+  ])
+
+  test("bar.json", {
+    ward:  "http://data.ordnancesurvey.co.uk/ontology/postcode/ward"
+  },
+  [
+    "http://data.ordnancesurvey.co.uk/id/postcodeunit/PE37PR",
+    "http://data.ordnancesurvey.co.uk/id/postcodeunit/JE24TR"
+  ])
+end
+def test2
+  cache_file = "foo.json"
+  query = {
+    lat: "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
+    lng: "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+  }
+  test_data =
+  [
+    "http://data.ordnancesurvey.co.uk/id/postcodeunit/PE37PR",
+    "http://data.ordnancesurvey.co.uk/id/postcodeunit/JE24TR"
+  ]
+  rdf_cache = RdfCache.new(cache_file, query)
+  test_data.each {|s|
+    res = rdf_cache.get(RDF::URI(s))
+    puts "Result returned by get(#{s}):"
+    pp res
+    if res
+      puts "lat: #{res.lat.value} #{res.lat.type} #{res.lat.datatype} #{res.lat.language}"
+      puts "lng: #{res.lng.value} #{res.lng.type} #{res.lng.datatype} #{res.lng.language}"
     end
   }
 end
-test("foo.json", {
-  lat: "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
-  lng: "http://www.w3.org/2003/01/geo/wgs84_pos#long"
-},
-[
-  "http://data.ordnancesurvey.co.uk/id/postcodeunit/PE37PR",
-  "http://data.ordnancesurvey.co.uk/id/postcodeunit/JE24TR"
-])
-
-test("bar.json", {
-  ward:  "http://data.ordnancesurvey.co.uk/ontology/postcode/ward"
-},
-[
-  "http://data.ordnancesurvey.co.uk/id/postcodeunit/PE37PR",
-  "http://data.ordnancesurvey.co.uk/id/postcodeunit/JE24TR"
-])
-
+test1
+test2
