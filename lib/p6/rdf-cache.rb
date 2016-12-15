@@ -17,7 +17,7 @@ class RdfCache
     #    lng: "http://www.w3.org/2003/01/geo/wgs84_pos#long"
     #  })
 
-    @cache_file, @query_hash = cache_file, query_hash
+    @cache_file, @query_hash = cache_file, Hash[ query_hash.map {|k,v| [k, RDF::URI(v)] } ]
 
     # Make the RDF::Query. 
     # For example, with the above parameters, the query would look like this:
@@ -27,7 +27,9 @@ class RdfCache
     #      RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#long") => :lng
     #    }
     #  })
-    @rdf_query = RDF::Query.new({stuff: Hash[query_hash.map {|k,v| [RDF::URI(v), k]}]})
+
+    # invert sways keys and values:
+    @rdf_query = RDF::Query.new({stuff: @query_hash.invert})
 
     begin
       File.open(cache_file, "rb") {|f|
@@ -60,7 +62,7 @@ class RdfCache
 	res = @rdf_query.execute(graph)
 	raise "No results from query" if res.size < 1
 	$stderr.puts "Expected 1 result from query of #{key}. Found #{res.size} results. Ignoring all but first." if res.size > 1
-	pp res
+	#pp res
 	#pp res[0].to_hash
 	# The data for this subject is stored in a hash
 	result = {}
@@ -88,40 +90,67 @@ class RdfCache
 	  end
 	}
 	puts "Just loaded data from network: "
-	pp result
+	#pp result
 	@cache_hash[key] = result
       rescue => e
 	$stderr.puts "Failed to load resource #{key}: #{e.message}"
 	@cache_hash[key] = Failure_value
       end
     end
-    return (@cache_hash[key] == Failure_value) ? nil : Results.new(@cache_hash[key])
+    return (@cache_hash[key] == Failure_value) ? nil : Results.new(@cache_hash[key], @query_hash)
+  end
+  def save_as_rdf(graph)
+    @cache_hash.keys.each {|subject|
+      v = @cache_hash[subject]
+      if (v != Failure_value)
+	res = Results.new(v, @query_hash)
+	res.add_to_graph(graph, RDF::URI.new(subject))
+      end
+    }
   end
   class Results
     # Results for all fields in the @query_hash
     # Access the result for one field by using that field's symbolic name as a method
-    def initialize(h)
-      @res = h
+    def initialize(h, query_hash)
+      @res = Hash[h.map {|k, v| [k, Result.new(v, query_hash[k.to_sym])]}]
     end
     def method_missing(m)
       x = @res[m.to_s]
       if x
-	return Result.new(x)
+	return x
       else
 	raise "Unknown method '#{m}' in Results class. Try one of these: #{@res.keys.map{|x| x.to_sym}}"
       end
     end
+    def add_to_graph(graph, subject_uri)
+      @res.each_value {|r| r.add_to_graph(graph, subject_uri)}
+    end
   end
   class Result
     Methods = [:value, :datatype, :type, :language]
-    def initialize(x)
-      @x = x
+    def initialize(x, query_uri)
+      @x, @query_uri = x, query_uri
     end
     def method_missing(m)
       if Methods.include?(m)
 	return @x[m.to_s]
       else
 	raise "Unknown method '#{m}' in Result class. Try one of these: #{Methods}"
+      end
+    end
+    def add_to_graph(graph, subject_uri)
+      case type
+      when "uri"
+	graph.insert([subject_uri, @query_uri, RDF::URI.new(value)])
+	#puts "#{subject} #{@query} #{value}"
+      when "literal"
+	opts = {}
+	opts[:datatype] = datatype if datatype
+	opts[:language] = language.to_sym if language
+	graph.insert([subject_uri, @query_uri, RDF::Literal.new(value, opts)])
+	#puts "#{subject} #{@query} #{value} #{datatype} #{language}"
+      else
+	raise "Missing cases for values of type '#{type}'"
       end
     end
   end
@@ -132,7 +161,10 @@ def test(cache_file, query, test_data)
   test_data.each {|s|
     res = rdf_cache.get(RDF::URI(s))
     puts "Result returned by get(#{s}):"
-    pp res
+    #pp res
+    graph = RDF::Graph.new
+    rdf_cache.save_as_rdf(graph)
+    RDF::RDFXML::Writer.open(cache_file + ".rdf", standard_prefixes: true) {|writer| writer << graph }
   }
 end
 def test1
@@ -168,7 +200,7 @@ def test2
   test_data.each {|s|
     res = rdf_cache.get(RDF::URI(s))
     puts "Result returned by get(#{s}):"
-    pp res
+    #pp res
     if res
       puts "lat: #{res.lat.value} #{res.lat.type} #{res.lat.datatype} #{res.lat.language}"
       puts "lng: #{res.lng.value} #{res.lng.type} #{res.lng.datatype} #{res.lng.language}"
