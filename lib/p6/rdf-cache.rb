@@ -142,13 +142,13 @@ class RdfCache
       case type
       when "uri"
 	graph.insert([subject_uri, @query_uri, RDF::URI.new(value)])
-	#puts "#{subject} #{@query} #{value}"
+	#puts "#{subject_uri} #{@query_uri} #{value}"
       when "literal"
 	opts = {}
 	opts[:datatype] = datatype if datatype
 	opts[:language] = language.to_sym if language
 	graph.insert([subject_uri, @query_uri, RDF::Literal.new(value, opts)])
-	#puts "#{subject} #{@query} #{value} #{datatype} #{language}"
+	#puts "#{subject_uri} #{@query_uri} #{value} #{datatype} #{language}"
       else
 	raise "Missing cases for values of type '#{type}'"
       end
