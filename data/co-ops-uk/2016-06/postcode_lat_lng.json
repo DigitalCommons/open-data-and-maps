@@ -1,0 +1,222 @@
+{
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/AB253XH": {
+    "lat": {
+      "value": "57.154647",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-2.106401",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/EH91DU": {
+    "lat": {
+      "value": "55.937755",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-3.202956",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/LS74QG": {
+    "lat": {
+      "value": "53.831706",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-1.537153",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/M145FT": {
+    "lat": {
+      "value": "53.458061",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-2.226543",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/NE61EH": {
+    "lat": {
+      "value": "54.977121",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-1.572529",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/S80XQ": {
+    "lat": {
+      "value": "53.359360",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-1.478335",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/EH74EA": {
+    "lat": {
+      "value": "55.962307",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-3.196109",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/OL120NU": {
+    "lat": {
+      "value": "53.618738",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-2.159405",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/GY24PB": 0,
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/GY46AA": 0,
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/GY57JB": 0,
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/M600AG": {
+    "lat": {
+      "value": "53.488061",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-2.237449",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/WS136RH": {
+    "lat": {
+      "value": "52.691546",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-1.809129",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/CV346DA": {
+    "lat": {
+      "value": "52.276093",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-1.564951",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/PE37PR": {
+    "lat": {
+      "value": "52.587236",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-0.264405",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/IP92BJ": {
+    "lat": {
+      "value": "52.022619",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "1.145130",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/EH288QJ": {
+    "lat": {
+      "value": "55.935633",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-3.395583",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/LN57DB": {
+    "lat": {
+      "value": "53.225054",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-0.540871",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/PO63FE": {
+    "lat": {
+      "value": "50.840741",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-1.082790",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/JE24TR": 0,
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/CV115BU": {
+    "lat": {
+      "value": "52.523021",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "-1.471020",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  },
+  "http://data.ordnancesurvey.co.uk/id/postcodeunit/CM20LS": {
+    "lat": {
+      "value": "51.731182",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    },
+    "lng": {
+      "value": "0.474111",
+      "type": "literal",
+      "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+    }
+  }
+}
