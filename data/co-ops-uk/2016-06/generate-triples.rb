@@ -438,7 +438,26 @@ ENDCSS
       }
     }
   end
-  def map_app_json(prog_ctr)
+  def map_app_json(prog_ctr, postcode_lat_lng_cache)
+    JSON.pretty_generate(
+      map {|i|
+	res = postcode_lat_lng_cache.get(i.ospostcode_uri)
+	if res
+	  {
+	    name: i.name,
+	    uri: i.uri,
+	    loc_uri: i.ospostcode_uri,
+	    lat: res.lat.value,
+	    lng: res.lng.value,
+	    www: i.homepage
+	  }
+	else
+	  nil
+	end
+      }.compact
+    )
+  end
+  def map_app_json_obsolete(prog_ctr)
     # Re-read previous results, so we don't have to do unnecessary queries:
     osres_file = "os_postcode_cache.json"
     failure_value = 0
@@ -519,7 +538,7 @@ ENDCSS
     #remove elements with duplicate ids
     uniq!{|e| e.id}
   end
-  def create_files
+  def create_files(postcode_lat_lng_cache)
     # TODO - haven't we alreay removed duplicates before this function is called? Where best to do it?
     remove_duplicate_ids
     prog_ctr = P6::ProgressCounter.new("Creating RDF, Turtle and HTML files for each initiative... ", size)
@@ -548,6 +567,7 @@ ENDCSS
       prog_ctr.step
       graph = i.populate_graph(graph)
     }
+    postcode_lat_lng_cache.save_as_rdf(graph)
     rdf_filename = P6::RdfXml.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
     ttl_filename = P6::Turtle.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
   end
@@ -817,12 +837,16 @@ P6::Html.save_file(html: collection.duplicates_html, filename: dups_html_file)
 
 # From here on, we're working with the collection after having duplicate IDs removed:
 collection.remove_duplicate_ids
+postcode_lat_lng_cache = RdfCache.new("postcode_lat_lng.json", {
+    lat: "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
+    lng: "http://www.w3.org/2003/01/geo/wgs84_pos#long"
+  })
 
 # TODO - should this be moved to create_files?
 # Generate a json file that can be used by the map-app, as an alternative to loading the data from, for example, a sparkle endpoint.
 map_app_json_file = "initiatives.json"
 prog_ctr = P6::ProgressCounter.new("Saving map-app data to #{map_app_json_file} ... ", collection.size)
-P6::File.save(collection.map_app_json(prog_ctr), map_app_json_file)
+P6::File.save(collection.map_app_json(prog_ctr, postcode_lat_lng_cache), map_app_json_file)
 
 #collection.resolve_duplicates
-collection.create_files
+collection.create_files(postcode_lat_lng_cache)

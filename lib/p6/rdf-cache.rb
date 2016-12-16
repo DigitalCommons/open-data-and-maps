@@ -10,6 +10,8 @@ require 'objspace'
 
 class RdfCache
   Failure_value = 0	# value stored in cache when query fails
+  Literal_type = "literal"
+  Uri_type = "uri"
   def initialize(cache_file, query_hash)
     # Example
     #  rdf_cache = RdfCache.new("os_postcode_cache.json", {
@@ -17,18 +19,19 @@ class RdfCache
     #    lng: "http://www.w3.org/2003/01/geo/wgs84_pos#long"
     #  })
 
-    @cache_file, @query_hash = cache_file, Hash[ query_hash.map {|k,v| [k, RDF::URI(v)] } ]
+    @cache_file = cache_file
 
     # Make the RDF::Query. 
     # For example, with the above parameters, the query would look like this:
-    #  query = RDF::Query.new({
+    #  @query_hash = RDF::Query.new({
     #    :stuff => {
-    #      RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#lat") => :lat,
-    #      RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#long") => :lng
+    #      :lat => RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#lat")
+    #      :lng => RDF::URI("http://www.w3.org/2003/01/geo/wgs84_pos#long")
     #    }
     #  })
+    @query_hash = Hash[ query_hash.map {|k,v| [k, RDF::URI(v)] } ]
 
-    # invert sways keys and values:
+    # invert swaps keys and values:
     @rdf_query = RDF::Query.new({stuff: @query_hash.invert})
 
     begin
@@ -40,12 +43,12 @@ class RdfCache
       $stderr.puts "Creating empty cache."
       @cache_hash = {}
     end
-    puts "Initial cache: "
-    pp @cache_hash
+    #puts "Initial cache: "
+    #pp @cache_hash
     ObjectSpace.define_finalizer(self, proc {|id| self.destructor})
   end
   def destructor
-    puts "destructor"
+    #puts "destructor"
     save_cache unless @cache_hash.empty?
   end
   def save_cache
@@ -69,27 +72,28 @@ class RdfCache
 
 	@query_hash.keys.each {|k|
 	  field = result[k.to_s] = {}
+	  raise "Missing '#{k}' from RDF::Query result" unless res[0][k]
 	  field["value"] = res[0][k].to_s
 
 	  if res[0][k].literal? 
 
-	    field["type"] = "literal"
-	    if (res[0][k].literal? && res[0][k].has_datatype?)
+	    field["type"] = Literal_type
+	    if (res[0][k].has_datatype?)
 	      field["datatype"] = res[0][k].datatype.to_uri.to_s
 	    end
-	    if (res[0][k].literal? && res[0][k].has_language?)
+	    if (res[0][k].has_language?)
 	      field["language"] = res[0][k].language.to_uri.to_s
 	    end
 
 	  elsif res[0][k].uri? 
 
-	    field["type"] = "uri"
+	    field["type"] = Uri_type
 
 	  else
 	    raise "Unexpected type of Term - we need to implement more types"
 	  end
 	}
-	puts "Just loaded data from network: "
+	#puts "Just loaded data from network: "
 	#pp result
 	@cache_hash[key] = result
       rescue => e
@@ -140,10 +144,10 @@ class RdfCache
     end
     def add_to_graph(graph, subject_uri)
       case type
-      when "uri"
+      when Uri_type
 	graph.insert([subject_uri, @query_uri, RDF::URI.new(value)])
 	#puts "#{subject_uri} #{@query_uri} #{value}"
-      when "literal"
+      when Literal_type
 	opts = {}
 	opts[:datatype] = datatype if datatype
 	opts[:language] = language.to_sym if language
@@ -160,7 +164,7 @@ def test(cache_file, query, test_data)
   rdf_cache = RdfCache.new(cache_file, query)
   test_data.each {|s|
     res = rdf_cache.get(RDF::URI(s))
-    puts "Result returned by get(#{s}):"
+    #puts "Result returned by get(#{s}):"
     #pp res
     graph = RDF::Graph.new
     rdf_cache.save_as_rdf(graph)
@@ -199,7 +203,7 @@ def test2
   rdf_cache = RdfCache.new(cache_file, query)
   test_data.each {|s|
     res = rdf_cache.get(RDF::URI(s))
-    puts "Result returned by get(#{s}):"
+    #puts "Result returned by get(#{s}):"
     #pp res
     if res
       puts "lat: #{res.lat.value} #{res.lat.type} #{res.lat.datatype} #{res.lat.language}"
@@ -207,5 +211,5 @@ def test2
     end
   }
 end
-test1
-test2
+#test1
+#test2
