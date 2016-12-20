@@ -40,6 +40,7 @@ class OptParse
     options.orgs_csv = nil
     options.outlets_csv = nil
     options.output_dir = nil
+    options.map_app_sparql = nil
     options.uri_base = nil
     options.essglobal_uri = nil
     options.doc_url_base = nil
@@ -48,8 +49,6 @@ class OptParse
     options.max_csv_rows = nil
     options.check_websites = false
     options.allow_blank_nodes = true
-    # TODO - add control over which output files are generated.
-    #        Particularly important for expensive ones like websites.html. 
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: example.rb [options]"
@@ -73,6 +72,12 @@ class OptParse
       opts.on("--output-dir DIRECTORYNAME",
               "Name of directory for generated output") do |filename|
         options.output_dir = filename
+      end
+
+      # Mandatory argument.
+      opts.on("--map-app-sparql FILENAME",
+              "Name of file for generated SPARQL query for tha map-app") do |filename|
+        options.map_app_sparql = filename
       end
 
       # Mandatory argument.
@@ -571,6 +576,28 @@ ENDCSS
     rdf_filename = P6::RdfXml.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
     ttl_filename = P6::Turtle.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
   end
+  def create_sparql_files
+    File.open($options.map_app_sparql, "w") {|f|
+      f.puts <<ENDSPARQL
+PREFIX essglobal: <#{$essglobal.to_uri.to_s}>
+PREFIX rdf: <#{RDF.to_uri.to_s}>
+PREFIX gr: <#{RDF::Vocab::GR.to_uri.to_s}>
+PREFIX osspatialrelations: <#{$osspatialrelations.to_uri.to_s}>
+PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX : <#{uri}>
+SELECT ?name ?spa ?lat ?long
+WHERE {
+	?x rdf:type essglobal:SSEInitiative .
+	?x gr:name ?name .
+	?x essglobal:hasAddress ?addr .
+	?addr  osspatialrelations:within ?spa .
+	?spa  wgs84_pos:lat ?lat.
+	?spa  wgs84_pos:long ?long.
+}
+ENDSPARQL
+
+    }
+  end
   private
   def uri
     RDF::URI("#{$options.uri_base}#{Collection.basename}")
@@ -850,3 +877,4 @@ P6::File.save(collection.map_app_json(prog_ctr, postcode_lat_lng_cache), map_app
 
 #collection.resolve_duplicates
 collection.create_files(postcode_lat_lng_cache)
+collection.create_sparql_files

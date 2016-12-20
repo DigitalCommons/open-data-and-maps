@@ -96,12 +96,17 @@ GEN_TRIPLES := generate-triples.rb
 
 # Directories
 GEN_DATA_DIR := generated-data/$(edition)/$(IDENTIFIER_PATH)
+GEN_SPARQL_DIR := generated-data/$(edition)/sparql/
 DATA_DIR := $(GEN_DATA_DIR)$(DATASET)
 CSS_SRC_DIR := css/
 CSS_GEN_DIR := $(GEN_DATA_DIR)$(DATASET)/css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 
 $(DATA_DIR):
+	$(check_valid_edition)
+	mkdir -p $@
+
+$(GEN_SPARQL_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
 
@@ -120,11 +125,12 @@ nullstring :=
 space := $(nullstring) # end of the line
 comma := ,
 
-$(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR)
+$(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR) $(GEN_SPARQL_DIR)
 	$(check_valid_edition)
 	$(RUBY) $(GEN_TRIPLES) --organizations-csv $(COOPS_UK_ORGS_CSV) \
 		--outlets-csv $(COOPS_UK_OUTLETS_CSV) \
 		--output-dir $(GEN_DATA_DIR) \
+		--map-app-sparql $(MAP_APP_SPARQL) \
 		--uri-base $(URI_BASE) \
 		--doc-url-base $(DOC_URL_BASE) \
 		--dataset $(DATASET) \
@@ -149,16 +155,19 @@ $(DEPLOY_target):
 .PHONY: list_sparql_graphs get_info_for_map_app
 
 DEFAULT_GRAPH_URI := http://163.172.187.51/OntoWiki/index.php/CoopsUKwithlatlong/ 
-SPARQL_FOR_MAP_APP := sparql/get_info_for_map_app.rq 
+MAP_APP_SPARQL := $(GEN_SPARQL_DIR)map-app-query.rq
 SPARQL_FOR_GRAPH_LIST := sparql/list-graphs.rq 
 SPARQL_ENDPOINT := http://163.172.187.51:8890/sparql
 SPARQL_CURL := curl -i -H "Accept: application/json" 
 
 list_sparql_graphs:
+	$(check_valid_edition)
+	cp $(SPARQL_FOR_GRAPH_LIST) $(GEN_SPARQL_DIR)
 	$(SPARQL_CURL) --data-urlencode query@$(SPARQL_FOR_GRAPH_LIST) $(SPARQL_ENDPOINT)
 
 get_info_for_map_app:
-	$(SPARQL_CURL) --data default-graph-uri=$(DEFAULT_GRAPH_URI) --data-urlencode query@$(SPARQL_FOR_MAP_APP) $(SPARQL_ENDPOINT)
+	$(check_valid_edition)
+	$(SPARQL_CURL) --data default-graph-uri=$(DEFAULT_GRAPH_URI) --data-urlencode query@$(MAP_APP_SPARQL) $(SPARQL_ENDPOINT)
 
 $(SPARQLTEST_target): list_sparql_graphs get_info_for_map_app
 
