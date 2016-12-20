@@ -152,7 +152,7 @@ DEFAULT_GRAPH_URI := http://163.172.187.51/OntoWiki/index.php/CoopsUKwithlatlong
 SPARQL_FOR_MAP_APP := sparql/get_info_for_map_app.rq 
 SPARQL_FOR_GRAPH_LIST := sparql/list-graphs.rq 
 SPARQL_ENDPOINT := http://163.172.187.51:8890/sparql
-SPARQL_CURL := curl -i -H "Accept: text/csv" 
+SPARQL_CURL := curl -i -H "Accept: application/json" 
 
 list_sparql_graphs:
 	$(SPARQL_CURL) --data-urlencode query@$(SPARQL_FOR_GRAPH_LIST) $(SPARQL_ENDPOINT)

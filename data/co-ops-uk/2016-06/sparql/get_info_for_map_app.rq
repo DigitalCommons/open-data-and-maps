@@ -1,3 +1,4 @@
+
 select ?name ?spa ?lat ?long
 where {
 	?x rdf:type <http://purl.org/solidarityeconomics/experimental/essglobal/vocab/SSEInitiative> .
