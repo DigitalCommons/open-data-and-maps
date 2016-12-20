@@ -4,7 +4,8 @@ GENERATE_target := generate
 DEPLOY_target := deploy
 HELP_target := help
 TEST_target := test
-.PHONY: $(HELP_target) $(GENERATE_target) $(DEPLOY_target) $(TEST_target)
+SPARQLTEST_target := sparqltest
+.PHONY: $(HELP_target) $(GENERATE_target) $(DEPLOY_target) $(TEST_target) $(SPARQLTEST_target)
 .DEFAULT_GOAL: $(HELP_target)
 
 $(HELP_target):
@@ -25,6 +26,8 @@ $(HELP_target):
 	@$(call echo_if_edition_ok,"\\tLocal directory $(GEN_DATA_DIR) is copied to $(SERVER_PATH).")
 	@$(call echo_if_edition_ok,"\\tAfter deployment \(assuming content negotiation is configured properly\) data can be accessed at this URI:")
 	@$(call echo_if_edition_ok,"\\t    $(URI_BASE)$(DATASET)")
+	@echo "make $(SPARQLTEST_target)"
+	@echo "\tRuns some sparql queries, and by doing so documents some things."
 
 # Variables to be overridden from the command line:
 #
@@ -142,4 +145,20 @@ $(DEPLOY_target):
 	@echo $(DEPLOY_target)
 	$(call SERVER_CMD,'cd $(SERVER_DIR) && mkdir -p $(SERVER_DOC_DIR)')
 	$(RSYNC) $(GEN_DATA_DIR) $(SERVER):$(SERVER_PATH)
+
+.PHONY: list_sparql_graphs get_info_for_map_app
+
+DEFAULT_GRAPH_URI := http://163.172.187.51/OntoWiki/index.php/CoopsUKwithlatlong/ 
+SPARQL_FOR_MAP_APP := sparql/get_info_for_map_app.rq 
+SPARQL_FOR_GRAPH_LIST := sparql/list-graphs.rq 
+SPARQL_ENDPOINT := http://163.172.187.51:8890/sparql
+SPARQL_CURL := curl -i -H "Accept: text/csv" 
+
+list_sparql_graphs:
+	$(SPARQL_CURL) --data-urlencode query@$(SPARQL_FOR_GRAPH_LIST) $(SPARQL_ENDPOINT)
+
+get_info_for_map_app:
+	$(SPARQL_CURL) --data default-graph-uri=$(DEFAULT_GRAPH_URI) --data-urlencode query@$(SPARQL_FOR_MAP_APP) $(SPARQL_ENDPOINT)
+
+$(SPARQLTEST_target): list_sparql_graphs get_info_for_map_app
 
