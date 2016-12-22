@@ -3,15 +3,16 @@
 // Website: http://johnwright.me/blog
 // This code is live @ 
 // http://johnwright.me/code-examples/sparql-query-in-code-rest-php-and-json-tutorial.php
-function getSparqlUrl()
+function getSparqlUrl($query_name)
 {
 	// TODO - pass in SPARQL parameters as script arguments?
-   $query = file_get_contents('map-app-query.rq');
-   $default_graph_uri = trim(file_get_contents('global.graph'));
+
+	$query = file_get_contents($query_name.'/query.rq');
+	$endpoint = trim(file_get_contents($query_name.'/endpoint.txt'));
+   $default_graph_uri = trim(file_get_contents($query_name.'/default-graph-uri.txt'));
  
    // TODO - Consider using HTTP POST?
-   // TODO - read SPAQRL endpoint from somewhere - don't hardcode it here
-   $searchUrl = 'http://163.172.187.51:8890/sparql?'
+   $searchUrl = $endpoint.'?'
 	  .'default-graph-uri='.urlencode($default_graph_uri)
       .'&query='.urlencode($query);
 	  
@@ -57,31 +58,9 @@ function request($url){
    //var_dump($response);
    return $response;
 }
-function printArray($array, $spaces = "")
-{
-   $retValue = "";
-	
-   if(is_array($array))
-   {	
-      $spaces = $spaces
-         ."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-      $retValue = $retValue."<br/>";
-      foreach(array_keys($array) as $key)
-      {
-         $retValue = $retValue.$spaces
-            ."<strong>".$key."</strong>"
-            .printArray($array[$key], 
-               $spaces);
-      }		
-      $spaces = substr($spaces, 0, -30);
-   }
-   else $retValue = 
-      $retValue." - ".$array."<br/>";
-	
-   return $retValue;
-}
-$requestURL = getSparqlUrl();
-//print $requestURL;
+$query_name = 'map-app';
+$requestURL = getSparqlUrl($query_name);
+print $requestURL;
 echo request($requestURL);
 //$responseArray = json_decode(
 	//request($requestURL),

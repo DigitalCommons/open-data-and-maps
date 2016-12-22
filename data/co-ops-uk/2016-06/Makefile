@@ -62,7 +62,7 @@ ifeq ($(edition),final)
 else ifeq ($(edition),test)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
-  MAX_CSV_ROWS := 10
+  MAX_CSV_ROWS := 100
   #CHECK_WEBSITES_FLAG := --check-websites
   ALLOW_BLANK_NODES_FLAG := --no-allow-blank-nodes
 else
@@ -144,13 +144,21 @@ comma := ,
 
 ONE_BIG_RDFXML_FILE := $(GEN_DATA_DIR)$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf
 
+# The GEN_SPARQL_DIR will be copied over to the map-app services dir, for use by a PHP script
+# These file names must match exactly the filenames in the PHP script
+MAP_APP_SPARQL_FILE := $(GEN_SPARQL_DIR)query.rq
+MAP_APP_ENDPOINT_FILE := $(GEN_SPARQL_DIR)endpoint.txt
+MAP_APP_GRAPH_FILE := $(GEN_SPARQL_DIR)default-graph-uri.txt
+
 $(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR) $(GEN_SPARQL_DIR) 
 	$(check_valid_edition)
+	echo "$(SPARQL_ENDPOINT)" > $(MAP_APP_ENDPOINT_FILE)
+	echo "$(GRAPH_NAME)" > $(MAP_APP_GRAPH_FILE)
 	$(RUBY) $(GEN_TRIPLES) --organizations-csv $(COOPS_UK_ORGS_CSV) \
 		--outlets-csv $(COOPS_UK_OUTLETS_CSV) \
 		--output-dir $(GEN_DATA_DIR) \
 		--one-big-file-suffix $(ONE_BIG_FILE_SUFFIX) \
-		--map-app-sparql $(MAP_APP_SPARQL) \
+		--map-app-sparql $(MAP_APP_SPARQL_FILE) \
 		--uri-base $(URI_BASE) \
 		--doc-url-base $(DOC_URL_BASE) \
 		--dataset $(DATASET) \
@@ -158,6 +166,8 @@ $(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) 
 		--essglobal-uri $(ESSGLOBAL_URI) \
 		--max-csv-rows $(MAX_CSV_ROWS) \
 		$(CHECK_WEBSITES_FLAG) $(ALLOW_BLANK_NODES_FLAG)
+	@echo "**** Don't forget to copy $(GEN_SPARQL_DIR) to map-app/www/services"
+
 
 # Destination directory on server to which data is to be deployed:
 SERVER_PATH := $(SERVER_DIR)$(SERVER_DOC_DIR)
@@ -215,19 +225,17 @@ $(TRIPLESTORE_target): | $(GEN_VIRTUOSO_DIR)
 
 #DEFAULT_GRAPH_URI := http://163.172.187.51/OntoWiki/index.php/CoopsUKwithlatlong/ 
 DEFAULT_GRAPH_URI := $(GRAPH_NAME)
-MAP_APP_SPARQL := $(GEN_SPARQL_DIR)map-app-query.rq
 SPARQL_FOR_GRAPH_LIST := sparql/list-graphs.rq 
 SPARQL_ENDPOINT := http://163.172.187.51:8890/sparql
 SPARQL_CURL := curl -i -H "Accept: application/json" 
 
 list_sparql_graphs:
 	$(check_valid_edition)
-	cp $(SPARQL_FOR_GRAPH_LIST) $(GEN_SPARQL_DIR)
 	$(SPARQL_CURL) --data-urlencode query@$(SPARQL_FOR_GRAPH_LIST) $(SPARQL_ENDPOINT)
 
 get_info_for_map_app:
 	$(check_valid_edition)
-	$(SPARQL_CURL) --data default-graph-uri=$(DEFAULT_GRAPH_URI) --data-urlencode query@$(MAP_APP_SPARQL) $(SPARQL_ENDPOINT)
+	$(SPARQL_CURL) --data default-graph-uri=$(DEFAULT_GRAPH_URI) --data-urlencode query@$(MAP_APP_SPARQL_FILE) $(SPARQL_ENDPOINT)
 
 $(SPARQLTEST_target): list_sparql_graphs get_info_for_map_app
 

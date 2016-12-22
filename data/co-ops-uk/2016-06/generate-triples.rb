@@ -605,6 +605,7 @@ WHERE {
 	?loc_uri wgs84_pos:lat ?lat.
 	?loc_uri wgs84_pos:long ?lng.
 }
+LIMIT #{size}
 ENDSPARQL
     }
   end
