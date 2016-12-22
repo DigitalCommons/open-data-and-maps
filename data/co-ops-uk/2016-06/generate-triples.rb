@@ -591,20 +591,21 @@ ENDCSS
 PREFIX essglobal: <#{$essglobal.to_uri.to_s}>
 PREFIX rdf: <#{RDF.to_uri.to_s}>
 PREFIX gr: <#{RDF::Vocab::GR.to_uri.to_s}>
+PREFIX foaf: <#{RDF::Vocab::FOAF.to_uri.to_s}>
 PREFIX osspatialrelations: <#{$osspatialrelations.to_uri.to_s}>
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX : <#{uri}>
-SELECT ?name ?spa ?lat ?long
+SELECT ?name ?uri ?loc_uri ?lat ?lng ?www
 WHERE {
-	?x rdf:type essglobal:SSEInitiative .
-	?x gr:name ?name .
-	?x essglobal:hasAddress ?addr .
-	?addr  osspatialrelations:within ?spa .
-	?spa  wgs84_pos:lat ?lat.
-	?spa  wgs84_pos:long ?long.
+	?uri rdf:type essglobal:SSEInitiative .
+	?uri gr:name ?name .
+	?uri foaf:homepage ?www .
+	?uri essglobal:hasAddress ?addr .
+	?addr osspatialrelations:within ?loc_uri .
+	?loc_uri wgs84_pos:lat ?lat.
+	?loc_uri wgs84_pos:long ?lng.
 }
 ENDSPARQL
-
     }
   end
   private
