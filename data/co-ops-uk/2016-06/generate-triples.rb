@@ -41,6 +41,7 @@ class OptParse
     options.outlets_csv = nil
     options.output_dir = nil
     options.map_app_sparql = nil
+    options.one_big_file_suffix = nil
     options.uri_base = nil
     options.essglobal_uri = nil
     options.doc_url_base = nil
@@ -78,6 +79,12 @@ class OptParse
       opts.on("--map-app-sparql FILENAME",
               "Name of file for generated SPARQL query for tha map-app") do |filename|
         options.map_app_sparql = filename
+      end
+
+      # Mandatory argument.
+      opts.on("--one-big-file-suffix SUFFIX",
+              "Name of file suffix for the one big file of RDF, generated for easy loading into OntoWiki") do |suffix|
+        options.one_big_file_suffix = suffix
       end
 
       # Mandatory argument.
@@ -277,13 +284,15 @@ class Collection < Array	# of Initiatives
   end
   # for forming the name of the one big file with all the data contained in it:
   def self.one_big_file_basename
-    "#{basename}_all"
+    "#{basename}#{$options.one_big_file_suffix}"
   end
   def self.about_uri
     RDF::URI("#{$options.uri_base}#{about_basename}")
   end
 
   def self.basename
+    # Unlike the bash command basename, this is the basename without the extension.
+    # TODO - rename basename_without_ext ?
     $options.dataset
   end
   def to_hash
@@ -661,6 +670,8 @@ class Initiative
   end
 
   def basename	# for output files
+    # Unlike the bash command basename, this is the basename without the extension.
+    # TODO - rename basename_without_ext ?
     "#{$options.dataset}/#{@id}"
   end
   def uri
