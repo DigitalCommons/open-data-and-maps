@@ -3,6 +3,24 @@
 // Website: http://johnwright.me/blog
 // This code is live @ 
 // http://johnwright.me/code-examples/sparql-query-in-code-rest-php-and-json-tutorial.php
+function report_success($response) 
+{
+	$result = [];
+	// API response uses JSend: https://labs.omniti.com/labs/jsend
+	$result["status"] = "success";
+	$result["data"] = $response;
+	echo json_encode($result);
+}
+function report_error($msg)
+{
+	$result = [];
+	// API response uses JSend: https://labs.omniti.com/labs/jsend
+	$result["status"] = "error";
+	$result["message"] = $msg;
+	http_response_code(500);
+	echo json_encode($result);
+	exit(1);
+}
 function getSparqlUrl($query_name)
 {
 	// TODO - pass in SPARQL parameters as script arguments?
@@ -22,7 +40,8 @@ function request($url){
  
    // is curl installed?
    if (!function_exists('curl_init')){ 
-      die('CURL is not installed!');
+	   report_error("PHP can't find function curl_init. Is CURL installed?");
+      //die('CURL is not installed!');
    }
    //echo 'curl_init OK';
  
@@ -49,7 +68,7 @@ function request($url){
    $response = curl_exec($ch);
    if (curl_errno($ch)) { 
 	   // TODO - grown-up error handling!
-	   print "Error: " . curl_error($ch); 
+	   report_error("PHP curl_exec produces error: " . curl_error($ch)); 
    }
    //echo 'curl_exec OK';
  
@@ -60,9 +79,18 @@ function request($url){
 }
 $query_name = 'map-app';
 $requestURL = getSparqlUrl($query_name);
-print $requestURL;
-echo request($requestURL);
-//$responseArray = json_decode(
-	//request($requestURL),
-	//true); 
+//print $requestURL;
+$response = request($requestURL);
+$res = json_decode($response, true);
+$keys = array("name", "uri", "loc_uri", "lat", "lng", "www");
+$result = array();
+foreach($res["results"]["bindings"] as $item) {
+	$obj = [];
+	foreach($keys as $key) {
+		$obj[$key] = $item[$key]["value"];
+	}
+	array_push($result, $obj);
+	//var_dump($item);
+}
+report_success($result);
 ?>

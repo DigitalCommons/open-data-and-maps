@@ -37,24 +37,60 @@ define(["app/eventbus"], function(eventbus) {
 		initiativesToLoad = initiativesToLoad.concat(json);
 		loadNextInitiatives();
 	}
+	function errorMessage(response) {
+		// Extract error message from parsed JSON response.
+		// Returns error string, or null if no error.
+		// API response uses JSend: https://labs.omniti.com/labs/jsend
+		switch (response.status) {
+			case ("error"):
+				return response.message;
+			case ("fail"):
+				return response.data.toString();
+			case ("success"):
+				return null;
+			default:
+				return "Unexpected JSON error message - cannot be extracted.";
+		}
+	}
 	function loadFromWebService() {
-		var service = "services/getdata.php";
+		var service = "services/getdata_using_sparql.php";
+		//var service = "services/getdata.php";
+		var response = null;
+		var message = null;
 		eventbus.publish({topic: "Initiative.loadStarted", data: {message: "Loading data via " + service}});
 		// We want to allow the effects of publishing the above event to take place in the UI before
 		// continuing with the loading of the data, so we allow the event queue to be processed:
 		setTimeout(function() {
 			d3.json(service, function(error, json) {
+				console.log(json);
 				if (error) {
 					console.warn(error);
+					try {
+						response = JSON.parse(error.responseText);
+						message = errorMessage(response);
+					}
+					catch(e) {
+						message = "Response contained no JSON."
+					}
 					eventbus.publish({
 						topic: "Initiative.loadFailed",
-						data: {message: error.status + ": " + error.statusText + ": " + error.responseURL}
+						data: {message: error.status + ": " + error.statusText + ": " + error.responseURL + ": " + message}
 					});
 				}
 				else {
-					console.log(json);
-					add(json);
-					eventbus.publish({topic: "Initiative.loadComplete"});
+					// API response uses JSend: https://labs.omniti.com/labs/jsend
+					message = errorMessage(json);
+					if (message === null) {
+						console.log(json);
+						add(json.data);
+						eventbus.publish({topic: "Initiative.loadComplete"});
+					}
+					else {
+						eventbus.publish({
+							topic: "Initiative.loadFailed",
+							data: {message: "Error from service: " + message}
+						});
+					}
 				}
 			});
 		}, 0);
