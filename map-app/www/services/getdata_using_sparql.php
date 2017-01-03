@@ -27,55 +27,55 @@ function getSparqlUrl($query_name)
 
 	$query = file_get_contents($query_name.'/query.rq');
 	$endpoint = trim(file_get_contents($query_name.'/endpoint.txt'));
-   $default_graph_uri = trim(file_get_contents($query_name.'/default-graph-uri.txt'));
- 
-   // TODO - Consider using HTTP POST?
-   $searchUrl = $endpoint.'?'
-	  .'default-graph-uri='.urlencode($default_graph_uri)
-      .'&query='.urlencode($query);
-	  
-   return $searchUrl;
+	$default_graph_uri = trim(file_get_contents($query_name.'/default-graph-uri.txt'));
+
+	// TODO - Consider using HTTP POST?
+	$searchUrl = $endpoint.'?'
+		.'default-graph-uri='.urlencode($default_graph_uri)
+		.'&query='.urlencode($query);
+
+	return $searchUrl;
 }
 function request($url){
- 
-   // is curl installed?
-   if (!function_exists('curl_init')){ 
-	   report_error("PHP can't find function curl_init. Is CURL installed?");
-      //die('CURL is not installed!');
-   }
-   //echo 'curl_init OK';
- 
-   // get curl handle
-   $ch= curl_init();
 
-   $headers = array(
-	   "Accept: application/json"
-   );
- 
-   // set request url
-   curl_setopt($ch, CURLOPT_URL, $url);
-   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
- 
-   // return response, don't print/echo
-   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-   //echo 'curl_setopt OK';
- 
+	// is curl installed?
+	if (!function_exists('curl_init')){ 
+		report_error("PHP can't find function curl_init. Is CURL installed?");
+		//die('CURL is not installed!');
+	}
+	//echo 'curl_init OK';
+
+	// get curl handle
+	$ch= curl_init();
+
+	$headers = array(
+		"Accept: application/json"
+	);
+
+	// set request url
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+	// return response, don't print/echo
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	//echo 'curl_setopt OK';
+
    /*
    Here you find more options for curl:
    http://www.php.net/curl_setopt
-   */		
- 
-   $response = curl_exec($ch);
-   if (curl_errno($ch)) { 
-	   // TODO - grown-up error handling!
-	   report_error("PHP curl_exec produces error: " . curl_error($ch)); 
-   }
-   //echo 'curl_exec OK';
- 
-   curl_close($ch);
- 
-   //var_dump($response);
-   return $response;
+	*/		
+
+	$response = curl_exec($ch);
+	if (curl_errno($ch)) { 
+		// TODO - grown-up error handling!
+		report_error("PHP curl_exec produces error: " . curl_error($ch)); 
+	}
+	//echo 'curl_exec OK';
+
+	curl_close($ch);
+
+	//var_dump($response);
+	return $response;
 }
 $query_name = 'map-app';
 $requestURL = getSparqlUrl($query_name);
