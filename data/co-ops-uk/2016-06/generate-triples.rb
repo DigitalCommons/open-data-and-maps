@@ -454,21 +454,25 @@ ENDCSS
   end
   def map_app_json(prog_ctr, postcode_lat_lng_cache)
     JSON.pretty_generate(
-      map {|i|
-	res = postcode_lat_lng_cache.get(i.ospostcode_uri)
-	if res
-	  {
-	    name: i.name,
-	    uri: i.uri,
-	    loc_uri: i.ospostcode_uri,
-	    lat: res.lat.value,
-	    lng: res.lng.value,
-	    www: i.homepage
-	  }
-	else
-	  nil
-	end
-      }.compact
+      {
+	# The format matches that created by getdata_using_sparql.php:
+	status: "success",
+	data: map {|i|
+	  res = postcode_lat_lng_cache.get(i.ospostcode_uri)
+	  if res
+	    {
+	      name: i.name,
+	      uri: i.uri,
+	      loc_uri: i.ospostcode_uri,
+	      lat: res.lat.value,
+	      lng: res.lng.value,
+	      www: i.homepage
+	    }
+	  else
+	    nil
+	  end
+	}.compact
+      }
     )
   end
   def map_app_json_obsolete(prog_ctr)
