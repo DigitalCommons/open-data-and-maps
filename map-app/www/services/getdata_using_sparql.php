@@ -1,4 +1,5 @@
 <?php 
+// Based on code originally written by:
 // Author: John Wright
 // Website: http://johnwright.me/blog
 // This code is live @ 
@@ -41,11 +42,7 @@ function request($url){
 	// is curl installed?
 	if (!function_exists('curl_init')){ 
 		report_error("PHP can't find function curl_init. Is CURL installed?");
-		//die('CURL is not installed!');
 	}
-	//echo 'curl_init OK';
-
-	// get curl handle
 	$ch= curl_init();
 
 	$headers = array(
@@ -58,28 +55,20 @@ function request($url){
 
 	// return response, don't print/echo
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	//echo 'curl_setopt OK';
 
-   /*
-   Here you find more options for curl:
-   http://www.php.net/curl_setopt
-	*/		
+	// See curl docs: http://www.php.net/curl_setopt
 
 	$response = curl_exec($ch);
 	if (curl_errno($ch)) { 
-		// TODO - grown-up error handling!
 		report_error("PHP curl_exec produces error: " . curl_error($ch)); 
 	}
-	//echo 'curl_exec OK';
 
 	curl_close($ch);
 
-	//var_dump($response);
 	return $response;
 }
 $query_name = 'map-app';
 $requestURL = getSparqlUrl($query_name);
-//print $requestURL;
 $response = request($requestURL);
 $res = json_decode($response, true);
 $keys = array("name", "uri", "loc_uri", "lat", "lng", "www");
@@ -90,7 +79,6 @@ foreach($res["results"]["bindings"] as $item) {
 		$obj[$key] = $item[$key]["value"];
 	}
 	array_push($result, $obj);
-	//var_dump($item);
 }
 report_success($result);
 ?>
