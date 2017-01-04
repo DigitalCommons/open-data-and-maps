@@ -459,6 +459,7 @@ ENDCSS
 	status: "success",
 	data: map {|i|
 	  res = postcode_lat_lng_cache.get(i.ospostcode_uri)
+	  prog_ctr.step
 	  if res
 	    {
 	      name: i.name,
