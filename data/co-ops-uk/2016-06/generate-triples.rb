@@ -586,8 +586,11 @@ ENDCSS
       prog_ctr.step
       graph = i.populate_graph(graph)
     }
+    puts "Saving postcode_lat_lng_cache file..."
     postcode_lat_lng_cache.save_as_rdf(graph)
+    puts "Saving one big RDF/XML file..."
     rdf_filename = P6::RdfXml.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
+    puts "Saving one big Turtle file..."
     ttl_filename = P6::Turtle.save_file(dir: $options.output_dir, :basename => Collection.one_big_file_basename, :prefixes => $prefixes, :graph => graph)
   end
   def create_sparql_files

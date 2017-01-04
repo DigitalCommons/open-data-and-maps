@@ -9,7 +9,7 @@ SPARQLTEST_target := sparqltest
 .DEFAULT_GOAL: $(HELP_target)
 
 date ?= $(shell date -u +%Y%m%d)
-version ?= $(date)
+version ?= $(shell date -u +%Y%m%d%H%M%S)
 
 $(HELP_target):
 	@echo USAGE
@@ -54,6 +54,10 @@ ALLOW_BLANK_NODES_FLAG := --allow-blank-nodes
 # The 'edition' variable should be passed in as a command line argument.
 # Generated data for each edition is kept in it's own separate directory.
 EDITIONS := final test
+ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
+  edition_errmsg := Unrecognized edition - you must use 'make edition=x' where x is one of {$(EDITIONS)}
+  BAD_EDITION := yup
+endif
 ifeq ($(edition),final)
   ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
   IDENTIFIER_PATH ?= experimental/
@@ -62,12 +66,12 @@ ifeq ($(edition),final)
 else ifeq ($(edition),test)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
-  MAX_CSV_ROWS := 4000
+  #MAX_CSV_ROWS := 4200
+  MAX_CSV_ROWS :=
   #CHECK_WEBSITES_FLAG := --check-websites
   ALLOW_BLANK_NODES_FLAG := --no-allow-blank-nodes
-else
-  edition_errmsg := Unrecognized edition - you must use 'make edition=x' where x is one of {$(EDITIONS)}
-  #$(warning $(edition_errmsg))
+else ifndef BAD_EDITION
+  edition_errmsg := Error in Makefile - missing configuration for edition $(edition)
   BAD_EDITION := yup
 endif
 
@@ -77,7 +81,6 @@ endef
 define check_valid_edition
 @[ -z "$(BAD_EDITION)" ] || { echo "$(edition_errmsg)" && false; }
 endef
-
 
 # See https://github.com/p6data-coop/ise-linked-open-data/wiki/URIs for a discussion about "experimental"
 DATASET ?= co-ops-uk
@@ -188,7 +191,7 @@ GET_RDFXML_FOR_VIRTUOSO = $(call GET_RDFXML,$(1),$(GEN_VIRTUOSO_DIR)$(2))
 # Datasets on the Virtuoso server are put into a named graph:
 GRAPH_NAME := http://163.172.187.51/OntoWiki/index.php/coopsuk/
 
-# virtuoso server name, typically this is configures in ~/.ssh/config:
+# virtuoso server name, typically this is configured in ~/.ssh/config:
 VIRTUOSO_SERVER := ise-0-admin
 # Directory on virtuoso server which has been configured (DirsAllowed in virtuoso.ini)
 # ready for Bulk data loading:
@@ -215,8 +218,9 @@ $(TRIPLESTORE_target): | $(GEN_VIRTUOSO_DIR)
 	@echo "rdf_loader_run();" >> $(VIRTUOSO_SCRIPT_LOCAL)
 	@echo "Transfering directory '$(GEN_VIRTUOSO_DIR)' to virtuoso server '$(VIRTUOSO_SERVER):$(VIRTUOSO_DATA_DIR)'"
 	@$(SSH) $(VIRTUOSO_SERVER) 'mkdir -p $(VIRTUOSO_DATA_DIR)'
-	@$(RSYNC) --delete $(GEN_VIRTUOSO_DIR) $(VIRTUOSO_SERVER):$(VIRTUOSO_DATA_DIR)
+	@$(RSYNC) $(GEN_VIRTUOSO_DIR) $(VIRTUOSO_SERVER):$(VIRTUOSO_DATA_DIR)
 	@echo "****"
+	@echo "**** IMPORTANT! ****"
 	@echo "**** The final step is to load the data into Virtuoso with graph named $(GRAPH_NAME):"
 	@echo "**** Execute the following command, providing the password for the Virtuoso dba user:"
 	@echo "****\tssh $(VIRTUOSO_SERVER) 'isql-vt localhost dba <password> $(VIRTUOSO_SCRIPT_REMOTE)'"
