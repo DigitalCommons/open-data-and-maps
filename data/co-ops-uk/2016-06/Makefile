@@ -66,8 +66,7 @@ ifeq ($(edition),final)
 else ifeq ($(edition),test)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
-  #MAX_CSV_ROWS := 4200
-  MAX_CSV_ROWS :=
+  MAX_CSV_ROWS := 100
   #CHECK_WEBSITES_FLAG := --check-websites
   ALLOW_BLANK_NODES_FLAG := --no-allow-blank-nodes
 else ifndef BAD_EDITION
