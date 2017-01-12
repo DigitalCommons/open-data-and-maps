@@ -655,7 +655,7 @@ class Initiative
     ch_uri = csv_row["Registrar"] === "Companies House" ? "http://business.data.gov.uk/id/company/#{csv_row["Registered Number"].rjust(8, "0")}" : nil
 
     # Diagnostic output, if you want to see when we've found a Companies House URI:
-    puts "#{csv_row["CUK Organisation ID"]}\t#{ch_uri}" if ch_uri
+    #puts "Companies House URI for #{csv_row["CUK Organisation ID"]}:\t#{ch_uri}" if ch_uri
 
     Initiative.new(csv_row, {
       name: csv_row["Trading Name"],
