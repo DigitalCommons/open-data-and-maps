@@ -632,7 +632,7 @@ ENDSPARQL
 end
 
 class Initiative
-  attr_reader :id, :name, :postcode_text, :postcode_normalized, :csv_row, :homepage 
+  attr_reader :id, :name, :postcode_text, :postcode_normalized, :csv_row, :homepage, :companies_house_uri
   def self.from_outlet(csv_row)
     postcode_text = csv_row["Postcode"].upcase
     postcode_normalized = postcode_text.gsub(/\s+/, "")
@@ -652,12 +652,18 @@ class Initiative
   def self.from_org(csv_row)
     postcode_text = csv_row["Registered Postcode"].upcase
     postcode_normalized = postcode_text.gsub(/\s+/, "")
+    ch_uri = csv_row["Registrar"] === "Companies House" ? "http://business.data.gov.uk/id/company/#{csv_row["Registered Number"].rjust(8, "0")}" : nil
+
+    # Diagnostic output, if you want to see when we've found a Companies House URI:
+    puts "#{csv_row["CUK Organisation ID"]}\t#{ch_uri}" if ch_uri
+
     Initiative.new(csv_row, {
       name: csv_row["Trading Name"],
       homepage: nil,
       postcode_text: postcode_text,
       postcode_normalized: postcode_normalized,
-      id: csv_row["CUK Organisation ID"]
+      id: csv_row["CUK Organisation ID"],
+      companies_house_uri: ch_uri
     })
   end
   def initialize(csv_row, opts)
@@ -666,6 +672,7 @@ class Initiative
     @homepage = opts[:homepage] || ""
     @postcode_text = opts[:postcode_text] || ""
     @postcode_normalized = opts[:postcode_normalized] || ""
+    @companies_house_uri = opts[:companies_house_uri] || ""
     @id = opts[:id] || ""
     if @id.empty?
       raise "Id is empty. " + source_as_str
@@ -748,7 +755,8 @@ class Initiative
 	["Website", P6::Html.link_to(homepage)],
 	["Postcode", postcode_text],
 	["Country", country_name],
-	["postcode URI", ospostcode_uri ? P6::Html.link_to(ospostcode_uri.to_uri.to_s) : "none available"]
+	["postcode URI", ospostcode_uri ? P6::Html.link_to(ospostcode_uri.to_uri.to_s) : "none available"],
+	["Companies House URI", !companies_house_uri.empty? ? P6::Html.link_to(companies_house_uri) : "none available - not a registered company?"]
     ])
   end
   def html_fragment_for_csv_row
