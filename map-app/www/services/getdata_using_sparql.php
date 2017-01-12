@@ -6,19 +6,24 @@
 // http://johnwright.me/code-examples/sparql-query-in-code-rest-php-and-json-tutorial.php
 function report_success($response) 
 {
-	$result = [];
+	$result = array();
 	// API response uses JSend: https://labs.omniti.com/labs/jsend
 	$result["status"] = "success";
 	$result["data"] = $response;
 	echo json_encode($result);
 }
-function report_error($msg)
+function report_error_and_die($msg)
 {
-	$result = [];
+	$result = array();
 	// API response uses JSend: https://labs.omniti.com/labs/jsend
 	$result["status"] = "error";
 	$result["message"] = $msg;
-	http_response_code(500);
+	if (function_exists('http_response_code')) {
+		http_response_code(500);
+	}
+	else {
+		// TODO - use header() function
+	}
 	echo json_encode($result);
 	exit(1);
 }
@@ -26,9 +31,9 @@ function getSparqlUrl($query_name)
 {
 	// TODO - pass in SPARQL parameters as script arguments?
 
-	$query = file_get_contents($query_name.'/query.rq');
-	$endpoint = trim(file_get_contents($query_name.'/endpoint.txt'));
-	$default_graph_uri = trim(file_get_contents($query_name.'/default-graph-uri.txt'));
+	$query = file_get_contents(__DIR__ . '/' . $query_name.'/query.rq');
+	$endpoint = trim(file_get_contents(__DIR__ . '/' . $query_name.'/endpoint.txt'));
+	$default_graph_uri = trim(file_get_contents(__DIR__ . '/' . $query_name.'/default-graph-uri.txt'));
 
 	// TODO - Consider using HTTP POST?
 	$searchUrl = $endpoint.'?'
@@ -41,7 +46,7 @@ function request($url){
 
 	// is curl installed?
 	if (!function_exists('curl_init')){ 
-		report_error("PHP can't find function curl_init. Is CURL installed?");
+		report_error_and_die("PHP can't find function curl_init. Is CURL installed?");
 	}
 	$ch= curl_init();
 
@@ -56,11 +61,14 @@ function request($url){
 	// return response, don't print/echo
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
+	//curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+	//curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+
 	// See curl docs: http://www.php.net/curl_setopt
 
 	$response = curl_exec($ch);
 	if (curl_errno($ch)) { 
-		report_error("PHP curl_exec produces error: " . curl_error($ch)); 
+		report_error_and_die("PHP curl_exec produces error: " . curl_error($ch)); 
 	}
 
 	curl_close($ch);
@@ -74,7 +82,7 @@ $res = json_decode($response, true);
 $keys = array("name", "uri", "loc_uri", "lat", "lng", "www");
 $result = array();
 foreach($res["results"]["bindings"] as $item) {
-	$obj = [];
+	$obj = array();
 	foreach($keys as $key) {
 		$obj[$key] = $item[$key]["value"];
 	}
