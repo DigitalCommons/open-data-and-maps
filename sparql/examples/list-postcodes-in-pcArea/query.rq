@@ -1,0 +1,10 @@
+PREFIX spatial: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?postcode
+WHERE {
+    ?x rdfs:label ?postcode .
+  ?x a <http://data.ordnancesurvey.co.uk/ontology/postcode/PostcodeUnit> .
+  ?x spatial:within <http://data.ordnancesurvey.co.uk/id/postcodearea/SO> .
+}
+LIMIT 20

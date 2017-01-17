@@ -1,0 +1,85 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: X-Requested-With, Content-Type
+Access-Control-Allow-Methods: GET,POST,OPTIONS,HEAD
+Access-Control-Allow-Origin: *
+Cache-Control: max-age=86400, must-revalidate
+Content-Type: application/sparql-results+json
+Date: Tue, 17 Jan 2017 10:35:07 GMT
+ETag: "c8f8dd299097b3bd4c6410002c0fe80d"
+Last-Modified: Tue, 06 Dec 2016 13:54:23 GMT
+Link: <http://www.ordnancesurvey.co.uk/oswebsite/opendata/licence/docs/licence.pdf>; rel="license"
+Server: Apache/2.2.3 (CentOS)
+Vary: Accept
+X-Powered-By: PHP/5.3.27
+Content-Length: 1730
+Connection: keep-alive
+
+{
+  "head": {
+    "vars": [ "postcode" ]
+  } ,
+  "results": {
+    "bindings": [
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AB" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AG" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AJ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AL" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AN" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AP" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AR" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AT" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AY" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0AZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0BB" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0BD" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "SO14 0BF" }
+      }
+    ]
+  }
+}

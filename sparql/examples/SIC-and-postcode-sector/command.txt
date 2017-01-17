@@ -1,0 +1,3 @@
+curl -i -H "Accept: text/plain" --data-urlencode query@query.rq $(< endpoint.txt) > results.txt
+]
+

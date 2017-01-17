@@ -1,0 +1,29 @@
+PREFIX spatial: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX terms: <http://business.data.gov.uk/companies/def/terms/>
+PREFIX postcode: <http://data.ordnancesurvey.co.uk/ontology/postcode/>
+PREFIX rov: <http://www.w3.org/ns/regorg#>
+
+
+SELECT ?name ?postcode WHERE {
+
+#Finds Company's Postcode
+<http://business.data.gov.uk/id/company/07889401> terms:registeredAddress ?add .
+?add postcode:postcode ?pc .
+
+#Go to OS for finding postcodes in same sector
+SERVICE <http://data.ordnancesurvey.co.uk/datasets/os-linked-data/apis/sparql> {
+	?pc spatial:within ?sec .
+	?sec a postcode:PostcodeSector .
+    ?x rdfs:label ?postcode .
+  ?x a postcode:PostcodeUnit .
+  ?x spatial:within ?sec.
+}
+
+OPTIONAL{
+#Find companies that have those postcodes
+?company terms:registeredAddress ?address .
+?address postcode:postcode ?x .
+?company rov:legalName ?name .
+}
+}
