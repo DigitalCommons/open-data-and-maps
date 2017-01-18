@@ -188,6 +188,7 @@ $essglobal_standard = RDF::Vocabulary.new($options.essglobal_uri + "standard/")
 #$solecon = RDF::Vocabulary.new("http://solidarityeconomics.org/vocab#")
 $ospostcode = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
 $osspatialrelations = RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/")
+$rov = RDF::Vocabulary.new("http://www.w3.org/ns/regorg#")
 $prefixes = {
   vcard: RDF::Vocab::VCARD.to_uri.to_s,
   geo: RDF::Vocab::GEO.to_uri.to_s,
@@ -196,6 +197,7 @@ $prefixes = {
   gr: RDF::Vocab::GR.to_uri.to_s,
   foaf: RDF::Vocab::FOAF.to_uri.to_s,
   ospostcode: $ospostcode.to_uri.to_s,
+  rov: $rov.to_uri.to_s,
   osspatialrelations: $osspatialrelations.to_uri.to_s
 }
 
@@ -601,14 +603,16 @@ PREFIX rdf: <#{RDF.to_uri.to_s}>
 PREFIX gr: <#{RDF::Vocab::GR.to_uri.to_s}>
 PREFIX foaf: <#{RDF::Vocab::FOAF.to_uri.to_s}>
 PREFIX osspatialrelations: <#{$osspatialrelations.to_uri.to_s}>
+PREFIX rov: <#{$rov.to_uri.to_s}>
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX : <#{uri}>
-SELECT ?name ?uri ?loc_uri ?lat ?lng ?www
+SELECT ?name ?uri ?loc_uri ?lat ?lng ?www ?regorg
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
-	?uri foaf:homepage ?www .
+	OPTIONAL { ?uri foaf:homepage ?www . }
 	?uri essglobal:hasAddress ?addr .
+	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
 	?addr osspatialrelations:within ?loc_uri .
 	?loc_uri wgs84_pos:lat ?lat.
 	?loc_uri wgs84_pos:long ?lng.
@@ -655,7 +659,7 @@ class Initiative
     ch_uri = csv_row["Registrar"] === "Companies House" ? "http://business.data.gov.uk/id/company/#{csv_row["Registered Number"].rjust(8, "0")}" : nil
 
     # Diagnostic output, if you want to see when we've found a Companies House URI:
-    #puts "Companies House URI for #{csv_row["CUK Organisation ID"]}:\t#{ch_uri}" if ch_uri
+    puts "Companies House URI for #{csv_row["CUK Organisation ID"]}:\t#{ch_uri}" if ch_uri
 
     Initiative.new(csv_row, {
       name: csv_row["Trading Name"],
@@ -783,12 +787,13 @@ class Initiative
   def populate_graph(graph)
     graph.insert([uri, RDF.type, Initiative.type_uri])
     graph.insert([uri, RDF::Vocab::GR.name, name])
-    graph.insert([uri, RDF::Vocab::FOAF.homepage, homepage])
+    graph.insert([uri, RDF::Vocab::FOAF.homepage, homepage]) unless homepage.empty?
     graph.insert([uri, essglobal.hasAddress, make_address(graph)])
     # legal-form/L2 is a co-operative.
     # Is everything in the co-ops UK open dataset actually a co-operative?
     #graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
     graph.insert([uri, essglobal.legalForm, $essglobal_standard["legal-form/L2"]])
+    graph.insert([uri, $rov.hasRegisteredOrganization, companies_house_uri]) unless companies_house_uri.empty? 
 
 #    begin
 #      postcode_uri = ospostcode_uri

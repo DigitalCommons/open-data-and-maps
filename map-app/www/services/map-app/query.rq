@@ -3,16 +3,18 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX gr: <http://purl.org/goodrelations/v1#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX osspatialrelations: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX rov: <http://www.w3.org/ns/regorg#>
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX : <http://data.solidarityeconomics.org/id/experimental/test/co-ops-uk>
-SELECT ?name ?uri ?loc_uri ?lat ?lng ?www
+SELECT ?name ?uri ?loc_uri ?lat ?lng ?www ?regorg
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
-	?uri foaf:homepage ?www .
+	OPTIONAL { ?uri foaf:homepage ?www . }
 	?uri essglobal:hasAddress ?addr .
+	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
 	?addr osspatialrelations:within ?loc_uri .
 	?loc_uri wgs84_pos:lat ?lat.
 	?loc_uri wgs84_pos:long ?lng.
 }
-LIMIT 13918
+LIMIT 13915
