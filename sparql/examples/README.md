@@ -1,6 +1,18 @@
 # SPARQL examples
 
 These examples have been generated in the course of research. They may not relate directly to the linked open data for the solidarity economy.
+## Running SPARQL queries from the command line
+Suppose we have a directory called `map-app` containing files relating to the query:
+```
+$ ls map-app
+default-graph-uri.txt    endpoint.txt        query.rq
+```
+We can use `curl` to run the query:
+```
+$ curl -i -H "Accept: application/json" --data-urlencode default-graph-uri=$(< map-app/default-graph-uri.txt) --data-urlencode query@map-app/query.rq $(< map-app/endpoint.txt) > result.json
+$ curl -i -H "Accept: text/html" --data-urlencode default-graph-uri=$(< map-app/default-graph-uri.txt) --data-urlencode query@map-app/query.rq $(< map-app/endpoint.txt) > result.html
+```
+In this example, `default-graph-uri` is used when querying our Virtuoso triple store via OntoWiki. Many SPARQL endpoint won't need this parameter. Other parameters can be added in a similar way.
 
 ## Description of examples
 
