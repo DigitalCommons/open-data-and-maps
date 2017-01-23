@@ -1,0 +1,53 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 200 OK
+Date: Fri, 20 Jan 2017 21:06:51 GMT
+Server: anon
+Access-Control-Allow-Origin: *
+Cache-Control: must-revalidate,no-cache,no-store, max-age=3600
+Content-Type: application/sparql-results+json; charset=utf-8
+Expires: Fri, 20 Jan 2017 22:06:51 GMT
+Fuseki-Request-ID: 55422
+Pragma: no-cache
+Content-Length: 1865
+Connection: close
+
+{
+  "head": {
+    "vars": [ "name" , "postcode" , "siclabel" ]
+  } ,
+  "results": {
+    "bindings": [
+      {
+        "name": { "type": "literal" , "value": "MADE WITH JOY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AW" } ,
+        "siclabel": { "type": "literal" , "xml:lang": "en" , "value": "Other information technology and computer service activities" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MATSU DIGITAL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AX" } ,
+        "siclabel": { "type": "literal" , "xml:lang": "en" , "value": "Other information technology and computer service activities" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANTONGROVE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ES" } ,
+        "siclabel": { "type": "literal" , "xml:lang": "en" , "value": "Other information technology and computer service activities" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AGILE COLLECTIVE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" } ,
+        "siclabel": { "type": "literal" , "xml:lang": "en" , "value": "Other information technology and computer service activities" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DOMAINS.COOP LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" } ,
+        "siclabel": { "type": "literal" , "xml:lang": "en" , "value": "Other information technology and computer service activities" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MN IT SUPPORT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SX" } ,
+        "siclabel": { "type": "literal" , "xml:lang": "en" , "value": "Other information technology and computer service activities" }
+      }
+    ]
+  }
+}

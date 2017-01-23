@@ -1,3 +1,7 @@
+<?php
+
+$query = '
+
 PREFIX spatial: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX terms: <http://business.data.gov.uk/companies/def/terms/>
@@ -8,12 +12,11 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 SELECT ?name ?postcode ?siclabel WHERE {
 
-#Finds Company's Postcode and SIC code
+#Finds Companys Postcode and SIC code
 ?add postcode:postcode ?pc .														
-<http://business.data.gov.uk/id/company/07889401> terms:registeredAddress ?add ;    
+<'.$input.'> terms:registeredAddress ?add ;    
 rov:orgActivity ?sic .
 ?sic skos:prefLabel ?siclabel .
-
 
 
 #Go to OS for finding postcodes in same sector
@@ -32,3 +35,5 @@ SERVICE <http://data.ordnancesurvey.co.uk/datasets/os-linked-data/apis/sparql> {
 ?company rov:legalName ?name .
 
 }
+';
+?>

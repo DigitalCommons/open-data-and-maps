@@ -27,3 +27,7 @@ Using Ordnance Survey's endpoint, this will find all the postcodes in a given po
 ### SIC-and-postcode-sector
 
 This query is directed at the Companies House endpoint. It takes a specific company, and finds its postcode and SIC code. It then uses the SERVICE command to go to the Ordnance Survey endpoint, which finds all postcode units that belong to the same postcode sector. Then all the companies with those postcodes and the same SIC code are found.
+
+### search-name
+
+Just a basic query using an unusual text searcher to find the name of a company in Companies House.

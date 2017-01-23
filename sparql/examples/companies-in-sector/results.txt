@@ -1,0 +1,2804 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 200 OK
+Date: Fri, 20 Jan 2017 15:11:31 GMT
+Server: anon
+Access-Control-Allow-Origin: *
+Cache-Control: must-revalidate,no-cache,no-store, max-age=3600
+Content-Type: application/sparql-results+json; charset=utf-8
+Expires: Fri, 20 Jan 2017 16:11:31 GMT
+Fuseki-Request-ID: 54680
+Pragma: no-cache
+Connection: close
+Transfer-Encoding: chunked
+
+{
+  "head": {
+    "vars": [ "name" , "postcode" ]
+  } ,
+  "results": {
+    "bindings": [
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BLINK IMAGE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BLUESTONE LETTING AND MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "COLLEGE AND COUNTY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JEMAR LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD SINOLINK ART (UK) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AB" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AD" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CLACYS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "COMERSGATE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXON PUBLICATIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "P BEST YEAR LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ST CLEMENTS OSTEOPATHY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "65 ST CLEMENTS MANAGEMENT COMPANY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AK ARCHITECTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HUTTON PARKER PROPERTY MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JOE PERKS & CO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MON THAI COMPANY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AJ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AP" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MWANZONI INTERNATIONAL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MWANZONI LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ST CLEMENTS NEWS & BOOZE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ST. CLEMENTS (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TRANSUN RETAIL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TRANSUN TRAVEL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CHERWELL WINE ACADEMY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ABBEYFIELD OXFORD SOCIETY LIMITED(THE)" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FAST TRACK 100 LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MADE WITH JOY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OPENWELL SOCIAL IMPACT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OPPORTUNITY INTERNATIONAL UNITED KINGDOM" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OPPORTUNITY MICROFINANCE INVESTMENTS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ARTSTALK FILM CREW LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MATSU DIGITAL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NIGHTSTRIKE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1AX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AY" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1AZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "3KEEL LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ALBERON LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ARC DEVELOPMENTS INTERNATIONAL (UK) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BAINTON CAPITAL PARTNERS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CONTRADA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ECOVERITAS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ELEMENT STUDIOS DESIGN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "O2N 2016 LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ORIGINAL FIELD OF ARCHITECTURE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD WEB LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SAFE! SUPPORT FOR YOUNG PEOPLE AFFECTED BY CRIME LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SPC NEW ENERGY HOLDINGS LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SPC-O2N LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WENBORN INTERNATIONAL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WIND ORCHID LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "27 LONDON PLACE MANAGEMENT COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXCOLL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INTERNATIONAL COLLEGE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INTERNATIONAL EDUCATION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INTERNATIONAL EDUCATIONAL SERVICES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INTERNATIONAL EDUCATIONAL TRUST LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INTERNATIONAL SCHOOL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD SCIENCE STUDIES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD SUMMER ACADEMY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE YOUTH LEADERSHIP TRUST" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TIDDLY POMMES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BD" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GLOBAL HI TEC LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HAMBROOK DESIGN & FABRICATION LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BG" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JAMALS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CHERWELL DISTRICT HOLDINGS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BN" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD CITY CARS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BN" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD CITY LINK LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BN" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BP" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BS" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EPION CONSULTING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FATBOYZ PIZZA (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1BY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KESTREL THEATRE COMPANY" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MARTA ROAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1BZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FUSION-OXFORD'S COMMUNITY ARTS AGENCY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD CHINESE STUDENTS AND SCHOLARS CHRISTIAN FELLOWSHIP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD GREENPRINT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "S-GROUP LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SAVETCP CIC" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE NOISE BOYS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TWO PEAS COMMUNICATIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DF" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DG" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DJ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DL" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DN" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DS" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DT" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1DX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ST HILDA'S COLLEGE (TRADING) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ST. HILDA'S PROPERTIES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE JACQUELINE DU PRE MUSIC BUILDING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MAGDALEN COLLEGE SCHOOL OXFORD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MCS ASSET MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1DZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ADRIAN GREENWOOD RARE BOOKS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FRESH CUT VIDEO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RELATE OXFORDSHIRE" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WORCESTER LEISURE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1EB" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1ED" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1EE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1EF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE FERRATER MORA OXFORD CENTRE FOR ANIMAL ETHICS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MYATRANS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOLOMON ACADEMIC TRUST" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THISTLEDOWN THEATRE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "IFFLEY (1996) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LHW CONSULTANCY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ONHAND SPORTS SHOP LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WOZ VENTURES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ABERFORD TRADITIONAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXMEDICA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EN" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AKUSHI MEDIA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OMSH LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TAL FESTIVAL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NMG HAIR LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "O U B C LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1ER" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANTONGROVE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ES" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD CITY MEDICAL SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ES" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SHIRE COUNTY CONSTRUCTION OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ET" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOFTECH IT SERVICES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ET" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JAMES HOUSE MANAGEMENT (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KEY2 FUTURES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HUE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ARGRENNAN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BAROX LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DAVID EDWARDS BUILDING SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FLORENCE PARK FLATS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1EY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TJP COACHING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1EZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1FA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1FH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ATHRAT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1FN" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1FQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1FW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1FX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1FY" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1GA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BUFFALO GRILLS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "POKEGO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "STEVE PEARSON PLUMBING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KAS ELECTRICAL SOLUTIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GD" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1GE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1GF" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1GG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ABDIRAHMAN OMAR LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1GJ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1GQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "M1 LOGISTICS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MBUK ELECTRICAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TASTENAUT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TUTI BUSINESS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "POULOMEE BASU LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1GY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EHCLINICAL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FAISSAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FILM TREE LONDON LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RICHARD PANTLIN LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOCIALLY ENTERPRISING SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ZENITH ARCHITECTURE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1HB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DUERER PRESS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MISS-UK LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AMZ PHARMA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AR MARKETING AND MANAGEMENT CONSULTING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INSTRUCT LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1HF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "104 HURST STREET LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OI LIVE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RESEARCH AND EVALUATION SERVICES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANNIE SLOAN INTERIORS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CAFE COCO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "G & D'S LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "G&D'S OXFORD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GD COWLEY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HR SOURCE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LAMONFIELD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MAGIC TOOLBOX LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OT PROJECTS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD TRADING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SMQ LEGAL SERVICES LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HP" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1HR" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1HS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DAILY INFORMATION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TRUCK MUSIC STORE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1HX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1HY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD NEW WORK TRUST LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TA WORKS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TACTICAL TRAINING AND CONSULTANCY TO INSPIRE CHANGE ACTIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UHURU COLLECTIVE HOLDINGS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UHURU COLLECTIVE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1HZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MAROC TRADING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RUSSIAN FOOD OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AGILE COLLECTIVE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ARIS & PHILLIPS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ATP GLOBAL EDUCATE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CASEMATE PUBLISHERS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CASEMATE UK LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CHAUNCY MAPLES MALAWI TRUST" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CLIMATE OUTREACH INFORMATION NETWORK" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DOMAINS.COOP LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ETHEX INVESTMENT CLUB LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ETHICAL IT LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INSIGHTSHARE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INSIGHTSHARE NETWORK" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INSTITUTE FOR FOOD, BRAIN AND BEHAVIOUR" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LENDAHAND ETHEX LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MOKORO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MONICA CUNEO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NAVIGATE COOPERATIVE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NEW INTERNATIONALIST CAMPAIGNERS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NEW INTERNATIONALIST PUBLICATIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NEW INTERNATIONALIST TRUST LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXBOW BOOKS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD COUNSELLING CENTRE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD MEZE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PEOPLE & PLANET STUDENT ACTIVITIES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PEOPLE AND PLANET LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "POLISH TASTE (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "QUEST FOR LEARNING GB LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "REFUGEE RESOURCE" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "S.O.S. SAHEL INTERNATIONAL U.K." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOCIAL JUSTICE AND HUMAN RIGHTS CENTRE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SPX OXFORD LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "T STATE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TABERU OXFORD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE ETHICAL PROPERTY COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE FREE WEST PAPUA CAMPAIGN" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE PARTNERING INITIATIVE" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "W BEST AGENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WE OWN IT LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1JH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EASTERN CONTINENTAL STORE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KIDNAP ME LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE OXFORD AMNESTY LECTURES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ETHICS PERFORMANCE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JONATHAN KENNEDY DESIGN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RAP COMMUNITY ACTION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JP" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1JQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1JR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ARGENT AND SABLE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BROAD BEAN PRODUCTIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DMC (GB) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EAST OXFORD PLANNING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TSDC LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "XTREAMLAB INTERNET SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "40 JAMES ST OX4 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "C S SUPPORT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "D.E.C. (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HUCKIN BROS. LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MAURICE SUCKLING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MEIKO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MULTI-FLOORS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PRESTON MOTORSPORT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE MOBOX FOUNDATION C.I.C." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UNIHEAT (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AU SCARABEE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FMB FOOD & WINE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1JU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1JW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1JX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1LE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ALL NATIONS TUTORIAL COLLEGE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BK HOLDINGS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BOARDWORKS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CAMBRIDGE EXCLUSIF TUTORIAL AGENCY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CAR NIRVANA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "COACHIFY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FASD EVENTS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FASD RESEARCH LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FISHER STUDIOS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE GALLERY (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THIRD STRAND CONSULTING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TOM DICK & DEBBIE PRODUCTIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VIVA NETWORK" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WHITE OCTOBER EVENTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TANTI LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AMARANTA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BACKDOOR BROADCASTING COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UNITE IGNITE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HIGH PERFORMANCE LEARNING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HIGH PERFORMANCE TRAINING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HIGHPERFORMANCETRAINING FACTORY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SEEQUANTS ANALYTICS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ATTWOOLL ASSOCIATES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LN" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ROCKTYPE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LN" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "145 DIVINITY ROAD MANAGEMENT COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CORE ECONOMICS EDUCATION" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DCHM LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HAXEZ LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "M C M RESEARCH LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXPHRD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SIRC LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOCIAL ISSUES RESEARCH CENTRE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "URBAN PICNIC CATERING LP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ATTIC ROOM HISTORY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OLIVER TAYLOR INTERIOR SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KIRKANDREWS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE LOVELY SAUSAGE COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RAYGATE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HACKNEY WORKSHOP LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ONEMIND MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SIGNAL BOOKS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1LY" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1LZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1NA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1NB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PROPERTY AA LL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ND" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VIRTUAL INERTIA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ND" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LNP CHINA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ALBERT ISLAND DEVELOPMENT LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GLOBAL YACHT SERVICE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GREEN SEA GUARD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HBH HOLDING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HOUSE OF SANTON LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HOUSE OF SANTON MARITIME LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MENTO-NEEM INTERNATIONAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE GREEK PROJECT COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VILLABIANCA MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "J. E. PHOENIX LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NG" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1NH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1NJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CRANE COURIERS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SHATIBIYYAH COLLEGE OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD FINANCIAL CONSULTING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1NT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SPICE HOUSE OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PIPER BOOKS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NX" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1NY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOUTHFIELD COURT RESIDENTS ASSOCIATION (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1NZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOFTSEAL COMPUTING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UPBEAT MUSIC LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ALMA PRODUCTION UK LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ES VEDRA PRODUCTIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SCREEN RESOURCE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SILVER LIGHT (SCI-FI) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SILVER LIGHT MEDIA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SILVER LIGHT PICTURES (ONE) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SILVER LIGHT PICTURES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SILVER LIGHT PRODUCTIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "STRANGER THINGS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ALEXANDRA HUNT TRADING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FRIENDS OF WARNEFORD MEADOW" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ELT TEACHER 2 WRITER LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KAREN SPILLER LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MINDFUL TRANSLATIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INPUT LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TOPAZ EDITORIAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD GOLF CLUB LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD GOLF CLUB VISITORS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PF" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1PN" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1PR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AVMORA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PS" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1PU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "A MILE IN MY SHOES CIC" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EMPATHY MUSEUM" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "YOGA IN SCHOOLS COMMUNITY INTEREST COMPANY" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "29 COURTHOPE ROAD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD CITY CLEANING SERVICES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1PZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WINTERGREEN PHARMACISTS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QD" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RAW WORKSHOP LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "27 BULLINGDON ROAD OXFORD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANDREW MCVICAR DIGITAL MEDIA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SEUFERT POLYMORPHIC SYSTEMS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CARYATID FILMS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QL" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QN" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SCARBO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MONARD ELECTRICAL CONTRACTORS LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DAVE CRAWFORD MOTOR SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DONG DONNG LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GALION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "XJJZ DESIGNED COMMUNICATIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QS" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "21 REGENT STREET MANAGEMENT COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1QX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TRANSFORM (UGANDA) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "D.K. NUCLEAR LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SPIRES MEDIA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VEEDOO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1QZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AJ ASSOCIATES (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CLOUD 9 EVENTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "COMFORT TRUST" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GAF OXFORD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SIMMONS SUSTAINABILITY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE RICKETY PRESS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE RUSTY BICYCLE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANTHESIS (UK) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANTHESIS CONSULTING (UK) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANTHESIS CONSULTING GROUP LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ASYLUM WELCOME" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BERGHAHN BOOKS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BEST FOOT FORWARD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BEYOND CONFLICT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CAIRN AGENCY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "COWLEY ROAD WORKS" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "E.W. MANNERS & SON LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HILLTHORPES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INTER PROPOSAL SERVICES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INTERNATIONAL PROPOSALS ACADEMY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KAVANGH HARWOOD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LRS CONSULTANCY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LRS ENVIRONMENTAL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MALLARDS & GREBE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MARIAM LEGAL SOLUTIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MARSHES CPA LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MARSHES LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MEDIA4CHANGE (UK) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NEVER SECOND SERVICES LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD PICTURES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PEGASUS THEATRE PRODUCTIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PEGASUS THEATRE TRUST" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PPA ARCHITECTURE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SIRIAMI LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SOULWORM LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SUSTAIN LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE BD TEAM LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE BIG PICTURE OXFORD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD REFRIGERATION AND AIR CONDITIONING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD REFRIGERATION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GIOVANNI'S BARBER SHOP LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RG" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1RH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1RJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "REEVES MEMORIAL COMPANY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE PORCH" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RL" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1RN" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1RP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CLIMATECARE OXFORD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EB STRATEGY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EBX LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ENERGY BANK LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ENERGY BOND EXCHANGE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EXPODO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INNOSPACE LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WILD HONEY LOVE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1RQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1RU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1RW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1RZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1SA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1SB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MIHAI MEDICAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "STACK ISLAND LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ADEPT STRATEGY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JOHN CARTER CONSULTING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KENTON BURCH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PHENOMENALI LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TUNDEE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1SJ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KLUED IN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PRESENCE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SN" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CSM COMMUNICATIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXANK LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD MAJOR PROGRAMMES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UP FOR CHANGE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "219 IFFLEY ROAD RESIDENTS' ASSOCIATION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CAMBRIDGE TECHNOLOGY AND POLICY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JACHAR LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "M.RAZAGHI CONSULTING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "W.FISHER CONTRACTING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1SR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HARMONY RESIDENTS ASSOCIATION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JON REES ASSOCIATES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MARITIME ENGINEERING CONSULTANTS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD BUILDING CONTROL CONSULTANCY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANTHONY LARCOMBE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ST" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OURFC TRADING LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1ST" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BECKY HAYES SLICE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CORROBORUM LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CRANSTON AND TURNER LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EUFORIC SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FOTO RUTA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SHARING FACTORY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SU" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "I K P M LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MOVING TARGET FILMS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GRENOBLE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MN IT SUPPORT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RIDE MUSIC LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CHEUNG HARDING ARCHITECTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KILDA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TMD MUSIC LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SY" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CREATIVE DATA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CURTAINS MADE SIMPLE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SZ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UPLIFT MARKETING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1SZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "S L G CHARITABLE TRUST LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HOUSINGDELIVERY.COM LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NBS COMMUNICATIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD OAK LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD SCHOOL OF MASSAGE AND NATURAL THERAPIES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TD" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TE" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FAIRACRES ARTS PROJECTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INSPIRING ACTION LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INTEGRATED WELLNESS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SG LEARNING CONSULTANCY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WILDSMITH LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MATTHEW TABERNER LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD LIEDER" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TJ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INNOVATION INTELLIGENCE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD NANO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EMERGENCY NUTRITION NETWORK" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PHOTON DESIGN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VALID NUTRITION" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1TW" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TY" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1TZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1UA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "37M LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "APEX AUTO SERVICES (AYL) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ASSET MAX LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ATELIER HABIB LONDON LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AYLESBURY KEBAB & BURGER HOUSE 010 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BUCKS PROPERTIES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CHARLBURY SOUTH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CHATTABOX INTERNATIONAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CLEAN GETAWAY AYL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "COUNTYWIDE INVESTMENTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CROWN ESTATES UK LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DALTAY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DEJAVU WITNEY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EASA SOFTWARE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EMAAR CONSTRUCTION LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "G G X LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GOLDEN CREST OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GREEN CAFES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HENTOM PUBS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HM ESTATES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HOLLY CROFT AYL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HOLLYCROFT ENTERPRISES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HUNAYESH LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INFINITY SPORTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INTEGRITEC (UK) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "J&R DELICATESSEN LTD." } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JOHN MARKS & KHUJA LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JRZ SOUTH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KUBRA EDUCATION OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LAITH AYL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LONDON PRINT FINISHERS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LPF GROUP LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LPF SOUTH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "M & B OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "M&F DENTAL CLINIC LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "M&M OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MAHEE TANDOORI LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MEREWOOD HEALTHCARE SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MERMAID AYL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NEW VIEW HOME IMPROVEMENTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NICHOLAS AYRES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 (OXFORD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 RESIDENTIAL 1 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 RESIDENTIAL 2 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 RESIDENTIAL 3 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 RESIDENTIAL 4 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 RESIDENTIAL 5 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX1 RESIDENTIAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OX2 PROPERTIES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD HAIR & BEAUTY ACADEMY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD MEDIA SOLUTIONS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORDSHIRE MOTOR EXPORTERS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXON BUILDERS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXSPHERIC LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PREMIER PRINT FINISHERS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PRESTIGE MOTORS SOUTH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PROPERTIES 2 U LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "QUME LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RAJ OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RICE BOX LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ROSEMOUNT ACCOUNTANCY SOUTH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RUPALI OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SCOPE SECURITY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SECURE EYE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SILVER FORK LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "STANDLAKE STAR LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TARIQ KHUJA LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE FIRST FLOOR RESTAURANT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TUITION COMPARE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VERICHK & CO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VINYS CAFE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VINYS CAFE NORTH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WANSBECK ESTATES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WISLA SUPERMARKET SOUTH LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WORLDTALK TRAVELS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ZHANGJI ORIENTAL FOOD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "READING KEBAB HOUSE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "A ALI PROPERTIES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AMJ RETAIL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EXPRESS PIZZA & DESI GRILL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EXPRESS PIZZA (OXFORD) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GOLDBECK LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HEAM RESTAURANTS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KHAN JI SUPERSTORE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "M INVESTORS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD 1 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD FASTFOOD LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD LETTINGS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PAK HALAL ERDEM FOOD CENTRE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "R MUNCH (OXFORD) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RUDBA VENTURES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TONI'S THE GUY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TONY'S THE GUY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VALLEYGATE PROPERTY MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1UQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "EAST LAND PROPERTY DEVELOPMENT LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LA SPRITZERIA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PELOTON ESPRESSO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RESTAURANT DU LIBAN LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BAOLI (OXFORD) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DFBB LOGISTICS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MOK PROPERTIES OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NQHNN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UT" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "URACO FASHION UK LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1UT" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1UY" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1WA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BEELINE BICYCLES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XA" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1XB" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1XD" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1XE" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KADAI AND NAAN RESTAURANT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SANDFORD MILL (FREEHOLD) LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SANDFORD MILL LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SANDFORD MILL MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SHERPA OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FOCUS 4 HEALTH" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KANDEL & COMPANY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "NV ESTATES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XG" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KEEPING CLEAN AND SHINING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XH" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1XL" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD COMPUTER SYSTEMS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "SCRIPTIC LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XP" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ABINGDON RUGBY FOOTBALL CLUB LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ALPHA PLUS GUARDIAN SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "AMAZON OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ANDROMEDA SOFTWARE SOLUTIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "APEX EDUCATIONAL CONSULTANCY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ARFC TRADING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ARMSTRONG EDUCATION LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ATHENA OXFORD LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CASSELLS COMMUNICATIONS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CENTRE LINE CONSULTING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CERLAN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CHERWELL LANDSCAPES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CLUB 1542 LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "COPPER VALLEY LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CRECIMIENTO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "CUTTING CORNER (BARBERS) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DARE ENGINEERING & MANAGEMENT SERVICES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DIB STUDIO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DM CO. (UK) PTY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "DNLMS LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GRIFFIN WORKS CONSTRUCTION LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "HUNT GAS & HEATING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "INSTANTCHESS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JERRY MAINTENANCE SERVICES LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "JOHN COOK CREATIVE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KENASHAZ LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "LYN BELL CONSULTING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MAMRE PROPERTY MANAGEMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MFIVE TRADING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MONOCOM UK LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "MY LIVE MARTIAL ARTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXAE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD EVENT CONCEPTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD INDEPENDENT LEGAL SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD-MEENA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PARNA LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PAUL VON STOLBERG LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PLT DESIGN LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PONY ROAD AUTO SPECIALISTS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PUR LOWEN LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RATCLIFFE PREHOSPITAL CONSULTING LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "REDPONY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "ROCKET THREE DESIGN LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "STUART LARKIN AND ASSOCIATES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "TAFFT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "THE ULTIMATE PICTURE PALACE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "UNIVERSAL VIDEO LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "VL ELECTRICAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "WIDDOWS EDUCATIONAL CONSULTANCY LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "XO WHOLESALE LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XQ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1XR" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "STERLING RESIDENTIAL LETTINGS LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XS" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "OXFORD A.M CLEANING SERVICES LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XU" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1XW" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RAYZA (UK) LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XX" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "IMPACT ENGINEERING TECHNOLOGIES LLP" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1XY" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1XZ" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1YA" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "39B LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GTR CAPITAL LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "GTR FX LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YB" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "RV 500 LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YB" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1YD" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "BODYBREATHE LTD" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "FALGO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KATTO LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YF" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "KOINONIA TRUST" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "REHABILITATION SERVICES TRUST FOR OXFORDSHIRE RE-EMPLOYMENT LIMITED" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YH" }
+      } ,
+      {
+        "name": { "type": "literal" , "value": "PLAINTALKING IN OXFORD COMMUNITY INTEREST COMPANY" } ,
+        "postcode": { "type": "literal" , "value": "OX4 1YL" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1YS" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1YT" }
+      } ,
+      {
+        "postcode": { "type": "literal" , "value": "OX4 1YZ" }
+      }
+    ]
+  }
+}

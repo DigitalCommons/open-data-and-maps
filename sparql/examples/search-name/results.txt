@@ -1,0 +1,35 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 200 OK
+Date: Fri, 20 Jan 2017 18:52:43 GMT
+Server: anon
+Access-Control-Allow-Origin: *
+Cache-Control: must-revalidate,no-cache,no-store, max-age=3600
+Content-Type: application/sparql-results+json; charset=utf-8
+Expires: Fri, 20 Jan 2017 19:52:43 GMT
+Fuseki-Request-ID: 55135
+Pragma: no-cache
+Content-Length: 742
+Connection: close
+
+{
+  "head": {
+    "vars": [ "companyName" , "company" ]
+  } ,
+  "results": {
+    "bindings": [
+      {
+        "companyName": { "type": "literal" , "xml:lang": "en" , "value": "JOJU LIMITED" } ,
+        "company": { "type": "uri" , "value": "http://business.data.gov.uk/id/company/05881628" }
+      } ,
+      {
+        "companyName": { "type": "literal" , "xml:lang": "en" , "value": "JOJU HEALTHCARE LTD" } ,
+        "company": { "type": "uri" , "value": "http://business.data.gov.uk/id/company/09885255" }
+      } ,
+      {
+        "companyName": { "type": "literal" , "xml:lang": "en" , "value": "JOJU SOLAR LIMITED" } ,
+        "company": { "type": "uri" , "value": "http://business.data.gov.uk/id/company/10536383" }
+      }
+    ]
+  }
+}
