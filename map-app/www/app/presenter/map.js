@@ -60,10 +60,25 @@ define(["app/eventbus"], function(eventbus) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
 		var eventHandlers = {};
-		var www = initiative.www;
-		var popuptext = "<h4>" + initiative.name +  "</h4>" +
-			"<a href=\"" + initiative.uri +"\" target=\"_blank\">Open</a> data in a new tab";
-		var options = {popuptext: popuptext, hovertext: initiative.name, cluster: true};
+
+		// It's easier to find on the map initiatives with websites, andthose with links to Companies House
+		// if we set the colour of the marker accordingly:
+		// Available colours can be found in the docs: https://github.com/lvoogdt/Leaflet.awesome-markers
+		var hasWww = initiative.www && initiative.www.length > 0;
+		var hasReg = initiative.regorg && initiative.regorg.length > 0;
+		var markerColor = (hasWww && hasReg) ? 'purple' : hasWww ? 'blue' : hasReg ? 'red' : 'green';
+
+		var popupRows = [];
+		popupRows.push("View <a href=\"" + initiative.uri +"\" target=\"_blank\">raw data summary</a> in a new tab");
+		if (hasWww) {
+			popupRows.push("View <a href=\"" + initiative.www +"\" target=\"_blank\">website</a> in a new tab");
+		}
+		if (hasReg) {
+			popupRows.push("View <a href=\"" + initiative.regorg +"\" target=\"_blank\">company registration</a> in a new tab");
+		}
+
+		var popuptext = "<h4>" + initiative.name +  "</h4>" + popupRows.join("<br>");
+		var options = {popuptext: popuptext, hovertext: initiative.name, cluster: true, markerColor: markerColor};
 		view.addMarker(latlng, options, eventHandlers);
 	}
 	function onInitiativeLoadComplete() {
