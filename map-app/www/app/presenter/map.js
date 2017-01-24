@@ -60,7 +60,9 @@ define(["app/eventbus"], function(eventbus) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
 		var eventHandlers = {};
-		var popuptext = "<h4>" + initiative.name +  "</h4><a href=\"" + initiative.uri +"\" target=\"_blank\">Open</a> data in a new tab";
+		var www = initiative.www;
+		var popuptext = "<h4>" + initiative.name +  "</h4>" +
+			"<a href=\"" + initiative.uri +"\" target=\"_blank\">Open</a> data in a new tab";
 		var options = {popuptext: popuptext, hovertext: initiative.name, cluster: true};
 		view.addMarker(latlng, options, eventHandlers);
 	}

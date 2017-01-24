@@ -5,13 +5,14 @@ define(["app/eventbus"], function(eventbus) {
 	var objects = [];
 	var initiativesToLoad = [];
 
-	function Initiative(name, uri, lat, lng, www) {
+	function Initiative(e) {
 		Object.defineProperties(this, {
-			name: { value: name, enumerable: true },
-			uri: { value: uri, enumerable: true },
-			lat: { value: lat, enumerable: true },
-			lng: { value: lng, enumerable: true },
-			www: { value: www, enumerable: true }
+			name: { value: e.name, enumerable: true },
+			uri: { value: e.uri, enumerable: true },
+			lat: { value: e.lat, enumerable: true },
+			lng: { value: e.lng, enumerable: true },
+			www: { value: e.www, enumerable: true },
+			regorg: { value: e.regorg, enumerable: true }
 		});
 		objects.push(this);
 		eventbus.publish({topic: "Initiative.new", data: this});
@@ -23,7 +24,7 @@ define(["app/eventbus"], function(eventbus) {
 		for (i = 0; i < maxInitiativesToLoadPerFrame; ++i) {
 			e = initiativesToLoad.pop();
 			if (e !== undefined) {
-				new Initiative(e.name, e.uri, e.lat, e.lng, e.www);
+				new Initiative(e);
 			}
 		}
 		// If there's still more to load, we do so after returning to the event loop:
