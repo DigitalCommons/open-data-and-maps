@@ -1,0 +1,72 @@
+% Brilliant documentation:
+% http://mirror.ox.ac.uk/sites/ctan.org/macros/latex/contrib/beamer/doc/beameruserguide.pdf
+
+\usepackage{beamerthemesplit}
+\usepackage{textpos} 
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\addtobeamertemplate{frametitle}{}{%
+  % From http://tex.stackexchange.com/a/180628
+  \begin{textblock*}{100mm}(\textwidth,-1cm)
+    \includegraphics[height=1cm,width=1cm]{ise-logo.jpg}
+  \end{textblock*}}
+
+\title{Linked Open Data in Action}
+\author{Matt Wallis}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section[Outline]{}
+\frame{\tableofcontents}
+
+\section{Introduction}
+\frame
+{
+  \frametitle{Institute for Solidarity Economics}
+  \begin{center}
+    \includegraphics[height=1cm,width=1cm]{ise-logo.jpg}
+  \end{center}
+
+  \begin{itemize}
+    \item What is Solidarity Economics (very very very briefly)?
+    \item \url{http://solidarityeconomics.org}
+  \end{itemize}
+}
+\subsection{Philosophy}
+\frame
+{
+  \frametitle{Principles}
+  \begin{itemize}
+    \item Receptive
+    \item Open
+    \item Value other people
+    \item Empathy
+    \item Walk a mile in someone else's shoes
+    \item No room for ego
+  \end{itemize}
+}
+\frame
+{
+  \frametitle{Principles applied to Software Engineering}
+  \begin{itemize}
+    \item Re-use existing work
+    \item Publish openly
+  \end{itemize}
+}
+%\subsection{Overview of the Beamer Class}
+\section{Example section}
+\frame
+{
+  \frametitle{Example slide}
+
+  \begin{itemize}
+    \item<1-> Normal LaTeX class.
+    \item<2-> Easy overlays.
+    \item<3-> No external programs needed.      
+  \end{itemize}
+}
+\end{document}
