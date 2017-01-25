@@ -70,3 +70,7 @@ div.buttonBox {
 	background-color: #718EA4;
 	color: #29506D;
 }
+div.leaflet-popup-content {
+	/* NB also requires setting maxWidth in leaflet Marker bindpopup, to make popup wide enough for big text */
+	font-size: 200%;
+}

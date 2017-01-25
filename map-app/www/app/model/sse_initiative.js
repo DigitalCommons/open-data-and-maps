@@ -64,7 +64,6 @@ define(["app/eventbus"], function(eventbus) {
 		// continuing with the loading of the data, so we allow the event queue to be processed:
 		setTimeout(function() {
 			d3.json(service, function(error, json) {
-				console.log(json);
 				if (error) {
 					console.warn(error);
 					try {
