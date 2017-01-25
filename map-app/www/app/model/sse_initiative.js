@@ -9,6 +9,7 @@ define(["app/eventbus"], function(eventbus) {
 		Object.defineProperties(this, {
 			name: { value: e.name, enumerable: true },
 			uri: { value: e.uri, enumerable: true },
+			within: { value: e.within, enumerable: true },
 			lat: { value: e.lat, enumerable: true },
 			lng: { value: e.lng, enumerable: true },
 			www: { value: e.www, enumerable: true },

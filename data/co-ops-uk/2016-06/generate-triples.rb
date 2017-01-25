@@ -466,7 +466,7 @@ ENDCSS
 	    {
 	      name: i.name,
 	      uri: i.uri,
-	      loc_uri: i.ospostcode_uri,
+	      within: i.ospostcode_uri,
 	      lat: res.lat.value,
 	      lng: res.lng.value,
 	      www: i.homepage
@@ -529,7 +529,7 @@ ENDCSS
 	  {
 	  name: i.name,
 	  uri: i.uri,
-	  loc_uri: i.ospostcode_uri,
+	  within: i.ospostcode_uri,
 	  lat: lat,
 	  lng: lng,
 	  www: i.homepage
@@ -606,16 +606,16 @@ PREFIX osspatialrelations: <#{$osspatialrelations.to_uri.to_s}>
 PREFIX rov: <#{$rov.to_uri.to_s}>
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX : <#{uri}>
-SELECT ?name ?uri ?loc_uri ?lat ?lng ?www ?regorg
+SELECT ?name ?uri ?within ?lat ?lng ?www ?regorg
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
 	OPTIONAL { ?uri foaf:homepage ?www . }
 	?uri essglobal:hasAddress ?addr .
 	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
-	?addr osspatialrelations:within ?loc_uri .
-	?loc_uri wgs84_pos:lat ?lat.
-	?loc_uri wgs84_pos:long ?lng.
+	?addr osspatialrelations:within ?within .
+	?within wgs84_pos:lat ?lat.
+	?within wgs84_pos:long ?lng.
 }
 LIMIT #{size}
 ENDSPARQL

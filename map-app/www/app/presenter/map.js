@@ -66,15 +66,22 @@ define(["app/eventbus"], function(eventbus) {
 		// Available colours can be found in the docs: https://github.com/lvoogdt/Leaflet.awesome-markers
 		var hasWww = initiative.www && initiative.www.length > 0;
 		var hasReg = initiative.regorg && initiative.regorg.length > 0;
+		var hasWithin = initiative.within && initiative.within.length > 0;
 		var markerColor = (hasWww && hasReg) ? 'purple' : hasWww ? 'blue' : hasReg ? 'red' : 'green';
 
+		function link(uri, text) {
+			return "<a title=\"" + uri + "\" href=\"" + uri +"\" target=\"_blank\">" + text + "</a>";
+		}
 		var popupRows = [];
-		popupRows.push("View <a href=\"" + initiative.uri +"\" target=\"_blank\">raw data summary</a> in a new tab");
+		popupRows.push("View " + link(initiative.uri, "raw data summary") + " in a new tab");
+		if (hasWithin) {
+			popupRows.push("View " + link(initiative.within, "geographic information") + " in a new tab");
+		}
 		if (hasWww) {
-			popupRows.push("View <a href=\"" + initiative.www +"\" target=\"_blank\">website</a> in a new tab");
+			popupRows.push("View " + link(initiative.www, "website") + " in a new tab");
 		}
 		if (hasReg) {
-			popupRows.push("View <a href=\"" + initiative.regorg +"\" target=\"_blank\">company registration</a> in a new tab");
+			popupRows.push("View " + link(initiative.regorg, "company registration") + " in a new tab");
 		}
 
 		var popuptext = "<h4>" + initiative.name +  "</h4>" + popupRows.join("<br>");
