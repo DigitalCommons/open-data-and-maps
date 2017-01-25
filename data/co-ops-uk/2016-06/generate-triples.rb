@@ -676,7 +676,9 @@ class Initiative
     @homepage = opts[:homepage] || ""
     @postcode_text = opts[:postcode_text] || ""
     @postcode_normalized = opts[:postcode_normalized] || ""
-    @companies_house_uri = opts[:companies_house_uri] || ""
+    # It is important that the companies_house_uri is encoded eith type 'uri' in the RDF.
+    # See Issue: https://github.com/p6data-coop/ise-linked-open-data/issues/20
+    @companies_house_uri = opts[:companies_house_uri] ? RDF::URI(opts[:companies_house_uri]) : nil
     @id = opts[:id] || ""
     if @id.empty?
       raise "Id is empty. " + source_as_str
@@ -760,7 +762,7 @@ class Initiative
 	["Postcode", postcode_text],
 	["Country", country_name],
 	["postcode URI", ospostcode_uri ? P6::Html.link_to(ospostcode_uri.to_uri.to_s) : "none available"],
-	["Companies House URI", !companies_house_uri.empty? ? P6::Html.link_to(companies_house_uri) : "none available - not a registered company?"]
+	["Companies House URI", companies_house_uri ? P6::Html.link_to(companies_house_uri.to_s) : "none available - not a registered company?"]
     ])
   end
   def html_fragment_for_csv_row
@@ -793,7 +795,7 @@ class Initiative
     # Is everything in the co-ops UK open dataset actually a co-operative?
     #graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
     graph.insert([uri, essglobal.legalForm, $essglobal_standard["legal-form/L2"]])
-    graph.insert([uri, $rov.hasRegisteredOrganization, companies_house_uri]) unless companies_house_uri.empty? 
+    graph.insert([uri, $rov.hasRegisteredOrganization, companies_house_uri]) if companies_house_uri
 
 #    begin
 #      postcode_uri = ospostcode_uri
