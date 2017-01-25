@@ -69,8 +69,10 @@ define(["app/eventbus"], function(eventbus) {
 		var hasWithin = initiative.within && initiative.within.length > 0;
 		var markerColor = (hasWww && hasReg) ? 'purple' : hasWww ? 'blue' : hasReg ? 'red' : 'green';
 
+		// For info about rel="noopener noreferrer",
+		// see https://www.thesitewizard.com/html-tutorial/open-links-in-new-window-or-tab.shtml
 		function link(uri, text) {
-			return "<a title=\"" + uri + "\" href=\"" + uri +"\" target=\"_blank\">" + text + "</a>";
+			return "<a title=\"" + uri + "\" href=\"" + uri +"\" rel=\"noopener noreferrer\" target=\"_blank\">" + text + "</a>";
 		}
 		var popupRows = [];
 		popupRows.push("View " + link(initiative.uri, "raw data summary") + " in a new tab");
