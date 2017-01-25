@@ -5,12 +5,17 @@
 \usepackage{textpos} 
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{calc}
+\newlength{\popupimagewidth}
 
-\addtobeamertemplate{frametitle}{}{%
+\setlength{\popupimagewidth}{\textwidth*3/5}
+
+\addtobeamertemplate{frametitle}{}{
   % From http://tex.stackexchange.com/a/180628
   \begin{textblock*}{100mm}(\textwidth,-1cm)
     \includegraphics[height=1cm,width=1cm]{ise-logo.jpg}
-  \end{textblock*}}
+  \end{textblock*}
+}
 
 \title{Linked Open Data in Action}
 \author{Matt Wallis}
@@ -28,15 +33,15 @@
 {
   \frametitle{Institute for Solidarity Economics}
   \begin{center}
-    \includegraphics[height=1cm,width=1cm]{ise-logo.jpg}
+    \includegraphics[height=2cm,width=2cm]{ise-logo.jpg}
   \end{center}
-
   \begin{itemize}
-    \item What is Solidarity Economics (very very very briefly)?
-    \item \url{http://solidarityeconomics.org}
+    \item<1-> What is Solidarity Economics (very very very briefly)?
+    \item<2-> \url{http://solidarityeconomics.org}
   \end{itemize}
 }
 \subsection{Philosophy}
+Here's something between frames that appears only in the article.
 \frame
 {
   \frametitle{Principles}
@@ -53,20 +58,59 @@
 {
   \frametitle{Principles applied to Software Engineering}
   \begin{itemize}
+    \item Research what's already out there
     \item Re-use existing work
     \item Publish openly
   \end{itemize}
 }
-%\subsection{Overview of the Beamer Class}
-\section{Example section}
+Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-open-data}
+\section{Data}
 \frame
 {
-  \frametitle{Example slide}
-
+  \frametitle{Why data?}
   \begin{itemize}
-    \item<1-> Normal LaTeX class.
-    \item<2-> Easy overlays.
-    \item<3-> No external programs needed.      
+    \item
   \end{itemize}
 }
+\subsection{Linked Open Data}
+\frame
+{
+  \frametitle{Overview}
+  \begin{itemize}
+    \item
+  \end{itemize}
+}
+\frame
+{
+  \frametitle{ESSGLOBAL}
+  \begin{itemize}
+    \item
+  \end{itemize}
+}
+\section{Applications}
+\subsection{Example map application}
+\frame
+{
+  \frametitle{map-app}
+  \begin{itemize}
+    \item Web application: \url{http://data.solidarityeconomics.org/map-app/}
+    \item Data is loaded by querying our Linked Open Database (aka a Triple Store)
+    \item Clean separation of application and data
+  \end{itemize}
+}
+\frame
+{
+  \frametitle{Links in practice}
+  \begin{center}
+    %\includegraphics{map-app-popup-screenshot.png}
+    \makebox[\textwidth]{\includegraphics[width=\popupimagewidth]{map-app-popup-screenshot.png}}
+    %\makebox[\textwidth]{\includegraphics[width=\paperwidth]{map-app-popup-screenshot.png}}
+    %\includegraphics[height=2cm,width=2cm]{map-app-popup-screenshot.png}
+  \end{center}
+  \begin{itemize}
+    \item
+  \end{itemize}
+}
+
+
 \end{document}
