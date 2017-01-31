@@ -21,7 +21,8 @@ define(["leaflet", "leafletAwesomeMarkers", "leaflet.markercluster"], function(l
 		var opts = Object.assign(dfltOptions, options);
 		var icon = leaflet.AwesomeMarkers.icon(opts);
 		this.marker = leaflet.marker(latlng, {icon: icon, title: hovertext});
-		this.marker.bindPopup(popuptext);
+		// maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
+		this.marker.bindPopup(popuptext, { maxWidth: 800 });
 
 		// Add the event handlers that are defined in model/pointseq:
 		Object.keys(eventHandlers).forEach(function(k) {

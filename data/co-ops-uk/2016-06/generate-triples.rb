@@ -466,7 +466,7 @@ ENDCSS
 	    {
 	      name: i.name,
 	      uri: i.uri,
-	      loc_uri: i.ospostcode_uri,
+	      within: i.ospostcode_uri,
 	      lat: res.lat.value,
 	      lng: res.lng.value,
 	      www: i.homepage
@@ -529,7 +529,7 @@ ENDCSS
 	  {
 	  name: i.name,
 	  uri: i.uri,
-	  loc_uri: i.ospostcode_uri,
+	  within: i.ospostcode_uri,
 	  lat: lat,
 	  lng: lng,
 	  www: i.homepage
@@ -606,16 +606,16 @@ PREFIX osspatialrelations: <#{$osspatialrelations.to_uri.to_s}>
 PREFIX rov: <#{$rov.to_uri.to_s}>
 PREFIX wgs84_pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX : <#{uri}>
-SELECT ?name ?uri ?loc_uri ?lat ?lng ?www ?regorg
+SELECT ?name ?uri ?within ?lat ?lng ?www ?regorg
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
 	OPTIONAL { ?uri foaf:homepage ?www . }
 	?uri essglobal:hasAddress ?addr .
 	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
-	?addr osspatialrelations:within ?loc_uri .
-	?loc_uri wgs84_pos:lat ?lat.
-	?loc_uri wgs84_pos:long ?lng.
+	?addr osspatialrelations:within ?within .
+	?within wgs84_pos:lat ?lat.
+	?within wgs84_pos:long ?lng.
 }
 LIMIT #{size}
 ENDSPARQL
@@ -676,7 +676,9 @@ class Initiative
     @homepage = opts[:homepage] || ""
     @postcode_text = opts[:postcode_text] || ""
     @postcode_normalized = opts[:postcode_normalized] || ""
-    @companies_house_uri = opts[:companies_house_uri] || ""
+    # It is important that the companies_house_uri is encoded eith type 'uri' in the RDF.
+    # See Issue: https://github.com/p6data-coop/ise-linked-open-data/issues/20
+    @companies_house_uri = opts[:companies_house_uri] ? RDF::URI(opts[:companies_house_uri]) : nil
     @id = opts[:id] || ""
     if @id.empty?
       raise "Id is empty. " + source_as_str
@@ -760,7 +762,7 @@ class Initiative
 	["Postcode", postcode_text],
 	["Country", country_name],
 	["postcode URI", ospostcode_uri ? P6::Html.link_to(ospostcode_uri.to_uri.to_s) : "none available"],
-	["Companies House URI", !companies_house_uri.empty? ? P6::Html.link_to(companies_house_uri) : "none available - not a registered company?"]
+	["Companies House URI", companies_house_uri ? P6::Html.link_to(companies_house_uri.to_s) : "none available - not a registered company?"]
     ])
   end
   def html_fragment_for_csv_row
@@ -793,7 +795,7 @@ class Initiative
     # Is everything in the co-ops UK open dataset actually a co-operative?
     #graph.insert([uri, essglobal.legalForm, RDF::URI("http://www.purl.org/essglobal/standard/legal-form/L2")])
     graph.insert([uri, essglobal.legalForm, $essglobal_standard["legal-form/L2"]])
-    graph.insert([uri, $rov.hasRegisteredOrganization, companies_house_uri]) unless companies_house_uri.empty? 
+    graph.insert([uri, $rov.hasRegisteredOrganization, companies_house_uri]) if companies_house_uri
 
 #    begin
 #      postcode_uri = ospostcode_uri

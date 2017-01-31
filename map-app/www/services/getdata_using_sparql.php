@@ -79,15 +79,20 @@ $query_name = 'map-app';
 $requestURL = getSparqlUrl($query_name);
 $response = request($requestURL);
 $res = json_decode($response, true);
+
 // The keys correspond to two things:
 //   1. The names of the variables used in the SPARQL query (see Initiative::create_sparql_files in generate-triples.rb)
 //   2. The names used in the JSON that is returned to the map-app
-$keys = array("name", "uri", "loc_uri", "lat", "lng", "www", "regorg");
+$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg");
+
 $result = array();
 foreach($res["results"]["bindings"] as $item) {
 	$obj = array();
 	foreach($keys as $key) {
-		$obj[$key] = $item[$key]["value"];
+		// Some keys are optional (e.g. www and regorg). Check a key is defined before using it:
+		if (array_key_exists($key, $item)) {
+			$obj[$key] = $item[$key]["value"];
+		}
 	}
 	array_push($result, $obj);
 }

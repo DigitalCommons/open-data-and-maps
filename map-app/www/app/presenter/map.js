@@ -60,8 +60,34 @@ define(["app/eventbus"], function(eventbus) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
 		var eventHandlers = {};
-		var popuptext = "<h4>" + initiative.name +  "</h4><a href=\"" + initiative.uri +"\" target=\"_blank\">Open</a> data in a new tab";
-		var options = {popuptext: popuptext, hovertext: initiative.name, cluster: true};
+
+		// It's easier to find on the map initiatives with websites, andthose with links to Companies House
+		// if we set the colour of the marker accordingly:
+		// Available colours can be found in the docs: https://github.com/lvoogdt/Leaflet.awesome-markers
+		var hasWww = initiative.www && initiative.www.length > 0;
+		var hasReg = initiative.regorg && initiative.regorg.length > 0;
+		var hasWithin = initiative.within && initiative.within.length > 0;
+		var markerColor = (hasWww && hasReg) ? 'purple' : hasWww ? 'blue' : hasReg ? 'red' : 'green';
+
+		// For info about rel="noopener noreferrer",
+		// see https://www.thesitewizard.com/html-tutorial/open-links-in-new-window-or-tab.shtml
+		function link(uri, text) {
+			return "<a title=\"" + uri + "\" href=\"" + uri +"\" rel=\"noopener noreferrer\" target=\"_blank\">" + text + "</a>";
+		}
+		var popupRows = [];
+		popupRows.push("View " + link(initiative.uri, "raw data summary") + " in a new tab");
+		if (hasWithin) {
+			popupRows.push("View " + link(initiative.within, "geographic information") + " in a new tab");
+		}
+		if (hasWww) {
+			popupRows.push("View " + link(initiative.www, "website") + " in a new tab");
+		}
+		if (hasReg) {
+			popupRows.push("View " + link(initiative.regorg, "company registration") + " in a new tab");
+		}
+
+		var popuptext = "<h4>" + initiative.name +  "</h4>" + popupRows.join("<br>");
+		var options = {popuptext: popuptext, hovertext: initiative.name, cluster: true, markerColor: markerColor};
 		view.addMarker(latlng, options, eventHandlers);
 	}
 	function onInitiativeLoadComplete() {
