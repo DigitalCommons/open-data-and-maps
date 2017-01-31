@@ -1,0 +1,23 @@
+HTTP/1.1 500 SPARQL Request Failed
+Server: Virtuoso/06.01.3127 (Linux) x86_64-pc-linux-gnu  
+Connection: Keep-Alive
+Date: Tue, 31 Jan 2017 11:20:13 GMT
+Accept-Ranges: bytes
+Content-Type: text/plain
+Content-Length: 418
+
+Virtuoso 22023 Error SR549: Both datatype id 262 and language id 258 are not default in call of rdf_box()
+
+SPARQL query:
+define sql:big-data-const 0 
+SELECT *
+WHERE {
+
+<http://data.solidarityeconomics.org/id/experimental/test/co-ops-uk/R006790> <http://www.w3.org/ns/regorg#hasRegisteredOrganization> ?company .
+
+SERVICE <http://business.data.gov.uk/companies/query>{
+     ?company ?p ?o .
+     }
+
+     
+}

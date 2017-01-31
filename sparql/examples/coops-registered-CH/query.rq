@@ -1,0 +1,12 @@
+
+SELECT *
+WHERE {
+
+<http://data.solidarityeconomics.org/id/experimental/test/co-ops-uk/R006790> <http://www.w3.org/ns/regorg#hasRegisteredOrganization> ?company .
+
+SERVICE <http://business.data.gov.uk/companies/query>{
+     ?company ?p ?o .
+     }
+
+     
+}

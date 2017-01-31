@@ -1,0 +1,4 @@
+SELECT ?o ?p ?ob WHERE {
+?s <http://reference.data.gov.uk/def/parliament/partyLeaderOf> ?o .
+?o ?p ?ob
+}
