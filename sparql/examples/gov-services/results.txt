@@ -1,0 +1,29 @@
+HTTP/1.1 200 OK
+Date: Wed, 25 Jan 2017 11:16:00 GMT
+Server: Fuseki (0.2.4-SNAPSHOT)
+Access-Control-Allow-Origin: *
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: text/plain;charset=UTF-8
+Connection: close
+Transfer-Encoding: chunked
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| o                                           | p                                                 | ob                                                                                                            |
+===================================================================================================================================================================================================================
+| <http://openelectiondata.org/id/parties/25> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> | <http://reference.data.gov.uk/def/parliament/PoliticalParty>                                                  |
+| <http://openelectiondata.org/id/parties/25> | <http://www.w3.org/2004/02/skos/core#prefLabel>   | "Conservative"@en                                                                                             |
+| <http://openelectiondata.org/id/parties/25> | <http://purl.org/dc/terms/source>                 | <http://openelectiondata.org/id/parties>                                                                      |
+| <http://openelectiondata.org/id/parties/25> | <http://www.w3.org/2004/02/skos/core#note>        | <http://en.wikipedia.org/wiki/Political_party>                                                                |
+| <http://openelectiondata.org/id/parties/25> | <http://www.w3.org/2000/01/rdf-schema#seeAlso>    | <http://www.direct.gov.uk/en/Governmentcitizensandrights/UKgovernment/Politicalpartiesandelections/DG_073226> |
+| <http://openelectiondata.org/id/parties/6>  | <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> | <http://reference.data.gov.uk/def/parliament/PoliticalParty>                                                  |
+| <http://openelectiondata.org/id/parties/6>  | <http://www.w3.org/2004/02/skos/core#prefLabel>   | "Labour"@en                                                                                                   |
+| <http://openelectiondata.org/id/parties/6>  | <http://purl.org/dc/terms/source>                 | <http://openelectiondata.org/id/parties>                                                                      |
+| <http://openelectiondata.org/id/parties/6>  | <http://www.w3.org/2004/02/skos/core#note>        | <http://en.wikipedia.org/wiki/Political_party>                                                                |
+| <http://openelectiondata.org/id/parties/6>  | <http://www.w3.org/2000/01/rdf-schema#seeAlso>    | <http://www.direct.gov.uk/en/Governmentcitizensandrights/UKgovernment/Politicalpartiesandelections/DG_073226> |
+| <http://openelectiondata.org/id/parties/26> | <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> | <http://reference.data.gov.uk/def/parliament/PoliticalParty>                                                  |
+| <http://openelectiondata.org/id/parties/26> | <http://www.w3.org/2004/02/skos/core#prefLabel>   | "Liberal Democrat"@en                                                                                         |
+| <http://openelectiondata.org/id/parties/26> | <http://purl.org/dc/terms/source>                 | <http://openelectiondata.org/id/parties>                                                                      |
+| <http://openelectiondata.org/id/parties/26> | <http://www.w3.org/2004/02/skos/core#note>        | <http://en.wikipedia.org/wiki/Political_party>                                                                |
+| <http://openelectiondata.org/id/parties/26> | <http://www.w3.org/2000/01/rdf-schema#seeAlso>    | <http://www.direct.gov.uk/en/Governmentcitizensandrights/UKgovernment/Politicalpartiesandelections/DG_073226> |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
