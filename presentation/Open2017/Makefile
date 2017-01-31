@@ -19,5 +19,7 @@ deploy: $(ALL_PDF)
 clean:
 	-rm $(AUXS) $(LOGS) $(NAVS) $(OUTS) $(PDFS) $(SNMS) $(TOCS)
 
+# run xelatex twice in order to get cross refs resolved.
 %.pdf: %.tex
+	xelatex $<
 	xelatex $<
