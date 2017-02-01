@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <head/>
 <body>
-<p>foo</p>
+<p>foo1</p>
 
 <?php
 function report_error_and_die($msg)
@@ -93,6 +93,24 @@ SERVICE <http://data.ordnancesurvey.co.uk/datasets/os-linked-data/apis/sparql> {
 }
 ';
 }
+function create_table($headings, $parameters, $res) {
+	echo '<table><tr>';
+	foreach($headings as $heading) {
+		echo '<td>'.$heading.'</td>' ;
+	};
+	echo '</tr>' ;
+
+	foreach($res["results"]["bindings"] as $item) {
+
+		echo '<tr>' ;
+		foreach($parameters as $key) {
+			echo '<td>'.$item[$key]["value"].'</td>' ;
+		}
+		echo '</tr>' ;
+	}
+
+	echo '</table>' ;
+}
 if ($_GET) {
 	$input = htmlspecialchars($_GET["company"]);
 
@@ -109,15 +127,18 @@ if ($_GET) {
 
 	echo '<p>'.$input.'</p>';
 	#Quick Description of SIC Label 
-	echo '<h3>Here are all the nearby companies with the SIC label "';
 	$res = json_decode($response, true);
+	if (array_key_exists(0, $res["results"]["bindings"])) {
+	echo '<h3>Here are all the nearby companies with the SIC label "';
 	echo $res["results"]["bindings"][0]["siclabel"]["value"].'":</h3>';
 
-	#Create a table, with $headings $parameters and $json string
 	$headings = array('Competitor Name','Postcode');
 	$parameters	= array('name','postcode');
-	$json = $response;
-	include 'create-table.php';
+	create_table($headings, $parameters, $res);
+	}
+	else {
+		echo '<p>No results found</p>';
+	}
 }
 ?>
 
