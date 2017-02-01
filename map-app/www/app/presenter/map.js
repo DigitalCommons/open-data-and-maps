@@ -2,6 +2,8 @@ define(["app/eventbus"], function(eventbus) {
 	"use strict";
 
 	var view;
+	var serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
+		"services/" + "display_similar_companies/main.php";
 	function registerView(v) {
 		view = v;
 		return { };	// return settings
@@ -68,6 +70,7 @@ define(["app/eventbus"], function(eventbus) {
 		var hasReg = initiative.regorg && initiative.regorg.length > 0;
 		var hasWithin = initiative.within && initiative.within.length > 0;
 		var markerColor = (hasWww && hasReg) ? 'purple' : hasWww ? 'blue' : hasReg ? 'red' : 'green';
+		var serviceToDisplaySimilarCompaniesURL;
 
 		// For info about rel="noopener noreferrer",
 		// see https://www.thesitewizard.com/html-tutorial/open-links-in-new-window-or-tab.shtml
@@ -84,6 +87,10 @@ define(["app/eventbus"], function(eventbus) {
 		}
 		if (hasReg) {
 			popupRows.push("View " + link(initiative.regorg, "company registration") + " in a new tab");
+			//console.log(document.location.origin + document.location.pathname + "services/" + "phpinfo.php");
+			serviceToDisplaySimilarCompaniesURL = serviceToDisplaySimilarCompanies + "?company=" + encodeURIComponent(initiative.regorg);
+			console.log(serviceToDisplaySimilarCompaniesURL);
+			popupRows.push("View " + link(serviceToDisplaySimilarCompaniesURL, "similar companies") + " in a new tab");
 		}
 
 		var popuptext = "<h4>" + initiative.name +  "</h4>" + popupRows.join("<br>");
