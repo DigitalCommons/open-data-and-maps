@@ -114,27 +114,23 @@ function create_table($headings, $parameters, $res) {
 if ($_GET) {
 	$input = htmlspecialchars($_GET["company"]);
 
-	#Generate $query with $input as argument
-	//include 'competitors-query.php';
 	$query = sparql_query($input);
 
-	#Get $endpoint
-	$endpoint = trim(file_get_contents('endpoint.txt'));
+	$endpoint = 'business.data.gov.uk/companies/query';
 
 	#Execute query with arguments, $query and $endpoint, returning json object, $response
-	$requestURL = $endpoint.'?' .'query='.urlencode($query);
-	$response = request($requestURL);
+	$sparqlURL = $endpoint.'?' .'query='.urlencode($query);
+	$json = request($sparqlURL);
 
 	echo '<p>'.$input.'</p>';
-	#Quick Description of SIC Label 
-	$res = json_decode($response, true);
+	$res = json_decode($json, true);
 	if (array_key_exists(0, $res["results"]["bindings"])) {
-	echo '<h3>Here are all the nearby companies with the SIC label "';
-	echo $res["results"]["bindings"][0]["siclabel"]["value"].'":</h3>';
+		echo '<h3>Here are all the nearby companies with the SIC label "';
+		echo $res["results"]["bindings"][0]["siclabel"]["value"].'":</h3>';
 
-	$headings = array('Competitor Name','Postcode');
-	$parameters	= array('name','postcode');
-	create_table($headings, $parameters, $res);
+		$headings = array('Company Name','Postcode');
+		$parameters	= array('name','postcode');
+		create_table($headings, $parameters, $res);
 	}
 	else {
 		echo '<p>No results found</p>';
