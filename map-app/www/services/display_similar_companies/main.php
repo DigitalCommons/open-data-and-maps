@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <head/>
 <body>
+<p>foo</p>
 
 <?php
 function report_error_and_die($msg)
@@ -54,11 +55,50 @@ function request($url){
 
 	return $response;
 }
+function sparql_query($company_uri) {
+	return '
+
+PREFIX spatial: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX terms: <http://business.data.gov.uk/companies/def/terms/>
+PREFIX postcode: <http://data.ordnancesurvey.co.uk/ontology/postcode/>
+PREFIX rov: <http://www.w3.org/ns/regorg#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+
+SELECT ?name ?postcode ?siclabel WHERE {
+
+#Finds Companys Postcode and SIC code
+?add postcode:postcode ?pc .														
+<'.$company_uri.'> terms:registeredAddress ?add ;    
+rov:orgActivity ?sic .
+?sic skos:prefLabel ?siclabel .
+
+
+#Go to OS for finding postcodes in same sector
+SERVICE <http://data.ordnancesurvey.co.uk/datasets/os-linked-data/apis/sparql> {
+	?pc spatial:within ?sec .
+	?sec a postcode:PostcodeSector .
+	?x rdfs:label ?postcode .
+  ?x a postcode:PostcodeUnit .
+  ?x spatial:within ?sec.
+}
+
+#Find companies that have those postcodes and SIC code										
+?company terms:registeredAddress ?address . 
+?address postcode:postcode ?x .
+?company rov:orgActivity ?sic .
+?company rov:legalName ?name .
+
+}
+';
+}
 if ($_GET) {
 	$input = htmlspecialchars($_GET["company"]);
 
 	#Generate $query with $input as argument
-	include 'competitors-query.php';
+	//include 'competitors-query.php';
+	$query = sparql_query($input);
 
 	#Get $endpoint
 	$endpoint = trim(file_get_contents('endpoint.txt'));
@@ -66,7 +106,6 @@ if ($_GET) {
 	#Execute query with arguments, $query and $endpoint, returning json object, $response
 	$requestURL = $endpoint.'?' .'query='.urlencode($query);
 	$response = request($requestURL);
-	//include 'request-results.php';
 
 	echo '<p>'.$input.'</p>';
 	#Quick Description of SIC Label 
