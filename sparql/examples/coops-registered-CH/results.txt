@@ -1,7 +1,19 @@
+HTTP/1.1 303 See Other
+Date: Tue, 31 Jan 2017 11:30:44 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Set-Cookie: PHPSESSID=gg93rgijv43gc2nhi6fdkkdv03; path=/
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Access-Control-Allow-Origin: *
+Location: http://163.172.187.51/OntoWiki/index.php/view/?r=http%3A%2F%2F163.172.187.51%2FOntoWiki%2Findex.php%2Fcoopsuk%2F&m=http%3A%2F%2F163.172.187.51%2FOntoWiki%2Findex.php%2Fcoopsuk%2F
+Content-Length: 0
+Content-Type: text/html; charset=UTF-8
+
 HTTP/1.1 500 SPARQL Request Failed
 Server: Virtuoso/06.01.3127 (Linux) x86_64-pc-linux-gnu  
 Connection: Keep-Alive
-Date: Tue, 31 Jan 2017 11:20:13 GMT
+Date: Tue, 31 Jan 2017 11:30:45 GMT
 Accept-Ranges: bytes
 Content-Type: text/plain
 Content-Length: 418
