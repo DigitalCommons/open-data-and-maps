@@ -5,7 +5,7 @@
 <body>
 
 <form action="index.php" method="get">
-	Start Search again:<br>
+	Search for another company:<br>
  	<input type="text" name="company">
 	<input type="submit" value="Submit">
 </form>
