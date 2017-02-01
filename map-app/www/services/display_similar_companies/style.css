@@ -21,3 +21,10 @@ td, th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+div.code {
+	background-color: #cccccc;
+}
+pre {
+	display: inline;
+	line-height: 1.2em;
+}

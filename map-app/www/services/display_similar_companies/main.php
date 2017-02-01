@@ -3,22 +3,15 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <head/>
 <body>
-<p>foo1</p>
+<h1>SPARQL query demonstration</h1>
+We perform a query on the Linked Open Data for Companies House to obtain a list of companies that are within the same postcode sector as our target company, and are in the same line of business.
+The relationship between postcodes and postcode sectors is obtained from Linked Open Data published by Ordnance Survey.
 
 <?php
 function report_error_and_die($msg)
 {
-	$result = array();
-	// API response uses JSend: https://labs.omniti.com/labs/jsend
-	$result["status"] = "error";
-	$result["message"] = $msg;
-	if (function_exists('http_response_code')) {
-		http_response_code(500);
-	}
-	else {
-		// TODO - use header() function
-	}
-	echo json_encode($result);
+	echo '<h3>Sorry - there was an error</h3>';
+	echo '<p>'.$msg.'</p>';
 	exit(1);
 }
 
@@ -57,7 +50,6 @@ function request($url){
 }
 function sparql_query($company_uri) {
 	return '
-
 PREFIX spatial: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX terms: <http://business.data.gov.uk/companies/def/terms/>
@@ -65,76 +57,90 @@ PREFIX postcode: <http://data.ordnancesurvey.co.uk/ontology/postcode/>
 PREFIX rov: <http://www.w3.org/ns/regorg#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
+SELECT ?name ?res_comp_uri ?res_comp_name ?res_postcode ?res_postcode_uri ?sic ?siclabel ?sec ?sec_label WHERE {
 
-SELECT ?name ?postcode ?siclabel WHERE {
-
-#Finds Companys Postcode and SIC code
-?add postcode:postcode ?pc .														
-<'.$company_uri.'> terms:registeredAddress ?add ;    
-rov:orgActivity ?sic .
-?sic skos:prefLabel ?siclabel .
-
-
-#Go to OS for finding postcodes in same sector
-SERVICE <http://data.ordnancesurvey.co.uk/datasets/os-linked-data/apis/sparql> {
+	#Finds Company\'s Postcode and SIC code
+	<'.$company_uri.'> terms:registeredAddress ?add ;
+		rov:orgActivity ?sic ;
+		rov:legalName ?name .
+	?sic skos:prefLabel ?siclabel .
+	?add postcode:postcode ?pc .
 	?pc spatial:within ?sec .
-	?sec a postcode:PostcodeSector .
-	?x rdfs:label ?postcode .
-  ?x a postcode:PostcodeUnit .
-  ?x spatial:within ?sec.
-}
+	?sec a postcode:PostcodeSector ;
+		rdfs:label ?sec_label .
 
-#Find companies that have those postcodes and SIC code										
-?company terms:registeredAddress ?address . 
-?address postcode:postcode ?x .
-?company rov:orgActivity ?sic .
-?company rov:legalName ?name .
-
+	#Find companies that have those postcodes and SIC code
+	?res_comp_uri terms:registeredAddress ?address .
+	?address postcode:postcode ?res_postcode_uri .
+	?res_postcode_uri spatial:within ?sec ;
+		rdfs:label ?res_postcode .
+	?res_comp_uri rov:orgActivity ?sic ;
+		rov:legalName ?res_comp_name .
 }
 ';
 }
 function create_table($headings, $parameters, $res) {
+	echo '<h3>Results</h3>';
 	echo '<table><tr>';
 	foreach($headings as $heading) {
-		echo '<td>'.$heading.'</td>' ;
+		echo '<th>'.$heading.'</th>' ;
 	};
 	echo '</tr>' ;
 
 	foreach($res["results"]["bindings"] as $item) {
 
 		echo '<tr>' ;
-		foreach($parameters as $key) {
-			echo '<td>'.$item[$key]["value"].'</td>' ;
-		}
+		echo '<td><a href="'.$item["res_comp_uri"]["value"].'">'.$item["res_comp_name"]["value"].'</a></td>';
+		echo '<td><a href="'.$item["res_postcode_uri"]["value"].'">'.$item["res_postcode"]["value"].'</a></td>';
+		//foreach($parameters as $key) {
+			//echo '<td>'.$item[$key]["value"].'</td>' ;
+		//}
 		echo '</tr>' ;
 	}
 
 	echo '</table>' ;
 }
-if ($_GET) {
-	$input = htmlspecialchars($_GET["company"]);
-
-	$query = sparql_query($input);
-
+if (isset($_GET["company"])) {
+	$companyURI = htmlspecialchars($_GET["company"]);
+	$query = sparql_query($companyURI);
 	$endpoint = 'business.data.gov.uk/companies/query';
 
 	#Execute query with arguments, $query and $endpoint, returning json object, $response
 	$sparqlURL = $endpoint.'?' .'query='.urlencode($query);
 	$json = request($sparqlURL);
 
-	echo '<p>'.$input.'</p>';
 	$res = json_decode($json, true);
 	if (array_key_exists(0, $res["results"]["bindings"])) {
-		echo '<h3>Here are all the nearby companies with the SIC label "';
-		echo $res["results"]["bindings"][0]["siclabel"]["value"].'":</h3>';
+		echo '<table>';
+		echo '<tr>';
+		echo '<th>Target company:</th>';
+		echo '<td><a href="'.$companyURI.'">'.$res["results"]["bindings"][0]["name"]["value"].'</a></td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<th>Line of Business:</th>';
+		echo '<td><a href="'.$res["results"]["bindings"][0]["sic"]["value"].'">'.$res["results"]["bindings"][0]["siclabel"]["value"].'</a></td>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<th>Postcode sector:</th>';
+		echo '<td><a href="'.$res["results"]["bindings"][0]["sec"]["value"].'">'.$res["results"]["bindings"][0]["sec_label"]["value"].'</a></td>';
+		echo '</tr>';
+		echo '</table>';
 
 		$headings = array('Company Name','Postcode');
-		$parameters	= array('name','postcode');
+		$parameters	= array('res_comp_name','res_postcode');
 		create_table($headings, $parameters, $res);
 	}
 	else {
-		echo '<p>No results found</p>';
+		echo '<p>No results found using the company URI'.$companyURI.'</p>';
 	}
+	echo '<h3>SPARQL query</h3>';
+	echo '<p> For those who are interested in the techincal details...</p>';
+	echo '<p>SPARQL endpoint: <code>'. htmlspecialchars($endpoint). '</code></p>';
+	echo '<p>Here is the SPARQL query that was used to obtain the results shown above:</p>';
+	echo '<div class="code"><pre>'.htmlspecialchars($query).'</pre></div>';
+}
+else {
+	report_error_and_die('Expected parameter "company" not found.');
 }
 ?>
 
