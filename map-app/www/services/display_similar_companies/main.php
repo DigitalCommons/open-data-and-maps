@@ -131,7 +131,7 @@ if (isset($_GET["company"])) {
 		create_table($headings, $parameters, $res);
 	}
 	else {
-		echo '<p>No results found using the company URI'.$companyURI.'</p>';
+		echo '<p>No results found using the company URI <a href="'.$companyURI.'">'.$companyURI.'</a>. This may be because the company is dissolved, and so no longer included in results from Companies House.</p>';
 	}
 	echo '<h3>SPARQL query</h3>';
 	echo '<p> For those who are interested in the techincal details...</p>';

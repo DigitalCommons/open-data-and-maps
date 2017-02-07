@@ -90,7 +90,7 @@ define(["app/eventbus"], function(eventbus) {
 			//console.log(document.location.origin + document.location.pathname + "services/" + "phpinfo.php");
 			serviceToDisplaySimilarCompaniesURL = serviceToDisplaySimilarCompanies + "?company=" + encodeURIComponent(initiative.regorg);
 			console.log(serviceToDisplaySimilarCompaniesURL);
-			popupRows.push("View " + link(serviceToDisplaySimilarCompaniesURL, "similar companies") + " in a new tab");
+			popupRows.push("View " + link(serviceToDisplaySimilarCompaniesURL, "similar companies nearby") + " in a new tab");
 		}
 
 		var popuptext = "<h4>" + initiative.name +  "</h4>" + popupRows.join("<br>");
