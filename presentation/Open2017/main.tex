@@ -2,10 +2,14 @@
 % http://mirror.ox.ac.uk/sites/ctan.org/macros/latex/contrib/beamer/doc/beameruserguide.pdf
 
 \usepackage{beamerthemesplit}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes,backgrounds,positioning,shapes.multipart}
 \usepackage{textpos} 
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{calc}
+%\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} PACKAGE CLASH!
+%\usepackage{color}
 \newlength{\popupimagewidth}
 
 \setlength{\popupimagewidth}{\textwidth*3/5}
@@ -21,6 +25,15 @@
 \author{Matt Wallis}
 \date{\today}
 
+% From http://tex.stackexchange.com/a/183966:
+\tikzset{
+    invisible/.style={opacity=0,text opacity=0},
+    visible on/.style={alt=#1{}{invisible}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+}
+
 \begin{document}
 
 \frame{
@@ -34,10 +47,9 @@
 }
 \frame{\titlepage}
 
-\section[Outline]{}
 \frame{\tableofcontents}
 
-\section{Introduction}
+\section{Institute for Solidarity Economics}
 \frame
 {
   \frametitle{Institute for Solidarity Economics}
@@ -50,46 +62,104 @@
     \item<1-> Our aim is to support this movement through education, research, and finding opportunities for collaboration.
   \end{itemize}
 }
-\subsection{Philosophy}
-Here's something between frames that appears only in the article.
-\frame
-{
-  \frametitle{Principles}
-  \begin{itemize}
-    \item Receptive
-    \item Open
-    \item Value other people
-    \item Empathy
-    \item Walk a mile in someone else's shoes
-    \item No room for ego
-  \end{itemize}
-}
-\frame
-{
-  \frametitle{Principles applied to Software Engineering}
-  \begin{itemize}
-    \item Research what's already out there
-    \item Re-use existing work
-    \item Publish openly
-  \end{itemize}
-}
-Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-open-data}
-\section{Data}
+\subsection{Why data?}
 \frame
 {
   \frametitle{Why data?}
   \begin{itemize}
-    \item
+    \item Help people find what's out there -- e.g. Maps
+    \item Behind every map is data
+    \item Behind every app is data
+    \item 
+  \end{itemize}
+}
+Here's something between frames that appears only in the article.
+\frame
+{
+  \frametitle{Guiding Principles}
+  \begin{itemize}
+    \item Data ownership is power - be careful!
+    \item Prefer distributed to centralized data
+    \item Prefer appropriate ownership of data
+    \item Trust is vital - make sources of data visible
+    \item Don't Repeat Yourself! (DRY)
+    \item Use existing best practice
+    \item Re-use existing software
+  \end{itemize}
+}
+Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-open-data}
+\section{What we did}
+\frame
+{
+  \frametitle{Research}
+  \begin{itemize}
+    \item Linked Open Data looked like best practice
+    \item But scary! {\em we didn't really understand it}
+    \item Experimentation
+      \begin{itemize}
+	\item Co-ops UK dataset (open, CSV)
+	\item Use existing ESSGLOBAL vocabulary
+	\item Learn about Linked Open Data
+	\item Generate experimental LOD dataset of over 13,000 UK Co-ops
+	\item Put them on a map
+      \end{itemize}
+    \item 
+  \end{itemize}
+}
+\frame
+{
+  \frametitle{Development}
+  \begin{itemize}
+    \item Generate experimental LOD dataset of over 13,000 UK Co-ops
+    \item Put them on a map
+    \item Document and educate
   \end{itemize}
 }
 \subsection{Linked Open Data}
-\frame
+\frame[fragile,t]
 {
-  \frametitle{Overview}
-  \begin{itemize}
-    \item
-  \end{itemize}
+  \frametitle{Passing links as data}
+  \centering
+  %\begin{center}
+  %\begin{tikzpicture}[overlay, scale=.8, show background rectangle, node distance=1cm]
+  \begin{tikzpicture}[remember picture, overlay, show background rectangle, node distance=1cm]
+    \tikzstyle{every text node part} = [align=center]
+    \tikzstyle{obj node} = [ellipse, fill=blue!20]
+    \tikzstyle{obj path} = [->, draw=blue!20]
+    \tikzstyle{label node} = [draw, text=black]
+    \tikzstyle{data node} = [rectangle, fill=green!20]
+    \tikzstyle{app node} = [rectangle, fill=red!20]
+    %\tikzstyle{label node} = [near start, sloped, auto]
+    \tikzstyle{label node} = [midway, auto]
+    %\node[obj node,anchor=north] at (current page.north) (iseobj) {\underline{Data links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/OX10AB}} \\ {\visible<3->{http://ch.gov/company/12345678}}};
+    \node[obj node] (iseobj) {\underline{Links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/OX10AB}} \\ {\visible<3->{http://ch.gov/company/12345678}}};
+    \node[text width=1cm, visible on=<1->] (datalabel) [left = of iseobj] {Example \\ data:};
+    \node[data node] (isedata) [below = of iseobj] {Co-op data};
+    \node[data node, visible on=<2->] (osdata) [left = of isedata] {OS data};
+    \node[data node, visible on=<3->] (chdata) [right = of isedata] {CH data};
+    %\node[label node, visible on=<2->] (datasetlabel) [left = of osdata] {Datasets:};
+    \node[text width=1.5cm, visible on=<1->] (datasetlabel) [left = of osdata] {Datasets:};
+
+    %\node[obj node] (iseobj) [above = of chdata] {\underline{Data links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/OX10AB}} \\ {\visible<3->{http://ch.gov/company/12345678}}};
+    \node[app node, visible on=<4->] (mapapp) [below left = of isedata] {Map};
+    \node[app node, visible on=<5->] (nearestapp) [below right = of isedata] {Nearest};
+    \node[text width=2.5cm, visible on=<4->] (appslabel) [left = of mapapp] {Apps:};
+    %\path[obj path] (isedata) edge (iseobj.south);
+    \draw[->, visible on=<1->] (isedata) -- (iseobj) node[label node]{contains};
+    \draw[->, visible on=<2->] (iseobj) -- (osdata) node[midway, left]{link};
+    \draw[->, visible on=<3->] (iseobj) -- (chdata) node[midway, right]{link};
+    \draw[<->, visible on=<4>] (mapapp) -- (isedata) node[midway, right]{query};
+    \draw[<->, visible on=<4>] (mapapp) -- (osdata) node[midway, left]{query};
+    \draw[->, visible on=<5->] (mapapp) -- (nearestapp) node[midway, below]{http://ch.gov/...};
+    \draw[<->, visible on=<5->] (nearestapp) -- (osdata) node[midway, left]{query};
+    \draw[<->, visible on=<5->] (nearestapp) -- (chdata) node[midway, right]{query};
+  \end{tikzpicture}
+  %\end{center}
+  %\begin{itemize}
+    %\item
+  %\end{itemize}
 }
+
 \frame
 {
   \frametitle{ESSGLOBAL}
