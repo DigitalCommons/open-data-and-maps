@@ -747,7 +747,7 @@ class Initiative
   @@heading = {
     table: "Summary of generated linked data",
     csv: "Original CSV data",
-    rdf: "RDF document",
+    rdf: "RDF/XML document",
     ttl: "Turtle document"
   }
   def html_fragment_for_data_table
