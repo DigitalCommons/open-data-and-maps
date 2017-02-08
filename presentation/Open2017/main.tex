@@ -116,40 +116,43 @@ Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-
   \end{itemize}
 }
 \subsection{Linked Open Data}
-\frame[fragile,t]
+%\frame[fragile,t]
+\frame[t]
 {
   \frametitle{Passing links as data}
   \centering
   %\begin{center}
-  %\begin{tikzpicture}[overlay, scale=.8, show background rectangle, node distance=1cm]
-  \begin{tikzpicture}[remember picture, overlay, show background rectangle, node distance=1cm]
+  %\begin{tikzpicture}[scale=.8, show background rectangle, node distance=1cm]
+  %\begin{tikzpicture}[remember picture, show background rectangle, node distance=1cm]
+  \begin{tikzpicture}[remember picture, node distance=1cm]
     \tikzstyle{every text node part} = [align=center]
     \tikzstyle{obj node} = [ellipse, fill=blue!20]
     \tikzstyle{obj path} = [->, draw=blue!20]
     \tikzstyle{label node} = [draw, text=black]
     \tikzstyle{data node} = [rectangle, fill=green!20]
+    \tikzstyle{extdata node} = [rectangle, draw, fill=green!20]
     \tikzstyle{app node} = [rectangle, fill=red!20]
     %\tikzstyle{label node} = [near start, sloped, auto]
     \tikzstyle{label node} = [midway, auto]
-    %\node[obj node,anchor=north] at (current page.north) (iseobj) {\underline{Data links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/OX10AB}} \\ {\visible<3->{http://ch.gov/company/12345678}}};
+    \tikzstyle{label text} = [align=left]
     \node[obj node] (iseobj) {\underline{Links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/OX10AB}} \\ {\visible<3->{http://ch.gov/company/12345678}}};
-    \node[text width=1cm, visible on=<1->] (datalabel) [left = of iseobj] {Example \\ data:};
-    \node[data node] (isedata) [below = of iseobj] {Co-op data};
-    \node[data node, visible on=<2->] (osdata) [left = of isedata] {OS data};
-    \node[data node, visible on=<3->] (chdata) [right = of isedata] {CH data};
-    %\node[label node, visible on=<2->] (datasetlabel) [left = of osdata] {Datasets:};
-    \node[text width=1.5cm, visible on=<1->] (datasetlabel) [left = of osdata] {Datasets:};
+    \node[label text, visible on=<1->] (datalabel) [left = of iseobj] {Example \\ data:};
+    \node[extdata node, visible on=<2->] (osdata) [below = of iseobj ] {OS data};
+    \node[data node] (isedata) [left = of osdata] {Our data};
+    \node[extdata node, visible on=<3->] (chdata) [right = of osdata] {CH data};
+    \node[label text, visible on=<1->] (datasetlabel) at (isedata-|datalabel) {Datasets:};
 
     %\node[obj node] (iseobj) [above = of chdata] {\underline{Data links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/OX10AB}} \\ {\visible<3->{http://ch.gov/company/12345678}}};
-    \node[app node, visible on=<4->] (mapapp) [below left = of isedata] {Map};
-    \node[app node, visible on=<5->] (nearestapp) [below right = of isedata] {Nearest};
-    \node[text width=2.5cm, visible on=<4->] (appslabel) [left = of mapapp] {Apps:};
+    \node[app node, visible on=<4->] (mapapp) [below left = of osdata] {Map};
+    \node[app node, visible on=<5->] (nearestapp) [below right = of osdata] {Nearest};
+    %\node[label text, visible on=<4->] (appslabel) [below = of datasetlabel, left = of mapapp] {Apps:};
+    \node[label text, visible on=<4->] (appslabel) at (mapapp-|datasetlabel) {Apps:};
     %\path[obj path] (isedata) edge (iseobj.south);
     \draw[->, visible on=<1->] (isedata) -- (iseobj) node[label node]{contains};
     \draw[->, visible on=<2->] (iseobj) -- (osdata) node[midway, left]{link};
     \draw[->, visible on=<3->] (iseobj) -- (chdata) node[midway, right]{link};
     \draw[<->, visible on=<4>] (mapapp) -- (isedata) node[midway, right]{query};
-    \draw[<->, visible on=<4>] (mapapp) -- (osdata) node[midway, left]{query};
+    \draw[<->, visible on=<4>] (mapapp) -- (osdata) node[midway, right]{query};
     \draw[->, visible on=<5->] (mapapp) -- (nearestapp) node[midway, below]{http://ch.gov/...};
     \draw[<->, visible on=<5->] (nearestapp) -- (osdata) node[midway, left]{query};
     \draw[<->, visible on=<5->] (nearestapp) -- (chdata) node[midway, right]{query};
