@@ -72,31 +72,46 @@ It contains all of the slides, and additional notes too.
     \item<1-> Our aim is to support this movement through education, research, and finding opportunities for collaboration.
   \end{itemize}
 }
-\subsection{Why data?}
+\subsection{Social context}
 \frame
 {
   \frametitle{Why data?}
   \begin{itemize}
-    \item Help people find what's out there -- e.g. Maps
-    \item Behind every map is data
-    \item Behind every app is data
-    \item 
+    \item Data fuels the WWW
+    \item Valueable because it's essential
+    \item Geographic maps
+      \begin{itemize}
+	\item Make the Solidarity Economy visible
+	\item Every map needs data
+      \end{itemize}
+    \item Apps to support the movement
+      \begin{itemize}
+	\item Every app needs data
+      \end{itemize}
+    \item Fits our aims: research, education, collaboration
   \end{itemize}
 }
 \frame
 {
-  \frametitle{Guiding Principles}
+  \frametitle{Guiding Principles: 1. Social}
   \begin{itemize}
     \item Data ownership is power - be careful!
     \item Prefer distributed to centralized data
     \item Prefer appropriate ownership of data
     \item Trust is vital - make sources of data visible
+  \end{itemize}
+}
+\section{What we did}
+\subsection{Research and Development}
+\frame
+{
+  \frametitle{Guiding Principles: 2. Engineering}
+  \begin{itemize}
     \item Don't Repeat Yourself! (DRY)
     \item Use existing best practice
     \item Re-use existing software
   \end{itemize}
 }
-\section{What we did}
 \frame
 {
   \frametitle{Research}
@@ -244,6 +259,10 @@ The machine-readable data in the Turtle format looks like this:
     \draw[<->, visible on=<5->] (nearestapp) -- (osdata) node[midway, left]{query};
     \draw[<->, visible on=<5->] (nearestapp) -- (chdata) node[midway, right]{query};
   \end{tikzpicture}
+    \begin{itemize}
+      \item<3-> Existing data: CH = Companies House
+      \item<2-> Existing data: OS = Ordnance Survey
+    \end{itemize}
 }
 
 In the picture above ...
