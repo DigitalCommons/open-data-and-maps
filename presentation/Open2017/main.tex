@@ -8,6 +8,7 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{calc}
+\usepackage{changepage}
 %\usepackage{listings}
 %\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} PACKAGE CLASH!
 %\usepackage{color}
@@ -23,7 +24,7 @@
   \end{textblock*}
 }
 
-%\newcommand{\defineterm}[2]{#1 -- #2}
+\newcommand{\defineterm}[2]{\textbf{#1} -- #2}
 \newcommand{\articleheading}[1]{\subsubsection{#1}}
 
 \title{Linked Open Data in Action}
@@ -165,20 +166,22 @@ The Web of Data shares the same infrastructure (the internet, web servers, etc) 
 By clicking the \textbf{raw data summary} link, your browser will take you to a page in the Web of Documents that shows data for a co-op. 
 That page is identified by a URI (Uniform Resource Identifier) that looks just like a URL (Uniform Resource Locator) you might see in your browser's URL bar. For example:
 
-{\footnotesize \url{http://data.solidarityeconomics.org/id/experimental/test/co-ops-uk/R005512} }
+{\footnotesize \url{http://data.solidarityeconomics.org/id/experimental/test/co-ops-uk/R005512}}
 
-When a web browser requests the web server for that URI, the web server will redirect the browser to a page in the Web of Documents that has the following URL:
+When a web browser requests a URI, the web server will redirect the browser to a page in the Web of Documents that has the following URL:
 
-{\footnotesize \url{http://data.solidarityeconomics.org/doc/experimental/test/co-ops-uk/R005512.html} }
+{\footnotesize \url{http://data.solidarityeconomics.org/doc/experimental/test/co-ops-uk/R005512.html}}
 
-But, when a machine requests the web server for that same URI, the web server will redirect the machine to data in the Web of Data. 
+But, when a machine requests that same URI, the web server will redirect the machine to data in the Web of Data. 
 The machine can request a number of different data formats from the web server.
 If the machine requested the Turtle data format, then the web server will redirect it to this URL:
 
-{\footnotesize \url{http://data.solidarityeconomics.org/doc/experimental/test/co-ops-uk/R005512.ttl} }
+{\footnotesize \url{http://data.solidarityeconomics.org/doc/experimental/test/co-ops-uk/R005512.ttl}}
 
 The machine-readable data in the Turtle format looks like this:
 
+%\vspace{1cm}
+\begin{adjustwidth}{-2cm}{0pt}
 {\footnotesize
 \begin{verbatim}
 @prefix essglobal: <http://purl.org/solidarityeconomics/experimental/essglobal/vocab/> .
@@ -202,6 +205,7 @@ The machine-readable data in the Turtle format looks like this:
    vcard:postal-code "SA33 5AJ" .
 \end{verbatim}
 }
+\end{adjustwidth}
 
 %\frame[fragile,t]
 \frame[t]
@@ -221,7 +225,7 @@ The machine-readable data in the Turtle format looks like this:
     \tikzstyle{app node} = [rectangle, fill=red!20]
     \tikzstyle{label node} = [midway, auto]
     \tikzstyle{label text} = [align=left]
-    \node[obj node] (iseobj) {\underline{Links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/OX10AB}} \\ {\visible<3->{http://ch.gov/company/12345678}}};
+    \node[obj node] (iseobj) {\underline{Links to other datasets} e.g. \\ {\visible<2->{http://os.gov/postcode/SA335AJ}} \\ {\visible<3->{http://ch.gov/company/01113761}}};
     \node[label text, visible on=<1->] (datalabel) [left = of iseobj] {Example \\ data:};
     \node[extdata node, visible on=<2->] (osdata) [below = of iseobj ] {OS data};
     \node[data node] (isedata) [left = of osdata] {Our data};
@@ -229,7 +233,7 @@ The machine-readable data in the Turtle format looks like this:
     \node[label text, visible on=<1->] (datasetlabel) at (isedata-|datalabel) {Datasets:};
 
     \node[app node, visible on=<4->] (mapapp) [below left = of osdata] {Map};
-    \node[app node, visible on=<5->] (nearestapp) [below right = of osdata] {Nearest};
+    \node[app node, visible on=<5->] (nearestapp) [below right = of osdata] {Nearby};
     \node[label text, visible on=<4->] (appslabel) at (mapapp-|datasetlabel) {Apps:};
     \draw[->, visible on=<1->] (isedata) -- (iseobj) node[label node]{contains};
     \draw[->, visible on=<2->] (iseobj) -- (osdata) node[midway, left]{link};
@@ -243,24 +247,15 @@ The machine-readable data in the Turtle format looks like this:
 }
 
 In the picture above ...
-
-\frame
-{
-  \frametitle{ESSGLOBAL}
-  \begin{itemize}
-    \item
-  \end{itemize}
-}
-\section{Applications}
-\subsection{Example map application}
-\subsection{Power of LOD}
-\frame
-{
-  \frametitle{Query across datsets}
-  \begin{itemize}
-    \item SPARQL demo
-  \end{itemize}
-}
+    \begin{description}
+      \item[Our data]is the Linked Open Data we created to describe the 13,000 co-ops.
+      \item[OS data] is Linked Open Data published by Ordnance Survey.
+      \item[CH data] is Linked Open Data published by Companies House.
+      \item[http://os.gov/postcode/OX10AB] represent the proper URI \url{http://data.ordnancesurvey.co.uk/id/postcodeunit/SA335AJ}
+      \item[http://ch.gov/company/01113761] represents the proper Companies House URI \url{http://business.data.gov.uk/id/company/01113761}
+      \item[Nearby] is the application that is launched when ``similar companies nearby'' is clicked in the map-app.
+      \item[http://ch.gov/...] is a link to Companies House that is passed as data to the Nearby application.
+    \end{description}
 
 \section{Conclusions}
 \frame
@@ -291,13 +286,21 @@ In the picture above ...
 {
   \frametitle{The LOD approach}
   \begin{itemize}
-    \item Avoid reinvention of wheels you didn't know existed
+    \item Answers question you didn't even know to ask!
+    \item Semantic data modelling is very powerful
+    \item Harnesses existing power of the Web of Documents
+    \item Enables appropriate ownership of data
     \item Excellent for ``National Grid'' of data
-    \item Easliy integrate with other data standards
+    \item Easily integrate with other data standards
     \item LOD everywhere? No!
-
   \end{itemize}
 }
+\begin{description}
+  \item[Appropriate ownership] Ordnance Survey owns geographics data; Companies House owns company registration data; Data about the Solidarity Economy can be distributed.
+  \item[Semantic data modelling] Consider postcodes. SA33 5AJ is within SA33 5; SA33 5 is within SA 33; SA33 is within SA. From the semantics of the data model, we can infer that SA33 5AJ is therefore within SA. This just touches the surface of the power of semantic data modelling.
+  \item[National Grid of data] This analogy with the electricity grid is about building fundamental infrastructure.
+  \item[Harness Web of Documents] Why invent new ways of dealing with data when these can be re-used from the Web of Documents? e.g. HTTP, global URI namespace, web servers, content negotiation to provide data is a wide range of formats, \dots
+\end{description}
 \frame
 {
   \frametitle{What's next?}

@@ -11,7 +11,7 @@ SNMS := $(SRCS:.tex=.snm)
 TOCS := $(SRCS:.tex=.toc)
 ALL_PDF := $(SRCS:.tex=.pdf)
 all: $(ALL_PDF)
-$(ALL_PDF): main.tex
+$(ALL_PDF): main.tex map-app-popup-screenshot.png 5-star-steps.png ise-logo.jpg
 
 SERVER ?= parecco
 SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
