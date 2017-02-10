@@ -26,7 +26,7 @@
 
 \newcommand{\defineterm}[2]{\textbf{#1} -- #2}
 \newcommand{\articleheading}[1]{\subsubsection{#1}}
-
+\newcommand{\geek}{\leavevmode\marginpar{\raisebox{-.35\height}{\includegraphics[height=5mm,width=5mm]{geek.png}}} }
 \title{Linked Open Data in Action}
 \author{Matt Wallis}
 \date{\today}
@@ -45,6 +45,11 @@
 \maketitle
 This is a handout to accompany the presentation at the Open:2017 conference.
 It contains all of the slides, and additional notes too.
+Some of the notes are quite geeky, and these can be skipped. They can be identified by the geek in the right margin, as in the next paragraph.
+
+\geek There are two types of people in the world -- those who can extrapolate from incomplete data.
+
+
 
 \frame{
   \begin{center}
@@ -175,25 +180,25 @@ Only the red markers have links to data held by Companies House.
 \articleheading{Links}
 
 Some of the links that are displayed in the pop-up are links to two different World Wide Webs: the \textit{Web of Documents} and the \textit{Web of Data}.
-The Web of Documents is the one that we are all familiar with; it is the place we inhabit through Web Browsers, and was designed to deliver documents for human beings to read.
+The Web of Documents is the one that we are all familiar with; it is the place we inhabit through Web Browsers, and was designed to deliver documents for humans to read.
 The Web of Data shares the same infrastructure (the internet, web servers, etc) as the Web of Documents, but it allows machines to request machine-readable data instead of human-readable documents.
 
-By clicking the \textbf{raw data summary} link, your browser will take you to a page in the Web of Documents that shows data for a co-op. 
+\geek By clicking the \textbf{raw data summary} link, your browser will take you to a page in the Web of Documents that shows data for a co-op. 
 That page is identified by a URI (Uniform Resource Identifier) that looks just like a URL (Uniform Resource Locator) you might see in your browser's URL bar. For example:
 
 {\footnotesize \url{http://data.solidarityeconomics.org/id/experimental/test/co-ops-uk/R005512}}
 
-When a web browser requests a URI, the web server will redirect the browser to a page in the Web of Documents that has the following URL:
+\geek When a web browser requests a URI, the web server will redirect the browser to a page in the Web of Documents that has the following URL:
 
 {\footnotesize \url{http://data.solidarityeconomics.org/doc/experimental/test/co-ops-uk/R005512.html}}
 
-But, when a machine requests that same URI, the web server will redirect the machine to data in the Web of Data. 
+\geek But, when a machine requests that same URI, the web server will redirect the machine to data in the Web of Data. 
 The machine can request a number of different data formats from the web server.
 If the machine requested the Turtle data format, then the web server will redirect it to this URL:
 
 {\footnotesize \url{http://data.solidarityeconomics.org/doc/experimental/test/co-ops-uk/R005512.ttl}}
 
-The machine-readable data in the Turtle format looks like this:
+\geek The machine-readable data in the Turtle format looks like this:
 
 %\vspace{1cm}
 \begin{adjustwidth}{-2cm}{0pt}
@@ -225,7 +230,7 @@ The machine-readable data in the Turtle format looks like this:
 %\frame[fragile,t]
 \frame[t]
 {
-  \frametitle{Passing links as data}
+  \frametitle{The data are links}
   \centering
   %\begin{center}
   %\begin{tikzpicture}[scale=.8, show background rectangle, node distance=1cm]
@@ -265,15 +270,19 @@ The machine-readable data in the Turtle format looks like this:
     \end{itemize}
 }
 
-In the picture above ...
+In the picture above \dots
     \begin{description}
       \item[Our data]is the Linked Open Data we created to describe the 13,000 co-ops.
       \item[OS data] is Linked Open Data published by Ordnance Survey.
       \item[CH data] is Linked Open Data published by Companies House.
-      \item[http://os.gov/postcode/OX10AB] represent the proper URI \url{http://data.ordnancesurvey.co.uk/id/postcodeunit/SA335AJ}
-      \item[http://ch.gov/company/01113761] represents the proper Companies House URI \url{http://business.data.gov.uk/id/company/01113761}
-      \item[Nearby] is the application that is launched when ``similar companies nearby'' is clicked in the map-app.
-      \item[http://ch.gov/...] is a link to Companies House that is passed as data to the Nearby application.
+      \item[http://os.gov/postcode/OX10AB] \geek represent the proper URI \url{http://data.ordnancesurvey.co.uk/id/postcodeunit/SA335AJ}
+      \item[http://ch.gov/company/01113761] \geek represents the proper Companies House URI \url{http://business.data.gov.uk/id/company/01113761}
+      \item[Nearby] is the application that is launched when ``similar companies nearby'' is clicked in the map-app. 
+	It makes use of both the OS data and the CH data:
+	The OS data can tell us which postcodes are within a particular geographics area, and the CH data can tell us what line of business a company is in.
+	Putting these two together, we can ask for all the companies that are in the same line of business, and in the same geographics area as a particular company.
+	For example, the map-app passes the detail of a co-op to the Nearby application, and it displays all companies that are in the same line of business and same geographical area as that co-op.
+      \item[http://ch.gov/...] \geek is a link to Companies House that is passed as data to the Nearby application.
     \end{description}
 
 \section{Conclusions}
@@ -307,6 +316,7 @@ In the picture above ...
   \begin{itemize}
     \item Answers question you didn't even know to ask!
     \item Semantic data modelling is very powerful
+    \item Interoperability
     \item Harnesses existing power of the Web of Documents
     \item Enables appropriate ownership of data
     \item Excellent for ``National Grid'' of data
@@ -316,9 +326,9 @@ In the picture above ...
 }
 \begin{description}
   \item[Appropriate ownership] Ordnance Survey owns geographics data; Companies House owns company registration data; Data about the Solidarity Economy can be distributed.
-  \item[Semantic data modelling] Consider postcodes. SA33 5AJ is within SA33 5; SA33 5 is within SA 33; SA33 is within SA. From the semantics of the data model, we can infer that SA33 5AJ is therefore within SA. This just touches the surface of the power of semantic data modelling.
+  \item[Semantic data modelling] \geek Consider postcodes. SA33 5AJ is within SA33 5; SA33 5 is within SA 33; SA33 is within SA. From the semantics of the data model, we can infer that SA33 5AJ is therefore within SA. This just touches the surface of the power of semantic data modelling.
   \item[National Grid of data] This analogy with the electricity grid is about building fundamental infrastructure.
-  \item[Harness Web of Documents] Why invent new ways of dealing with data when these can be re-used from the Web of Documents? e.g. HTTP, global URI namespace, web servers, content negotiation to provide data is a wide range of formats, \dots
+  \item[Harness Web of Documents] \geek Why invent new ways of dealing with data when these can be re-used from the Web of Documents? e.g. HTTP, global URI namespace, web servers, content negotiation to provide data is a wide range of formats, \dots
 \end{description}
 \frame
 {
