@@ -1,7 +1,7 @@
 
 .PHONY: all clean deploy
 
-SRCS := main.beamer.tex main.article.tex
+SRCS := main.beamer.tex main.article.tex main.handout.tex
 AUXS := $(SRCS:.tex=.aux)
 LOGS := $(SRCS:.tex=.log)
 NAVS := $(SRCS:.tex=.nav)

@@ -9,18 +9,29 @@
 \usepackage{graphicx}
 \usepackage{calc}
 \usepackage{changepage}
+\mode<article>{\usepackage{fullpage}}
 \newlength{\popupimagewidth}
 
 \setlength{\popupimagewidth}{\textwidth*3/5}
-\setcounter{tocdepth}{2}% Don't show subsubsections in table of contents
 
 \putlogoinslide
 \newcommand{\defineterm}[2]{\textbf{#1} -- #2}
-\newcommand{\articleheading}[1]{\subsubsection{#1}}
 \newcommand{\geek}{\leavevmode\marginpar{\raisebox{-.35\height}{\includegraphics[height=5mm,width=5mm]{geek.png}}} }
+
+% Attempt to define new environment for frames that puts a line above and below the frames in the article.
+% Unfortunately, this seems to cause the frames to be missed out of the presentation!
+%\newcounter{FrameNumber}
+%\newenvironment<>{myframe}[2][]
+%{\stepcounter{FrameNumber} 
+%\hrulefill \ Slide \theFrameNumber
+%\begin{frame}[#1]
+  %\frametitle{\theFrameNumber. #2}}
+%{\end{frame}
+%\hrulefill \ End of Slide \theFrameNumber}
+
 \title{Linked Open Data in Action}
 \author{Matt Wallis}
-\date{\today}
+%\date{\today}
 \date{February 17, 2017}
 
 % From http://tex.stackexchange.com/a/183966:
@@ -41,7 +52,7 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
 
 \geek There are two types of people in the world -- those who can extrapolate from incomplete data.
 
-\frame{
+\begin{frame}{Before we start}
   \begin{center}
     Download handout now
 
@@ -49,12 +60,13 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
 
     Twitter: \href{https://twitter.com/SolidarityEcon}{@SolidarityEcon}
   \end{center}
-}
+\end{frame}
 \frame{\titlepage}
 
 \frame{\tableofcontents}
 
 \section{Institute for Solidarity Economics}
+\subsection{Who we are}
 \frame
 {
   \frametitle{Institute for Solidarity Economics}
@@ -64,10 +76,11 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
   \begin{itemize}
     \item<1-> \url{http://solidarityeconomics.org}
     \item<1-> The Solidarity Economy is a grassroots movement that is building a fair and ecological alternative to Capitalism.
-    \item<1-> Our aim is to support this movement through education, research, and finding opportunities for collaboration.
+    \item<2-> Our aim is to support this movement through education, research, and finding opportunities for collaboration.
+    \item<3-> A multi-stakeholder Charitable Incorporated Organisation (CIO) association.
   \end{itemize}
 }
-\subsection{Social context}
+\subsection{Data: Social context}
 \frame
 {
   \frametitle{Why data?}
@@ -88,26 +101,33 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
 }
 \frame
 {
-  \frametitle{Guiding Principles: 1. Social}
+  \frametitle{Guiding Principles 1: Social}
   \begin{itemize}
     \item Data ownership is power - be careful!
     \item Prefer distributed data to centralized data
     \item Prefer appropriate ownership of data
       \begin{itemize}
 	\item Links are better than copies
+	  \only<article> {For example, consider weather forecasts --
+	  A copy of a weather forecast gets out of date!
+	  A link is much better -- let the Met Office own the data.}
       \end{itemize}
     \item Trust is vital - make sources of data visible
+    \item<article> We are all familiar with the power wielded by the big corporations who dominate data.
+      We want a solution that permits the data to be owned by the people whose resources are described by that data.
+      They may choose to allow someone else to own it, but we want to give them that choice.
   \end{itemize}
 }
 \section{What we did}
 \subsection{Research and Development}
 \frame
 {
-  \frametitle{Guiding Principles: 2. Engineering}
+  \frametitle{Guiding Principles 2: Engineering}
   \begin{itemize}
-    \item Don't Repeat Yourself! (DRY)
     \item Use existing best practice
     \item Re-use existing software
+    \item Re-use existing data (link, don't copy!)
+    \item Re-use existing data models
   \end{itemize}
 }
 \frame
@@ -140,9 +160,15 @@ Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-
 {
   \frametitle{map-app}
   \begin{itemize}
-    \item Web application: \url{http://data.solidarityeconomics.org/map-app/}
-    \item Data is loaded by querying our Linked Open Database
-    \item Clean separation of application and data
+    \item<1-> Web application: \url{http://data.solidarityeconomics.org/map-app/}
+    \item<2-> Data is loaded by querying our Linked Open Database
+    \item<3-> map-app provides browseable links to LOD that is provided by others
+      \begin{itemize}
+	\item<3-> Companies House
+	\item<3-> Ordnance Survey
+      \end{itemize}
+    \item<4-> map-app links to educational material about our LOD
+    \item<article> Clean separation of application and data
   \end{itemize}
 }
 
@@ -170,7 +196,7 @@ The map-app was developed for two main reasons:
 By clicking on a marker on the map-app, a pop-up will appear, as shown above.
 Only the red markers have links to data held by Companies House.
 
-\articleheading{Links}
+\subsection<article>{Links}
 
 Some of the links that are displayed in the pop-up are links to two different World Wide Webs: the \textit{Web of Documents} and the \textit{Web of Data}.
 The Web of Documents is the one that we are all familiar with; it is the place we inhabit through web browsers, and was designed to deliver documents for humans to read.
@@ -194,7 +220,7 @@ If the machine requested the Turtle data format, then the web server will redire
 \geek The machine-readable data in the Turtle format looks like this:
 
 %\vspace{1cm}
-\begin{adjustwidth}{-2cm}{0pt}
+%\begin{adjustwidth}{-2cm}{0pt}
 {\footnotesize
 \begin{verbatim}
 @prefix essglobal: <http://purl.org/solidarityeconomics/experimental/essglobal/vocab/> .
@@ -218,10 +244,10 @@ If the machine requested the Turtle data format, then the web server will redire
    vcard:postal-code "SA33 5AJ" .
 \end{verbatim}
 }
-\end{adjustwidth}
+%\end{adjustwidth}
 
 %\frame[fragile,t]
-\hrulefill Start of slide
+%\hrulefill Start of slide
 %\frame[t]
 \begin{frame}[t]
   \frametitle{The data are links}
@@ -263,7 +289,7 @@ If the machine requested the Turtle data format, then the web server will redire
       \item<2-> Existing data: OS = Ordnance Survey
     \end{itemize}
   \end{frame}
-\hrulefill
+%\hrulefill
 
 In the picture above \dots
     \begin{description}
