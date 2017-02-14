@@ -1,2 +1,10 @@
 \documentclass[ignorenonframetext]{beamer}
+\newcommand{\putlogoinslide}{
+  \addtobeamertemplate{frametitle}{}{
+    % From http://tex.stackexchange.com/a/180628
+    \begin{textblock*}{100mm}(\textwidth,-1cm)
+      \includegraphics[height=1cm,width=1cm]{ise-logo.jpg}
+    \end{textblock*}
+  }
+}
 \input{main.tex}

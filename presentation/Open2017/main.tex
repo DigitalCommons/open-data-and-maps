@@ -9,21 +9,12 @@
 \usepackage{graphicx}
 \usepackage{calc}
 \usepackage{changepage}
-%\usepackage{listings}
-%\usepackage[usenames,dvipsnames,svgnames,table]{xcolor} PACKAGE CLASH!
-%\usepackage{color}
 \newlength{\popupimagewidth}
 
 \setlength{\popupimagewidth}{\textwidth*3/5}
 \setcounter{tocdepth}{2}% Don't show subsubsections in table of contents
 
-\addtobeamertemplate{frametitle}{}{
-  % From http://tex.stackexchange.com/a/180628
-  \begin{textblock*}{100mm}(\textwidth,-1cm)
-    \includegraphics[height=1cm,width=1cm]{ise-logo.jpg}
-  \end{textblock*}
-}
-
+\putlogoinslide
 \newcommand{\defineterm}[2]{\textbf{#1} -- #2}
 \newcommand{\articleheading}[1]{\subsubsection{#1}}
 \newcommand{\geek}{\leavevmode\marginpar{\raisebox{-.35\height}{\includegraphics[height=5mm,width=5mm]{geek.png}}} }
@@ -43,13 +34,12 @@
 
 \begin{document}
 \maketitle
-This handout is to accompany the presentation at the Open:2017 conference.
-It contains all of the slides, and additional notes too.
-Some of the notes are quite geeky, and these can be skipped. They can be identified by the geek in the right margin, as in the next paragraph.
+This handout is to accompany the presentation at the Open:2017 conference,
+and contains all of the slides from Matt's presentation.
+It also contains some additional notes --
+some of the notes are quite geeky, and these can be skipped. They can be identified by the geek in the right margin, as seen below.
 
 \geek There are two types of people in the world -- those who can extrapolate from incomplete data.
-
-
 
 \frame{
   \begin{center}
@@ -82,7 +72,7 @@ Some of the notes are quite geeky, and these can be skipped. They can be identif
 {
   \frametitle{Why data?}
   \begin{itemize}
-    \item Data fuels the WWW
+    \item Data fuels the World Wide Web
     \item Valueable because it's essential
     \item Geographic maps
       \begin{itemize}
@@ -101,10 +91,10 @@ Some of the notes are quite geeky, and these can be skipped. They can be identif
   \frametitle{Guiding Principles: 1. Social}
   \begin{itemize}
     \item Data ownership is power - be careful!
-    \item Prefer distributed to centralized data
+    \item Prefer distributed data to centralized data
     \item Prefer appropriate ownership of data
       \begin{itemize}
-	\item Links are better that copies
+	\item Links are better than copies
       \end{itemize}
     \item Trust is vital - make sources of data visible
   \end{itemize}
@@ -124,13 +114,13 @@ Some of the notes are quite geeky, and these can be skipped. They can be identif
 {
   \frametitle{Research}
   \begin{itemize}
-    \item Linked Open Data looked like best practice
-    \item But scary! {\em we didn't really understand it}
+    \item Linked Open Data (LOD) looked like best practice
+    \item But scary! {\em we needed to understand it better}
     \item Experimentation
       \begin{itemize}
 	\item Co-ops UK dataset (open, CSV)
 	\item Use existing ESSGLOBAL vocabulary
-	\item Learn about Linked Open Data
+	\item Learn more about Linked Open Data
       \end{itemize}
   \end{itemize}
 }
@@ -138,8 +128,8 @@ Some of the notes are quite geeky, and these can be skipped. They can be identif
 {
   \frametitle{Development}
   \begin{itemize}
-    \item Generate experimental LOD dataset of over 13,000 UK Co-ops
-    \item Deploy the LOD dataset - openly available on the web
+    \item Generated experimental LOD dataset of over 13,000 UK Co-ops
+    \item Deployed the LOD dataset - openly available on the web
     \item Put the 13,000 co-ops on a map
     \item Document and educate
   \end{itemize}
@@ -157,7 +147,7 @@ Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-
 }
 
 You can take a look at the map-app by clicking on the link: \url{http://data.solidarityeconomics.org/map-app/}.
-But, if lots of people do this at the same time during the presentation, it will be slow to load, because the data is hosted on a very small server.
+Please note that if lots of people do this at the same time during the presentation, it will be slow to load, because the data is hosted on a very small server.
 
 The map-app was developed for two main reasons:
   \begin{itemize}
@@ -183,7 +173,7 @@ Only the red markers have links to data held by Companies House.
 \articleheading{Links}
 
 Some of the links that are displayed in the pop-up are links to two different World Wide Webs: the \textit{Web of Documents} and the \textit{Web of Data}.
-The Web of Documents is the one that we are all familiar with; it is the place we inhabit through Web Browsers, and was designed to deliver documents for humans to read.
+The Web of Documents is the one that we are all familiar with; it is the place we inhabit through web browsers, and was designed to deliver documents for humans to read.
 The Web of Data shares the same infrastructure (the internet, web servers, etc) as the Web of Documents, but it allows machines to request machine-readable data instead of human-readable documents.
 
 \geek By clicking the \textbf{raw data summary} link, your browser will take you to a page in the Web of Documents that shows data for a co-op. 
@@ -231,8 +221,9 @@ If the machine requested the Turtle data format, then the web server will redire
 \end{adjustwidth}
 
 %\frame[fragile,t]
-\frame[t]
-{
+\hrulefill Start of slide
+%\frame[t]
+\begin{frame}[t]
   \frametitle{The data are links}
   \centering
   %\begin{center}
@@ -271,7 +262,8 @@ If the machine requested the Turtle data format, then the web server will redire
       \item<3-> Existing data: CH = Companies House
       \item<2-> Existing data: OS = Ordnance Survey
     \end{itemize}
-}
+  \end{frame}
+\hrulefill
 
 In the picture above \dots
     \begin{description}
