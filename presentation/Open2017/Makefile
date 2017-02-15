@@ -34,3 +34,4 @@ clean:
 %.pdf: %.tex
 	xelatex $<
 	xelatex $<
+	cp main.article.pdf Open2017-data-handout.pdf

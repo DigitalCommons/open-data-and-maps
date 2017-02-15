@@ -18,8 +18,10 @@
 \newcommand{\defineterm}[2]{\textbf{#1} -- #2}
 \newcommand{\geek}{\leavevmode\marginpar{\raisebox{-.35\height}{\includegraphics[height=5mm,width=5mm]{geek.png}}} }
 
-\newcommand{\startslide}{\noindent\hrulefill\ \textit{Start of slide} \\}
-\newcommand{\slideend}{\noindent\hrulefill\ \textit{End of slide} \\}
+\newcommand{\startslide}{}
+\newcommand{\slideend}{}
+%\newcommand{\startslide}{\noindent\hrulefill\ \textit{Start of slide} \\}
+%\newcommand{\slideend}{\noindent\hrulefill\ \textit{End of slide} \\}
 % Attempt to define new environment for frames that puts a line above and below the frames in the article.
 % Unfortunately, this seems to cause the frames to be missed out of the presentation!
 %\newcounter{FrameNumber}
@@ -54,14 +56,18 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
 
 \geek There are two types of people in the world -- those who can extrapolate from incomplete data.
 
-The slides are topped and tailed with horizontal lines, like this:
-
 \startslide
 \begin{frame}{Before we start}
   \begin{center}
     A handout to accompany this talk is \textbf{available now}:
 
-    http://
+    %Short URL:
+
+    \url{http://bit.do/open2017-data-handout}
+
+    %Full URL:
+
+    %\url{http://solidarityeconomics.org/resources/Open2017-data-handout.pdf}
 
 	  \vspace{1cm}
     Twitter: \href{https://twitter.com/SolidarityEcon}{@SolidarityEcon}
@@ -83,8 +89,8 @@ The slides are topped and tailed with horizontal lines, like this:
   \end{center}
   \begin{itemize}
     \item<1-> \url{http://solidarityeconomics.org}
-    \item<1-> The Solidarity Economy is a grassroots movement that is building a fair and ecological alternative to Capitalism.
-    \item<2-> Our aim is to support this movement through education, research, and finding opportunities for collaboration.
+    \item<1-> Our aim is to support the Solidarity Economy movement through education, research, and finding opportunities for collaboration.
+    \item<2-> The Solidarity Economy is a grassroots movement that is building a fair and ecological alternative to Capitalism.
     \item<3-> We are sponsoring Open:2017
     \item<3-> Find out more in latest edition of STIR magazine
   \end{itemize}
@@ -111,7 +117,10 @@ Come and talk to us there.
 	\item Every app needs data
       \end{itemize}
     \item<4-> Fits our aims: research, education, collaboration
-    \item<4-> Starting with data to describe initiatives in the Solidarity Economy
+    \item<4-> Starting point:
+      \begin{itemize}
+	\item Data to describe initiatives in the Solidarity Economy
+      \end{itemize}
   \end{itemize}
 }
 \slideend
@@ -192,11 +201,11 @@ We used the existing ESSGLOBAL vocabulary for Linked Open Data.
   \frametitle{map-app}
   \begin{itemize}
     \item<1-> Web application to show UK co-ops on a map
-    \item<2-> Data is loaded by querying our Linked Open Database
-    \item<3-> map-app provides browseable links to LOD that is provided by others
+    \item<2-> Data is loaded from our Linked Open Database
+    \item<3-> map-app provides links to LOD that is provided by others
       \begin{itemize}
-	\item<3-> Companies House
 	\item<3-> Ordnance Survey
+	\item<3-> Companies House
       \end{itemize}
     \item<4-> map-app links to educational material about our LOD
     \item<article> Clean separation of application and data
@@ -373,10 +382,10 @@ The descriptions of the 5 star classifications at \url{http://5stardata.info} ar
 {
   \frametitle{The LOD approach}
   \begin{itemize}
-    \item Answers question you didn't even know to ask!
-    \item Enables appropriate ownership of data
-    \item Semantic data modelling is very powerful
-    \item Technically, ticks the boxes
+    \item<1-> Answers question you didn't even know to ask!
+    \item<1-> Enables appropriate ownership of data
+    \item<2-> Semantic data modelling is very powerful
+    \item<2-> Technically, ticks the boxes
       \begin{itemize}
 	\item Interoperability
 	\item Global identifiers (http links)
@@ -384,8 +393,8 @@ The descriptions of the 5 star classifications at \url{http://5stardata.info} ar
 	\item Easily integrate with other data standards
 	\item \dots
       \end{itemize}
-    \item Highly knowledgeable and helpful online community
-    \item Excellent for ``National Grid'' of data
+    \item<3-> Highly knowledgeable and helpful online community
+    \item<4-> Excellent for ``National Grid'' of data
   \end{itemize}
 }
 \slideend
@@ -405,6 +414,17 @@ The descriptions of the 5 star classifications at \url{http://5stardata.info} ar
   \end{itemize}
 }
 \slideend
+
+\subsection<article>{Links to more on LOD}
+Here are a few links to provide more information about Linked Open Data:
+
+  \begin{itemize}
+    \item Tim Berners-Lee talking at TED2009: \url{https://www.ted.com/talks/tim_berners_lee_on_the_next_web}
+    \item Video by Europeana: \url{https://vimeo.com/36752317}
+    \item \url{http://linkeddata.org/}
+    \item \url{https://www.w3.org/standards/semanticweb/data}
+    \item Getting into technical detail: \url{http://linkeddatabook.com/editions/1.0/}
+  \end{itemize}
 
 
 \end{document}
