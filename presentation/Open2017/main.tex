@@ -18,6 +18,8 @@
 \newcommand{\defineterm}[2]{\textbf{#1} -- #2}
 \newcommand{\geek}{\leavevmode\marginpar{\raisebox{-.35\height}{\includegraphics[height=5mm,width=5mm]{geek.png}}} }
 
+\newcommand{\startslide}{\noindent\hrulefill\ \textit{Start of slide} \\}
+\newcommand{\slideend}{\noindent\hrulefill\ \textit{End of slide} \\}
 % Attempt to define new environment for frames that puts a line above and below the frames in the article.
 % Unfortunately, this seems to cause the frames to be missed out of the presentation!
 %\newcounter{FrameNumber}
@@ -29,7 +31,7 @@
 %{\end{frame}
 %\hrulefill \ End of Slide \theFrameNumber}
 
-\title{Linked Open Data in Action}
+\title{Linked Open Data for the Solidarity Economy}
 \author{Matt Wallis}
 %\date{\today}
 \date{February 17, 2017}
@@ -52,6 +54,9 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
 
 \geek There are two types of people in the world -- those who can extrapolate from incomplete data.
 
+The slides are topped and tailed with horizontal lines, like this:
+
+\startslide
 \begin{frame}{Before we start}
   \begin{center}
     A handout to accompany this talk is \textbf{available now}:
@@ -62,12 +67,14 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
     Twitter: \href{https://twitter.com/SolidarityEcon}{@SolidarityEcon}
   \end{center}
 \end{frame}
+\slideend
 \frame{\titlepage}
 
 \frame{\tableofcontents}
 
 \section{Institute for Solidarity Economics}
 \subsection{Who we are}
+\startslide
 \frame
 {
   \frametitle{Institute for Solidarity Economics}
@@ -78,10 +85,16 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
     \item<1-> \url{http://solidarityeconomics.org}
     \item<1-> The Solidarity Economy is a grassroots movement that is building a fair and ecological alternative to Capitalism.
     \item<2-> Our aim is to support this movement through education, research, and finding opportunities for collaboration.
-    \item<3-> A multi-stakeholder Charitable Incorporated Organisation (CIO) association.
+    \item<3-> We are sponsoring Open:2017
+    \item<3-> Find out more in latest edition of STIR magazine
   \end{itemize}
 }
-\subsection{Data: Social context}
+\slideend
+The Institure for Solidarity Economics is sharing a table with STIR magazine at Open:2017. 
+Come and talk to us there.
+
+\subsection{Why data?}
+\startslide
 \frame
 {
   \frametitle{Why data?}
@@ -98,53 +111,66 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
 	\item Every app needs data
       \end{itemize}
     \item<4-> Fits our aims: research, education, collaboration
+    \item<4-> Starting with data to describe initiatives in the Solidarity Economy
   \end{itemize}
 }
+\slideend
+\startslide
 \frame
 {
   \frametitle{Guiding Principles 1: Social}
   \begin{itemize}
-    \item Data ownership is power - be careful!
-    \item Prefer distributed data to centralized data
-    \item Prefer appropriate ownership of data
+    \item<1-> Data ownership is power - be careful!
+    \item<2-> Prefer distributed data to centralized data
+    \item<2-> Prefer appropriate ownership of data
       \begin{itemize}
 	\item Links are better than copies
 	  \only<article> {For example, consider weather forecasts --
 	  A copy of a weather forecast gets out of date!
 	  A link is much better -- let the Met Office own the data.}
       \end{itemize}
-    \item Trust is vital - make sources of data visible
+    \item<3-> Trust is vital - make sources of data visible
     \item<article> We are all familiar with the power wielded by the big corporations who dominate data.
       We want a solution that permits the data to be owned by the people whose resources are described by that data.
       They may choose to allow someone else to own it, but we want to give them that choice.
   \end{itemize}
 }
+\slideend
 \section{What we did}
 \subsection{Research and Development}
+\startslide
 \frame
 {
   \frametitle{Guiding Principles 2: Engineering}
   \begin{itemize}
-    \item Use existing best practice
-    \item Re-use existing software
-    \item Re-use existing data (link, don't copy!)
-    \item Re-use existing data models
+    \item<1-> Use existing best practice
+    \item<1-> Re-use existing software
+    \item<1-> Re-use existing data (link, don't copy!)
+    \item<1-> Re-use existing data models
+    \item<2-> Open source
+      \begin{itemize}
+	\item Use open source software
+	\item ISE publishes work with open source licenses
+      \end{itemize}
   \end{itemize}
 }
+\slideend
+\startslide
 \frame
 {
   \frametitle{Research}
   \begin{itemize}
     \item<1-> Linked Open Data (LOD) looked like best practice
     \item<1-> But scary! {\em we needed to understand it better}
-    \item<2-> Experimentation
+    \item<2-> Experimentation and discovery
       \begin{itemize}
-	\item Co-ops UK dataset (open, CSV)
-	\item Use existing ESSGLOBAL vocabulary
-	\item Learn more about Linked Open Data
+	\item Publish a dataset using LOD principles
+	\item Use that dataset in an app
       \end{itemize}
   \end{itemize}
 }
+\slideend
+\startslide
 \frame
 {
   \frametitle{Development}
@@ -155,13 +181,17 @@ some of the notes are quite geeky, and these can be skipped. They can be identif
     \item Document and educate
   \end{itemize}
 }
+\slideend
 Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-open-data}
+We used the existing ESSGLOBAL vocabulary for Linked Open Data.
+
 \subsection{Map of UK co-ops}
+\startslide
 \frame
 {
   \frametitle{map-app}
   \begin{itemize}
-    \item<1-> Web application: \url{http://data.solidarityeconomics.org/map-app/}
+    \item<1-> Web application to show UK co-ops on a map
     \item<2-> Data is loaded by querying our Linked Open Database
     \item<3-> map-app provides browseable links to LOD that is provided by others
       \begin{itemize}
@@ -172,6 +202,7 @@ Our work is available on GitHub: \url{https://github.com/p6data-coop/ise-linked-
     \item<article> Clean separation of application and data
   \end{itemize}
 }
+\slideend
 
 You can take a look at the map-app by clicking on the link: \url{http://data.solidarityeconomics.org/map-app/}.
 Please note that if lots of people do this at the same time during the presentation, it will be slow to load, because the data is hosted on a very small server.
@@ -183,6 +214,7 @@ The map-app was developed for two main reasons:
   \end{itemize}
 
 \subsection{Linked Open Data}
+\startslide
 \frame
 {
   \frametitle{Links to the webs}
@@ -194,6 +226,7 @@ The map-app was developed for two main reasons:
     \item Web of Data
   \end{itemize}
 }
+\slideend
 By clicking on a marker on the map-app, a pop-up will appear, as shown above.
 Only the red markers have links to data held by Companies House.
 
@@ -248,8 +281,8 @@ If the machine requested the Turtle data format, then the web server will redire
 %\end{adjustwidth}
 
 %\frame[fragile,t]
-%\hrulefill Start of slide
 %\frame[t]
+\startslide
 \begin{frame}[t]
   \frametitle{The data are links}
   \centering
@@ -290,7 +323,7 @@ If the machine requested the Turtle data format, then the web server will redire
       \item<2-> Existing data: OS = Ordnance Survey
     \end{itemize}
   \end{frame}
-%\hrulefill
+    \slideend
 
 In the picture above \dots
     \begin{description}
@@ -319,6 +352,7 @@ In the picture above \dots
     %\item Leave things in better shape
   %\end{itemize}
 %}
+\startslide
 \frame
 {
   \frametitle{LOD Everywhere? No}
@@ -332,27 +366,36 @@ In the picture above \dots
     \item \url{http://5stardata.info}
   \end{itemize}
 }
+\slideend
 The descriptions of the 5 star classifications at \url{http://5stardata.info} are both brief and informative.
+\startslide
 \frame
 {
   \frametitle{The LOD approach}
   \begin{itemize}
     \item Answers question you didn't even know to ask!
-    \item Semantic data modelling is very powerful
-    \item Interoperability
-    \item Harnesses existing power of the Web of Documents
     \item Enables appropriate ownership of data
-    \item Excellent for ``National Grid'' of data
-    \item Easily integrate with other data standards
+    \item Semantic data modelling is very powerful
+    \item Technically, ticks the boxes
+      \begin{itemize}
+	\item Interoperability
+	\item Global identifiers (http links)
+	\item Harnesses existing power of the Web of Documents
+	\item Easily integrate with other data standards
+	\item \dots
+      \end{itemize}
     \item Highly knowledgeable and helpful online community
+    \item Excellent for ``National Grid'' of data
   \end{itemize}
 }
+\slideend
 \begin{description}
   \item[Appropriate ownership] Ordnance Survey owns geographics data; Companies House owns company registration data; Data about the Solidarity Economy can be distributed.
   \item[Semantic data modelling] \geek Consider postcodes. SA33 5AJ is within SA33 5; SA33 5 is within SA 33; SA33 is within SA. From the semantics of the data model, we can infer that SA33 5AJ is therefore within SA. This just touches the surface of the power of semantic data modelling.
   \item[National Grid of data] This analogy with the electricity grid is about building fundamental infrastructure.
   \item[Harness Web of Documents] \geek Why invent new ways of dealing with data when these can be re-used from the Web of Documents? e.g. HTTP, global URI namespace, web servers, content negotiation to provide data is a wide range of formats, \dots
 \end{description}
+\startslide
 \frame
 {
   \frametitle{What's next?}
@@ -361,6 +404,7 @@ The descriptions of the 5 star classifications at \url{http://5stardata.info} ar
     \item Talk to us about other datasets
   \end{itemize}
 }
+\slideend
 
 
 \end{document}
