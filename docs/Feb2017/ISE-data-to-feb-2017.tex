@@ -1,35 +1,106 @@
 \documentclass[11pt,twoside,a4paper]{article}
 
+\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{fullpage}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes,backgrounds,positioning,shapes.multipart}
+\usepackage{textpos} 
 \title{Linked Open Data for the Solidarity Economy}
-\author{Matt Wallis}
+\author{Matt Wallis, Institute for Solidarity Economics}
 %\date{\today}
 \date{February 23, 2017}
 \begin{document}
 \maketitle
 
-The Institure for Solidarity Economics has been working on Linked Open Data for the Solidarity Economy,
+The Institute for Solidarity Economics has been working on Linked Open Data for the Solidarity Economy,
 producing an experimental dataset of UK co-ops, and an application to view the co-ops on a geographical map.
 The map also provides as way to browse educational material about the Linked Open Data.
 
-This document outlines that work, and is based on a presentation given at the Open:2017, Platform Co-operatives (\url{https://2017.open.coop/}) conference in London, February 17, 2017.
+This document describes the work to date.
+It is based on a presentation given at the Open:2017,
+Platform Co-operatives (\url{https://2017.open.coop/}) conference in London, February 17, 2017.
 
 \section*{Institute for Solidarity Economics}
-\subsection*{Who we are}
-  \begin{itemize}
-    \item Website: \url{http://solidarityeconomics.org}
-    \item Twitter: \href{https://twitter.com/SolidarityEcon}{@SolidarityEcon}
-  \end{itemize}
+  \begin{center}
+    \includegraphics[height=2cm,width=2cm]{ise-logo.jpg}
+
+    \begin{tabular}{l l}
+      Website: & \url{http://solidarityeconomics.org} \\
+      Twitter: & \href{https://twitter.com/SolidarityEcon}{@SolidarityEcon} \\
+    \end{tabular}
+  \end{center}
+
 Our aim is to support the Solidarity Economy movement through education, research, and finding opportunities for collaboration.
 What we mean by the Solidarity Economy is a grassroots movement that is building a fair and ecological alternative to Capitalism.
 
 \subsection*{Why data?}
+Data fuels the World Wide Web -- they are many examples of the power of data. 
+
+One if the goals of the Institute for Solidarity Economics is to make it easier to discover the initiatives that are part of the Solidarity Economy.
+An obvious thing to do is to put those initiatives on a geographic map.
+But the data descrining the initiatives must come before the map. A simple geographic may provides a view onto the data, and other simple views (like an alphabetic directory) also have their uses.
+
+We also can see a need for applications that do more than provide a view of SE initiatives -- applications that help the SE to operate.
+Of course, these to require data.
+It is becasue of this fundamental dependency on data that ISE decided to take a closer look at it.
+
+\subsection*{Social considerations}
+Data ownership is power. The social issues around this power need careful consideration.
+
+By publishing data about something, you are making claims about that thing, and the actual 'owners' of that thing may disagree with the claims you are making.
+This issue can be avoided if the 'owners' of the thing are able to publish their own data.
+So it is important that any technology used for publishing and accessing data allows the actual owner to publish their own data.
+
+Because the publisher of data is the one who is making a claim about the things that their data describes,
+it is important that the technology chosen allows users of that data to see who is publishing the data, who is making these claims.
+For example, if ISE publishes data about initiatives within the Solidarity Economy, 
+then ISE is claiming that each if these initiatives satisfies ISE's view of what it means to be in the Solidarity Economy.
+Other people may have a slightly different view of which initiatives should be regards as \textit{in} or \textit{out} of the SE.
+It is therefore important that it is possible to identify \textit{who} is making the claims expressed in the data.
+
 \section*{What we did}
 \subsection*{Research and Development}
 \subsection*{Map of UK co-ops}
 \subsection*{Linked Open Data}
 \subsection*{Links}
+  \centering
+  %\begin{center}
+  %\begin{tikzpicture}[scale=.8, show background rectangle, node distance=1cm]
+  %\begin{tikzpicture}[remember picture, show background rectangle, node distance=1cm]
+  \begin{tikzpicture}[remember picture, node distance=1cm]
+    \tikzstyle{every text node part} = [align=center]
+    \tikzstyle{obj node} = [ellipse, fill=blue!20]
+    \tikzstyle{obj path} = [->, draw=blue!20]
+    \tikzstyle{label node} = [draw, text=black]
+    \tikzstyle{data node} = [rectangle, fill=green!20]
+    \tikzstyle{extdata node} = [rectangle, draw, fill=green!20]
+    \tikzstyle{app node} = [rectangle, fill=red!20]
+    \tikzstyle{label node} = [midway, auto]
+    \tikzstyle{label text} = [align=left]
+    \node[obj node] (iseobj) {\underline{Links to other datasets} e.g. \\ {http://os.gov/postcode/SA335AJ} \\ {http://ch.gov/company/01113761}};
+    \node[label text] (datalabel) [left = of iseobj] {Example \\ data:};
+    \node[extdata node] (osdata) [below = of iseobj ] {OS data};
+    \node[data node] (isedata) [left = of osdata] {Our data};
+    \node[extdata node] (chdata) [right = of osdata] {CH data};
+    \node[label text] (datasetlabel) at (isedata-|datalabel) {Datasets:};
+
+    \node[app node] (mapapp) [below left = of osdata] {Map};
+    \node[app node] (nearestapp) [below right = of osdata] {Nearby};
+    \node[label text] (appslabel) at (mapapp-|datasetlabel) {Apps:};
+    \draw[->] (isedata) -- (iseobj) node[label node]{contains};
+    \draw[->] (iseobj) -- (osdata) node[midway, left]{link};
+    \draw[->] (iseobj) -- (chdata) node[midway, right]{link};
+    \draw[<->] (mapapp) -- (isedata) node[midway, right]{query};
+    \draw[<->] (mapapp) -- (osdata) node[midway, right]{query};
+    \draw[->] (mapapp) -- (nearestapp) node[midway, below]{http://ch.gov/...};
+    \draw[<->] (nearestapp) -- (osdata) node[midway, left]{query};
+    \draw[<->] (nearestapp) -- (chdata) node[midway, right]{query};
+  \end{tikzpicture}
+    \begin{itemize}
+      \item<3-> Existing data: CH = Companies House
+      \item<2-> Existing data: OS = Ordnance Survey
+    \end{itemize}
 \section*{Conclusions}
 \subsection*{Links to more on LOD}
 \end{document}
