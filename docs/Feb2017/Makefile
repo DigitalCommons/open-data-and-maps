@@ -1,5 +1,5 @@
-
-.PHONY: all clean deploy
+SHELL := /bin/bash
+.PHONY: all clean spellcheck acceptspellings
 
 SRCS := ISE-data-to-feb-2017.tex
 AUXS := $(SRCS:.tex=.aux)
@@ -13,19 +13,18 @@ ALL_PDF := $(SRCS:.tex=.pdf)
 all: $(ALL_PDF)
 $(ALL_PDF): map-app-popup-screenshot.png 5-star-steps.png ise-logo.jpg
 
-SERVER ?= parecco
-SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
-# Define macro for executing commands on the server (here using ssh):
-SERVER_CMD = ssh $(SERVER) $(1)
-RSYNC := rsync -avz 
-HANDOUT_REDIRECTION_SRC := open2017.html
-HANDOUT_REDIRECTION_TGT_DIR := open2017/
-HANDOUT_REDIRECTION_TGT_HTML := index.html
+UNKNOWN_WORDS := hunspell -l -t -i utf-8
+ACCEPTED_UNKNOWNS := spellcheck.out
 
-deploy: $(ALL_PDF)
-	@echo "Need to deploy $(ALL_PDF) to somewhere"
-	$(call SERVER_CMD,'cd $(SERVER_DIR) && mkdir -p $(HANDOUT_REDIRECTION_TGT_DIR)')
-	$(RSYNC) $(HANDOUT_REDIRECTION_SRC) $(SERVER):$(SERVER_DIR)$(HANDOUT_REDIRECTION_TGT_DIR)$(HANDOUT_REDIRECTION_TGT_HTML)
+spellcheck:
+	@echo "Words in $(SRCS) that are neither in a standard dictionary nor the previously accepted words in $(ACCEPTED_UNKNOWNS)":
+	-diff --new-line-format="" --unchanged-line-format="" <($(UNKNOWN_WORDS) $(SRCS) | sort -u) $(ACCEPTED_UNKNOWNS)
+	if test "$$?" != "0"; then echo Bad else echo $$?  fi
+
+acceptspellings:
+	@echo "Saving words not in dictionary to $(ACCEPTED_UNKNOWNS)."
+	@echo "You can delete any words that should not be accepted from there."
+	$(UNKNOWN_WORDS) $(SRCS) | sort -u > $(ACCEPTED_UNKNOWNS)
 
 clean:
 	-rm $(AUXS) $(LOGS) $(NAVS) $(OUTS) $(PDFS) $(SNMS) $(TOCS)

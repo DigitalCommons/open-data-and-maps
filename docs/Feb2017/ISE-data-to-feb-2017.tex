@@ -14,7 +14,7 @@
 \maketitle
 
 The Institute for Solidarity Economics has been working on Linked Open Data for the Solidarity Economy,
-producing an experimental dataset of UK co-ops, and an application to view the co-ops on a geographical map.
+producing an experimental data-set of UK co-ops, and an application to view the co-ops on a geographical map.
 The map also provides as way to browse educational material about the Linked Open Data.
 
 This document describes the work to date.
@@ -34,33 +34,80 @@ Platform Co-operatives (\url{https://2017.open.coop/}) conference in London, Feb
 Our aim is to support the Solidarity Economy movement through education, research, and finding opportunities for collaboration.
 What we mean by the Solidarity Economy is a grassroots movement that is building a fair and ecological alternative to Capitalism.
 
+
 \subsection*{Why data?}
+
 Data fuels the World Wide Web -- they are many examples of the power of data. 
 
-One if the goals of the Institute for Solidarity Economics is to make it easier to discover the initiatives that are part of the Solidarity Economy.
-An obvious thing to do is to put those initiatives on a geographic map.
-But the data descrining the initiatives must come before the map. A simple geographic may provides a view onto the data, and other simple views (like an alphabetic directory) also have their uses.
+One of the goals of the Institute for Solidarity Economics is to make it easier to discover the initiatives that are part of the Solidarity Economy,
+for example by putting those initiatives on a geographic map.
+A geographic map provides a view of the data. Other simple views (like an alphabetic directory) also have their uses.
+In any case, the data comes before any useful view of the data.
 
-We also can see a need for applications that do more than provide a view of SE initiatives -- applications that help the SE to operate.
-Of course, these to require data.
-It is becasue of this fundamental dependency on data that ISE decided to take a closer look at it.
+We can also see a need for applications that do more than provide a view of SE initiatives -- 
+applications that help the initiative to operate;
+applications that help initiatives to co-operate.
+These applications will also depend on data.
+Interoperability between applications is greatly improved by interoperability between the data used by those applications.
+It is because of this fundamental dependency on data that ISE decided to take a closer look at it.
+
 
 \subsection*{Social considerations}
+
 Data ownership is power. The social issues around this power need careful consideration.
 
 By publishing data about something, you are making claims about that thing, and the actual 'owners' of that thing may disagree with the claims you are making.
 This issue can be avoided if the 'owners' of the thing are able to publish their own data.
-So it is important that any technology used for publishing and accessing data allows the actual owner to publish their own data.
+So it is important that any technology used for publishing and accessing data allows the actual owner to choose to publish their own data.
 
-Because the publisher of data is the one who is making a claim about the things that their data describes,
-it is important that the technology chosen allows users of that data to see who is publishing the data, who is making these claims.
+Because the publisher of data is the one who is making a claim about the things described by their data,
+it is important that the technology chosen to publish data allows users of that data to see who is publishing the data, who is making these claims.
 For example, if ISE publishes data about initiatives within the Solidarity Economy, 
 then ISE is claiming that each if these initiatives satisfies ISE's view of what it means to be in the Solidarity Economy.
-Other people may have a slightly different view of which initiatives should be regards as \textit{in} or \textit{out} of the SE.
-It is therefore important that it is possible to identify \textit{who} is making the claims expressed in the data.
+Other organizations may have a slightly different view of which initiatives should be regards as \textit{in} or \textit{out} of the Solidarity Economy.
+So, it's important that it is possible to identify \textit{who} is making the claims expressed in the data.
+
+It is usually better to refer to someone else's data rather than to create your own version (a copy) of that data.
+If there are two versions of the same data, then any changes should be made to both, and this rarely happens in practice.
+The original owners of the data may be misrepresented by a copy of their data which does not contain the changes that they have made since the copy was made.
+Similarly, they may be misrepresented by changes made to the copy.
+So, we prefer links to data, rather than copies.
+
+How can we trust the data we use? How can we believe it to be true?
+Usually we depend on trusting the \textit{source} of information in order to believe in it.
+So, it's vital that we can determine the sources of the information,
+its \textit{provenance},
+particularly when we are looking at situations where data may have been gathered from many different sources.
+
+We are all familiar with the power wielded by the big corporations who dominate data.
+We want a solution that permits the data to be owned by the people whose resources are described by that data.
+They may choose to allow someone else to own it, but we want to give them that choice.
+
+To summarize:
+\begin{itemize}
+  \item Permit data to be distributed rather than centralized.
+  \item Allow data to be owned by the owner of the resource which it describes.
+  \item References to other people's data are better than copies of it.
+  \item The provenance of data should be traceable.  
+\end{itemize}
 
 \section*{What we did}
+The following engineering principles guided the path we took:
+  \begin{itemize}
+    \item Use existing best practice
+    \item Re-use existing software
+    \item Re-use existing data (link to it, don't copy it!)
+    \item Re-use existing data models
+    \item Open source
+      \begin{itemize}
+	\item Use open source software
+	\item ISE publishes work with open source licenses
+      \end{itemize}
+  \end{itemize}
+
 \subsection*{Research and Development}
+We decided that Linked Open Data was a good candidate for best practice in this field.
+By Linked Open Data, we mean the set of technologies and specifications \href{https://www.w3.org/standards/semanticweb/data}{described by W3C}, based on an original idea by Tim Berners-Lee to extend the World Wide Web (the ``Web of Documents'') to include a ``Web of Data''. 
 \subsection*{Map of UK co-ops}
 \subsection*{Linked Open Data}
 \subsection*{Links}
@@ -78,12 +125,12 @@ It is therefore important that it is possible to identify \textit{who} is making
     \tikzstyle{app node} = [rectangle, fill=red!20]
     \tikzstyle{label node} = [midway, auto]
     \tikzstyle{label text} = [align=left]
-    \node[obj node] (iseobj) {\underline{Links to other datasets} e.g. \\ {http://os.gov/postcode/SA335AJ} \\ {http://ch.gov/company/01113761}};
+    \node[obj node] (iseobj) {\underline{Links to other data-sets} e.g. \\ {http://os.gov/postcode/SA335AJ} \\ {http://ch.gov/company/01113761}};
     \node[label text] (datalabel) [left = of iseobj] {Example \\ data:};
     \node[extdata node] (osdata) [below = of iseobj ] {OS data};
     \node[data node] (isedata) [left = of osdata] {Our data};
     \node[extdata node] (chdata) [right = of osdata] {CH data};
-    \node[label text] (datasetlabel) at (isedata-|datalabel) {Datasets:};
+    \node[label text] (datasetlabel) at (isedata-|datalabel) {Data-sets:};
 
     \node[app node] (mapapp) [below left = of osdata] {Map};
     \node[app node] (nearestapp) [below right = of osdata] {Nearby};
