@@ -1,11 +1,18 @@
 \documentclass[11pt,twoside,a4paper]{article}
 
 \usepackage{graphicx}
+\usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{fullpage}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,shapes,backgrounds,positioning,shapes.multipart}
 \usepackage{textpos} 
+\hypersetup{% See http://www.tug.org/applications/hyperref/manual.html#x1-120003.8
+  colorlinks=true,
+  linkcolor=green,
+  urlcolor=blue,
+  linkbordercolor=red,
+}
 \title{Linked Open Data for the Solidarity Economy}
 \author{Matt Wallis, Institute for Solidarity Economics}
 %\date{\today}
@@ -21,7 +28,7 @@ This document describes the work to date.
 It is based on a presentation given at the Open:2017,
 Platform Co-operatives (\url{https://2017.open.coop/}) conference in London, February 17, 2017.
 
-\section*{Institute for Solidarity Economics}
+\section{Institute for Solidarity Economics}
   \begin{center}
     \includegraphics[height=2cm,width=2cm]{ise-logo.jpg}
 
@@ -35,7 +42,7 @@ Our aim is to support the Solidarity Economy movement through education, researc
 What we mean by the Solidarity Economy is a grassroots movement that is building a fair and ecological alternative to Capitalism.
 
 
-\subsection*{Why data?}
+\subsection{Why data?}
 
 Data fuels the World Wide Web -- they are many examples of the power of data. 
 
@@ -52,36 +59,40 @@ Interoperability between applications is greatly improved by interoperability be
 It is because of this fundamental dependency on data that ISE decided to take a closer look at it.
 
 
-\subsection*{Social considerations}
+\subsection{Social considerations}
 
 Data ownership is power. The social issues around this power need careful consideration.
 
+\subsubsection{Ownership of data}
 By publishing data about something, you are making claims about that thing, and the actual 'owners' of that thing may disagree with the claims you are making.
 This issue can be avoided if the 'owners' of the thing are able to publish their own data.
 So it is important that any technology used for publishing and accessing data allows the actual owner to choose to publish their own data.
 
+We are all familiar with the power wielded by the big corporations who dominate data.
+We want a solution that permits the data to be owned by the people whose resources are described by that data.
+They may choose to allow someone else to own it, but we want to give them that choice.
+
+\subsubsection{Truth -- who's making the claims}
 Because the publisher of data is the one who is making a claim about the things described by their data,
 it is important that the technology chosen to publish data allows users of that data to see who is publishing the data, who is making these claims.
 For example, if ISE publishes data about initiatives within the Solidarity Economy, 
-then ISE is claiming that each if these initiatives satisfies ISE's view of what it means to be in the Solidarity Economy.
+then ISE may be claiming that each of these initiatives satisfies ISE's view of what it means to be in the Solidarity Economy.
 Other organizations may have a slightly different view of which initiatives should be regards as \textit{in} or \textit{out} of the Solidarity Economy.
 So, it's important that it is possible to identify \textit{who} is making the claims expressed in the data.
 
+\subsubsection{Prefer links to copies}
 It is usually better to refer to someone else's data rather than to create your own version (a copy) of that data.
 If there are two versions of the same data, then any changes should be made to both, and this rarely happens in practice.
 The original owners of the data may be misrepresented by a copy of their data which does not contain the changes that they have made since the copy was made.
 Similarly, they may be misrepresented by changes made to the copy.
 So, we prefer links to data, rather than copies.
 
+\subsubsection{Trust and provenance}
 How can we trust the data we use? How can we believe it to be true?
 Usually we depend on trusting the \textit{source} of information in order to believe in it.
 So, it's vital that we can determine the sources of the information,
 its \textit{provenance},
 particularly when we are looking at situations where data may have been gathered from many different sources.
-
-We are all familiar with the power wielded by the big corporations who dominate data.
-We want a solution that permits the data to be owned by the people whose resources are described by that data.
-They may choose to allow someone else to own it, but we want to give them that choice.
 
 To summarize:
 \begin{itemize}
@@ -91,7 +102,7 @@ To summarize:
   \item The provenance of data should be traceable.  
 \end{itemize}
 
-\section*{What we did}
+\section{What we did}
 The following engineering principles guided the path we took:
   \begin{itemize}
     \item Use existing best practice
@@ -105,14 +116,45 @@ The following engineering principles guided the path we took:
       \end{itemize}
   \end{itemize}
 
-\subsection*{Research and Development}
-We decided that Linked Open Data was a good candidate for best practice in this field.
+\subsection{Research and Development}
+We decided that Linked Open Data (LOD) was a good candidate for best practice in this field.
 By Linked Open Data, we mean the set of technologies and specifications \href{https://www.w3.org/standards/semanticweb/data}{described by W3C}, based on an original idea by Tim Berners-Lee to extend the World Wide Web (the ``Web of Documents'') to include a ``Web of Data''. 
-\subsection*{Map of UK co-ops}
-\subsection*{Linked Open Data}
-\subsection*{Links}
-  \centering
-  %\begin{center}
+
+In order to understand LOD properly, we wanted to use it in a realistic situation: 
+To create and deploy a LOD dataset of a good size, the data describing initiatives within the Solidarity Economy,
+and to create a simple map application to display the initiatives described in the dataset. 
+This would exercise the creation, deployment and consumption of the data.
+
+The development work undertaken by ISE is available open source on GitHub:
+\url{https://github.com/p6data-coop/ise-linked-open-data}.
+
+\subsection{Co-ops UK data}
+
+Starting in 2015, Co-ops UK have been
+\href{https://www.uk.coop/economy2015/access-data}{publishing open data}
+about co-ops.
+This dataset provides information about over 10,000 co-ops and co-op outlets.
+It is available in Comma-Separated Value (CSV) format.
+CSV is a machine-readable format, which removes one of the obstacles to converting it to LOD.
+
+\subsection{ESSGLOBAL}
+
+To model the Co-ops UK as Linked Data,
+we wanted to re-use existing data models, if possible.
+To this end, we found the ESSGLOBAL Metadata Application Profile
+(also known the Dublin Core Application Profile for the Social and Solidarity Economy - DCAP-SSE).
+This work was undertaken by RIPESS Europe and is described in 
+\href{http://ripess.eu/wp-content/uploads/2014/07/ESSglobal_interop_guidelines.pdf}{this document}.
+
+During our work, we made a few corrections and updates to ESSGLOBAL.
+This will form the basis of new releases of ESSGLOBAL, and is stored in a GitHub repository:
+\url{https://github.com/essglobal-linked-open-data/map-sse}.
+
+\subsection{Map of UK co-ops}
+\subsection{Linked Open Data}
+\subsection{Links}
+  %\centering
+  \begin{center}
   %\begin{tikzpicture}[scale=.8, show background rectangle, node distance=1cm]
   %\begin{tikzpicture}[remember picture, show background rectangle, node distance=1cm]
   \begin{tikzpicture}[remember picture, node distance=1cm]
@@ -145,9 +187,17 @@ By Linked Open Data, we mean the set of technologies and specifications \href{ht
     \draw[<->] (nearestapp) -- (chdata) node[midway, right]{query};
   \end{tikzpicture}
     \begin{itemize}
-      \item<3-> Existing data: CH = Companies House
-      \item<2-> Existing data: OS = Ordnance Survey
+      \item Existing data: CH = Companies House
+      \item Existing data: OS = Ordnance Survey
     \end{itemize}
-\section*{Conclusions}
-\subsection*{Links to more on LOD}
+  \end{center}
+\section{Technical Details}
+    \subsection{RDF library}
+    \subsection{Geographic data}
+    \subsection{Virtuoso triple store}
+    \subsection{SPARQL quieries}
+    \subsection{purl.org}
+
+\section{Conclusions}
+\subsection{Links to more on LOD}
 \end{document}
