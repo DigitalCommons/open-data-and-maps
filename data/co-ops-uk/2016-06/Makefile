@@ -62,7 +62,7 @@ ifeq ($(edition),final)
   ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
   IDENTIFIER_PATH ?= experimental/
   # There is no max number of CSV rows:
-  MAX_CSV_ROWS := 
+  MAX_CSV_ROWS :=  100
 else ifeq ($(edition),test)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
