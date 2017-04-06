@@ -150,6 +150,48 @@ During our work, we made a few corrections and updates to ESSGLOBAL.
 This will form the basis of new releases of ESSGLOBAL, and is stored in a GitHub repository:
 \url{https://github.com/essglobal-linked-open-data/map-sse}.
 
+\subsection{LOD - Links}
+
+\subsubsection{Links to Ordnance Survey}
+
+We wanted to put the co-ops from the Co-ops UK dataset onto a map.
+However, the dataset does not provide the geographic location (e.g. latitude and longitude) of co-ops.
+But the dataset does provide postcodes, and Ordnance Survey publish Linked Open Data that provides the latitude and longitude (of the "centre"?) of each postcode.
+So this was an opportunity both to obtain the location needed to put things on a map, and also to experiment with links to other dataset from our Linked Open Data.
+
+Of course, using the location of the (centre of) the postcode is not as accurate as using the exact location of the co-op. 
+For an average UK postcode, all addresses are with about 200m of the centre.
+But postcodes vary greatly in size, much bigger in the countryside than than in built-up areas.
+If the exact location of a co-op is know, then this can be added to the Linked Open Data.
+The location based on the postcode should only be used when the exact location is unavailable.
+
+See \hyperref[sec:tech:os]{section \ref{sec:tech:os}} for technical details.
+
+\subsubsection{Links to Companies House}
+
+Some UK co-ops are registered with Companies House.
+For these co-ops, the Co-ops UK dataset provides the registered number.
+Companies House provides Linked Open Data for all companies, and you can make a link to the data for a particular company if you know the registered number of that company.
+
+In the spirit of experimentation, we decided to include these links to Companies House in the Linked Open Data for co-ops,
+and then to see how we could use the data held by Companies House that was now reachable through the link.
+We found that the LOD from Companies House provides a considerable amount of information including the ``line of business'' 
+(actually, the \href{https://en.wikipedia.org/wiki/Standard_Industrial_Classification}{SIC Code})
+of each registered organization.
+
+See \hyperref[sec:tech:ch]{section \ref{sec:tech:ch}} for technical details.
+
+\subsubsection{The power of links to other datasets}
+
+By combining the information from Ordnance Survey and Companies House, 
+we can get answers to questions such as: 
+for a given co-op, what are the other companies in the same line of business as this co-op, which are also geographically close to that co-op?
+Of course, there are many other questions that can be answered,
+but we concentrated on this one as an illustrative example of the power of linking to other LOD datasets.
+
+See \hyperref[sec:tech:nearby]{section \ref{sec:tech:nearby}} for technical details.
+
+asdas
 \subsection{Map of UK co-ops}
 \subsection{Linked Open Data}
 \subsection{Links}
@@ -193,11 +235,30 @@ This will form the basis of new releases of ESSGLOBAL, and is stored in a GitHub
   \end{center}
 \section{Technical Details}
     \subsection{RDF library}
+    \subsection{URIs}
+    \subsubsection{Real world objects and documents about them}
+    TODO: say something about the use of id and doc and content negotiation.
+    Maybe refer to \href{https://data.gov.uk/resources/uris}{Creating URIs for UK gov data}
+    \subsubsection{Content negotiation}
+    \subsubsection{purl}
+    TODO: purl.org, Persistence.
+    \subsubsection{Example: dereferencing a URI}
+    TODO: Walk through purl and content negotiation
     \subsection{Geographic data}
+    \label{sec:tech:os}
+    \subsection{Links to Companies House}
+    \label{sec:tech:ch}
     \subsection{Virtuoso triple store}
-    \subsection{SPARQL quieries}
+    \subsection{SPARQL queries}
+    \subsubsection{Querying the co-ops dataset}
+    \subsubsection{Finding similar companies nearby}
+    \label{sec:tech:nearby}
     \subsection{purl.org}
 
 \section{Conclusions}
 \subsection{Links to more on LOD}
+    \begin{itemize}
+      \item \href{https://www.w3.org/TR/ld-bp/}{W3C: Best Practices for Publishing Linked Data}
+      \item \href{https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/60975/designing-URI-sets-uk-public-sector.pdf}{Designing URI Sets for the UK Public Sector}
+    \end{itemize}
 \end{document}

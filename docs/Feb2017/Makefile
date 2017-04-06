@@ -14,17 +14,18 @@ all: $(ALL_PDF)
 $(ALL_PDF): map-app-popup-screenshot.png 5-star-steps.png ise-logo.jpg
 
 UNKNOWN_WORDS := hunspell -l -t -i utf-8
-ACCEPTED_UNKNOWNS := spellcheck.out
+ACCEPTED_UNKNOWNS := accepted-spellings.sorted.txt
 
 spellcheck:
 	@echo "Words in $(SRCS) that are neither in a standard dictionary nor the previously accepted words in $(ACCEPTED_UNKNOWNS)":
-	-diff --new-line-format="" --unchanged-line-format="" <($(UNKNOWN_WORDS) $(SRCS) | sort -u) $(ACCEPTED_UNKNOWNS)
-	if test "$$?" != "0"; then echo Bad else echo $$?  fi
+	-@diff --new-line-format="" --unchanged-line-format="" <($(UNKNOWN_WORDS) $(SRCS) | sort -u) $(ACCEPTED_UNKNOWNS)
 
+# acceptspellings will merge the new unknown words with the existing ones (from ACCEPTED_UNKNOWNS) and 
+# create a new version of ACCEPTED_UNKNOWNS.
 acceptspellings:
 	@echo "Saving words not in dictionary to $(ACCEPTED_UNKNOWNS)."
 	@echo "You can delete any words that should not be accepted from there."
-	$(UNKNOWN_WORDS) $(SRCS) | sort -u > $(ACCEPTED_UNKNOWNS)
+	$(UNKNOWN_WORDS) $(SRCS) | cat - $(ACCEPTED_UNKNOWNS) | sort -u > $(ACCEPTED_UNKNOWNS)
 
 clean:
 	-rm $(AUXS) $(LOGS) $(NAVS) $(OUTS) $(PDFS) $(SNMS) $(TOCS)
