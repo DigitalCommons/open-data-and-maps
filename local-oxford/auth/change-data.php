@@ -1,6 +1,6 @@
 <?php  
 
-session_save_path('C:\wamp64\cgi-bin\tmp');
+session_save_path('/home/pareccoc/cgi-bin/tmp');
 session_start();
 session_regenerate_id();
 
