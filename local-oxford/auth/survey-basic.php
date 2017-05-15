@@ -12,9 +12,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
         <meta charset="utf-8">
    </head>
-    <body>
+    <body class="main" ><div class="content">
+
     <h2>Welcome to Oxford SE Data</h2>
     <p>We currently don't have any information on your initiative, please answer the following questions, it's ok to skip some.</p>
     <p>There are just three sections - 1.Basic Info - 2.Initiative Description - 3.Extra Bits</p>
@@ -36,5 +38,5 @@
     </form>
     
 
-    </body>
+    </div></body>
 </html>

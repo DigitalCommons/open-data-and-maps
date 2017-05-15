@@ -41,6 +41,7 @@ if( isset($_POST['user']) && isset($_POST['password']) )
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <meta charset="utf-8">
         <title>Start</title>
     </head>

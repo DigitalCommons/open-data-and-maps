@@ -2,12 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <title>Get New Password</title>
-        
-        <style type="text/css">
-        	
-        </style>
+
     </head>
     <body>
 
@@ -18,11 +15,15 @@
 		include('db_login.php');
 						
 		if (!isset($_POST['email'])){
-			echo '<form action="forgot.php" method="POST">
+			echo '
+				<div class="centered">
+				<form action="forgot.php" method="POST">
   				<label >Please write your username/email:<br/></label>
     			<input type="text" name="email"/><br/>
-   				<input type="submit" value="Submit"/><br/><br/>
-    			</form>';
+   				<input class="button" type="submit" value="Submit"/><br/><br/>
+    			</form>
+				<a class="button" href="login.php">Back to Login</a>
+    			</div>';
 		}
 		else{
 			//check legitimacy
@@ -55,7 +56,7 @@
 		};
 
 		?>
-  			<a href="login.php">Back to Login</a>
+  			
   		 
     </body>
 </html> 

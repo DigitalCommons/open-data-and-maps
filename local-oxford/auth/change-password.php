@@ -14,12 +14,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <title>Change Password</title>
-        
-        <style type="text/css">
-        	
-        </style>
     </head>
     <body>
 

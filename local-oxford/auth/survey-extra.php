@@ -35,9 +35,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <meta charset="utf-8">
    </head>
-    <body>
+    <body class="main" ><div class="content">
     <h3>3/3. Extra Info</h3>
         <form action="survey-finish.php" method="POST" id="form">
     <label >If your initiative has members, how many?<br/></label>
@@ -46,13 +47,13 @@
     <select name="volunteervac">
         <option selected disabled>Choose</option>
         <option value="yes">Yes</option>
-        <option value="no">No<option>
+        <option value="no">No</option>
     </select><br/>
     <label >Do you have any job vacancies?:<br/></label>
     <select name="jobvac">
         <option selected disabled>Choose</option>
         <option value="yes">Yes</option>
-        <option value="no">No<option>
+        <option value="no">No</option>
     </select><br/>
     <label >In which year was your initiative founded?:<br/></label>
     <input type="text" name="foundingyear"><br/>
@@ -66,5 +67,5 @@
     </form>
     
 
-    </body>
+    </div></body>
 </html>
