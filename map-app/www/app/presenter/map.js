@@ -94,7 +94,8 @@ define(["app/eventbus"], function(eventbus) {
 		}
 
 		var popuptext = "<h4>" + initiative.name +  "</h4>" + popupRows.join("<br>");
-		var options = {popuptext: popuptext, hovertext: initiative.name, cluster: true, markerColor: markerColor};
+		// See http://fontawesome.io/icons/ for a list of icon names (where we're using 'home'), below:
+		var options = {icon: 'home', popuptext: popuptext, hovertext: initiative.name, cluster: true, markerColor: markerColor};
 		view.addMarker(latlng, options, eventHandlers);
 	}
 	function onInitiativeLoadComplete() {
