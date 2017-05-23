@@ -23,9 +23,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <meta charset="utf-8">
    </head>
-    <body>
+    <body class="main" ><div class="content">
     <h3>2/3. Initiative Description</h3>
     <form action="survey-extra.php" method="POST" id="form">
     <label >How would you describe your initiative in one sentence:<br/></label>
@@ -93,5 +94,5 @@
     </form>
     
 
-    </body>
+    </div></body>
 </html>
