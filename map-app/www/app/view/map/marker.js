@@ -1,4 +1,4 @@
-define(["leaflet", "leaflet.markercluster"], function(leaflet, cluster) {
+define(["leaflet", "leaflet.markercluster", "leafletAwesomeMarkers"], function(leaflet, cluster, awesomeMarkers) {
 	"use strict";
 
 	var group = null;
