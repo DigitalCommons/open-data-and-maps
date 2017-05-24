@@ -1,4 +1,4 @@
-define(["leaflet", "leafletAwesomeMarkers", "leaflet.markercluster"], function(leaflet, awesomeMarkers, cluster) {
+define(["leaflet", "leaflet.markercluster"], function(leaflet, cluster) {
 	"use strict";
 
 	var group = null;
@@ -19,6 +19,9 @@ define(["leaflet", "leafletAwesomeMarkers", "leaflet.markercluster"], function(l
 
 		// options argument overrides our default options:
 		var opts = Object.assign(dfltOptions, options);
+
+		// Note that the dependency between AwesomeMarkers and leaflet is expressed as a 
+		// requireJS shim config in our main requireJS configuration.
 		var icon = leaflet.AwesomeMarkers.icon(opts);
 		this.marker = leaflet.marker(latlng, {icon: icon, title: hovertext});
 		// maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
