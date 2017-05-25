@@ -17,7 +17,7 @@
         <link rel="stylesheet" type="text/css" href="styles.css">
         <title>Change Password</title>
     </head>
-    <body>
+    <body><div class="centered">
 
 <?php	
 
@@ -29,7 +29,7 @@
 			echo '<form action="change-password.php" method="POST">
   				<label >Please write your new password and double-check it:<br/></label>
     			<input type="text" name="password"/><br/>
-   				<input type="submit" value="Submit"/><br/><br/>
+   				<input class="button" type="submit" value="Submit"/><br/><br/>
     			</form>';
 		}
 		else{
@@ -40,17 +40,12 @@
 			if ($stmt = mysqli_prepare($conn, 'UPDATE users SET password = ? WHERE email = ?;')) {
    				mysqli_stmt_bind_param($stmt, "ss", $hash, $user);
     			mysqli_stmt_execute($stmt); };
-				//send unhashed version to email with login link
-    		/*$subject = "Data Registration";
-			$msg = "Hi ".$user.",\nYou've requested a new password, please login (http://link.com) using your email and the following password and then change it to something more memorable:\n".$random;
- 			$headers = 'From: dan@solidarityeconomics.org' . "\r\n" .'X-Mailer: PHP/' . phpversion();
- 			mail($user,$subject,$msg,$headers);*/
-				//echo message to check emails
+
  			echo '<p>Please go and <a href="login.php">login</a> with your new password.</p>';
 			};
 		
 
 		?>
   		 
-    </body>
+    </div></body>
 </html> 

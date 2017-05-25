@@ -47,7 +47,7 @@
     	mysqli_stmt_execute($stmt); };
 
 		//Send an email
-		$subject = "Data Registration";
+		$subject = "Oxford Solidarity Economy Mapping";
 		$msg = "Hi ".$user.",\nWelcome to the Oxford Map, to set up your password click this link, Thanks Very Much!\nhttp://internal.parecco.co.uk/oxford-data/verify.php?id=".$random;
  		$headers = 'From: dan@solidarityeconomics.org' . "\r\n" .
     		'X-Mailer: PHP/' . phpversion();

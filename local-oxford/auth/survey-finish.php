@@ -13,8 +13,6 @@
         
         //Process data to be uploaded
         isset($_POST['members']) ? $members = $_POST['members'] : $members = '';
-        isset($_POST['volunteervac']) ? $volunteervac = $_POST['volunteervac'] : $volunteervac = '';
-        isset($_POST['jobvac']) ? $jobvac = $_POST['jobvac'] : $jobvac = '';
         isset($_POST['foundingyear']) ? $foundingyear = $_POST['foundingyear'] : $foundingyear = '';
         isset($_POST['legal']) ? $legal = $_POST['legal'] : $legal = '';
         isset($_POST['registrar']) ? $registrar = $_POST['registrar'] : $registrar = '';
@@ -23,7 +21,7 @@
 
 
         //Upload Data
-        $addinfo = 'UPDATE data SET members = '.$members.', volunteervac = "'.$volunteervac.'", jobvac = "'.$jobvac.'", foundingyear = '.$foundingyear.', legal = "'.$legal.'", legal = "'.$legal.'", registrar = "'.$registrar.'", registerednum = "'.$registerednum.'" WHERE email = "'.$user.'";';
+        $addinfo = 'UPDATE data SET members = '.$members.',  foundingyear = '.$foundingyear.', legal = "'.$legal.'", registrar = "'.$registrar.'", registerednum = "'.$registerednum.'" WHERE email = "'.$user.'";';
         $result = mysqli_query( $conn, $addinfo ); //needs securing
 
         header("Location: index.php");

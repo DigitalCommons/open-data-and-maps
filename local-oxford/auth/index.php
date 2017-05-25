@@ -29,7 +29,8 @@
         <link rel="stylesheet" type="text/css" href="styles.css">
    </head>
     <body class="main" ><div class="content">
-    <h2>Welcome to the Member's Area</h2>
+    <h2>Your Data</h2>
+    <a class="button" href="http://solidarityeconomics.org">Go to the Main Site</a>
     <a class="button" href="change-password.php">Click to Change Password</a>
     <p>View and change your data below</p>
     <form action="change-data.php" method="POST" id="form"></form>
@@ -104,7 +105,7 @@
         </tr>
         <tr>
             <td>Provides (direct needs)</td>
-            <td><?php echo $row[18].'<br/>'.$row[19].'<br/>'.$row[20]; ?></td>
+            <td><?php echo $row[14].'<br/>'.$row[15].'<br/>'.$row[16]; ?></td>
             <td><label >Which of these does your initiative directly provide (choose up to 3):<br/><br/></label>
     <input type="checkbox" name="provides[]" form="form" value="food+drink"><label>Food and Drink</label><br/>
     <input type="checkbox" name="provides[]" form="form" value="water"><label>Drinking Water</label><br/>
@@ -125,30 +126,8 @@
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
         <tr>
-            <td>Topics (indirect work)</td>
-            <td><?php echo $row[21].'<br/>'.$row[22].'<br/>'.$row[23]; ?></td>
-            <td><label >Which of these does your initiative indirectly work on (choose up to 3):<br/><br/></label>
-    <input type="checkbox" name="topic[]" form="form" value="food+drink"><label>Food and Drink</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="water"><label>Drinking Water</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="land"><label>Land</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="mobility"><label>Mobility</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="health"><label>Health</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="culture"><label>Culture</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="safety"><label>Safety</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="housing"><label>Housing</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="spaces"><label>Spaces</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="objects_of_utility"><label>Objects of Utility</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="clothes"><label>Clothes</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="learning_opportunities"><label>Learning Opportunities</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="energy"><label>Energy/Electricity/Heating</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="community"><label>Community</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="participation"><label>Participation</label><br/>
-    <input type="checkbox" name="topic[]" form="form" value="spirituality"><label>Spirituality</label></td>
-            <td><input type="submit" value="Submit" form="form"/></td>
-        </tr>
-        <tr>
             <td>Identity</td>
-            <td><?php echo $row[24].'<br/>'.$row[25].'<br/>'.$row[26]; ?></td>
+            <td><?php echo $row[17].'<br/>'.$row[18].'<br/>'.$row[19]; ?></td>
             <td><label >Does your initiative identify with any of the following networks or principles? (choose up to 3):<br/><br/></label>
     <input type="checkbox" name="identity[]" form="form" value="solidarity_economy"><label>Solidarity Economy</label><br/>
     <input type="checkbox" name="identity[]" form="form" value="transition_initiative"><label>Transition Initiative</label><br/>
@@ -166,7 +145,7 @@
         </tr>
         <tr>
             <td>Interaction</td>
-            <td><?php echo $row[27].'<br/>'.$row[28].'<br/>'.$row[29]; ?></td>
+            <td><?php echo $row[20].'<br/>'.$row[21].'<br/>'.$row[22]; ?></td>
             <td><label >Does your organisation fulfill needs in ways other than standard trade? (choose up to 3):<br/><br/></label>
     <input type="checkbox" name="interaction[]" form="form" value="bartering"><label>Bartering</label><br/>
     <input type="checkbox" name="interaction[]" form="form" value="sharing"><label>Sharing</label><br/>
@@ -186,30 +165,8 @@
 
         <tr>
             <td>How many members does your initiative have?</td>
-            <td><?php echo $row[17]; ?></td>
+            <td><?php echo $row[13]; ?></td>
             <td><input type="text" form="form" name="members"/></td>
-            <td><input type="submit" value="Submit" form="form"/></td>
-        </tr>
-
-        <tr>
-            <td>Do you have any volunteer vacancies?</td>
-            <td><?php echo $row[15]; ?></td>
-            <td><select form="form" name="volunteervac">
-                    <option selected disabled>Choose</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                 </select></td>
-            <td><input type="submit" value="Submit" form="form"/></td>
-        </tr>
-
-        <tr>
-            <td>Do you have any job vacancies?</td>
-            <td><?php echo $row[16]; ?></td>
-            <td><select form="form" name="jobvac">
-                    <option selected disabled>Choose</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                </select></td>
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
 
