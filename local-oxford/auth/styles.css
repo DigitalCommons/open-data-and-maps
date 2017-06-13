@@ -189,3 +189,60 @@ textarea {
  	margin-top: -300px;
 	margin-left: -200px;
 }
+
+.checkboxes {
+    columns: 4 8em;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+}
+
+li {
+    padding: 5px; 
+}
+
+.fa{
+  color: #fb8b24;
+}
+
+.fa-icon{ color: #ff8b24;}
+
+#gps-description{
+  width:700px;
+  padding:50px;
+  margin:auto;
+  border: 2px solid #fb8b24;
+}
+
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    cursor:help;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: #fb8b24;
+    color: black;
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    left: 105%;
+    width: 20em;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

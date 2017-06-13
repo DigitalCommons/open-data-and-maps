@@ -16,15 +16,34 @@
         $phone = $_POST['phone'];
         $street = $_POST['street'];
         $postcode = $_POST['postcode'];
+        $latitude = $_POST['latitude'];
+        $longitude = $_POST['longitude'];
         //Change this it's stupid
-        $addinfo = 'INSERT INTO data VALUES("'.$user.'","'.$contact.'","'.$street.'","'.$postcode.'","'.$website.'","'.$name.'", "'.$phone.'",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);';
+        $addinfo = 'INSERT INTO data (email,contact,street,postcode,website,name,phone,latitude,longitude) VALUES("'.$user.'","'.$contact.'","'.$street.'","'.$postcode.'","'.$website.'","'.$name.'", "'.$phone.'", "'.$latitude.'", "'.$longitude.'");';
         $result = mysqli_query( $conn, $addinfo );
+
+        $query_activities = "SELECT label, definition FROM fields WHERE type = 'Activities';"; 
+        $result1 = mysqli_query( $conn, $query_activities ); //needs securing
+        $activities = mysqli_fetch_all($result1); //All these arrays take the form [[label1,def1],[label2,def2]]
+
+        $query_qual = "SELECT label, definition FROM fields WHERE type = 'Qualifiers';"; 
+        $result2 = mysqli_query( $conn, $query_qual ); //needs securing
+        $qualifiers = mysqli_fetch_all($result2);
+
+        $query_lab = "SELECT label, definition FROM fields WHERE type = 'Type of Labour';"; 
+        $result3 = mysqli_query( $conn, $query_lab ); //needs securing
+        $labour = mysqli_fetch_all($result3);
+
+        $query_icons = "SELECT label, definition FROM fields WHERE type = 'Icon';"; 
+        $result5 = mysqli_query( $conn, $query_icons ); //needs securing
+        $icons = mysqli_fetch_all($result5);
 ?>	
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="https://use.fontawesome.com/76c1f7b47f.js"></script>
         <meta charset="utf-8">
    </head>
     <body class="main" ><div class="content">
@@ -34,46 +53,37 @@
     <input type="text" name="sentence"/><br/><br/>
     <label >If you would like to give a longer description please do so here:<br/></label>
     <textarea rows="10" cols="50" name="description"></textarea><br/><br/>
-    <label >Which of these does your initiative directly provide (choose up to 3):<br/></label>
-    <input type="checkbox" name="provides[]" value="food+drink"><label>Food and Drink</label><br/>
-    <input type="checkbox" name="provides[]" value="water"><label>Drinking Water</label><br/>
-    <input type="checkbox" name="provides[]" value="land"><label>Land</label><br/>
-    <input type="checkbox" name="provides[]" value="mobility"><label>Mobility</label><br/>
-    <input type="checkbox" name="provides[]" value="health"><label>Health</label><br/>
-    <input type="checkbox" name="provides[]" value="culture"><label>Culture</label><br/>
-    <input type="checkbox" name="provides[]" value="safety"><label>Safety</label><br/>
-    <input type="checkbox" name="provides[]" value="housing"><label>Housing</label><br/>
-    <input type="checkbox" name="provides[]" value="spaces"><label>Spaces</label><br/>
-    <input type="checkbox" name="provides[]" value="objects_of_utility"><label>Objects of Utility</label><br/>
-    <input type="checkbox" name="provides[]" value="clothes"><label>Clothes</label><br/>
-    <input type="checkbox" name="provides[]" value="learning_opportunities"><label>Learning Opportunities</label><br/>
-    <input type="checkbox" name="provides[]" value="energy"><label>Energy/Electricity/Heating</label><br/>
-    <input type="checkbox" name="provides[]" value="community"><label>Community</label><br/>
-    <input type="checkbox" name="provides[]" value="participation"><label>Participation</label><br/>
-    <input type="checkbox" name="provides[]" value="spirituality"><label>Spirituality</label><br/><br/>
-    <label >Does your initiative identify with any of the following networks or principles? (choose up to 3):<br/></label>
-    <input type="checkbox" name="identity[]" value="solidarity_economy"><label>Solidarity Economy</label><br/>
-    <input type="checkbox" name="identity[]" value="transition_initiative"><label>Transition Initiative</label><br/>
-    <input type="checkbox" name="identity[]" value="permaculture"><label>Permaculture</label><br/>
-    <input type="checkbox" name="identity[]" value="demonetized_economy"><label>Demonetized Economy</label><br/>
-    <input type="checkbox" name="identity[]" value="community_based_currencies"><label>Community Based Currencies</label><br/>
-    <input type="checkbox" name="identity[]" value="commons"><label>Commons</label><br/>
-    <input type="checkbox" name="identity[]" value="economy_for_the_common_good"><label>Economy for the Common Good</label><br/>
-    <input type="checkbox" name="identity[]" value="collaborative_economy"><label>Collaborative Economy</label><br/>
-    <input type="checkbox" name="identity[]" value="ecovillage"><label>Ecovillage</label><br/>
-    <input type="checkbox" name="identity[]" value="degrowth"><label>Degrowth</label><br/>
-    <input type="checkbox" name="identity[]" value="subsistence_economy"><label>Subsistence Economy</label><br/>
-    <input type="checkbox" name="identity[]" value="p2p_economy"><label>P2P Economy</label><br/><br/>
-    <label >Does your organisation fulfill needs in ways other than standard trade? (choose up to 3):<br/></label>
-    <input type="checkbox" name="interaction[]" value="bartering"><label>Bartering</label><br/>
-    <input type="checkbox" name="interaction[]" value="sharing"><label>Sharing</label><br/>
-    <input type="checkbox" name="interaction[]" value="lending"><label>Lending</label><br/>
-    <input type="checkbox" name="interaction[]" value="renting"><label>Renting</label><br/>
-    <input type="checkbox" name="interaction[]" value="gifting"><label>Gifting</label><br/>
-    <input type="checkbox" name="interaction[]" value="rebuying_reselling"><label>Second Hand/Selling Used Goods</label><br/>
-    <input type="checkbox" name="interaction[]" value="cousing"><label>Co-using</label><br/>
-    <input type="checkbox" name="interaction[]" value="diy_and_dit"><label>DIY - Do it Yourself and Together</label><br/>
-    <input type="checkbox" name="interaction[]" value="buying_and_selling"><label>Buy & Sell</label><br/><br/>
+    <label >Pick an icon for the Map which best represents you:<br/></label>
+        <ul class="checkboxes">
+            <?php 
+                foreach($icons as $array){
+                    echo '<li><input type="radio" name="icon" value="'.$array[0].'" /><i class="fa '.$array[0].' fa-lg"></i></li>';
+                };
+            ?>
+                </ul>
+    <label >Does your organisation work in any of the following sectors? (choose up to 3):<br/></label>
+
+            <?php 
+                foreach($activities as $array){
+                    echo '<input type="checkbox" name="provides[]" form="form" value="'.$array[0].'"><label>'.$array[0].'</label><br/>';
+                };
+            ?>
+
+    <br/>
+    <label >Does your initiative identify with any of the following principles? (choose up to 3):<br/></label>
+            <?php 
+                foreach($qualifiers as $array){
+                    echo '<input type="checkbox" name="identity[]" form="form" value="'.$array[0].'"><label class="tooltip">'.$array[0].'<span class="tooltiptext">'.$array[1].'</span></label><br/>';
+                };
+            ?>
+    <br/>
+    <label >What kinds of labour does your organisation use? (choose up to 3):<br/></label>
+            <?php 
+                foreach($labour as $array){
+                    echo '<input type="checkbox" name="interaction[]" form="form" value="'.$array[0].'"><label>'.$array[0].'</label><br/>';
+                };
+            ?>
+    <br/>
     <input class="submit" type="submit" value="Submit"/><br/><br/>
     </form>
     <h3>Progress:</h3>

@@ -19,9 +19,8 @@
         isset($_POST['registerednum']) ? $registerednum = $_POST['registerednum'] : $registerednum  = '';
 
 
-
         //Upload Data
-        $addinfo = 'UPDATE data SET members = '.$members.',  foundingyear = '.$foundingyear.', legal = "'.$legal.'", registrar = "'.$registrar.'", registerednum = "'.$registerednum.'" WHERE email = "'.$user.'";';
+        $addinfo = 'UPDATE data SET  members = "'.$members.'",  foundingyear = "'.$foundingyear.'", legal = "'.$legal.'", registrar = "'.$registrar.'", registerednum = "'.$registerednum.'" WHERE email = "'.$user.'";';
         $result = mysqli_query( $conn, $addinfo ); //needs securing
 
         header("Location: index.php");

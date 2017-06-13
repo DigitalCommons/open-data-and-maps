@@ -18,6 +18,25 @@
         };
         $row = mysqli_fetch_row($result);
 
+        $query_activities = "SELECT label, definition FROM fields WHERE type = 'Activities';"; 
+        $result1 = mysqli_query( $conn, $query_activities ); //needs securing
+        $activities = mysqli_fetch_all($result1); //All these arrays take the form [[label1,def1],[label2,def2]]
+
+        $query_qual = "SELECT label, definition FROM fields WHERE type = 'Qualifiers';"; 
+        $result2 = mysqli_query( $conn, $query_qual ); //needs securing
+        $qualifiers = mysqli_fetch_all($result2);
+
+        $query_lab = "SELECT label, definition FROM fields WHERE type = 'Type of Labour';"; 
+        $result3 = mysqli_query( $conn, $query_lab ); //needs securing
+        $labour = mysqli_fetch_all($result3);
+
+        $query_leg = "SELECT label, definition FROM fields WHERE type = 'Legal Form';"; 
+        $result4 = mysqli_query( $conn, $query_leg ); //needs securing
+        $legal = mysqli_fetch_all($result4);
+
+        $query_icons = "SELECT label, definition FROM fields WHERE type = 'Icon';"; 
+        $result5 = mysqli_query( $conn, $query_icons ); //needs securing
+        $icons = mysqli_fetch_all($result5);
  		
 ?>	
 
@@ -26,13 +45,13 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"/>
         <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="https://use.fontawesome.com/76c1f7b47f.js"></script>
    </head>
     <body class="main" ><div class="content">
-    <h2>Your Data</h2>
-    <a class="button" href="http://solidarityeconomics.org">Go to the Main Site</a>
-    <a class="button" href="change-password.php">Click to Change Password</a>
-    <p>View and change your data below</p>
+    <h2>Your Information</h2>
+    <p>View and change your information below</p>
     <form action="change-data.php" method="POST" id="form"></form>
     <table>
         <tr>
@@ -48,6 +67,14 @@
             <td><?php echo $row[0]; ?></td>
             <td></td>
             <td></td>
+        </tr>
+        <tr>
+            <td>Your Map Location</td>
+            <td><p>Latitude: <?php echo round($row[24],2); ?></p><p>Longitude: <?php echo round($row[25],2); ?></p></td>
+            <td><p>Click your location, then submit</p><div id="map" style="height: 400px; margin:auto;"></div><p>Latitude: <span id="myLat"></span></p><p>Longitude: <span id="myLng"></span></p>
+            <input type="hidden" id="lat" form="form" value="" name="latitude" />
+            <input type="hidden" id="lng" form="form" value="" name="longitude" /></td>
+            <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
         
         <tr>
@@ -90,7 +117,19 @@
         </tr>    
         <tr><th colspan="4">Initiative Description</th>
         </tr>
-
+        <tr>
+            <td>Pick a Map Icon</td>
+            <td><i class= <?php echo '"fa '.$row[23].' fa-2x"'; ?> ></i></td>
+            <td>
+                <ul class="checkboxes">
+                <?php 
+                foreach($icons as $array){
+                    echo '<li><input type="radio" form="form" name="icon" value="'.$array[0].'" /><i class="fa '.$array[0].' fa-2x"></i></li>';
+                };
+            ?>
+                </ul></td>
+            <td><input type="submit" value="Submit" form="form"/></td>
+        </tr>
         <tr>
             <td>Sentence Description</td>
             <td><?php echo $row[7]; ?></td>
@@ -106,56 +145,37 @@
         <tr>
             <td>Provides (direct needs)</td>
             <td><?php echo $row[14].'<br/>'.$row[15].'<br/>'.$row[16]; ?></td>
-            <td><label >Which of these does your initiative directly provide (choose up to 3):<br/><br/></label>
-    <input type="checkbox" name="provides[]" form="form" value="food+drink"><label>Food and Drink</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="water"><label>Drinking Water</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="land"><label>Land</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="mobility"><label>Mobility</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="health"><label>Health</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="culture"><label>Culture</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="safety"><label>Safety</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="housing"><label>Housing</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="spaces"><label>Spaces</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="objects_of_utility"><label>Objects of Utility</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="clothes"><label>Clothes</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="learning_opportunities"><label>Learning Opportunities</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="energy"><label>Energy/Electricity/Heating</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="community"><label>Community</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="participation"><label>Participation</label><br/>
-    <input type="checkbox" name="provides[]" form="form" value="spirituality"><label>Spirituality</label></td>
+            <td><label >Does your organisation work in any of the following sectors? (choose up to 3):<br/><br/></label>
+            <?php 
+                foreach($activities as $array){
+                    echo '<input type="checkbox" name="provides[]" form="form" value="'.$array[0].'"><label>'.$array[0].'</label><br/>';
+                };
+            ?>
+        </td>
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
         <tr>
             <td>Identity</td>
             <td><?php echo $row[17].'<br/>'.$row[18].'<br/>'.$row[19]; ?></td>
-            <td><label >Does your initiative identify with any of the following networks or principles? (choose up to 3):<br/><br/></label>
-    <input type="checkbox" name="identity[]" form="form" value="solidarity_economy"><label>Solidarity Economy</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="transition_initiative"><label>Transition Initiative</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="permaculture"><label>Permaculture</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="demonetized_economy"><label>Demonetized Economy</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="community_based_currencies"><label>Community Based Currencies</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="commons"><label>Commons</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="economy_for_the_common_good"><label>Economy for the Common Good</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="collaborative_economy"><label>Collaborative Economy</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="ecovillage"><label>Ecovillage</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="degrowth"><label>Degrowth</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="subsistence_economy"><label>Subsistence Economy</label><br/>
-    <input type="checkbox" name="identity[]" form="form" value="p2p_economy"><label>P2P Economy</label></td>
+            <td><label >Does your initiative identify with any of the following principles? (choose up to 3):<br/><br/></label>
+            <?php 
+                foreach($qualifiers as $array){
+                    echo '<input type="checkbox" name="identity[]" form="form" value="'.$array[0].'"><label class="tooltip">'.$array[0].'<span class="tooltiptext">'.$array[1].'</span></label><br/>';
+                };
+            ?>
+            </td>
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
         <tr>
             <td>Interaction</td>
             <td><?php echo $row[20].'<br/>'.$row[21].'<br/>'.$row[22]; ?></td>
-            <td><label >Does your organisation fulfill needs in ways other than standard trade? (choose up to 3):<br/><br/></label>
-    <input type="checkbox" name="interaction[]" form="form" value="bartering"><label>Bartering</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="sharing"><label>Sharing</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="lending"><label>Lending</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="renting"><label>Renting</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="gifting"><label>Gifting</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="rebuying_reselling"><label>Second Hand/Selling Used Goods</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="cousing"><label>Co-using</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="diy_and_dit"><label>DIY - Do it Yourself and Together</label><br/>
-    <input type="checkbox" name="interaction[]" form="form" value="buying_and_selling"><label>Buy & Sell</label></td>
+            <td><label >What kinds of labour does your organisation use? (choose  up to 3):<br/><br/></label>
+            <?php 
+                foreach($labour as $array){
+                    echo '<input type="checkbox" name="interaction[]" form="form" value="'.$array[0].'"><label>'.$array[0].'</label><br/>';
+                };
+            ?>
+        </td>
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
 
@@ -180,7 +200,13 @@
         <tr>
             <td>Which legal form does you initiative have?</td>
             <td><?php echo $row[9]; ?></td>
-            <td><input type="text" form="form" name="legal"></td>
+            <td><select name="legal" form="form"><option selected disabled>Choose</option>
+                <?php 
+                foreach($legal as $array){
+                    echo '<option value="'.$array[0].'">'.$array[0].'</option>';
+                };
+                ?>
+            </select></td>
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
 
@@ -200,11 +226,60 @@
 
     </table>
 
+    <a class="button" href="http://solidarityeconomics.org">Go to the Main Site</a>
+    <a class="button" href="change-password.php">Click to Change Password</a>
 
 
 
+    </div>
 
-    </div></body>
+<script
+        src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script>
+        var map = L.map('map').setView([51.75, -1.25], 12);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+       <?php if($row[24]!=0){
+
+        echo "L.marker([$row[24],$row[25]],
+                {
+                icon: L.divIcon({
+        className: \"fa-icon\",
+        // html here defines what goes in the div created for each marker
+        html: '<i class=\"fa fa-user fa-2x\"></i>',
+        // and the marker width and height
+        iconSize: [40, 40]})
+}).addTo(map);";};
+?>
+
+
+        document.getElementById('map').style.cursor = 'crosshair';
+
+        map.on('click', function(e) {
+
+    var gpsLat = e.latlng.lat;
+    var gpsLng = e.latlng.lng;
+
+        document.getElementById("myLat").innerHTML=gpsLat;
+        document.getElementById("myLng").innerHTML=gpsLng;
+
+        document.getElementById('lat').value = gpsLat;
+        document.getElementById('lng').value = gpsLng;
+
+
+});
+
+
+    </script>
+
+    </body>
 </html>
 
 

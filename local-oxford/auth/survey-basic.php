@@ -12,6 +12,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"/>
     <link rel="stylesheet" type="text/css" href="styles.css">
         <meta charset="utf-8">
    </head>
@@ -34,6 +35,11 @@
     <input type="text" name="street"><br/>
     <label >Postcode<br/></label>
     <input type="text" name="postcode"><br/>
+    <label>Choose your location on the map, then press submit<br/></label>
+    <p>Latitude: <span id="myLat">____</span></p><p>Longitude: <span id="myLng">____</span></p><br/>
+    <div id="map" style="height: 400px; width:600px;"></div>
+    <input type="hidden" id="lat" form="form" value="" name="latitude" />
+    <input type="hidden" id="lng" form="form" value="" name="longitude" />
     <input class="submit" type="submit" value="Submit"/><br/><br/>
     </form>
     <h3>Progress:</h3>
@@ -41,5 +47,43 @@
         <div class="progress" style="width:33%">33%</div>
     </div>
 
-    </div></body>
+    </div>
+
+
+<script
+        src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script>
+        var map = L.map('map').setView([51.75, -1.25], 12);
+        mapLink = 
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+            }).addTo(map);
+
+
+
+        document.getElementById('map').style.cursor = 'crosshair';
+
+        map.on('click', function(e) {
+
+    var gpsLat = e.latlng.lat;
+    var gpsLng = e.latlng.lng;
+
+        document.getElementById("myLat").innerHTML=gpsLat;
+        document.getElementById("myLng").innerHTML=gpsLng;
+
+        document.getElementById('lat').value = gpsLat;
+        document.getElementById('lng').value = gpsLng;
+
+
+});
+
+
+    </script>
+
+    </body>
 </html>

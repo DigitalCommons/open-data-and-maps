@@ -14,6 +14,7 @@
         //Process data to be uploaded
         isset($_POST['sentence']) ? $sentence = $_POST['sentence'] : $sentence = '';
         isset($_POST['description']) ? $description = $_POST['description'] : $description = '';
+        isset($_POST['icon']) ? $icon = $_POST['icon'] : $icon = '';
         isset($_POST['provides']) ? $provides = $_POST['provides'] : $provides = ['','',''];
         isset($_POST['identity']) ? $identity = $_POST['identity'] : $identity = ['','',''];
         isset($_POST['interaction']) ? $interaction = $_POST['interaction'] : $interaction = ['','',''];
@@ -24,8 +25,12 @@
         $interaction = array_slice(array_pad($interaction,3,''),0,3);
 
         //Upload Data
-        $addinfo = 'UPDATE data SET sentence = "'.$sentence.'", description = "'.$description.'", providesa = "'.$provides[0].'", providesb = "'.$provides[1].'", providesc = "'.$provides[2].'", identitya = "'.$identity[0].'", identityb = "'.$identity[1].'", identityc = "'.$identity[2].'", interactiona = "'.$interaction[0].'", interactionb = "'.$interaction[1].'", interactionc = "'.$interaction[2].'" WHERE email = "'.$user.'";';
+        $addinfo = 'UPDATE data SET sentence = "'.$sentence.'", description = "'.$description.'", icon = "'.$icon.'", providesa = "'.$provides[0].'", providesb = "'.$provides[1].'", providesc = "'.$provides[2].'", identitya = "'.$identity[0].'", identityb = "'.$identity[1].'", identityc = "'.$identity[2].'", interactiona = "'.$interaction[0].'", interactionb = "'.$interaction[1].'", interactionc = "'.$interaction[2].'" WHERE email = "'.$user.'";';
         $result = mysqli_query( $conn, $addinfo ); //needs securing
+
+        $query_leg = "SELECT label, definition FROM fields WHERE type = 'Legal Form';"; 
+        $result4 = mysqli_query( $conn, $query_leg ); //needs securing
+        $legal = mysqli_fetch_all($result4);
 
         
 ?>	
@@ -40,15 +45,22 @@
     <h3>3/3. Extra Info</h3>
         <form action="survey-finish.php" method="POST" id="form">
     <label >If your initiative has members, how many?<br/></label>
-    <input type="text" name="members"/><br/>
+    <input type="text" name="members" form="form"/><br/>
     <label >In which year was your initiative founded?:<br/></label>
-    <input type="text" name="foundingyear"><br/>
+    <input type="text" name="foundingyear" form="form"/><br/>
     <label >What is your initiative's legal form?:<br/></label>
-    <input type="text" name="legal"><br/>
+    <select name="legal" form="form"><option selected disabled>Choose</option>
+                <?php 
+                foreach($legal as $array){
+                    echo '<option value="'.$array[0].'">'.$array[0].'</option>';
+                };
+                ?>
+            </select>
+    <br/>
     <label >Does your initiative have a registering body (eg Companies House, Charity Commission)?<br/></label>
-    <input type="text" name="registrar"><br/>
+    <input type="text" name="registrar"/><br/>
     <label >What is your registered number with that registrar?<br/></label>
-    <input type="text" name="registerednum"><br/>
+    <input type="text" name="registerednum"/><br/>
     <input class="submit" type="submit" value="Submit"/><br/><br/>
     </form>
     <h3>Progress:</h3>
