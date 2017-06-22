@@ -50,11 +50,14 @@ foreach ($post_arrays as $string)
 $query = substr($query, 0, -1);
 $query .= ' WHERE email = "'.$user.'";';
         
-$result = mysqli_query( $conn, $query); //needs securing
+if ($stmt = mysqli_prepare($conn, $query)) {
+    mysqli_stmt_execute($stmt); 
+    }; 
 
 header("Location: index.php");
 exit();
 
+mysqli_close($conn);
         
 ?>	
 

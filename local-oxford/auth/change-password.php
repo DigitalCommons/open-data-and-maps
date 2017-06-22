@@ -44,7 +44,7 @@
  			echo '<p>Please go and <a href="login.php">login</a> with your new password.</p>';
 			};
 		
-
+			mysqli_close($conn);
 		?>
   		 
     </div></body>

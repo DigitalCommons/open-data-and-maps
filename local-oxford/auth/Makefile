@@ -15,7 +15,7 @@ SERVER ?= parecco
 SERVER_APP_DIR ?= www-internal/oxford-data/
 BUILT_DIR := ./
 
-RSYNC := rsync -avz --chmod=ugo=rx
+RSYNC := rsync -avz --chmod=D755,F644
 
 # Define macro for executing commands on the server (here using ssh):
 SERVER_CMD = ssh $(SERVER) $(1)

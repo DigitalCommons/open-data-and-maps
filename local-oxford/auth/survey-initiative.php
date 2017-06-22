@@ -6,8 +6,7 @@
     			header("Location: login.php");
     			exit();
 			};
- 		
-        // Connect to database //needs securing
+
         include('db_login.php');
         $user = $_SESSION['user'];
         $name = $_POST['name'];
@@ -18,24 +17,29 @@
         $postcode = $_POST['postcode'];
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
-        //Change this it's stupid
-        $addinfo = 'INSERT INTO data (email,contact,street,postcode,website,name,phone,latitude,longitude) VALUES("'.$user.'","'.$contact.'","'.$street.'","'.$postcode.'","'.$website.'","'.$name.'", "'.$phone.'", "'.$latitude.'", "'.$longitude.'");';
-        $result = mysqli_query( $conn, $addinfo );
+
+        //PARAMETRISE
+        $addinfo = 'INSERT INTO data (email,contact,street,postcode,website,name,phone,latitude,longitude) VALUES(?,?,?,?,?,?,?,?,?);';
+
+        if ($stmt = mysqli_prepare($conn, $addinfo)) {
+            mysqli_stmt_bind_param($stmt, "sssssssdd", $user,$contact,$street,$postcode,$website,$name,$phone,$latitude,$longitude);
+            mysqli_stmt_execute($stmt);
+        };
 
         $query_activities = "SELECT label, definition FROM fields WHERE type = 'Activities';"; 
-        $result1 = mysqli_query( $conn, $query_activities ); //needs securing
+        $result1 = mysqli_query( $conn, $query_activities ); 
         $activities = mysqli_fetch_all($result1); //All these arrays take the form [[label1,def1],[label2,def2]]
 
         $query_qual = "SELECT label, definition FROM fields WHERE type = 'Qualifiers';"; 
-        $result2 = mysqli_query( $conn, $query_qual ); //needs securing
+        $result2 = mysqli_query( $conn, $query_qual ); 
         $qualifiers = mysqli_fetch_all($result2);
 
         $query_lab = "SELECT label, definition FROM fields WHERE type = 'Type of Labour';"; 
-        $result3 = mysqli_query( $conn, $query_lab ); //needs securing
+        $result3 = mysqli_query( $conn, $query_lab ); 
         $labour = mysqli_fetch_all($result3);
 
         $query_icons = "SELECT label, definition FROM fields WHERE type = 'Icon';"; 
-        $result5 = mysqli_query( $conn, $query_icons ); //needs securing
+        $result5 = mysqli_query( $conn, $query_icons ); 
         $icons = mysqli_fetch_all($result5);
 ?>	
 

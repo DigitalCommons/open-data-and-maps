@@ -246,3 +246,34 @@ li {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+html, body {
+   height: 100%;
+}
+
+#navbar {
+    height:60px;
+    width: 100%;
+    background-color: white;
+    padding:10px;
+    color:white;
+    font-size: 16px;
+    border-bottom: 3px solid #0bb696;
+    overflow: hidden;
+}
+
+#navbar .button {
+  width: 150px;
+  margin-right:20px;
+  float: right;
+}
+
+#detail {
+  height:100%;
+  float:left;
+  width:25%;
+  background-color: white;
+  border-right: 3px solid #0bb696;
+  padding:10px;
+  overflow:scroll;
+}

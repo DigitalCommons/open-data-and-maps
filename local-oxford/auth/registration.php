@@ -23,7 +23,11 @@
 
 		// Check if user already exists
 		$checkuser =  "SELECT * FROM users WHERE email='".$user."';";
-		$result0 = mysqli_query($conn, $checkuser);
+
+        if ($statemt = mysqli_prepare($conn, $checkuser)) {
+			mysqli_stmt_execute($statemt); 
+			$result0 = mysqli_stmt_get_result($statemt);
+			}; 		
 		
 		if(mysqli_num_rows($result0) == 1){
 		echo "<p>Sorry that email is already in use, <a href='forgot.php'>forget your password?</a> Or back to <a href='login.php'>Login</a>.</p>";}

@@ -10,33 +10,46 @@
         //If there is no data for this user then redirect to initial survey
         include('db_login.php');
         $user = $_SESSION['user'];
-        $query = "SELECT * FROM data WHERE email='".$user."';";
-        $result = mysqli_query( $conn, $query ); //needs securing
-        if (mysqli_num_rows($result) == 0){
-            header("Location: survey-basic.php");
-                exit();
-        };
-        $row = mysqli_fetch_row($result);
 
+
+        //Retrieve data securely
+        if ($stmt = mysqli_prepare($conn, "SELECT * FROM data WHERE email=?;")) {
+            mysqli_stmt_bind_param($stmt, "s", $user);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+                //Redirect if no data
+                if (mysqli_num_rows($result) == 0){
+                    header("Location: survey-basic.php");
+                    exit();
+                };
+            //all data for this user stored in this array
+            $row = mysqli_fetch_all($result)[0];
+            };
+
+
+        //Get fields and options from database
+        //All these arrays take the form [[label1,definition1],[label2,definition2]]
         $query_activities = "SELECT label, definition FROM fields WHERE type = 'Activities';"; 
-        $result1 = mysqli_query( $conn, $query_activities ); //needs securing
-        $activities = mysqli_fetch_all($result1); //All these arrays take the form [[label1,def1],[label2,def2]]
+        $result1 = mysqli_query( $conn, $query_activities );
+        $activities = mysqli_fetch_all($result1); 
 
         $query_qual = "SELECT label, definition FROM fields WHERE type = 'Qualifiers';"; 
-        $result2 = mysqli_query( $conn, $query_qual ); //needs securing
+        $result2 = mysqli_query( $conn, $query_qual );
         $qualifiers = mysqli_fetch_all($result2);
 
         $query_lab = "SELECT label, definition FROM fields WHERE type = 'Type of Labour';"; 
-        $result3 = mysqli_query( $conn, $query_lab ); //needs securing
+        $result3 = mysqli_query( $conn, $query_lab );
         $labour = mysqli_fetch_all($result3);
 
         $query_leg = "SELECT label, definition FROM fields WHERE type = 'Legal Form';"; 
-        $result4 = mysqli_query( $conn, $query_leg ); //needs securing
+        $result4 = mysqli_query( $conn, $query_leg );
         $legal = mysqli_fetch_all($result4);
 
         $query_icons = "SELECT label, definition FROM fields WHERE type = 'Icon';"; 
-        $result5 = mysqli_query( $conn, $query_icons ); //needs securing
+        $result5 = mysqli_query( $conn, $query_icons );
         $icons = mysqli_fetch_all($result5);
+
+        mysqli_close($conn);
  		
 ?>	
 
@@ -71,7 +84,7 @@
         <tr>
             <td>Your Map Location</td>
             <td><p>Latitude: <?php echo round($row[24],2); ?></p><p>Longitude: <?php echo round($row[25],2); ?></p></td>
-            <td><p>Click your location, then submit</p><div id="map" style="height: 400px; margin:auto;"></div><p>Latitude: <span id="myLat"></span></p><p>Longitude: <span id="myLng"></span></p>
+            <td><p>Zoom in, click your location, then submit</p><div id="map" style="height: 400px; margin:auto;"></div><p>Latitude: <span id="myLat"></span></p><p>Longitude: <span id="myLng"></span></p>
             <input type="hidden" id="lat" form="form" value="" name="latitude" />
             <input type="hidden" id="lng" form="form" value="" name="longitude" /></td>
             <td><input type="submit" value="Submit" form="form"/></td>

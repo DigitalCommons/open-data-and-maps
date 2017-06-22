@@ -20,8 +20,12 @@
 
 
         //Upload Data
-        $addinfo = 'UPDATE data SET  members = "'.$members.'",  foundingyear = "'.$foundingyear.'", legal = "'.$legal.'", registrar = "'.$registrar.'", registerednum = "'.$registerednum.'" WHERE email = "'.$user.'";';
-        $result = mysqli_query( $conn, $addinfo ); //needs securing
+        $addinfo = 'UPDATE data SET  members = ?,  foundingyear = ?, legal = ?, registrar = ?, registerednum = ? WHERE email = ?;';
+
+        if ($stmt = mysqli_prepare($conn, $addinfo)) {
+            mysqli_stmt_bind_param($stmt, "iissss", $members,$foundingyear,$legal,$registrar,$registerednum,$user);
+            mysqli_stmt_execute($stmt);
+        };
 
         header("Location: index.php");
         exit();

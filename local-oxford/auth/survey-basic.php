@@ -35,7 +35,7 @@
     <input type="text" name="street"><br/>
     <label >Postcode<br/></label>
     <input type="text" name="postcode"><br/>
-    <label>Choose your location on the map, then press submit<br/></label>
+    <label>Choose your location on the map, zoom in to be more precise, then press submit<br/></label>
     <p>Latitude: <span id="myLat">____</span></p><p>Longitude: <span id="myLng">____</span></p><br/>
     <div id="map" style="height: 400px; width:600px;"></div>
     <input type="hidden" id="lat" form="form" value="" name="latitude" />

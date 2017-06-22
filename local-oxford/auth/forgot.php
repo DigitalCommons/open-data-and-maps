@@ -29,8 +29,13 @@
 			//check legitimacy
 			$user = mysqli_real_escape_string($conn,$_POST["email"]);
 			$checkuser =  "SELECT * FROM users WHERE email='".$user."';";
-			$result0 = mysqli_query($conn, $checkuser);
-		
+        
+        	if ($statemt = mysqli_prepare($conn, $checkuser)) {
+				mysqli_stmt_execute($statemt); 
+				$result0 = mysqli_stmt_get_result($statemt);
+			}; 		
+
+
 			if(mysqli_num_rows($result0) == 1){
 				//create password
 			$random = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1,5))),1,10);
@@ -53,7 +58,7 @@
 			echo '<p>Email not recognised please <a href="register.php">register</a> or <a href="forgot.php">try again</a>.</p>';
 			};
 		};
-
+			mysqli_close($conn);
 		?>
   			
   		 

@@ -25,11 +25,18 @@
         $interaction = array_slice(array_pad($interaction,3,''),0,3);
 
         //Upload Data
-        $addinfo = 'UPDATE data SET sentence = "'.$sentence.'", description = "'.$description.'", icon = "'.$icon.'", providesa = "'.$provides[0].'", providesb = "'.$provides[1].'", providesc = "'.$provides[2].'", identitya = "'.$identity[0].'", identityb = "'.$identity[1].'", identityc = "'.$identity[2].'", interactiona = "'.$interaction[0].'", interactionb = "'.$interaction[1].'", interactionc = "'.$interaction[2].'" WHERE email = "'.$user.'";';
-        $result = mysqli_query( $conn, $addinfo ); //needs securing
+        $addinfo = 'UPDATE data SET sentence = ?, description = ?, icon = ?, providesa = ?, providesb = ?, providesc = ?, identitya = ?, identityb = ?, identityc = ?, interactiona = ?, interactionb = ?, interactionc = ? WHERE email = ?;';
+
+        if ($stmt = mysqli_prepare($conn, $addinfo)) {
+            mysqli_stmt_bind_param($stmt, "sssssssssssss", $sentence,$description,$icon,$provides[0],$provides[1],$provides[2],$identity[0],$identity[1],$identity[2],$interaction[0],$interaction[1],$interaction[2],$user);
+            mysqli_stmt_execute($stmt);
+        };
+
+
+
 
         $query_leg = "SELECT label, definition FROM fields WHERE type = 'Legal Form';"; 
-        $result4 = mysqli_query( $conn, $query_leg ); //needs securing
+        $result4 = mysqli_query( $conn, $query_leg );
         $legal = mysqli_fetch_all($result4);
 
         

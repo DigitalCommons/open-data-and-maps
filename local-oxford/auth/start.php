@@ -12,11 +12,15 @@ $hasher = new PasswordHash(8, false);
         
 if( isset($_POST['user']) && isset($_POST['password']) )
 {   
-        $user =  mysqli_real_escape_string($conn,$_POST["user"]);
-        $password =  mysqli_real_escape_string($conn,$_POST["password"]); 
-     $query = "SELECT * FROM users WHERE email='".$user."';";
-       $result = mysqli_query( $conn, $query ); 
-        $row = mysqli_fetch_row($result);
+        $user =  $_POST["user"];
+        $password =  $_POST["password"]; 
+        if ($stmt = mysqli_prepare($conn, "SELECT * FROM users WHERE email=?;")) {
+            mysqli_stmt_bind_param($stmt, "s", $user);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $row = mysqli_fetch_all($result)[0];
+            };
+
         if ($hasher->CheckPassword($password,$row[2]) && $row[4] == 1){
         // auth okay, setup session
        $_SESSION['user'] = $user;
