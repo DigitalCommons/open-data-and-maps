@@ -54,7 +54,7 @@ if ($stmt = mysqli_prepare($conn, $query)) {
     mysqli_stmt_execute($stmt); 
     }; 
 
-header("Location: index.php");
+header("Location: profile.php");
 exit();
 
 mysqli_close($conn);

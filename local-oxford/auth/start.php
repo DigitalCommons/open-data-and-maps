@@ -25,7 +25,7 @@ if( isset($_POST['user']) && isset($_POST['password']) )
         // auth okay, setup session
        $_SESSION['user'] = $user;
         // redirect to required page
-        header( "Location: index.php" );
+        header( "Location: profile.php" );
         exit();
      } 
      else {

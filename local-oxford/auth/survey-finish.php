@@ -27,7 +27,7 @@
             mysqli_stmt_execute($stmt);
         };
 
-        header("Location: index.php");
+        header("Location: profile.php");
         exit();
         
 ?>	
