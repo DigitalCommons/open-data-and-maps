@@ -66,12 +66,33 @@
                 echo "
                 var marker = new L.marker([$row[24],$row[25]],
                 {
-                icon: L.AwesomeMarkers.icon({icon: '".ltrim($row[23],'fa-')."',iconColor:'black', markerColor: 'orange', prefix: 'fa'}),
+                icon: L.AwesomeMarkers.icon({icon: '".ltrim($row[23],'fa-')."',iconColor:'white', markerColor: 'darkpurple', prefix: 'fa'}),
                 title: '$row[5]'
                 })
                 .addTo(map).bindPopup('$row[5]');
 
-                marker.email_id = '$row[0]';
+                marker.contact = '$row[1]';
+                marker.street = '$row[2]';
+                marker.postcode = '$row[3]';
+                marker.website = '$row[4]';
+                marker.name = '$row[5]';
+                marker.phone = '$row[6]';
+                marker.sentence = '$row[7]';
+                marker.description = '$row[8]';
+                marker.legal = '$row[9]';
+                marker.foundingyear = '$row[10]';
+                marker.registrar = '$row[11]';
+                marker.registerednum = '$row[12]';
+                marker.members = '$row[13]';
+                marker.providesa = '$row[14]';
+                marker.providesb = '$row[15]';
+                marker.providesc = '$row[16]';
+                marker.identitya = '$row[17]';
+                marker.identityb = '$row[18]';
+                marker.identityc = '$row[19]';
+                marker.interactiona = '$row[20]';
+                marker.interactionb = '$row[21]';
+                marker.interactionc = '$row[22]';
 
                 marker.on('click', onMarkerClick);
                 ";
@@ -80,8 +101,9 @@
         ?>
 
         function onMarkerClick(e) {
-            document.getElementById("detail").innerHTML = e.target.email_id;
+                document.getElementById("detail").innerHTML = "<h1>"+e.target.name+"</h1><p>"+e.target.sentence+"</p>";
         }
+
 
     </script>
 
