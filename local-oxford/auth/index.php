@@ -44,18 +44,14 @@
     </div>
     <div class="body row">
         <div class="left col scroll-y" id="detail">
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
-            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Welcome to the Solidarity Economy in Oxford</h1>
+    <p>Please explore some of the great things that are happening in Oxford. If you are involved in an initiative which is beneficial for people or planet please take 5 minutes to register and add yourself to the map!</p>
+<p>Click on a marker to display information for that initiative</p>
         </div>
         <div class="right col" id="map">
         </div>
     </div>
+
 
 
 
