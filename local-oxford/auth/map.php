@@ -37,13 +37,26 @@
 
    </head>
     <body style="padding:0px; margin:0px;">
-        <div id="navbar">
+    <div class="header row" id="navbar">
             <a class="button" href="info.php">About</a>            
             <a class="button" href="login.php">Log in</a>
             <a class="button" href="register.php">Register</a>
+    </div>
+    <div class="body row">
+        <div class="left col scroll-y" id="detail">
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
+            <h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p>
         </div>
-    <div id="detail"><h1>Oxford Solidarity Economy</h1><p>Click on a marker to display information for that initiative</p></div>
-    <div id="map" style="height: 100%; margin-top:0px;"></div>
+        <div class="right col" id="map">
+        </div>
+    </div>
+
 
 
 

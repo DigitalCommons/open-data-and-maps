@@ -247,19 +247,17 @@ li {
     visibility: visible;
 }
 
-html, body {
+html{
    height: 100%;
 }
 
 #navbar {
-    height:60px;
-    width: 100%;
     background-color: white;
-    padding:10px;
     color:white;
     font-size: 16px;
     border-bottom: 3px solid #0bb696;
-    overflow: hidden;
+    box-sizing: border-box;
+    padding: 10px;
 }
 
 #navbar .button {
@@ -269,11 +267,26 @@ html, body {
 }
 
 #detail {
-  height:100%;
-  float:left;
-  width:25%;
   background-color: white;
   border-right: 3px solid #0bb696;
-  padding:10px;
-  overflow:scroll;
+  box-sizing: border-box;
+  padding: 10px;
 }
+
+#map{
+}
+
+body { margin: 0; -webkit-text-size-adjust: 100%; }
+.page { left: 0; right: 0; top: 0; bottom: 0; }
+.row, .col, .page { overflow: hidden; position: absolute; }
+.row { left: 0; right: 0; }
+.col { top: 0; bottom: 0; }
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.scroll-y { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.fill, .pane { position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: 100%; height: 100% }
+.pane { display: none; }
+
+.left.col { width: 25%; }
+.right.col { left: 25%; right: 0; }
+.header.row { height: 80px; }
+.body.row { top: 80px; bottom: 0px; }
