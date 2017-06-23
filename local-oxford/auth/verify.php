@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    <link rel="stylesheet" type="text/css" href="styles.css">
    </head>
     <body>
 
@@ -28,7 +29,7 @@
         };
 
 
-			echo "<p> Your email has been verified, please <a href='login.php'>log in</a>.</p>";
+			echo "<p style='padding:20px;'> Your email has been verified, please <a href='login.php'>log in</a>.</p>";
 		};
 			
 		mysqli_close($conn);

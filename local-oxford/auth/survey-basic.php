@@ -19,11 +19,11 @@
     <body class="main" ><div class="content">
 
     <h2 id="title">Oxford Solidarity Economy Mapping</h2>
-    <p style="margin-top: 20px; margin-bottom: 50px;">We currently don't have any information on your initiative, please answer the following questions, block of text explaining shit... blah blah... It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+    <p style="margin-top: 20px;">Thanks for registering! We currently don't have any information on your initiative, please answer the following questions. </p><p>It should take about <strong>5 minutes</strong> to answer them all, but feel free to <strong>skip some.</strong></p><p style="padding-bottom:20px; margin-bottom:20px; border-bottom: 3px solid #0bb696;">All of the information you enter here will be open data, accessible to anyone, but you will be able to <strong>change it at any time.</strong> Please see our <a href=privacy.html>privacy policy</a> for more information.</p>
 
 
     <form action="survey-initiative.php" method="POST" id="form">
-    <label >Initiative's Name:<br/></label>
+    <label >Initiative's Name*:<br/></label>
     <input type="text" name="name"/><br/>
     <label >Public email:<br/></label>
     <input type="text" name="contact"><br/>
@@ -35,7 +35,7 @@
     <input type="text" name="street"><br/>
     <label >Postcode<br/></label>
     <input type="text" name="postcode"><br/>
-    <label>Choose your location on the map, zoom in to be more precise, then press submit<br/></label>
+    <label>Choose your location on the map, zoom in to be more precise, then press submit*:<br/></label>
     <p>Latitude: <span id="myLat">____</span></p><p>Longitude: <span id="myLng">____</span></p><br/>
     <div id="map" style="height: 400px; width:600px;"></div>
     <input type="hidden" id="lat" form="form" value="" name="latitude" />

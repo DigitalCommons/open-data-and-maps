@@ -57,7 +57,7 @@
     <input type="text" name="sentence"/><br/><br/>
     <label >If you would like to give a longer description please do so here:<br/></label>
     <textarea rows="10" cols="50" name="description"></textarea><br/><br/>
-    <label >Pick an icon for the Map which best represents you:<br/></label>
+    <label >Pick an icon for the Map which best represents you*:<br/></label>
         <ul class="checkboxes">
             <?php 
                 foreach($icons as $array){
