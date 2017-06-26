@@ -30,6 +30,17 @@
 
 
 			echo "<p style='padding:20px;'> Your email has been verified, please <a href='login.php'>log in</a>.</p>";
+
+			//Send an email notification to moderator
+
+			$row = mysqli_fetch_row($result);
+			$sendto = "dan@solidarityeconomics.org";
+			$subject = "Local Map Notification - New User";
+			$msg = "A new user has been verified on the Oxford SE Map, their email is: ".$row[1].", in the database their id = ".$row[0];
+ 		$headers = 'From: dan@solidarityeconomics.org' . "\r\n" .
+    		'X-Mailer: PHP/' . phpversion();
+ 		mail($sendto,$subject,$msg,$headers);
+
 		};
 			
 		mysqli_close($conn);
