@@ -73,6 +73,7 @@ th, td {
     border-bottom: 1px solid #ddd; 
     text-align: left; 
     padding: 5px;
+
 }
 
 th {
@@ -83,6 +84,7 @@ th {
 table {
 	width:100%;
 	font-size: 14px;
+  table-layout: fixed;
 }
 
 #login-header{
