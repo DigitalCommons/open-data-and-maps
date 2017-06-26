@@ -19,6 +19,7 @@
             };
 
 
+
         mysqli_close($conn);
         
 ?>  
@@ -80,14 +81,18 @@
 
 
         var dataLength = data.length;
+
+        console.log(data);
         for (var i = 0; i < dataLength; i++) {
 
             var marker = L.marker([data[i][24],data[i][25]],
                 {
-                icon: L.AwesomeMarkers.icon({icon: data[i][23].substr(4), iconColor:'white', markerColor: 'darkpurple', prefix: 'fa'}),
+                icon: L.AwesomeMarkers.icon({icon: data[i][23].replace(" ","").substr(3), iconColor:'white', markerColor: 'darkpurple', prefix: 'fa'}),
                 title: data[i][5]
                 })
                 .bindPopup(data[i][5]);
+
+                console.log(data[i][23].substr(4));
 
                 marker.contact = data[i][1];
                 marker.street = data[i][2];

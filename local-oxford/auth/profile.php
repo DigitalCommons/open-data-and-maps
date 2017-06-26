@@ -242,7 +242,8 @@
     <a class="button" href="index.php">Go to the Map</a>
     <a class="button" href="change-password.php">Click to Change Password</a>
 
-
+    <!--Change this email to the proper forwarded-->
+    <p style="font-size: 12px; text-align: right;">Any issues, please contact dan@solidarityeconomics.org</p>
 
     </div>
 
