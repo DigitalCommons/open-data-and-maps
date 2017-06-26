@@ -39,9 +39,15 @@
    </head>
     <body style="padding:0px; margin:0px;">
     <div class="header row" id="navbar">
-            <a class="button" href="info.php">About</a>            
-            <a class="button" href="login.php">Log in</a>
-            <a class="button" href="register.php">Register</a>
+            <a class="button" href="info.php">About</a>
+<?php       
+        if (isset($_SESSION['user'])){
+            echo'<a class="button" href="profile.php">Access your Data</a>';
+        }
+        else{
+            echo '<a class="button" href="login.php">Log in</a>
+            <a class="button" href="register.php">Register</a>';
+            };?>
     </div>
     <div class="body row">
         <div class="left col scroll-y" id="detail">
@@ -82,7 +88,6 @@
 
         var dataLength = data.length;
 
-        console.log(data);
         for (var i = 0; i < dataLength; i++) {
 
             var marker = L.marker([data[i][24],data[i][25]],
@@ -92,7 +97,6 @@
                 })
                 .bindPopup(data[i][5]);
 
-                console.log(data[i][23].substr(4));
 
                 marker.contact = data[i][1];
                 marker.street = data[i][2];
