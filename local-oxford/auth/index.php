@@ -1,10 +1,8 @@
- <?php  session_save_path('/home/pareccoc/cgi-bin/tmp');
+<?php  session_save_path('/home/pareccoc/cgi-bin/tmp');
         session_start();
         session_regenerate_id();
-        if(isset($_SESSION['user']))      //Keep user logged in
-            {
-            $user = $_SESSION['user'];
-            };
+
+
 
 
         include('db_login.php');
@@ -77,60 +75,60 @@
                 maxClusterRadius:20
             });
 
+        //Convert the Data to JSON
+        var data = <?php echo json_encode($data, JSON_HEX_TAG);?>;
 
 
-        <?php
-            foreach($data as $row){
-                if(!is_null($row[24])){
-                echo "
-                var marker = L.marker([$row[24],$row[25]],
+        var dataLength = data.length;
+        for (var i = 0; i < dataLength; i++) {
+
+            var marker = L.marker([data[i][24],data[i][25]],
                 {
-                icon: L.AwesomeMarkers.icon({icon: '".ltrim($row[23],'fa-')."',iconColor:'white', markerColor: 'darkpurple', prefix: 'fa'}),
-                title: '$row[5]'
+                icon: L.AwesomeMarkers.icon({icon: data[i][23].substr(4), iconColor:'white', markerColor: 'darkpurple', prefix: 'fa'}),
+                title: data[i][5]
                 })
-                .bindPopup('$row[5]');
+                .bindPopup(data[i][5]);
 
-                marker.contact = '$row[1]';
-                marker.street = '$row[2]';
-                marker.postcode = '$row[3]';
-                marker.website = '$row[4]';
-                marker.name = '$row[5]';
-                marker.phone = '$row[6]';
-                marker.sentence = '$row[7]';
-                marker.description = '$row[8]';
-                marker.legal = '$row[9]';
-                marker.foundingyear = '$row[10]';
-                marker.registrar = '$row[11]';
-                marker.registerednum = '$row[12]';
-                marker.members = '$row[13]';
-                marker.providesa = '$row[14]';
-                marker.providesb = '$row[15]';
-                marker.providesc = '$row[16]';
-                marker.identitya = '$row[17]';
-                marker.identityb = '$row[18]';
-                marker.identityc = '$row[19]';
-                marker.interactiona = '$row[20]';
-                marker.interactionb = '$row[21]';
-                marker.interactionc = '$row[22]';
+                marker.contact = data[i][1];
+                marker.street = data[i][2];
+                marker.postcode = data[i][3];
+                marker.website = data[i][4];
+                marker.name = data[i][5];
+                marker.phone = data[i][6];
+                marker.sentence = data[i][7];
+                marker.description = data[i][8];
+                marker.legal = data[i][9];
+                marker.foundingyear = data[i][10];
+                marker.registrar = data[i][11];
+                marker.registerednum = data[i][12];
+                marker.members = data[i][13];
+                marker.providesa = data[i][14];
+                marker.providesb = data[i][15];
+                marker.providesc = data[i][16];
+                marker.identitya = data[i][17];
+                marker.identityb = data[i][18];
+                marker.identityc = data[i][19];
+                marker.interactiona = data[i][20];
+                marker.interactionb = data[i][21];
+                marker.interactionc = data[i][22];
+                marker.dataId = data[i][26];
 
                 marker.on('click', onMarkerClick);
 
                 markerClusters.addLayer(marker);
-
-
-                ";
-                };
-            };
-        ?>
-
-
-
-
+};
 
         map.addLayer(markerClusters);
 
         function onMarkerClick(e) {
-                document.getElementById("detail").innerHTML = "<h1>"+e.target.name+"</h1><p>"+e.target.sentence+"</p>";
+                document.getElementById("detail").innerHTML = "<h1>"+e.target.name+"</h1><p>"+e.target.sentence+"</p>"
+                <?php //Add a report option for registered users
+                    if(isset($_SESSION['user']))    
+                    {
+                    echo '+"<br/><a href=report.php?id="+e.target.dataId+">Click to Report if this initiative should not be on the map</a>"';
+                    };
+                ?>
+                ;
         }
 
 
