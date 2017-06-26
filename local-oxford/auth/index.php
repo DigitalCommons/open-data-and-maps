@@ -33,6 +33,8 @@
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"/>
         <link rel="stylesheet" type="text/css" href="styles.css">
         <link rel="stylesheet" href="leaflet.awesome-markers.css">
+        <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
         <script src="https://use.fontawesome.com/76c1f7b47f.js"></script>
 
    </head>
@@ -58,6 +60,7 @@
 
 <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 <script src="leaflet.awesome-markers.js"></script>
+<script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js'></script>
 <script>
 
         var map = L.map('map').setView([51.75, -1.25], 12);
@@ -69,16 +72,23 @@
             maxZoom: 18,
             }).addTo(map);
 
+        var markerClusters = L.markerClusterGroup(
+            {
+                maxClusterRadius:20
+            });
+
+
+
         <?php
             foreach($data as $row){
                 if(!is_null($row[24])){
                 echo "
-                var marker = new L.marker([$row[24],$row[25]],
+                var marker = L.marker([$row[24],$row[25]],
                 {
                 icon: L.AwesomeMarkers.icon({icon: '".ltrim($row[23],'fa-')."',iconColor:'white', markerColor: 'darkpurple', prefix: 'fa'}),
                 title: '$row[5]'
                 })
-                .addTo(map).bindPopup('$row[5]');
+                .bindPopup('$row[5]');
 
                 marker.contact = '$row[1]';
                 marker.street = '$row[2]';
@@ -104,10 +114,20 @@
                 marker.interactionc = '$row[22]';
 
                 marker.on('click', onMarkerClick);
+
+                markerClusters.addLayer(marker);
+
+
                 ";
                 };
             };
         ?>
+
+
+
+
+
+        map.addLayer(markerClusters);
 
         function onMarkerClick(e) {
                 document.getElementById("detail").innerHTML = "<h1>"+e.target.name+"</h1><p>"+e.target.sentence+"</p>";
