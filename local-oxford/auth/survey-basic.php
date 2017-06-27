@@ -18,8 +18,8 @@
    </head>
     <body class="main" ><div class="content">
 
-    <h2 id="title">Oxford Solidarity Economy Mapping</h2>
-    <p style="margin-top: 20px;">Thanks for registering! We currently don't have any information on your initiative, please answer the following questions. </p><p>It should take about <strong>5 minutes</strong> to answer them all, but feel free to <strong>skip some.</strong></p><p style="padding-bottom:20px; margin-bottom:20px; border-bottom: 3px solid #0bb696;">All of the information you enter here will be open data, accessible to anyone, but you will be able to <strong>change it at any time.</strong> Please see our <a href=privacy.html>privacy policy</a> for more information.</p>
+    <h1 id="title">Oxford Solidarity Economy Mapping</h1>
+    <p style="margin-top: 20px;">Thanks for registering! We currently don't have any information on your initiative, please answer the following questions. </p><p>It should take about <strong>5 minutes</strong> to answer them all, but feel free to <strong>skip some.</strong></p><p style="padding-bottom:20px; margin-bottom:20px; border-bottom: 3px solid #0bb696;">All of the information you enter here will be open data, accessible to anyone, but you will be able to <strong>change it at any time.</strong> Please see our <a href=privacy.php>privacy policy</a> for more information.</p>
 
 
     <form action="survey-initiative.php" method="POST" id="form">
