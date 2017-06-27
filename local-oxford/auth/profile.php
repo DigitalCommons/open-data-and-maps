@@ -246,7 +246,8 @@
     </table>
 
     <a class="button" href="index.php">Go to the Map</a>
-    <a class="button" href="change-password.php">Click to Change Password</a>
+    <a class="button" href="change-password.php">Change Password</a>
+    <a class="button" href="delete-account.php">Delete Account</a>
 
     <!--Change this email to the proper forwarded-->
     <p style="font-size: 12px; text-align: right;">Any issues, please contact dan@solidarityeconomics.org</p>
