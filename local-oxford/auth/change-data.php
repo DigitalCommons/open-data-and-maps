@@ -47,8 +47,7 @@ foreach ($post_arrays as $string)
         $query .= $string.'a="'.$data_array[0].'",'.$string.'b="'.$data_array[1].'",'.$string.'c="'.$data_array[2].'",';
     };
 
-$query = substr($query, 0, -1);
-$query .= ' WHERE email = "'.$user.'";';
+$query .= 'recent_change = NULL WHERE email = "'.$user.'";';
         
 if ($stmt = mysqli_prepare($conn, $query)) {
     mysqli_stmt_execute($stmt); 

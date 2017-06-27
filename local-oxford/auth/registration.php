@@ -44,7 +44,7 @@
 
 		//Secure from SQL injection
 
-		if ($stmt = mysqli_prepare($conn, 'INSERT INTO users VALUES(NULL,?,?,?, NULL);')) {
+		if ($stmt = mysqli_prepare($conn, 'INSERT INTO users (email, password, verification) VALUES(?,?,?);')) {
 
    		mysqli_stmt_bind_param($stmt, "sss", $user, $hash, $random);
 
