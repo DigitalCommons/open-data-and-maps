@@ -16,9 +16,10 @@
             //all data for this user stored in this array
             $data = mysqli_fetch_all($result);
             
-            //Remove private emails
+            //Remove private emails and add paragraphs to descriptions
             for ($i=0; $i<count($data) ; $i++) { 
                 $data[$i][0] = "";
+                $data[$i][8] = nl2br($data[$i][8]);
             };
 
             };

@@ -278,6 +278,7 @@ html{
   border-right: 3px solid #0bb696;
   box-sizing: border-box;
   padding: 10px;
+  overflow-wrap: break-word;
 }
 
 #map{
