@@ -97,30 +97,7 @@
                 })
                 .bindPopup(data[i][5]);
 
-
-                marker.contact = data[i][1];
-                marker.street = data[i][2];
-                marker.postcode = data[i][3];
-                marker.website = data[i][4];
-                marker.name = data[i][5];
-                marker.phone = data[i][6];
-                marker.sentence = data[i][7];
-                marker.description = data[i][8];
-                marker.legal = data[i][9];
-                marker.foundingyear = data[i][10];
-                marker.registrar = data[i][11];
-                marker.registerednum = data[i][12];
-                marker.members = data[i][13];
-                marker.providesa = data[i][14];
-                marker.providesb = data[i][15];
-                marker.providesc = data[i][16];
-                marker.identitya = data[i][17];
-                marker.identityb = data[i][18];
-                marker.identityc = data[i][19];
-                marker.interactiona = data[i][20];
-                marker.interactionb = data[i][21];
-                marker.interactionc = data[i][22];
-                marker.dataId = data[i][26];
+                marker.dataId = i;
 
                 marker.on('click', onMarkerClick);
 
@@ -129,15 +106,34 @@
 
         map.addLayer(markerClusters);
 
+        var descriptionLayout = [["<h1>",[5],"</h1>"],["<p>",[7],"</p>"],["<h2>","Contact Info","</h2>"],["<p>",[1,2,3,4,6],"</p>"],["<h2>","Sectors of Activity","</h2>"],["<p>",[14,15,16],"</p>"],["<h2>","Values","</h2>"],["<p>",[17,18,19],"</p>"],["<h2>","Types of Labour","</h2>"],["<p>",[20,21,22],"</p>"],["<h2>","Description","</h2>"],["<p>",[8],"</p>"],["<h2>","Extra Info","</h2>"],["<p>Number of Members - ",[13],"</p>"],["<p>Legal Form - ",[9],"</p>"],["<p>Founding Year - ",[10],"</p>"],["<p>Registrar - ",[11],"</p>"],["<p>Registered Number - ",[12],"</p>"],["<h2>","Data Last Updated","</h2>"],["<p>",[27],"</p>"]];
+
         function onMarkerClick(e) {
-                document.getElementById("detail").innerHTML = "<h1>"+e.target.name+"</h1><p>"+e.target.sentence+"</p>"
+
+                var initiativeDescription = '';
+
+                for (var x = 0; x < descriptionLayout.length; x++) {
+                    if( typeof descriptionLayout[x][1] === 'string') {
+                        initiativeDescription += descriptionLayout[x][0]+descriptionLayout[x][1]+descriptionLayout[x][2];
+                    }
+                    else{
+                        for (var y = 0; y < descriptionLayout[x][1].length; y++) {
+                            if(data[e.target.dataId][descriptionLayout[x][1][y]]!= '' && data[e.target.dataId][descriptionLayout[x][1][y]]!= null){
+                            initiativeDescription += descriptionLayout[x][0]+data[e.target.dataId][descriptionLayout[x][1][y]]+descriptionLayout[x][2];
+                            };
+                        };
+                    }
+                }
+
                 <?php //Add a report option for registered users
                     if(isset($_SESSION['user']))    
                     {
-                    echo '+"<br/><a href=report.php?id="+e.target.dataId+">Click to Report if this initiative should not be on the map</a>"';
+                    echo 'initiativeDescription += "<br/><a href=report.php?id="+data[e.target.dataId][26]+">Click to Report if this initiative should not be on the map</a>";';
                     };
                 ?>
-                ;
+
+
+                document.getElementById("detail").innerHTML = initiativeDescription;
         }
 
 

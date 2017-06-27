@@ -55,6 +55,12 @@
 	margin: auto;
 }
 
+h2{
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
 .progress-container{
 	color:#000;
 	background-color:#f0f0f0;
@@ -95,7 +101,7 @@ table {
 
 body{
 	font-family: "Lato", sans-serif;
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: 400;
 	letter-spacing: 1px;
 }
