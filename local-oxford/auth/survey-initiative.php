@@ -18,12 +18,25 @@
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
 
+
+        // Check if user already exists, don't want double entries
+        $checkuser =  "SELECT * FROM data WHERE email='".$user."';";
+
+        if ($statemt = mysqli_prepare($conn, $checkuser)) {
+            mysqli_stmt_execute($statemt); 
+            $result0 = mysqli_stmt_get_result($statemt);
+            };      
+        
+        if(mysqli_num_rows($result0) == 0){
+
         //PARAMETRISE
         $addinfo = 'INSERT INTO data (email,contact,street,postcode,website,name,phone,latitude,longitude) VALUES(?,?,?,?,?,?,?,?,?);';
 
         if ($stmt = mysqli_prepare($conn, $addinfo)) {
             mysqli_stmt_bind_param($stmt, "sssssssdd", $user,$contact,$street,$postcode,$website,$name,$phone,$latitude,$longitude);
             mysqli_stmt_execute($stmt);
+        };
+
         };
 
         $query_activities = "SELECT label, definition FROM fields WHERE type = 'Activities';"; 

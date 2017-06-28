@@ -65,7 +65,7 @@
 
 
  
-  			<a href="login.php">Back to Map</a>
+  			<a href="index.php">Back to Map</a>
   		 
     </body>
 </html> 
