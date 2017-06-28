@@ -36,7 +36,7 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"/>
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="styles2.css">
         <link rel="stylesheet" href="leaflet.awesome-markers.css">
         <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
         <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
@@ -45,7 +45,7 @@
    </head>
     <body style="padding:0px; margin:0px;">
     <div class="header row" id="navbar">
-            <!--AFTER SEA LAUNCH <a href="http://solidarityeconomy.coop"><img style="height:80px; float:left;" src="logo.png" title="Solidarity Economy Association" /></a> -->
+            <a href="http://solidarityeconomy.coop"><img style="height:80px; float:left;" src="logo.png" title="Solidarity Economy Association" /></a>
             <a class="button" href="info.php">About</a>
 <?php       
         if (isset($_SESSION['user'])){
@@ -57,10 +57,11 @@
             };?>
     </div>
     <div class="body row">
-        <div class="left col scroll-y" id="detail" >
+        <div class="left col" ><div class="toggle row" id="toggles"></div>
+        <div class="detail row scroll-y" id="detail">
             <h1 style="margin-top: 0px;">Welcome to the Solidarity Economy in Oxford</h1>
     <p>Please explore some of the great things that are happening in Oxford. If you are involved in an initiative which is beneficial for people or planet please take 5 minutes to register and add yourself to the map!</p>
-<p>Click on a marker to display information for that initiative</p>
+<p>Click on a marker to display information for that initiative</p></div>
         </div>
         <div class="right col" id="map">
         </div>
@@ -86,7 +87,7 @@
 
         var markerClusters = L.markerClusterGroup(
             {
-                maxClusterRadius:15
+                maxClusterRadius:10
             });
 
         //Convert the Data to JSON

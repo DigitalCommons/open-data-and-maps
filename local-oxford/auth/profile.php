@@ -157,7 +157,7 @@
         </tr>
         <tr>
             <td>Full Description</td>
-            <td><?php echo $row[8]; ?></td>
+            <td><?php echo nl2br($row[8]); ?></td>
             <td><textarea rows="10" cols="50" name="description" form="form"></textarea></td>
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>

@@ -284,7 +284,11 @@ html{
 #map{
 }
 
-
+#toggles{
+  border-bottom: 1px solid #0bb696;
+  border-right: 3px solid #0bb696;
+  box-sizing: border-box;
+}
 
 body { margin: 0; -webkit-text-size-adjust: 100%; }
 .page { left: 0; right: 0; top: 0; bottom: 0; }
@@ -300,4 +304,6 @@ body { margin: 0; -webkit-text-size-adjust: 100%; }
 .right.col { left: 25%; right: 0; }
 .header.row { height: 80px; }
 .body.row { top: 80px; bottom: 0px; }
+.toggle.row {height:30px;}
+.detail.row {top:30px; bottom:0px;}
 
