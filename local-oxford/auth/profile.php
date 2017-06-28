@@ -162,7 +162,7 @@
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
         <tr>
-            <td>Provides (direct needs)</td>
+            <td>Sectors of Activity</td>
             <td><?php echo $row[14].'<br/>'.$row[15].'<br/>'.$row[16]; ?></td>
             <td><label >Does your organisation work in any of the following sectors? (choose up to 3):<br/><br/></label>
             <?php 
@@ -174,7 +174,7 @@
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
         <tr>
-            <td>Identity</td>
+            <td>Principles/Values</td>
             <td><?php echo $row[17].'<br/>'.$row[18].'<br/>'.$row[19]; ?></td>
             <td><label >Does your initiative identify with any of the following principles? (choose up to 3):<br/><br/></label>
             <?php 
@@ -186,12 +186,12 @@
             <td><input type="submit" value="Submit" form="form"/></td>
         </tr>
         <tr>
-            <td>Interaction</td>
+            <td>Types of Labour</td>
             <td><?php echo $row[20].'<br/>'.$row[21].'<br/>'.$row[22]; ?></td>
             <td><label >What kinds of labour does your organisation use? (choose  up to 3):<br/><br/></label>
             <?php 
                 foreach($labour as $array){
-                    echo '<input type="checkbox" name="interaction[]" form="form" value="'.$array[0].'"><label>'.$array[0].'</label><br/>';
+                    echo '<input type="checkbox" name="interaction[]" form="form" value="'.$array[0].'"><label class="tooltip">'.$array[0].'<span class="tooltiptext">'.$array[1].'</span></label><br/>';
                 };
             ?>
         </td>

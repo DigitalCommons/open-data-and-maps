@@ -39,10 +39,10 @@ Qualifiers 	<http://purl.org/solidarityeconomics/experimental/essglobal/standard
 Qualifiers 	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/qualifiers/FreeCulture>	Free Culture 	Artistic and Cultural Products which have licenses like the Creative Commons or similar, where it can be copied and in some times transformed with some conditions that vary, like citing the original author, prohibition of commercial trading, etc.	
 Qualifiers 	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/qualifiers/FreeKnowledgeorSoftware>	Free Knowledge or Software	Products, like software and machinery, that are licensed in a way that allows the public to know the source code (the way it has been produced) and to produce derivatives, under some conditions like citing the original author and having to also use the same license	
 Qualifiers 	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/qualifiers/q08>	Handicraft	Products and Services that are not industrial, being made in a traditional and artisanal way.  	
-Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T1>	Associative		
-Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T2>	Subordinate		
-Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T3>	Voluntary Work		
-Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T5>	Externally Hired 		
+Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T1>	Associative	Co-operative work, minimal hierarchy, self-management etc	
+Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T2>	Subordinate	Standard Management structure, with hierarchy, managers or owners make the decisions.	
+Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T3>	Voluntary Work	If you use volunteers.	
+Type Of Labour	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/type-of-labour/T5>	Externally Hired 	Some work is contracted out.	
 Legal Form 	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/legal-form/L1>	Informal Group		
 Legal Form 	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/legal-form/L2>	Co-operative  		
 Legal Form 	<http://purl.org/solidarityeconomics/experimental/essglobal/standard/legal-form/L3>	Company 		

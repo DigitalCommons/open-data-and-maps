@@ -45,7 +45,7 @@
    </head>
     <body style="padding:0px; margin:0px;">
     <div class="header row" id="navbar">
-            <!--AFTER SEA LAUNCH <a href="http://solidarityeconomy.coop"><img style="height:80px; float:left;" src="logo.png" title="Solidarity Economy Association" /></a> -->
+            <!--AFTER SEA LAUNCH <a href="http://solidarityeconomy.coop">--><img style="height:80px; float:left;" src="logo.png" title="Solidarity Economy Association" />
             <a class="button" href="info.php">About</a>
 <?php       
         if (isset($_SESSION['user'])){
@@ -59,6 +59,7 @@
     <div class="body row">
         <div class="left col scroll-y" id="detail" >
             <h1 style="margin-top: 0px;">Welcome to the Solidarity Economy in Oxford</h1>
+            <p>This is a pilot phase project from the <a href=info.php>Solidarity Economy Association</a>.</p>
     <p>Please explore some of the great things that are happening in Oxford. If you are involved in an initiative which is beneficial for people or planet please take 5 minutes to register and add yourself to the map!</p>
 <p>Click on a marker to display information for that initiative</p>
         </div>
@@ -95,7 +96,10 @@
 
         var dataLength = data.length;
 
+
         for (var i = 0; i < dataLength; i++) {
+
+            if(data[i][23]!=null){
 
             var marker = L.marker([data[i][24],data[i][25]],
                 {
@@ -109,6 +113,8 @@
                 marker.on('click', onMarkerClick);
 
                 markerClusters.addLayer(marker);
+
+            };
 };
 
         map.addLayer(markerClusters);

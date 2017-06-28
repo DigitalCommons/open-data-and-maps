@@ -84,7 +84,7 @@
     <label >What kinds of labour does your organisation use? (choose up to 3):<br/></label>
             <?php 
                 foreach($labour as $array){
-                    echo '<input type="checkbox" name="interaction[]" form="form" value="'.$array[0].'"><label>'.$array[0].'</label><br/>';
+                    echo '<input type="checkbox" name="interaction[]" form="form" value="'.$array[0].'"><label class="tooltip">'.$array[0].'<span class="tooltiptext">'.$array[1].'</span></label><br/>';
                 };
             ?>
     <br/>
