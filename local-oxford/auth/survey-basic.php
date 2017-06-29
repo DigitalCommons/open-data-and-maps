@@ -54,7 +54,7 @@
         src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
     </script>
 
-    <script>
+        <script>
         var map = L.map('map').setView([51.75, -1.25], 12);
         mapLink = 
             '<a href="http://openstreetmap.org">OpenStreetMap</a>';
@@ -64,23 +64,34 @@
             maxZoom: 18,
             }).addTo(map);
 
+        var currentMarker;
 
+        map.on("click", function (event) {
+            if (currentMarker) {
+                currentMarker.setLatLng(event.latlng);
 
-        document.getElementById('map').style.cursor = 'crosshair';
-
-        map.on('click', function(e) {
-
-    var gpsLat = e.latlng.lat;
-    var gpsLng = e.latlng.lng;
+        var gpsLat = event.latlng.lat;
+        var gpsLng = event.latlng.lng;
 
         document.getElementById("myLat").innerHTML=gpsLat;
         document.getElementById("myLng").innerHTML=gpsLng;
 
         document.getElementById('lat').value = gpsLat;
         document.getElementById('lng').value = gpsLng;
+            return;
+        }
 
 
-});
+
+        currentMarker = L.marker(event.latlng, {
+            draggable: true
+        }).addTo(map).on("click", function () {
+            event.originalEvent.stopPropagation();
+        });
+        });
+
+        document.getElementById('map').style.cursor = 'crosshair';
+
 
 
     </script>
