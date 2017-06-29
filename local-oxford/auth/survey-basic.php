@@ -81,7 +81,14 @@
             return;
         }
 
+        var gpsLat = event.latlng.lat;
+        var gpsLng = event.latlng.lng;
 
+        document.getElementById("myLat").innerHTML=gpsLat;
+        document.getElementById("myLng").innerHTML=gpsLng;
+
+        document.getElementById('lat').value = gpsLat;
+        document.getElementById('lng').value = gpsLng;
 
         currentMarker = L.marker(event.latlng, {
             draggable: true
