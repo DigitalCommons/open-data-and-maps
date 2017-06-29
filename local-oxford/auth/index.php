@@ -141,7 +141,7 @@
                 <?php //Add a report option for registered users
                     if(isset($_SESSION['user']))    
                     {
-                    echo 'initiativeDescription += "<br/><a href=report.php?id="+data[e.target.dataId][26]+">Click to Report if this initiative should not be on the map</a>";';
+                    echo 'initiativeDescription += "<br/><a href=why-report.php?id="+data[e.target.dataId][26]+">Click to Report if this initiative should not be on the map</a>";';
                     };
                 ?>
 

@@ -18,10 +18,11 @@
 
 <?php	
 		$user = $_SESSION['user'];
-		$id = $_GET['id'];
+		$id = $_POST['id'];
+		$reason = htmlentities($_POST['reason']);
 		$sendto = "dan@solidarityeconomics.org";
 		$subject = "Local Map Report";
-		$msg = "The user: ".$user."\nHas reported the initiative with the following id in the data table: ".$id;
+		$msg = "The user: ".$user."\nHas reported the initiative with the following id in the data table: ".$id."\nThe reason they gave for reporting was:\n".$reason;
  		$headers = 'From: dan@solidarityeconomics.org' . "\r\n" .
     		'X-Mailer: PHP/' . phpversion();
  		mail($sendto,$subject,$msg,$headers);
