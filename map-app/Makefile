@@ -1,6 +1,7 @@
 # Hint: type 'make' to get the usage message.
 
 .PHONY: help deploy lint build
+.PHONY: build_coops_uk_map
 .DEFAULT_GOAL: help
 
 help:
@@ -32,6 +33,11 @@ BUILD_CONFIG := build.js
 
 APP_DIR := $(SRC_DIR)app/
 JS_FILES := $(SRC_DIR)app.js $(shell find $(APP_DIR) -name '*.js')
+
+build_coops_uk_map:
+	node $(PACKAGER_OPTIMIZER) -o $(BUILD_CONFIG) dir=coops_uk_map
+	find $(BUILT_DIR) -name '*.swp' -exec rm {} \;	# Delete files left behind by VIM
+
 
 build:
 	node $(PACKAGER_OPTIMIZER) -o $(BUILD_CONFIG)
