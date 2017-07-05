@@ -29,8 +29,13 @@
 			//check legitimacy
 			$user = mysqli_real_escape_string($conn,$_POST["email"]);
 			$checkuser =  "SELECT * FROM users WHERE email='".$user."';";
-			$result0 = mysqli_query($conn, $checkuser);
-		
+        
+        	if ($statemt = mysqli_prepare($conn, $checkuser)) {
+				mysqli_stmt_execute($statemt); 
+				$result0 = mysqli_stmt_get_result($statemt);
+			}; 		
+
+
 			if(mysqli_num_rows($result0) == 1){
 				//create password
 			$random = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', mt_rand(1,5))),1,10);
@@ -41,20 +46,19 @@
    				mysqli_stmt_bind_param($stmt, "ss", $hash, $user);
     			mysqli_stmt_execute($stmt); };
 				//send unhashed version to email with login link
-    		$subject = "Data Registration";
+    		$subject = "Oxford Solidarity Economy Mapping";
 			$msg = "Hi ".$user.",\nYou've requested a new password, please login (http://internal.parecco.co.uk/oxford-data/login.php) using your email and the following password and then change it to something more memorable:\n".$random;
  			$headers = 'From: dan@solidarityeconomics.org' . "\r\n" .'X-Mailer: PHP/' . phpversion();
  			mail($user,$subject,$msg,$headers);
 				//echo message to check emails
  			echo '<p>Please go and check your emails for your new password and then <a href="login.php">login</a>.</p>';
- 			echo '<p>('.$random.')<p>';
 			}
 			else{
 				//echo "email not recognised please register(link) or try again(link)."
 			echo '<p>Email not recognised please <a href="register.php">register</a> or <a href="forgot.php">try again</a>.</p>';
 			};
 		};
-
+			mysqli_close($conn);
 		?>
   			
   		 

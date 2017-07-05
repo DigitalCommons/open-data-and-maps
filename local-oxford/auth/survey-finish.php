@@ -13,20 +13,21 @@
         
         //Process data to be uploaded
         isset($_POST['members']) ? $members = $_POST['members'] : $members = '';
-        isset($_POST['volunteervac']) ? $volunteervac = $_POST['volunteervac'] : $volunteervac = '';
-        isset($_POST['jobvac']) ? $jobvac = $_POST['jobvac'] : $jobvac = '';
         isset($_POST['foundingyear']) ? $foundingyear = $_POST['foundingyear'] : $foundingyear = '';
         isset($_POST['legal']) ? $legal = $_POST['legal'] : $legal = '';
         isset($_POST['registrar']) ? $registrar = $_POST['registrar'] : $registrar = '';
         isset($_POST['registerednum']) ? $registerednum = $_POST['registerednum'] : $registerednum  = '';
 
 
-
         //Upload Data
-        $addinfo = 'UPDATE data SET members = '.$members.', volunteervac = "'.$volunteervac.'", jobvac = "'.$jobvac.'", foundingyear = '.$foundingyear.', legal = "'.$legal.'", legal = "'.$legal.'", registrar = "'.$registrar.'", registerednum = "'.$registerednum.'" WHERE email = "'.$user.'";';
-        $result = mysqli_query( $conn, $addinfo ); //needs securing
+        $addinfo = 'UPDATE data SET  members = ?,  foundingyear = ?, legal = ?, registrar = ?, registerednum = ? WHERE email = ?;';
 
-        header("Location: index.php");
+        if ($stmt = mysqli_prepare($conn, $addinfo)) {
+            mysqli_stmt_bind_param($stmt, "iissss", $members,$foundingyear,$legal,$registrar,$registerednum,$user);
+            mysqli_stmt_execute($stmt);
+        };
+
+        header("Location: profile.php");
         exit();
         
 ?>	

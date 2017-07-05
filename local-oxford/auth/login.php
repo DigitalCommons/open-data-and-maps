@@ -8,8 +8,8 @@
 
     <body>
         <div class="centered">
-            <img src="logo.png" alt="logo" id="splash" />
-            <?php if(isset($_GET['id'])){$id = $_GET['id']; if($id=='nope'){echo "<p id='login-header'>Email/Password didn't work</p>";}}; ?>
+           
+            <?php if(isset($_GET['id'])){$id = $_GET['id']; if($id=='nope'){echo "<p id='login-header'>Email/Password didn't work</p>";}}else {echo'            <img id="splash" src="logo.png" title="Solidarity Economy Association" />';}; ?>
             <form action="start.php" method="POST" id="form">
                 <label class="smaller">Email<br/></label>
                 <input type="text" name="user"/><br/>

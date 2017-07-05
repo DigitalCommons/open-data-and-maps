@@ -23,7 +23,11 @@
 
 		// Check if user already exists
 		$checkuser =  "SELECT * FROM users WHERE email='".$user."';";
-		$result0 = mysqli_query($conn, $checkuser);
+
+        if ($statemt = mysqli_prepare($conn, $checkuser)) {
+			mysqli_stmt_execute($statemt); 
+			$result0 = mysqli_stmt_get_result($statemt);
+			}; 		
 		
 		if(mysqli_num_rows($result0) == 1){
 		echo "<p>Sorry that email is already in use, <a href='forgot.php'>forget your password?</a> Or back to <a href='login.php'>Login</a>.</p>";}
@@ -40,15 +44,15 @@
 
 		//Secure from SQL injection
 
-		if ($stmt = mysqli_prepare($conn, 'INSERT INTO users VALUES(NULL,?,?,?, NULL);')) {
+		if ($stmt = mysqli_prepare($conn, 'INSERT INTO users (email, password, verification) VALUES(?,?,?);')) {
 
    		mysqli_stmt_bind_param($stmt, "sss", $user, $hash, $random);
 
     	mysqli_stmt_execute($stmt); };
 
 		//Send an email
-		$subject = "Data Registration";
-		$msg = "Hi ".$user.",\nWelcome to the Oxford Map, to set up your password click this link, Thanks Very Much!\nhttp://internal.parecco.co.uk/oxford-data/verify.php?id=".$random;
+		$subject = "Oxford Solidarity Economy Mapping";
+		$msg = "Hello!,\nWelcome to the Oxford Map, to verify your email and add yourself to the map click the following link, Thanks Very Much!\nhttp://oxford.solidarityeconomics.org/verify.php?id=".$random;
  		$headers = 'From: dan@solidarityeconomics.org' . "\r\n" .
     		'X-Mailer: PHP/' . phpversion();
  		mail($user,$subject,$msg,$headers);

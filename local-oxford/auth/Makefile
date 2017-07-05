@@ -12,10 +12,10 @@ help:
 # The value of SERVER would often be the name of a host set up in an ssh config file. 
 # See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
 SERVER ?= parecco
-SERVER_APP_DIR ?= www-internal/oxford-data/
+SERVER_APP_DIR ?= public_html/subdomains/solidarityeconomics.org/oxford
 BUILT_DIR := ./
 
-RSYNC := rsync -avz --chmod=ugo=rx
+RSYNC := rsync -avz --chmod=D755,F644
 
 # Define macro for executing commands on the server (here using ssh):
 SERVER_CMD = ssh $(SERVER) $(1)
