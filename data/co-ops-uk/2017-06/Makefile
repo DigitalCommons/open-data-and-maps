@@ -103,8 +103,9 @@ SSH := ssh
 # N.B. http://unix.stackexchange.com/questions/94421/how-to-use-ssh-config-setting-for-each-server-by-rsync
 
 # Source files:
-COOPS_UK_OUTLETS_CSV := co-operativeeconomy_opendataextract2016/2016open_data_outlets.csv
-COOPS_UK_ORGS_CSV := co-operativeeconomy_opendataextract2016/2016open_data_organisations.csv
+CSV_DIR := co-ops-uk-csv-data/
+COOPS_UK_OUTLETS_CSV := $(CSV_DIR)open_data_outlets.csv
+COOPS_UK_ORGS_CSV := $(CSV_DIR)open_data_organisations.csv
 
 # Programs/scripts:
 GEN_TRIPLES := generate-triples.rb
