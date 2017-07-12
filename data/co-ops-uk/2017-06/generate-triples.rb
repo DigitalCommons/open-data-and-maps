@@ -659,7 +659,7 @@ class Initiative
     ch_uri = csv_row["Registrar"] === "Companies House" ? "http://business.data.gov.uk/id/company/#{csv_row["Registered Number"].rjust(8, "0")}" : nil
 
     # Diagnostic output, if you want to see when we've found a Companies House URI:
-    puts "Companies House URI for #{csv_row["CUK Organisation ID"]}:\t#{ch_uri}" if ch_uri
+    #puts "Companies House URI for #{csv_row["CUK Organisation ID"]}:\t#{ch_uri}" if ch_uri
 
     Initiative.new(csv_row, {
       name: csv_row["Trading Name"],
@@ -676,6 +676,7 @@ class Initiative
     @homepage = opts[:homepage] || ""
     @postcode_text = opts[:postcode_text] || ""
     @postcode_normalized = opts[:postcode_normalized] || ""
+    raise "Empty postcode" if postcode_normalized.empty?
     # It is important that the companies_house_uri is encoded eith type 'uri' in the RDF.
     # See Issue: https://github.com/p6data-coop/ise-linked-open-data/issues/20
     @companies_house_uri = opts[:companies_house_uri] ? RDF::URI(opts[:companies_house_uri]) : nil
@@ -779,7 +780,7 @@ class Initiative
     # Return an ordnance survey postcode URI
     # TODO - raise an exception if there's not postcode URI for this postcode (e.g. Northern Irish ones??)
     postcode = postcode_normalized
-    raise "Empty postcode" if postcode.empty?
+    raise "Empty postcode. Source: \"#{source_as_str}\"" if postcode.empty?
     $ospostcode[postcode]	# Convert it to RDF URI, using $ospostcode vocab.
   end
   def make_graph
