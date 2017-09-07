@@ -83,7 +83,7 @@ define check_valid_edition
 endef
 
 # See https://github.com/p6data-coop/ise-linked-open-data/wiki/URIs for a discussion about "experimental"
-DATASET ?= co-ops-uk
+DATASET ?= co-ops-uk2017
 
 # Following data.gov.uk principles, URIs for real-world objects are under `id`, ...
 URI_PATTERN ?= id/$(IDENTIFIER_PATH)
