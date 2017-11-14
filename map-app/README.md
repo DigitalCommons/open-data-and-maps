@@ -46,7 +46,7 @@ curl  -H "Accept: application/rdf+xml" -L http://data.solidarityeconomics.org/id
 
 ## Limitations
 
-Although the Co-ops UK dataset includes co-ops in Northern Ireland, the map-app does not show them, because Ordnance Survey don't publish data for Northern Ireland free of charge.
+Although the Co-ops UK dataset includes co-ops in Northern Ireland, the map-app does not show them, because Ordnance Survey doesn't publish data for Northern Ireland free of charge.
 
 Other co-ops have also been omitted. 
 The most common cause for this is URI clashes - we're constructing URIs by concatenating `Co-ops UK Organization ID` and `Postcode`.
