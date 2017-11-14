@@ -40,6 +40,8 @@ $(HELP_target):
 # The value of SERVER would often be the name of a host set up in an ssh config file. 
 # See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
 SERVER ?= parecco
+
+# SERVER_DIR must already exist when the DEPLOY_target is invoked
 SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
 DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 
