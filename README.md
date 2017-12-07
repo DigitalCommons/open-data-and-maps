@@ -1,4 +1,6 @@
 # open-data-and-maps
+[Matt Wallis](https://github.com/matt-wallis) is reponsible for this repository.
+
 Linked Open Data and geographic maps for the Solidarity Economy produced by the [Solidarity Economy Association](https://www.solidarityeconomy.coop/).
 
 See [ISE strategy for data](http://solidarityeconomics.org/2016/02/16/ise-strategy-for-data/).
