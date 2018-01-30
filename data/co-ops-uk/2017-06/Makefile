@@ -55,7 +55,7 @@ ALLOW_BLANK_NODES_FLAG := --allow-blank-nodes
 # We maintain different editions of the data.
 # The 'edition' variable should be passed in as a command line argument.
 # Generated data for each edition is kept in it's own separate directory.
-EDITIONS := final test
+EDITIONS := final test2017
 ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
   edition_errmsg := Unrecognized edition - you must use 'make edition=x' where x is one of {$(EDITIONS)}
   BAD_EDITION := yup
@@ -65,7 +65,7 @@ ifeq ($(edition),final)
   IDENTIFIER_PATH ?= experimental/
   # There is no max number of CSV rows:
   MAX_CSV_ROWS :=  100
-else ifeq ($(edition),test)
+else ifeq ($(edition),test2017)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
   #MAX_CSV_ROWS := 100
