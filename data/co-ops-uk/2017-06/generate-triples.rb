@@ -12,6 +12,7 @@
 
 require 'pp'
 require 'optparse'
+require 'ostruct'
 require 'cgi'
 require 'csv'
 require 'json'
