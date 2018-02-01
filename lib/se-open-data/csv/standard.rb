@@ -6,6 +6,9 @@ module SeOpenData
       # The order of the columns:
       HeadersV1 = [:id, :name, :postcode, :homepage, :companies_house_number]
 
+      # Keys should provide unique access to the dataset (no dups)
+      KeysV1 = [:id]
+
       # The text of each column:
       HeaderText = {
 	id: "Identifier",

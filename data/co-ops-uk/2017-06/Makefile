@@ -127,9 +127,12 @@ STD_CSV_DIR := $(GEN_CSV_DIR)standard/
 STD_COOPS_UK_OUTLETS_CSV := $(STD_CSV_DIR)open_data_outlets.csv
 STD_COOPS_UK_ORGS_CSV := $(STD_CSV_DIR)open_data_organisations.csv
 STD_COOPS_UK_MERGED_CSV := $(STD_CSV_DIR)co-ops-uk-merged.csv
+STD_COOPS_UK_DE_DUPED_CSV := $(STD_CSV_DIR)co-ops-uk-de-duplicated.csv
+STD_COOPS_UK_DUPS_CSV := $(STD_CSV_DIR)co-ops-uk-ignored-duplicates.csv
 COOPS_UK_ORGS_CSV_CONVERTER := co-ops-uk-orgs-converter.rb
 COOPS_UK_OUTLETS_CSV_CONVERTER := co-ops-uk-outlets-converter.rb
 CSV_MERGER := ../../../lib/se-open-data/csv/merge.rb
+CSV_DE_DUPER := ../../../lib/se-open-data/csv/de-duplicator.rb
 
 
 
@@ -141,6 +144,11 @@ $(STD_COOPS_UK_ORGS_CSV) : $(COOPS_UK_ORGS_CSV) $(COOPS_UK_ORGS_CSV_CONVERTER) |
 
 $(STD_COOPS_UK_MERGED_CSV) : $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) $(CSV_MERGER) 
 	$(RUBY) $(CSV_MERGER) $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) > $@
+
+$(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_MERGED_CSV) 
+	$(RUBY) $^ > $@ 2> $(STD_COOPS_UK_DUPS_CSV)
+	@echo "Ignored duplicates have been written to $(STD_COOPS_UK_DUPS_CSV)"
+	@echo Total ignored: `wc -l $(STD_COOPS_UK_DUPS_CSV)`
 
 $(STD_CSV_DIR):
 	$(check_valid_edition)
@@ -174,7 +182,8 @@ space := $(nullstring) # end of the line
 comma := ,
 
 #$(CSV_target): $(STD_COOPS_UK_ORGS_CSV) $(STD_COOPS_UK_OUTLETS_CSV) | $(STD_CSV_DIR)
-$(CSV_target): $(STD_COOPS_UK_MERGED_CSV) | $(STD_CSV_DIR)
+#$(CSV_target): $(STD_COOPS_UK_MERGED_CSV) | $(STD_CSV_DIR)
+$(CSV_target): $(STD_COOPS_UK_DE_DUPED_CSV) | $(STD_CSV_DIR)
 
 ONE_BIG_RDFXML_FILE := $(GEN_DATA_DIR)$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf
 
