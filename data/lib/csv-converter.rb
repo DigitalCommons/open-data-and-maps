@@ -12,7 +12,7 @@ module SeOpenData
       companies_house_number: "Companies House Number"
     }
     StandardHeadersV1 = [:id, :name, :postcode, :homepage, :companies_house_number]
-    def initialize(argv, output_headers)
+    def initialize(output_headers)
       @output_headers = output_headers
     end
     def convert(csv_row_reader, csv_opts)

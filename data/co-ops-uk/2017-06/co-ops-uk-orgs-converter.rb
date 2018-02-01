@@ -23,6 +23,6 @@ class CoopsUkOrgsReader < SeOpenData::CsvRowReader
   end
 end
 output_headers = SeOpenData::CsvConverter::StandardHeadersV1
-csv_converter = SeOpenData::CsvConverter.new(ARGV, output_headers)
+csv_converter = SeOpenData::CsvConverter.new(output_headers)
 csv_converter.convert(CoopsUkOrgsReader, encoding: "ISO-8859-1")
 
