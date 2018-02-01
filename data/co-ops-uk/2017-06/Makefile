@@ -1,11 +1,12 @@
 # Hint: type 'make' to get the usage message.
 
 GENERATE_target := generate
+CSV_target := csv
 DEPLOY_target := deploy
 TRIPLESTORE_target := triplestore
 HELP_target := help
 SPARQLTEST_target := sparqltest
-.PHONY: $(HELP_target) $(GENERATE_target) $(DEPLOY_target) $(TRIPLESTORE_target) $(SPARQLTEST_target)
+.PHONY: $(HELP_target) $(GENERATE_target) $(DEPLOY_target) $(TRIPLESTORE_target) $(SPARQLTEST_target) $(CSV_target)
 .DEFAULT_GOAL: $(HELP_target)
 
 date ?= $(shell date -u +%Y%m%d)
@@ -97,7 +98,7 @@ DOC_URL_BASE := $(DATA_SERVER_URL)/$(SERVER_DOC_DIR)
 
 # Programs used within this makefile:
 SCP := scp
-RUBY := ruby
+RUBY := ruby2.4
 RSYNC := rsync -avz 
 SSH := ssh
 
@@ -120,6 +121,30 @@ DATA_DIR := $(GEN_DATA_DIR)$(DATASET)
 CSS_SRC_DIR := css/
 CSS_GEN_DIR := $(GEN_DATA_DIR)$(DATASET)/css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
+
+GEN_CSV_DIR := generated-data/csv/
+STD_CSV_DIR := $(GEN_CSV_DIR)standard/
+STD_COOPS_UK_OUTLETS_CSV := $(STD_CSV_DIR)open_data_outlets.csv
+STD_COOPS_UK_ORGS_CSV := $(STD_CSV_DIR)open_data_organisations.csv
+STD_COOPS_UK_MERGED_CSV := $(STD_CSV_DIR)co-ops-uk-merged.csv
+COOPS_UK_ORGS_CSV_CONVERTER := co-ops-uk-orgs-converter.rb
+COOPS_UK_OUTLETS_CSV_CONVERTER := co-ops-uk-outlets-converter.rb
+CSV_MERGER := ../../../lib/se-open-data/csv/merge.rb
+
+
+
+$(STD_COOPS_UK_OUTLETS_CSV) : $(COOPS_UK_OUTLETS_CSV) $(COOPS_UK_OUTLETS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_OUTLETS_CSV))
+	$(RUBY) $(COOPS_UK_OUTLETS_CSV_CONVERTER) $< > $@
+
+$(STD_COOPS_UK_ORGS_CSV) : $(COOPS_UK_ORGS_CSV) $(COOPS_UK_ORGS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_ORGS_CSV))
+	$(RUBY) $(COOPS_UK_ORGS_CSV_CONVERTER) $< > $@
+
+$(STD_COOPS_UK_MERGED_CSV) : $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) $(CSV_MERGER) 
+	$(RUBY) $(CSV_MERGER) $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) > $@
+
+$(STD_CSV_DIR):
+	$(check_valid_edition)
+	mkdir -p $@
 
 $(DATA_DIR):
 	$(check_valid_edition)
@@ -147,6 +172,9 @@ TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
 nullstring :=
 space := $(nullstring) # end of the line
 comma := ,
+
+#$(CSV_target): $(STD_COOPS_UK_ORGS_CSV) $(STD_COOPS_UK_OUTLETS_CSV) | $(STD_CSV_DIR)
+$(CSV_target): $(STD_COOPS_UK_MERGED_CSV) | $(STD_CSV_DIR)
 
 ONE_BIG_RDFXML_FILE := $(GEN_DATA_DIR)$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf
 
