@@ -304,26 +304,6 @@ class Collection < Array	# of Initiatives
     each {|i| h[i.id] << i }
     h
   end
-  def resolve_duplicates
-    # Currently, this method does not resolve duplicates, but reports on them.
-    # The HTML report produced by method duplicates_html may be a better choice than this.
-    outlets_headers = ["CUK Organisation ID", "Registered Name", "Outlet Name", "Street", "City", "State/Province", "Postcode", "Description", "Phone", "Website"]
-    h = to_hash
-    dups = h.select {|k, v| v.count > 1}
-    pp dups
-    dups.each {|k, v| 
-      common, different = outlets_headers.partition{|x|
-	v.map { |i| i.csv_row[x] }.uniq.count == 1
-      }
-      puts common.map { |x| "#{x}: #{v[0].csv_row[x]}" }.join("; ")
-      puts v.map { |i| "    #{different.map { |x| "#{x}: #{i.csv_row[x]}" }.join("; ")}\n"}.join
-
-      if v.uniq.count == 1
-	puts "Duplicate entries in source data:"
-	pp v
-      end
-    }
-  end
   def websites_html(prog_ctr)
     # Report on the Websites.
     css = <<'ENDCSS'
@@ -844,6 +824,5 @@ map_app_json_file = "initiatives.json"
 prog_ctr = P6::ProgressCounter.new("Saving map-app data to #{map_app_json_file} ... ", collection.size)
 P6::File.save(collection.map_app_json(prog_ctr, postcode_lat_lng_cache), map_app_json_file)
 
-#collection.resolve_duplicates
 collection.create_files(postcode_lat_lng_cache)
 collection.create_sparql_files
