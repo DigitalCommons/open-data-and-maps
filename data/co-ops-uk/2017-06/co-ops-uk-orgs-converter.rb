@@ -33,7 +33,7 @@ end
 
 SeOpenData::CSV.convert(
   # Output:
-  $stdout, SeOpenData::CSV::Standard::HeadersV1, SeOpenData::CSV::Standard::HeaderText,
+  $stdout, SeOpenData::CSV::Standard::V1::Headers,
   # Input:
   ARGF.read, CoopsUkOrgsReader, encoding: "ISO-8859-1"
 )

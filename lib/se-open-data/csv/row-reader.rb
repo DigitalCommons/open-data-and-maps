@@ -11,7 +11,7 @@ module SeOpenData
 	postcode.upcase.gsub(/\s+/, "")
       end
       def method_missing(method, *args, &block)
-	@headers.keys.include?(method) ?  @row[@headers[method]] : ""
+	@headers.keys.include?(method) ?  @row[@headers[method]] : nil
       end
     end
   end
@@ -52,7 +52,7 @@ end
 
 SeOpenData::CSV.convert(
   # Output:
-  $stdout, SeOpenData::CSV::Standard::HeadersV1, SeOpenData::CSV::Standard::HeaderText,
+  $stdout, SeOpenData::CSV::Standard::V1::Headers,
   # Input:
   ARGF.read, CoopsUkOutletsReader, encoding: "ISO-8859-1"
 )

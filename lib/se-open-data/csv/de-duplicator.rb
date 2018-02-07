@@ -37,5 +37,5 @@ module SeOpenData
   end
 end
 
-Keys = SeOpenData::CSV::Standard::KeysV1.map {|sym| SeOpenData::CSV::Standard::HeaderText[sym] }
+Keys = SeOpenData::CSV::Standard::V1::UniqueKeys.map {|sym| SeOpenData::CSV::Standard::V1::Headers[sym] }
 SeOpenData::CSV.de_duplicator(ARGF.read, $stdout, $stderr, Keys)
