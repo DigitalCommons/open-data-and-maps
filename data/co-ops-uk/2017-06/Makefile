@@ -98,7 +98,8 @@ DOC_URL_BASE := $(DATA_SERVER_URL)/$(SERVER_DOC_DIR)
 
 # Programs used within this makefile:
 SCP := scp
-RUBY := ruby2.4
+#RUBY := ruby2.4
+RUBY := ruby
 RSYNC := rsync -avz 
 SSH := ssh
 
@@ -132,29 +133,32 @@ STD_COOPS_UK_DUPS_CSV := $(STD_CSV_DIR)co-ops-uk-ignored-duplicates.csv
 STD_COOPS_UK_WITH_LAT_LNG := $(STD_CSV_DIR)co-ops-uk-with-lat-lng.csv
 COOPS_UK_ORGS_CSV_CONVERTER := co-ops-uk-orgs-converter.rb
 COOPS_UK_OUTLETS_CSV_CONVERTER := co-ops-uk-outlets-converter.rb
-CSV_MERGER := ../../../lib/se-open-data/csv/merge.rb
-CSV_DE_DUPER := ../../../lib/se-open-data/csv/de-duplicator.rb
-CSV_POSTCODEUNIT_ADDER := ../../../lib/se-open-data/csv/add-ospostcodeunit.rb
+
+SE_OPEN_DATA_BIN_DIR := ../../tools/se_open_data/bin/
+SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
+CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)merge.rb
+CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)de-duplicator.rb
+CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)add-ospostcodeunit.rb
 POSTCODE_LAT_LNG_CACHE := postcode_lat_lng.json
 
 
 
 $(STD_COOPS_UK_OUTLETS_CSV) : $(COOPS_UK_OUTLETS_CSV) $(COOPS_UK_OUTLETS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_OUTLETS_CSV))
-	$(RUBY) $(COOPS_UK_OUTLETS_CSV_CONVERTER) $< > $@
+	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(COOPS_UK_OUTLETS_CSV_CONVERTER) $< > $@
 
 $(STD_COOPS_UK_ORGS_CSV) : $(COOPS_UK_ORGS_CSV) $(COOPS_UK_ORGS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_ORGS_CSV))
-	$(RUBY) $(COOPS_UK_ORGS_CSV_CONVERTER) $< > $@
+	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(COOPS_UK_ORGS_CSV_CONVERTER) $< > $@
 
 $(STD_COOPS_UK_MERGED_CSV) : $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) $(CSV_MERGER) 
-	$(RUBY) $(CSV_MERGER) $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) > $@
+	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_MERGER) $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) > $@
 
 $(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_MERGED_CSV) 
-	$(RUBY) $^ > $@ 2> $(STD_COOPS_UK_DUPS_CSV)
+	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $^ > $@ 2> $(STD_COOPS_UK_DUPS_CSV)
 	@echo "Ignored duplicates have been written to $(STD_COOPS_UK_DUPS_CSV)"
 	@echo Total ignored: `wc -l $(STD_COOPS_UK_DUPS_CSV)`
 
 $(STD_COOPS_UK_WITH_LAT_LNG) : $(STD_COOPS_UK_DE_DUPED_CSV) $(CSV_POSTCODEUNIT_ADDER)
-	$(RUBY) $(CSV_POSTCODEUNIT_ADDER) --postcodeunit-cache $(POSTCODE_LAT_LNG_CACHE) $< > $@
+	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_POSTCODEUNIT_ADDER) --postcodeunit-cache $(POSTCODE_LAT_LNG_CACHE) $< > $@
 
 $(STD_CSV_DIR):
 	$(check_valid_edition)

@@ -1,7 +1,8 @@
 require 'linkeddata'
 
-$lib_dir = "../../../lib/p6/"
-require_relative $lib_dir + 'rdf-cache'
+#$lib_dir = "../../../lib/p6/"
+#require_relative $lib_dir + 'rdf-cache'
+require_relative 'cache'
 
 module SeOpenData
   module RDF
@@ -11,7 +12,7 @@ module SeOpenData
 
       class Client
 	def initialize(rdf_cache_filename)
-	  @cache = RdfCache.new(rdf_cache_filename, {
+	  @cache = Cache.new(rdf_cache_filename, {
 	    lat: Geo["lat"].to_s,
 	    lng: Geo["long"].to_s
 	  })

@@ -3,7 +3,7 @@
 
 require 'pp'
 require 'csv'
-require_relative 'standard'
+require 'se_open_data'
 
 module SeOpenData
   module CSV

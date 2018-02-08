@@ -8,12 +8,9 @@ require 'pp'
 require 'optparse'
 require 'ostruct'
 
-require_relative 'convert'
-require_relative 'row-reader'
-require_relative 'standard'
-require_relative '../rdf/os-postcodeunit'
-$lib_dir = "../../../lib/p6/"
-require_relative $lib_dir + 'progress-counter'
+require 'se_open_data'
+#$lib_dir = "../../../lib/p6/"
+#require_relative $lib_dir + 'progress-counter'
 
 module SeOpenData
   module CSV

@@ -1,9 +1,7 @@
 # This is the Converter for Co-ops UK 'outlets' CSV.
 # It converts it into a CSV with standard column headings.
 
-require_relative '../../../lib/se-open-data/csv/standard'
-require_relative '../../../lib/se-open-data/csv/convert'
-require_relative '../../../lib/se-open-data/csv/row-reader'
+require 'se_open_data'
 
 class CoopsUkOutletsReader < SeOpenData::CSV::RowReader
   # For each symbol S in output_headers, the class determines how that output column is populated:
