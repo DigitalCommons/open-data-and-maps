@@ -1,4 +1,14 @@
 # Here we define the standard column headings for CSV that we convert to Linked Data
+#
+# The symbols in these Headers hashes are used elsewhere in the SeOpenData library
+# in order to address the data in a CSV file, with an extra level of indirection,
+# removing the dependency on the text of the Column header.
+# e.g. use 
+#    SeOpenData::CSV::Standard::V1::Headers[:postcode]
+# instead of
+#    "Postcode"
+#
+# So don't mess with the symbol names!!
 
 module SeOpenData
   module CSV

@@ -1,7 +1,5 @@
 require 'linkeddata'
 
-#$lib_dir = "../../../lib/p6/"
-#require_relative $lib_dir + 'rdf-cache'
 require_relative 'cache'
 
 module SeOpenData

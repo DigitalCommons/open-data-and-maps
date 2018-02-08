@@ -1,3 +1,12 @@
+###############################################
+#
+# OBSOLETE
+#
+# USE se_open_data/rdf/cache instead
+#
+###############################################
+
+#
 # This is motivated initially by the need to cache the lat/long results about postcodeunits.
 #
 

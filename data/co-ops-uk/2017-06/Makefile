@@ -138,7 +138,7 @@ SE_OPEN_DATA_BIN_DIR := ../../tools/se_open_data/bin/
 SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
 CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)merge.rb
 CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)de-duplicator.rb
-CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)add-ospostcodeunit.rb
+CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)add-postcode-lat-long-to-csv.rb
 POSTCODE_LAT_LNG_CACHE := postcode_lat_lng.json
 
 
