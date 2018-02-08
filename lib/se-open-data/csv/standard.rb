@@ -20,8 +20,8 @@ module SeOpenData
       module OsPostcodeUnit
 	Headers = {
 	  ospostcodeunit: "Postcode Unit",
-	  latitude: "Latitude",
-	  longitude: "Longitide"
+	  latitude: "Postcode Latitude",
+	  longitude: "Postcode Longitide"
 	}
       end
       module V1WithOsPostcodeUnit
