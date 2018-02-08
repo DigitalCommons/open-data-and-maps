@@ -1,15 +1,13 @@
 # De-duplicates rows of CSV.
 # A duplicate is defined as having the same keys as a previous row.
 
-require 'pp'
 require 'csv'
-require 'se_open_data'
 
 module SeOpenData
   module CSV
     def CSV.de_duplicator(
       input_io,		# Input CSV (must have headers)
-      output_io,	# CSV with duplicates removed (included headers)
+      output_io,	# CSV with duplicates removed
       error_io,		# CSV containing duplicates (no headers)
       keys		# Array of column headings that make up the unique key
     )
@@ -36,6 +34,3 @@ module SeOpenData
     end
   end
 end
-
-Keys = SeOpenData::CSV::Standard::V1::UniqueKeys.map {|sym| SeOpenData::CSV::Standard::V1::Headers[sym] }
-SeOpenData::CSV.de_duplicator(ARGF.read, $stdout, $stderr, Keys)
