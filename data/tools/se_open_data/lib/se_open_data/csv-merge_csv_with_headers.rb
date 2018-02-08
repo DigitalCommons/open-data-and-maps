@@ -2,7 +2,6 @@
 #  All are assumed to have a header row.
 #  It is an error for their header rows not to be identical.
 
-require 'pp'
 require 'csv'
 
 module SeOpenData
@@ -28,5 +27,3 @@ module SeOpenData
     end
   end
 end
-
-SeOpenData::CSV.merge_csv_with_headers(ARGV, $stdout)
