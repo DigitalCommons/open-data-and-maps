@@ -2,6 +2,7 @@
 
 GENERATE_target := generate
 CSV_target := csv
+RDF_target := rdf
 DEPLOY_target := deploy
 TRIPLESTORE_target := triplestore
 HELP_target := help
@@ -69,6 +70,8 @@ ifeq ($(edition),final)
 else ifeq ($(edition),test2017)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
+  URI_PREFIX := http://uri_prefix/
+
   #MAX_CSV_ROWS := 100
   MAX_CSV_ROWS :=
   #CHECK_WEBSITES_FLAG := --check-websites
@@ -139,25 +142,26 @@ SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
 CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)merge-csv-with-headers.rb
 CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv-de-duplicator.rb
 CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)add-postcode-lat-long-to-csv.rb
+CSV_TO_RDF := $(SE_OPEN_DATA_BIN_DIR)standard-csv-to-rdf.rb
 POSTCODE_LAT_LNG_CACHE := postcode_lat_lng.json
 
 
 
-$(STD_COOPS_UK_OUTLETS_CSV) : $(COOPS_UK_OUTLETS_CSV) $(COOPS_UK_OUTLETS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_OUTLETS_CSV))
+$(STD_COOPS_UK_OUTLETS_CSV) : $(COOPS_UK_OUTLETS_CSV) $(COOPS_UK_OUTLETS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_OUTLETS_CSV)) $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(COOPS_UK_OUTLETS_CSV_CONVERTER) $< > $@
 
-$(STD_COOPS_UK_ORGS_CSV) : $(COOPS_UK_ORGS_CSV) $(COOPS_UK_ORGS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_ORGS_CSV))
+$(STD_COOPS_UK_ORGS_CSV) : $(COOPS_UK_ORGS_CSV) $(COOPS_UK_ORGS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_ORGS_CSV)) $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(COOPS_UK_ORGS_CSV_CONVERTER) $< > $@
 
-$(STD_COOPS_UK_MERGED_CSV) : $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) $(CSV_MERGER) 
+$(STD_COOPS_UK_MERGED_CSV) : $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) $(CSV_MERGER)  | $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_MERGER) $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) > $@
 
-$(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_MERGED_CSV) 
+$(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_MERGED_CSV)  | $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $^ > $@ 2> $(STD_COOPS_UK_DUPS_CSV)
 	@echo "Ignored duplicates have been written to $(STD_COOPS_UK_DUPS_CSV)"
 	@echo Total ignored: `wc -l $(STD_COOPS_UK_DUPS_CSV)`
 
-$(STD_COOPS_UK_WITH_LAT_LNG) : $(STD_COOPS_UK_DE_DUPED_CSV) $(CSV_POSTCODEUNIT_ADDER)
+$(STD_COOPS_UK_WITH_LAT_LNG) : $(STD_COOPS_UK_DE_DUPED_CSV) $(CSV_POSTCODEUNIT_ADDER) | $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_POSTCODEUNIT_ADDER) --postcodeunit-cache $(POSTCODE_LAT_LNG_CACHE) $< > $@
 
 $(STD_CSV_DIR):
@@ -195,6 +199,14 @@ comma := ,
 #$(CSV_target): $(STD_COOPS_UK_MERGED_CSV) | $(STD_CSV_DIR)
 #$(CSV_target): $(STD_COOPS_UK_DE_DUPED_CSV) | $(STD_CSV_DIR)
 $(CSV_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(STD_CSV_DIR)
+
+$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) 
+	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
+	  --uri-prefix $(URI_PREFIX) \
+	  --dataset $(DATASET) \
+	  --essglobal-uri $(ESSGLOBAL_URI) \
+	  $<
+
 
 ONE_BIG_RDFXML_FILE := $(GEN_DATA_DIR)$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf
 
