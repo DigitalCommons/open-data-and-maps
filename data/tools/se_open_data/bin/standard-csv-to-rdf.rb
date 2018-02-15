@@ -68,7 +68,8 @@ config = SeOpenData::Initiative::RDF::Config.new($options.uri_prefix, $options.d
 # Create RDF for each initiative
 collection.each {|initiative|
   rdf = SeOpenData::Initiative::RDF.new(initiative, config)
-  rdf.graph
+  rdf.save_rdfxml($options.outdir)
+
   #rdf.save_as
 }
 

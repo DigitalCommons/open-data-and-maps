@@ -70,7 +70,6 @@ ifeq ($(edition),final)
 else ifeq ($(edition),test2017)
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
-  URI_PREFIX := http://uri_prefix/
 
   #MAX_CSV_ROWS := 100
   MAX_CSV_ROWS :=
@@ -200,12 +199,13 @@ comma := ,
 #$(CSV_target): $(STD_COOPS_UK_DE_DUPED_CSV) | $(STD_CSV_DIR)
 $(CSV_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(STD_CSV_DIR)
 
-$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) 
+$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(DATA_DIR)
+	head -100 $< | \
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
-	  --uri-prefix $(URI_PREFIX) \
+	  --output-directory $(GEN_DATA_DIR) \
+	  --uri-prefix $(URI_BASE) \
 	  --dataset $(DATASET) \
-	  --essglobal-uri $(ESSGLOBAL_URI) \
-	  $<
+	  --essglobal-uri $(ESSGLOBAL_URI) 
 
 
 ONE_BIG_RDFXML_FILE := $(GEN_DATA_DIR)$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf
