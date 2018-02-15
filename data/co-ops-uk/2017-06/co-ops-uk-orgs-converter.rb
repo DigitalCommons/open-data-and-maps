@@ -15,6 +15,7 @@ class CoopsUkOrgsReader < SeOpenData::CSV::RowReader
   CsvHeaders = {
     name: "Trading Name",
     postcode: "Registered Postcode",
+    country_name: "UK Nation",
     id: "CUK Organisation ID"
   }
   def initialize(row)

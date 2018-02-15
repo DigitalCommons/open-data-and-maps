@@ -7,10 +7,11 @@ module SeOpenData
 	Ospostcode = ::RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
 	Osspatialrelations = ::RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/")
 	Rov = ::RDF::Vocabulary.new("http://www.w3.org/ns/regorg#")
-	attr_reader :uri_prefix, :dataset, :essglobal_uri, :essglobal_vocab
+	attr_reader :uri_prefix, :dataset, :essglobal_uri, :essglobal_vocab, :essglobal_standard
 	def initialize(uri_prefix, dataset, essglobal_uri)
 	  @uri_prefix, @dataset, @essglobal_uri = uri_prefix, dataset, essglobal_uri
 	  @essglobal_vocab = ::RDF::Vocabulary.new(essglobal_uri + "vocab/")
+	  @essglobal_standard = ::RDF::Vocabulary.new(essglobal_uri + "standard/")
 	end
 	def prefixes
 	  {

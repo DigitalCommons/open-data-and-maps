@@ -26,6 +26,11 @@ class CoopsUkOutletsReader < SeOpenData::CSV::RowReader
   def id
     row["CUK Organisation ID"] + postcode_normalized
   end
+  def country_name
+    # The co-ops UK outlet CSV data, unlike the co-ops UK organizations CSV data,
+    # does not include the coiuntry name explicitly, so we just hard-code UK:
+    "UK"
+  end
 end
 
 SeOpenData::CSV.convert(

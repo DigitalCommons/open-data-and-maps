@@ -20,6 +20,7 @@ module SeOpenData
 	  id: "Identifier",
 	  name: "Name",
 	  postcode: "Postcode",
+	  country_name: "Country Name",
 	  homepage: "Website",
 	  companies_house_number: "Companies House Number"
 	}
