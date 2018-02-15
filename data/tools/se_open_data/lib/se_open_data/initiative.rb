@@ -1,10 +1,11 @@
 module SeOpenData
   class Initiative
-    def initialize(csv_row)
-      @csv_row = csv_row
+    attr_reader :config
+    def initialize(config, csv_row)
+      @config, @csv_row = config, csv_row
     end
-    def self.from_csv(row)
-      new(row)
+    def rdf
+      @rdf ||= RDF::new(self, config)
     end
     def method_missing(method, *args, &block)
       @csv_row.send(method, *args)

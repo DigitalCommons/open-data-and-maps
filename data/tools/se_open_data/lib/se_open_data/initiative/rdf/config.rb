@@ -28,7 +28,7 @@ module SeOpenData
 	def uri_base
 	  "#{uri_prefix}#{dataset}/"
 	end
-	def rdf_type
+	def initiative_rdf_type
 	  essglobal_vocab["SSEInitiative"]
 	end
       end

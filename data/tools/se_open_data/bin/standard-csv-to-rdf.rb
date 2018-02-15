@@ -57,22 +57,20 @@ end
 # Need some command line options...
 
 $options = OptParse.parse(ARGV)
-
+config = SeOpenData::Initiative::RDF::Config.new($options.uri_prefix, $options.dataset, $options.essglobal_uri)
 
 # Load CSV into data structures, for this particular standard
 Standard = SeOpenData::CSV::Standard::V1WithOsPostcodeUnit
-collection = SeOpenData::Initiative::Collection.new
+collection = SeOpenData::Initiative::Collection.new(config)
 collection.add_from_csv(ARGF.read, Standard::Headers)
-config = SeOpenData::Initiative::RDF::Config.new($options.uri_prefix, $options.dataset, $options.essglobal_uri)
 
 # Create RDF for each initiative
 collection.each {|initiative|
-  rdf = SeOpenData::Initiative::RDF.new(initiative, config)
-  rdf.save_rdfxml($options.outdir)
-  rdf.save_turtle($options.outdir)
-
-  #rdf.save_as
+  initiative.rdf.save_rdfxml($options.outdir)
+  initiative.rdf.save_turtle($options.outdir)
 }
+collection.rdf.save_rdfxml($options.outdir)
+collection.rdf.save_turtle($options.outdir)
 
 
 # Create RDF to list each initiative

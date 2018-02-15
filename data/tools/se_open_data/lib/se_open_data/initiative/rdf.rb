@@ -3,10 +3,10 @@ require 'linkeddata'
 module SeOpenData
   class Initiative
     class RDF
-      attr_reader :initiative, :config, :graph
+      attr_reader :initiative, :config
       def initialize(initiative, config)
+	puts "Initiative::RDF:" + initiative.id
 	@initiative, @config = initiative, config
-	@graph = make_graph
       end
       def save_rdfxml(outdir)
 	f = filename(outdir, ".rdf")
@@ -23,11 +23,13 @@ module SeOpenData
       def filename(outdir, ext)
 	outdir + config.dataset + "/" + initiative.id + ext
       end
+      def graph
+	@graph ||= make_graph
+      end
       def make_graph
 	puts uri.to_s
 	g = ::RDF::Graph.new
 	populate_graph(g)
-	#puts g.to_s
 	g
       end
       def uri
@@ -47,7 +49,7 @@ module SeOpenData
       end
 
       def populate_graph(graph)
-	graph.insert([uri, ::RDF.type, config.rdf_type])
+	graph.insert([uri, ::RDF.type, config.initiative_rdf_type])
 	if initiative.name && !initiative.name.empty?
 	  graph.insert([uri, ::RDF::Vocab::GR.name, initiative.name])
 	end
