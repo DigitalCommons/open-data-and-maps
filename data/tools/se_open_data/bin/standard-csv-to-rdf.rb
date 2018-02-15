@@ -69,6 +69,7 @@ config = SeOpenData::Initiative::RDF::Config.new($options.uri_prefix, $options.d
 collection.each {|initiative|
   rdf = SeOpenData::Initiative::RDF.new(initiative, config)
   rdf.save_rdfxml($options.outdir)
+  rdf.save_turtle($options.outdir)
 
   #rdf.save_as
 }

@@ -14,6 +14,12 @@ module SeOpenData
 	  writer << graph
 	}
       end
+      def save_turtle(outdir)
+	f = filename(outdir, ".ttl")
+	::RDF::Turtle::Writer.open(f, standard_prefixes: true, prefixes: config.prefixes) {|writer|
+	  writer << graph
+	}
+      end
       def filename(outdir, ext)
 	outdir + config.dataset + "/" + initiative.id + ext
       end
