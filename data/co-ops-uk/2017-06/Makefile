@@ -213,9 +213,6 @@ $(RDF_target): $(CSV_FOR_TESTING_TO_RDF) | $(DATA_DIR)
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  $<
 
-
-ONE_BIG_RDFXML_FILE := $(GEN_DATA_DIR)$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf
-
 # The GEN_SPARQL_DIR will be copied over to the map-app services dir, for use by a PHP script
 # These file names must match exactly the filenames in the PHP script
 MAP_APP_SPARQL_FILE := $(GEN_SPARQL_DIR)query.rq

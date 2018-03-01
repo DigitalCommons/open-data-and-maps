@@ -47,6 +47,10 @@ module SeOpenData
 	initiative.ospostcodeunit && !initiative.ospostcodeunit.empty? ?
 	  ::RDF::URI(initiative.ospostcodeunit) : nil
       end
+      def lat_lng
+	initiative.latitude && initiative.longitude && ! initiative.latitude.empty? && ! initiative.longitude.empty? ?
+	  { lat: initiative.latitude, lng: initiative.longitude } : nil
+      end
 
       def populate_graph(graph)
 	graph.insert([uri, ::RDF.type, config.initiative_rdf_type])
@@ -70,6 +74,11 @@ module SeOpenData
 	end
 	if ospostcodeunit_uri
 	  graph.insert([address_uri, Config::Osspatialrelations.within, ospostcodeunit_uri])
+	  loc = lat_lng
+	  if loc
+	    graph.insert([ospostcodeunit_uri, Config::Geo["lat"], ::RDF::Literal::Decimal.new(loc[:lat])])
+	    graph.insert([ospostcodeunit_uri, Config::Geo["long"], ::RDF::Literal::Decimal.new(loc[:lng])])
+	  end
 	end
 
       end

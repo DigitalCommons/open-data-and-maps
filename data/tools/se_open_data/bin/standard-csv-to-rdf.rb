@@ -14,6 +14,7 @@ class OptParse
     options.uri_prefix = nil
     options.dataset = nil
     options.essglobal_uri = nil
+    options.postcodeunit_cache = nil
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: $0 [options]"
@@ -38,6 +39,10 @@ class OptParse
 	      "Base URI for the essglobal vocabulary. e.g. http://purl.org/essglobal") do |uri|
         options.essglobal_uri = uri
       end
+      opts.on("--postcodeunit-cache FILENAME",
+	      "JSON file where OS postcode unit results are cached") do |filename|
+	options.postcodeunit_cache = filename
+      end
 
       opts.separator ""
       opts.separator "Common options:"
@@ -57,7 +62,12 @@ end
 # Need some command line options...
 
 $options = OptParse.parse(ARGV)
-config = SeOpenData::Initiative::RDF::Config.new($options.uri_prefix, $options.dataset, $options.essglobal_uri)
+config = SeOpenData::Initiative::RDF::Config.new(
+  $options.uri_prefix,
+  $options.dataset,
+  $options.essglobal_uri,
+  $options.postcodeunit_cache
+)
 
 # Load CSV into data structures, for this particular standard
 Standard = SeOpenData::CSV::Standard::V1WithOsPostcodeUnit
@@ -69,8 +79,10 @@ collection.each {|initiative|
   initiative.rdf.save_rdfxml($options.outdir)
   initiative.rdf.save_turtle($options.outdir)
 }
-collection.rdf.save_rdfxml($options.outdir)
-collection.rdf.save_turtle($options.outdir)
+collection.rdf.save_index_rdfxml($options.outdir)
+collection.rdf.save_index_turtle($options.outdir)
+collection.rdf.save_one_big_rdfxml($options.outdir)
+collection.rdf.save_one_big_turtle($options.outdir)
 
 
 # Create RDF to list each initiative

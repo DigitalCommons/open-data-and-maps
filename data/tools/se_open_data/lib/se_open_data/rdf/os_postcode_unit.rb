@@ -5,14 +5,12 @@ require_relative 'cache'
 module SeOpenData
   module RDF
     module OsPostcodeUnit
-      OsVocab = ::RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
-      Geo = ::RDF::Vocabulary.new("http://www.w3.org/2003/01/geo/wgs84_pos#")
 
       class Client
 	def initialize(rdf_cache_filename)
 	  @cache = Cache.new(rdf_cache_filename, {
-	    lat: Geo["lat"].to_s,
-	    lng: Geo["long"].to_s
+	    lat: Initiative::RDF::Config::Geo["lat"].to_s,
+	    lng: Initiative::RDF::Config::Geo["long"].to_s
 	  })
 	end
 	def get(postcode)
@@ -21,7 +19,7 @@ module SeOpenData
 	  postcode_normalized = normalize(postcode)
 	  return nil if postcode_normalized.empty?
 
-	  postcode_uri = OsVocab[postcode_normalized]
+	  postcode_uri = Initiative::RDF::Config::Ospostcode[postcode_normalized]
 	  res = @cache.get(postcode_uri)
 	  return nil unless res
 

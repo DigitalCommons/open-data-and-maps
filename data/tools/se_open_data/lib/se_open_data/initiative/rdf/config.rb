@@ -6,12 +6,14 @@ module SeOpenData
       class Config
 	Ospostcode = ::RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/id/postcodeunit/")
 	Osspatialrelations = ::RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/")
+	Geo = ::RDF::Vocabulary.new("http://www.w3.org/2003/01/geo/wgs84_pos#")
 	Rov = ::RDF::Vocabulary.new("http://www.w3.org/ns/regorg#")
-	attr_reader :uri_prefix, :dataset, :essglobal_uri, :essglobal_vocab, :essglobal_standard
-	def initialize(uri_prefix, dataset, essglobal_uri)
-	  @uri_prefix, @dataset, @essglobal_uri = uri_prefix, dataset, essglobal_uri
+	attr_reader :uri_prefix, :dataset, :essglobal_uri, :essglobal_vocab, :essglobal_standard, :postcodeunit_cache
+	def initialize(uri_prefix, dataset, essglobal_uri, postcodeunit_cache_filename)
+	  @uri_prefix, @dataset, @essglobal_uri, @postcodeunit_cache = uri_prefix, dataset, essglobal_uri, postcodeunit_cache
 	  @essglobal_vocab = ::RDF::Vocabulary.new(essglobal_uri + "vocab/")
 	  @essglobal_standard = ::RDF::Vocabulary.new(essglobal_uri + "standard/")
+	  @postcodeunit_cache = SeOpenData::RDF::OsPostcodeUnit::Client.new(postcodeunit_cache_filename)
 	end
 	def prefixes
 	  {
