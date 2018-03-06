@@ -48,6 +48,7 @@ module SeOpenData
 	end
 	private
 	def index_graph
+	  # We're going to cache the results of this method in the variable @index_graph.
 	  if @size_when_index_graph_created
 	    # Of course, it is also possible that the cache could be outdated with the sizes matching.
 	    # But this should catch the most likely error:
@@ -65,6 +66,7 @@ module SeOpenData
 	  graph
 	end
 	def one_big_graph
+	  # We're going to cache the results of this method in the variable @one_big_graph.
 	  if @size_when_one_big_graph_created
 	    # Of course, it is also possible that the cache could be outdated with the sizes matching.
 	    # But this should catch the most likely error:
