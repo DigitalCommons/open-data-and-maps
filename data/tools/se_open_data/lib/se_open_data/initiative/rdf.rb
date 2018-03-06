@@ -5,7 +5,7 @@ module SeOpenData
     class RDF
       attr_reader :initiative, :config
       def initialize(initiative, config)
-	puts "Initiative::RDF:" + initiative.id
+	#puts "Initiative::RDF:" + initiative.id
 	@initiative, @config = initiative, config
       end
       def save_rdfxml(outdir)
@@ -27,7 +27,7 @@ module SeOpenData
 	@graph ||= make_graph
       end
       def make_graph
-	puts uri.to_s
+	#puts uri.to_s
 	g = ::RDF::Graph.new
 	populate_graph(g)
 	g

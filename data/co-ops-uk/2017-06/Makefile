@@ -200,12 +200,13 @@ comma := ,
 #$(CSV_target): $(STD_COOPS_UK_DE_DUPED_CSV) | $(STD_CSV_DIR)
 $(CSV_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(STD_CSV_DIR)
 
+# For testing purposes, we generate a CSV with just the first 100 lines:
 $(CSV_FOR_TESTING_TO_RDF): $(STD_COOPS_UK_WITH_LAT_LNG)
 	head -1 $< > $@
 	grep '[0-9],http' $<  | head -100 >> $@
 
-#$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(DATA_DIR)
-$(RDF_target): $(CSV_FOR_TESTING_TO_RDF) | $(DATA_DIR)
+#$(RDF_target): $(CSV_FOR_TESTING_TO_RDF) | $(DATA_DIR)
+$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(DATA_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
 	  --output-directory $(GEN_DATA_DIR) \
 	  --uri-prefix $(URI_BASE) \

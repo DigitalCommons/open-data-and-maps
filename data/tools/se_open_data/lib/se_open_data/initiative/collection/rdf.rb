@@ -79,8 +79,10 @@ module SeOpenData
 	def make_one_big_graph
 	  # N.B. This is not ::RDF::Graph because we need to be able to use the protected method insert_graph:
 	  graph = Graph.new
+	  counter = SeOpenData::Utils::ProgressCounter.new("Creating one big graph", collection.size)
 	  collection.each {|i|	# each initiative in the collection
 	    graph.insert_graph(i.rdf.graph)
+	    counter.step
 	  }
 	  graph
 	end
