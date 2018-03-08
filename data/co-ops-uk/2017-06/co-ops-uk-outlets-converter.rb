@@ -24,7 +24,7 @@ class CoopsUkOutletsReader < SeOpenData::CSV::RowReader
   # Here are the methods for generating those output columns:
   # (So all method names below should aldo appear as keys in the output_headers Hash)
   def id
-    row["CUK Organisation ID"] + postcode_normalized
+    "#{row["CUK Organisation ID"]}/#{postcode_normalized}"
   end
   def country_name
     # The co-ops UK outlet CSV data, unlike the co-ops UK organizations CSV data,
