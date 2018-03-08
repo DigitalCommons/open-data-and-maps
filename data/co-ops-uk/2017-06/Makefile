@@ -140,9 +140,9 @@ COOPS_UK_OUTLETS_CSV_CONVERTER := co-ops-uk-outlets-converter.rb
 SE_OPEN_DATA_BIN_DIR := ../../tools/se_open_data/bin/
 SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
 CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)merge-csv-with-headers.rb
-CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv-de-duplicator.rb
-CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)add-postcode-lat-long-to-csv.rb
-CSV_TO_RDF := $(SE_OPEN_DATA_BIN_DIR)standard-csv-to-rdf.rb
+CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/remove-duplicates.rb
+CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/add-postcode-lat-long.rb
+CSV_TO_RDF := $(SE_OPEN_DATA_BIN_DIR)csv/standard/csv-to-rdf.rb
 POSTCODE_LAT_LNG_CACHE := postcode_lat_lng.json
 
 
