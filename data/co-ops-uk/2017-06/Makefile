@@ -130,6 +130,7 @@ STD_CSV_DIR := $(GEN_CSV_DIR)standard/
 STD_COOPS_UK_OUTLETS_CSV := $(STD_CSV_DIR)open_data_outlets.csv
 STD_COOPS_UK_ORGS_CSV := $(STD_CSV_DIR)open_data_organisations.csv
 STD_COOPS_UK_MERGED_CSV := $(STD_CSV_DIR)co-ops-uk-merged.csv
+STD_COOPS_UK_FIXED_DUPS_CSV := $(STD_CSV_DIR)co-ops-uk-fixed-dups.csv
 STD_COOPS_UK_DE_DUPED_CSV := $(STD_CSV_DIR)co-ops-uk-de-duplicated.csv
 STD_COOPS_UK_DUPS_CSV := $(STD_CSV_DIR)co-ops-uk-ignored-duplicates.csv
 STD_COOPS_UK_WITH_LAT_LNG := $(STD_CSV_DIR)co-ops-uk-with-lat-lng.csv
@@ -140,6 +141,7 @@ COOPS_UK_OUTLETS_CSV_CONVERTER := co-ops-uk-outlets-converter.rb
 SE_OPEN_DATA_BIN_DIR := ../../tools/se_open_data/bin/
 SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
 CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)merge-csv-with-headers.rb
+CSV_DUP_FIXER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/fix-duplicates.rb
 CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/remove-duplicates.rb
 CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/add-postcode-lat-long.rb
 CSV_TO_RDF := $(SE_OPEN_DATA_BIN_DIR)csv/standard/csv-to-rdf.rb
@@ -156,7 +158,10 @@ $(STD_COOPS_UK_ORGS_CSV) : $(COOPS_UK_ORGS_CSV) $(COOPS_UK_ORGS_CSV_CONVERTER) |
 $(STD_COOPS_UK_MERGED_CSV) : $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) $(CSV_MERGER)  | $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_MERGER) $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) > $@
 
-$(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_MERGED_CSV)  | $(STD_CSV_DIR)
+$(STD_COOPS_UK_FIXED_DUPS_CSV) : $(CSV_DUP_FIXER) $(STD_COOPS_UK_MERGED_CSV)  | $(STD_CSV_DIR)
+	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $^ > $@
+
+$(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_FIXED_DUPS_CSV)  | $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $^ > $@ 2> $(STD_COOPS_UK_DUPS_CSV)
 	@echo "Ignored duplicates have been written to $(STD_COOPS_UK_DUPS_CSV)"
 	@echo Total ignored: `wc -l $(STD_COOPS_UK_DUPS_CSV)`
