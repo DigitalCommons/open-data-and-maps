@@ -75,7 +75,7 @@ module SeOpenData
 	# Furthermore, http://wifo5-03.informatik.uni-mannheim.de/bizer/pub/LinkedDataTutorial/#datamodel
 	# discourages the use of blank nodes.
 	# See also: https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/13
-	::RDF::URI("#{uri}Address")
+	::RDF::URI("#{uri}#Address")
       end
       def ospostcodeunit_uri
 	initiative.ospostcodeunit && !initiative.ospostcodeunit.empty? ?
