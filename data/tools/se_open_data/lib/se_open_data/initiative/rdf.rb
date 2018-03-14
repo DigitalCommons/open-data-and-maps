@@ -32,7 +32,8 @@ module SeOpenData
 
 	dirsep = "/"
 	# The parent dir is assumed to already exist ...
-	parent_dir = outdir + config.dataset + dirsep
+	#parent_dir = outdir + config.dataset + dirsep
+	parent_dir = outdir
 	initiative_path = initiative.id.split(dirsep)
 	# Last part of initiative_path is filename, not dir name.
 	# We're just interested in ensuring dirs exist.
@@ -66,7 +67,7 @@ module SeOpenData
 	g
       end
       def uri
-	::RDF::URI("#{config.uri_base}#{initiative.id}")
+	::RDF::URI("#{config.uri_prefix}#{initiative.id}")
       end
       def address_uri
 	# We don't really weant to have to mint URIs for the Address, but OntoWiki doesn't seem to

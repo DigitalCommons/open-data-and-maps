@@ -63,6 +63,7 @@ ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
   BAD_EDITION := yup
 endif
 ifeq ($(edition),final)
+  DATASET_URI_BASE := https://w3id.org/coops-uk/2017/id/
   ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
   IDENTIFIER_PATH ?= experimental/
   # There is no max number of CSV rows:
@@ -109,9 +110,9 @@ SSH := ssh
 # N.B. http://unix.stackexchange.com/questions/94421/how-to-use-ssh-config-setting-for-each-server-by-rsync
 
 # Source files:
-CSV_DIR := co-ops-uk-csv-data/
-COOPS_UK_OUTLETS_CSV := $(CSV_DIR)open_data_outlets.csv
-COOPS_UK_ORGS_CSV := $(CSV_DIR)open_data_organisations.csv
+SRC_CSV_DIR := co-ops-uk-csv-data/
+COOPS_UK_OUTLETS_CSV := $(SRC_CSV_DIR)open_data_outlets.csv
+COOPS_UK_ORGS_CSV := $(SRC_CSV_DIR)open_data_organisations.csv
 
 # Programs/scripts:
 GEN_TRIPLES := generate-triples.rb
@@ -125,7 +126,8 @@ CSS_SRC_DIR := css/
 CSS_GEN_DIR := $(GEN_DATA_DIR)$(DATASET)/css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 
-GEN_CSV_DIR := generated-data/csv/
+GEN_RDF_DIR := generated-data/$(edition)/$(DATASET)/
+GEN_CSV_DIR := generated-data/$(edition)/csv/
 STD_CSV_DIR := $(GEN_CSV_DIR)standard/
 STD_COOPS_UK_OUTLETS_CSV := $(STD_CSV_DIR)open_data_outlets.csv
 STD_COOPS_UK_ORGS_CSV := $(STD_CSV_DIR)open_data_organisations.csv
@@ -177,6 +179,10 @@ $(DATA_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
 
+$(GEN_RDF_DIR):
+	$(check_valid_edition)
+	mkdir -p $@
+
 $(GEN_SPARQL_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
@@ -211,10 +217,10 @@ $(CSV_FOR_TESTING_TO_RDF): $(STD_COOPS_UK_WITH_LAT_LNG)
 	grep '[0-9],http' $<  | head -100 >> $@
 
 #$(RDF_target): $(CSV_FOR_TESTING_TO_RDF) | $(DATA_DIR)
-$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(DATA_DIR)
+$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(GEN_RDF_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
-	  --output-directory $(GEN_DATA_DIR) \
-	  --uri-prefix $(URI_BASE) \
+	  --output-directory $(GEN_RDF_DIR) \
+	  --uri-prefix $(DATASET_URI_BASE) \
 	  --dataset $(DATASET) \
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  $<
