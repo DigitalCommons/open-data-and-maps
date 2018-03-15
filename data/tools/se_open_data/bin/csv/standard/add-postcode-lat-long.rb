@@ -5,6 +5,17 @@ require 'optparse'
 require 'ostruct'
 require 'se_open_data'
 
+OutputStandard = SeOpenData::CSV::Standard::V1
+
+module HashExtensions
+  def subhash(*keys)
+    keys = keys.select { |k| key?(k) }
+    Hash[keys.zip(values_at(*keys))]
+  end
+end
+
+Hash.send(:include, HashExtensions)
+
 class OptParse
   #
   # Return a structure describing the options.
@@ -15,8 +26,8 @@ class OptParse
     options = OpenStruct.new
     options.postcodeunit_cache = nil
     # @todo Some of these could be provided with a command line interface to set them:
-    options.new_headers = SeOpenData::CSV::Standard::OsPostcodeUnit::Headers
-    options.input_headers = SeOpenData::CSV::Standard::V1::Headers
+    options.new_headers = OutputStandard::Headers.subhash(:geocontainer, :geocontainer_lat, :geocontainer_lon)
+    options.input_csv_postcode_header = OutputStandard::Headers[:postcode]
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: $0 [options]"
@@ -50,7 +61,7 @@ $options = OptParse.parse(ARGV)
 SeOpenData::CSV.add_postcode_lat_long(
   ARGF.read,
   $stdout,
-  $options.input_headers,
+  $options.input_csv_postcode_header,
   $options.new_headers,
   $options.postcodeunit_cache
 )

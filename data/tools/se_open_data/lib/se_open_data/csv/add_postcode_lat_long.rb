@@ -1,7 +1,7 @@
 
 module SeOpenData
   module CSV
-    def CSV.add_postcode_lat_long(input_io, output_io, input_headers, new_headers, postcodeunit_cache, csv_opts = {})
+    def CSV.add_postcode_lat_long(input_io, output_io, input_csv_postcode_header, new_headers, postcodeunit_cache, csv_opts = {})
       csv_opts.merge!(headers: true)
       csv_in = ::CSV.new(input_io, csv_opts)
       csv_out = ::CSV.new(output_io)
@@ -13,14 +13,17 @@ module SeOpenData
 
       csv_in.each do |row|
 	unless headers
-	  headers = row.headers + new_headers.values
+	  headers = row.headers + new_headers.values.reject {|h| row.headers.include? h }
 	  csv_out << headers
 	end
-	pcunit = postcode_client.get(row[input_headers[:postcode]])
-	row << {
-	  new_headers[:ospostcodeunit] => pcunit ? pcunit[:within] : nil,
-	  new_headers[:latitude] => pcunit ? pcunit[:lat] : nil,
-	  new_headers[:longitude] => pcunit ? pcunit[:lng] : nil
+	pcunit = postcode_client.get(row[input_csv_postcode_header])
+	loc_data = {
+	  geocontainer: pcunit ? pcunit[:within] : nil,
+	  geocontainer_lat: pcunit ? pcunit[:lat] : nil,
+	  geocontainer_lon: pcunit ? pcunit[:lng] : nil
+	}
+	new_headers.each {|k, v|
+	    row[v] = loc_data[k]
 	}
 	csv_out << row
       end

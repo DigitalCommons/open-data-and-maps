@@ -77,13 +77,13 @@ module SeOpenData
 	# See also: https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/13
 	::RDF::URI("#{uri}#Address")
       end
-      def ospostcodeunit_uri
-	initiative.ospostcodeunit && !initiative.ospostcodeunit.empty? ?
-	  ::RDF::URI(initiative.ospostcodeunit) : nil
+      def geocontainer_uri
+	initiative.geocontainer && !initiative.geocontainer.empty? ?
+	  ::RDF::URI(initiative.geocontainer) : nil
       end
       def lat_lng
-	initiative.latitude && initiative.longitude && ! initiative.latitude.empty? && ! initiative.longitude.empty? ?
-	  { lat: initiative.latitude, lng: initiative.longitude } : nil
+	initiative.geocontainer_lat && initiative.geocontainer_lon && ! initiative.geocontainer_lat.empty? && ! initiative.geocontainer_lon.empty? ?
+	  { lat: initiative.geocontainer_lat, lng: initiative.geocontainer_lon } : nil
       end
       def legal_form_uris
 	# Returns array of URIs
@@ -120,12 +120,12 @@ module SeOpenData
 	if initiative.country_name && !initiative.country_name.empty?
 	  graph.insert([address_uri, ::RDF::Vocab::VCARD["country-name"], initiative.country_name])
 	end
-	if ospostcodeunit_uri
-	  graph.insert([address_uri, Config::Osspatialrelations.within, ospostcodeunit_uri])
+	if geocontainer_uri
+	  graph.insert([address_uri, Config::Osspatialrelations.within, geocontainer_uri])
 	  loc = lat_lng
 	  if loc
-	    graph.insert([ospostcodeunit_uri, Config::Geo["lat"], ::RDF::Literal::Decimal.new(loc[:lat])])
-	    graph.insert([ospostcodeunit_uri, Config::Geo["long"], ::RDF::Literal::Decimal.new(loc[:lng])])
+	    graph.insert([geocontainer_uri, Config::Geo["lat"], ::RDF::Literal::Decimal.new(loc[:lat])])
+	    graph.insert([geocontainer_uri, Config::Geo["long"], ::RDF::Literal::Decimal.new(loc[:lng])])
 	  end
 	end
 

@@ -24,7 +24,16 @@ module SeOpenData
 	  postcode: "Postcode",
 	  country_name: "Country Name",
 	  homepage: "Website",
-	  companies_house_number: "Companies House Number"
+	  companies_house_number: "Companies House Number",
+
+	  # Postcode location
+	  # Don't add these columns by hand!
+	  # Use bin/csv/standard/add-postcode-lat-long.rb to generate them from the postcode.
+	  # TODO - generalise this to be about any containing geographic area to which the 'within'
+	  # predicate can be applied.
+	  geocontainer: "Geo Container",
+	  geocontainer_lat: "Geo Container Latitude",
+	  geocontainer_lon: "Geo Container Longitide"
 	}
 	# Sometimes a single column can take values that are in fact a list.
 	# So we need to know the character used to separate the items in the list.
@@ -34,17 +43,6 @@ module SeOpenData
 
 	# Keys should provide unique access to the dataset (no dups)
 	UniqueKeys = [:id]
-      end
-      module OsPostcodeUnit
-	Headers = {
-	  ospostcodeunit: "Postcode Unit",
-	  latitude: "Postcode Latitude",
-	  longitude: "Postcode Longitide"
-	}
-      end
-      module V1WithOsPostcodeUnit
-	Headers = V1::Headers.merge(OsPostcodeUnit::Headers)
-	SubFieldSeparator = V1::SubFieldSeparator
       end
     end
   end

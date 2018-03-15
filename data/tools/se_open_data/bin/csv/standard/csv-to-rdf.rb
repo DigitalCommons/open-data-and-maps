@@ -15,7 +15,7 @@ class OptParse
     options.dataset = nil
     options.essglobal_uri = nil
     options.postcodeunit_cache = nil
-    options.csv_standard = SeOpenData::CSV::Standard::V1WithOsPostcodeUnit
+    options.csv_standard = SeOpenData::CSV::Standard::V1
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: $0 [options]"
@@ -46,7 +46,6 @@ class OptParse
       end
       opts.on("--csv-standard STANDARD",
 	      "WARNING: STANDARD is currently hardcoded!") do |standard|
-	options.csv_standard = SeOpenData::CSV::Standard::V1WithOsPostcodeUnit
       end
 
       opts.separator ""
