@@ -7,9 +7,7 @@ module SeOpenData
       def initialize(essglobal_uri)
 	uri = "#{essglobal_uri}standard/legal-form"
 	puts uri
-	#graph = ::RDF::Graph.load(uri, graph_name: nil, content_type: "application/rdf+xml")
 	graph = ::RDF::Graph.load(uri, format: :rdfxml)
-	#puts "graph loaded"
 	#puts graph.dump(:ntriples)
 	#::RDF::Reader.each { |klass| puts klass.name }
 	#::RDF::Format.each { |klass| puts klass.name }
@@ -19,10 +17,6 @@ module SeOpenData
 	end
 	@lookup = {}
 	query.execute(graph).each do |solution|
-	  #puts solution.inspect
-	  #puts solution.concept.to_s
-	  #puts solution.label.to_s
-	  #puts solution.label.language
 	  @lookup[solution.label.to_s.gsub(/ /, "")] = solution
 	end
       end

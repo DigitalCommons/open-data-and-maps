@@ -3,19 +3,23 @@
 
 require 'se_open_data'
 
+# This is the CSV standard that we're converting into:
 OutputStandard = SeOpenData::CSV::Standard::V1
+
 class CoopsUkOrgsReader < SeOpenData::CSV::RowReader
   # Headers in input CSV (with Hash key symbols matching Hash key symbols in output CSV Headers)
   InputHeaders = {
+    # These symbols match symbols in OutputStandard::Headers.
+    # So the corresponding cells with be copied fro inpiut to output:
     name: "Trading Name",
     postcode: "Registered Postcode",
     country_name: "UK Nation",
-    id: "CUK Organisation ID"
-    # TODO - consider adding other Headers, e.g. 
-    # registrar: "Registrar"
-    # and then using the generated methods from RowReader to read these.
-    # This should be fine, provide we choose symbols that don't class with those 
-    # in OutputStandard::Headers for which a method is provided below.
+    id: "CUK Organisation ID",
+
+    # These symbold don't match symbold in OutputStandard::Headers.
+    # But CSV::RowReader creates method using these symbol names to read that colm from the row:
+    registrar: "Registrar",
+    registered_number: "Registered Number"
   }
   def initialize(row)
     # Let CSV::RowReader provide methods for accessing columns described by InputHeaders, above:
@@ -26,12 +30,15 @@ class CoopsUkOrgsReader < SeOpenData::CSV::RowReader
   # (So all method names below should aldo appear as keys in the output_headers Hash)
   def companies_house_number
     # Registered number with Companies House
-    row["Registrar"] == "Companies House" ? row["Registered Number"] : nil
+    registrar == "Companies House" ? registered_number : nil
   end
   def legal_forms
+    # Return a list of strings, separated by OutputStandard::SubFieldSeparator.
+    # Each item in the list is a prefLabel taken from essglobal/standard/legal-form.skos.
+    # See lib/se_open_data/essglobal/legal_form.rb
     [
       "Cooperative", 
-      row["Registrar"] == "Companies House" ? "Company" : nil
+      registrar == "Companies House" ? "Company" : nil
     ].compact.join(OutputStandard::SubFieldSeparator)
   end
 end

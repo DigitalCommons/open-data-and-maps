@@ -10,7 +10,6 @@ module SeOpenData
 	Rov = ::RDF::Vocabulary.new("http://www.w3.org/ns/regorg#")
 	attr_reader :uri_prefix, :dataset, :essglobal_uri, :essglobal_vocab, :essglobal_standard, :postcodeunit_cache, :legal_form_lookup, :csv_standard
 	def initialize(uri_prefix, dataset, essglobal_uri, postcodeunit_cache_filename, csv_standard)
-	  puts "CONFIG: #{csv_standard.inspect}"
 	  @uri_prefix, @dataset, @essglobal_uri, @postcodeunit_cache = uri_prefix, dataset, essglobal_uri, postcodeunit_cache
 	  @essglobal_vocab = ::RDF::Vocabulary.new(essglobal_uri + "vocab/")
 	  @essglobal_standard = ::RDF::Vocabulary.new(essglobal_uri + "standard/")
