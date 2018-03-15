@@ -7,6 +7,9 @@ module SeOpenData
     def rdf
       @rdf ||= RDF::new(self, config)
     end
+    def html
+      @html ||= HTML::new(self, config)
+    end
     def method_missing(method, *args, &block)
       @csv_row.send(method, *args)
     end

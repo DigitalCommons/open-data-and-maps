@@ -23,9 +23,9 @@ module SeOpenData
 	# Create RDF for each initiative
 	counter = SeOpenData::Utils::ProgressCounter.new("Saving RDF files for each initiative", size)
 	each {|initiative|
-
 	  initiative.rdf.save_rdfxml($options.outdir)
 	  initiative.rdf.save_turtle($options.outdir)
+	  initiative.html.save($options.outdir)
 	  counter.step
 	}
 	rdf.save_index_rdfxml($options.outdir)
