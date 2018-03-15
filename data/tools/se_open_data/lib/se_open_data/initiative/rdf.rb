@@ -9,53 +9,16 @@ module SeOpenData
 	@initiative, @config = initiative, config
       end
       def save_rdfxml(outdir)
-	f = filename(outdir, ".rdf")
+	f = File.name(initiative.id, outdir, ".rdf")
 	::RDF::RDFXML::Writer.open(f, standard_prefixes: true, prefixes: config.prefixes) {|writer|
 	  writer << graph
 	}
       end
       def save_turtle(outdir)
-	f = filename(outdir, ".ttl")
+	f = File.name(initiative.id, outdir, ".ttl")
 	::RDF::Turtle::Writer.open(f, standard_prefixes: true, prefixes: config.prefixes) {|writer|
 	  writer << graph
 	}
-      end
-      def filename(outdir, ext)
-	# Returns the filename for this initiative.
-
-	# ALSO - side effect - makes sure the directory exists.
-	# History: This was not necessary when RDF serializations were written to files like:
-	#    R000001BD157AB.ttl
-	# But now, in keeping with the URIs for initiatives, the filenames might be like this:
-	#    R000001/BD158AB/2.ttl
-	# So we have to create subdirectories for these.
-
-	dirsep = "/"
-	# The parent dir is assumed to already exist ...
-	#parent_dir = outdir + config.dataset + dirsep
-	parent_dir = outdir
-	initiative_path = initiative.id.split(dirsep)
-	# Last part of initiative_path is filename, not dir name.
-	# We're just interested in ensuring dirs exist.
-	initiative_path.pop
-	if initiative_path.size > 0
-	  # The initiative file is in a subdir of the parent dir.
-	  # We must ensure that subdir exists:
-	  Dir.chdir(parent_dir) do
-	    ensure_subdir_exists(initiative_path)
-	  end
-	end
-	parent_dir + initiative.id + ext
-      end
-      private def ensure_subdir_exists(path)
-	# This is not really a method of this class. Just a convenience utility.
-	dir = path.shift
-	Dir.mkdir(dir) unless Dir.exist?(dir)
-	if path.size > 0
-	  Dir.chdir(dir) do
-	    ensure_subdir_exists(path)
-	  end
-	end
       end
       def graph
 	@graph ||= make_graph
