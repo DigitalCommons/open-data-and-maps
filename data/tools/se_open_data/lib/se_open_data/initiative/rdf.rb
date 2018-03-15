@@ -44,6 +44,10 @@ module SeOpenData
 	initiative.geocontainer && !initiative.geocontainer.empty? ?
 	  ::RDF::URI(initiative.geocontainer) : nil
       end
+      def companies_house_uri
+	ch_num = initiative.companies_house_number 
+	ch_num && !ch_num.empty? && SeOpenData::RDF::CompaniesHouse.uri(ch_num) || nil
+      end
       def lat_lng
 	initiative.geocontainer_lat && initiative.geocontainer_lon && ! initiative.geocontainer_lat.empty? && ! initiative.geocontainer_lon.empty? ?
 	  { lat: initiative.geocontainer_lat, lng: initiative.geocontainer_lon } : nil
@@ -71,9 +75,8 @@ module SeOpenData
 	legal_form_uris.each {|legal_form_uri|
 	  graph.insert([uri, config.essglobal_vocab.legalForm, legal_form_uri])
 	}
-	if initiative.companies_house_number && !initiative.companies_house_number.empty?
-	  graph.insert([uri, Config::Rov.hasRegisteredOrganization,
-		 SeOpenData::RDF::CompaniesHouse.uri(initiative.companies_house_number)])
+	if companies_house_uri
+	  graph.insert([uri, Config::Rov.hasRegisteredOrganization, companies_house_uri])
 	end
 	graph.insert([uri, config.essglobal_vocab.hasAddress, address_uri])
 
