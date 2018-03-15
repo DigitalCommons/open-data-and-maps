@@ -3,6 +3,7 @@
 GENERATE_target := generate
 CSV_target := csv
 RDF_target := rdf
+TEST_target := test
 DEPLOY_target := deploy
 TRIPLESTORE_target := triplestore
 HELP_target := help
@@ -34,6 +35,9 @@ $(HELP_target):
 	@echo "\tWARNING: This replaces the directory on the server (i.e. files on the server may be deleted)."
 	@echo "make $(TRIPLESTORE_target) edition=x"
 	@echo "\tInstall deployed data into the triple store."
+	@echo "make $(TEST_target) edition=x stabledir=dir"
+	@echo "\tRun tests, and compare results with stabledir."
+	@$(call echo_if_edition_ok,"\\tCompare stabledir with $(GEN_RDF_DIR).")
 	@echo "make $(SPARQLTEST_target) edition=x"
 	@echo "\tRuns some sparql queries, and by doing so documents some things."
 
@@ -228,6 +232,9 @@ $(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(GEN_RDF_DIR)
 	  --dataset $(DATASET) \
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  $<
+
+$(TEST_target): $(RDF_target)
+	diff -r $(stabledir) $(GEN_RDF_DIR)
 
 # The GEN_SPARQL_DIR will be copied over to the map-app services dir, for use by a PHP script
 # These file names must match exactly the filenames in the PHP script
