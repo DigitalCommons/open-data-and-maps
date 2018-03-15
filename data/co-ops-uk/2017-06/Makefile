@@ -64,7 +64,9 @@ ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
 endif
 ifeq ($(edition),final)
   DATASET_URI_BASE := https://w3id.org/coops-uk/2017/id/
-  ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
+  ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
+  # Does this one really exist? :
+  #ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
   IDENTIFIER_PATH ?= experimental/
   # There is no max number of CSV rows:
   MAX_CSV_ROWS :=  100

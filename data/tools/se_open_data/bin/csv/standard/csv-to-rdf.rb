@@ -15,6 +15,7 @@ class OptParse
     options.dataset = nil
     options.essglobal_uri = nil
     options.postcodeunit_cache = nil
+    options.csv_standard = SeOpenData::CSV::Standard::V1WithOsPostcodeUnit
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: $0 [options]"
@@ -43,6 +44,10 @@ class OptParse
 	      "JSON file where OS postcode unit results are cached") do |filename|
 	options.postcodeunit_cache = filename
       end
+      opts.on("--csv-standard STANDARD",
+	      "WARNING: STANDARD is currently hardcoded!") do |standard|
+	options.csv_standard = SeOpenData::CSV::Standard::V1WithOsPostcodeUnit
+      end
 
       opts.separator ""
       opts.separator "Common options:"
@@ -66,13 +71,13 @@ config = SeOpenData::Initiative::RDF::Config.new(
   $options.uri_prefix,
   $options.dataset,
   $options.essglobal_uri,
-  $options.postcodeunit_cache
+  $options.postcodeunit_cache,
+  $options.csv_standard
 )
 
 # Load CSV into data structures, for this particular standard
-Standard = SeOpenData::CSV::Standard::V1WithOsPostcodeUnit
 collection = SeOpenData::Initiative::Collection.new(config)
-collection.add_from_csv(ARGF.read, Standard::Headers)
+collection.add_from_csv(ARGF.read)
 
 # Create RDF for each initiative
 counter = SeOpenData::Utils::ProgressCounter.new("Saving RDF files for each initiative", collection.size)

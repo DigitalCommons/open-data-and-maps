@@ -19,11 +19,18 @@ module SeOpenData
 	Headers = {
 	  id: "Identifier",
 	  name: "Name",
+	  # The allowed values for legal_form are taken from essglobal.
+	  legal_forms: "Legal Forms",
 	  postcode: "Postcode",
 	  country_name: "Country Name",
 	  homepage: "Website",
 	  companies_house_number: "Companies House Number"
 	}
+	# Sometimes a single column can take values that are in fact a list.
+	# So we need to know the character used to separate the items in the list.
+	# For example, in the legal_form column, we might have an initiative that
+	# is both a 'Cooperative' and a 'Company', the cell would then have the value "Cooperative;Company"
+	SubFieldSeparator = ";"
 
 	# Keys should provide unique access to the dataset (no dups)
 	UniqueKeys = [:id]
@@ -37,6 +44,7 @@ module SeOpenData
       end
       module V1WithOsPostcodeUnit
 	Headers = V1::Headers.merge(OsPostcodeUnit::Headers)
+	SubFieldSeparator = V1::SubFieldSeparator
       end
     end
   end

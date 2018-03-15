@@ -85,6 +85,17 @@ module SeOpenData
 	initiative.latitude && initiative.longitude && ! initiative.latitude.empty? && ! initiative.longitude.empty? ?
 	  { lat: initiative.latitude, lng: initiative.longitude } : nil
       end
+      def legal_form_uris
+	# Returns array of URIs
+	initiative.legal_forms.split(config.csv_standard::SubFieldSeparator).map {|form|
+	  if config.legal_form_lookup.has_label?(form)
+	    ::RDF::URI(config.legal_form_lookup.concept_uri(form))
+	  else
+	    $stderr.puts "Could not find legal-form: #{form}"
+	    nil
+	  end
+	}.compact	# To remove any nil elements added above.
+      end
 
       def populate_graph(graph)
 	graph.insert([uri, ::RDF.type, config.initiative_rdf_type])
@@ -94,9 +105,12 @@ module SeOpenData
 	if initiative.homepage && !initiative.homepage.empty?
 	  graph.insert([uri, ::RDF::Vocab::FOAF.homepage, initiative.homepage])
 	end
-	graph.insert([uri, config.essglobal_vocab.legalForm, config.essglobal_standard["legal-form/L2"]])
+	legal_form_uris.each {|legal_form_uri|
+	  graph.insert([uri, config.essglobal_vocab.legalForm, legal_form_uri])
+	}
 	if initiative.companies_house_number && !initiative.companies_house_number.empty?
-	  graph.insert([uri, Config::Rov.hasRegisteredOrganization, SeOpenData::RDF::CompaniesHouse.uri(initiative.companies_house_number)])
+	  graph.insert([uri, Config::Rov.hasRegisteredOrganization,
+		 SeOpenData::RDF::CompaniesHouse.uri(initiative.companies_house_number)])
 	end
 	graph.insert([uri, config.essglobal_vocab.hasAddress, address_uri])
 	graph.insert([address_uri, ::RDF.type, config.essglobal_vocab["Address"]])
