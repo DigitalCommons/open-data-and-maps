@@ -12,6 +12,9 @@ class CoopsUkOrgsReader < SeOpenData::CSV::RowReader
     # These symbols match symbols in OutputStandard::Headers.
     # So the corresponding cells with be copied fro inpiut to output:
     name: "Trading Name",
+    street_address: "Registered Street",
+    locality: "Registered City",
+    region: "Registered State/Province",
     postcode: "Registered Postcode",
     country_name: "UK Nation",
     id: "CUK Organisation ID",

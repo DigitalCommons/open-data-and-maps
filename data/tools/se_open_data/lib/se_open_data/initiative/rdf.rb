@@ -114,12 +114,19 @@ module SeOpenData
 	end
 	graph.insert([uri, config.essglobal_vocab.hasAddress, address_uri])
 	graph.insert([address_uri, ::RDF.type, config.essglobal_vocab["Address"]])
-	if initiative.postcode && !initiative.postcode.empty?
-	  graph.insert([address_uri, ::RDF::Vocab::VCARD["postal-code"], initiative.postcode])
-	end
-	if initiative.country_name && !initiative.country_name.empty?
-	  graph.insert([address_uri, ::RDF::Vocab::VCARD["country-name"], initiative.country_name])
-	end
+
+	# Map values onto their VCARD porperties:
+	{
+	  initiative.street_address => "street-address",
+	  initiative.locality => "locality",
+	  initiative.region => "region",
+	  initiative.postcode => "postal-code",
+	  initiative.country_name => "country-name"
+	}.each {|val, property|
+	  if val && !val.empty?
+	    graph.insert([address_uri, ::RDF::Vocab::VCARD[property], val])
+	  end
+	}
 	if geocontainer_uri
 	  graph.insert([address_uri, Config::Osspatialrelations.within, geocontainer_uri])
 	  loc = lat_lng

@@ -21,6 +21,9 @@ module SeOpenData
 	  name: "Name",
 	  # The allowed values for legal_form are taken from essglobal.
 	  legal_forms: "Legal Forms",
+	  street_address: "Street Address",
+	  locality: "Locality",
+	  region: "Region",
 	  postcode: "Postcode",
 	  country_name: "Country Name",
 	  homepage: "Website",

@@ -12,6 +12,9 @@ class CoopsUkOutletsReader < SeOpenData::CSV::RowReader
     # These symbols match symbols in OutputStandard::Headers.
     # So the corresponding cells with be copied fro inpiut to output:
     name: "Outlet Name",
+    street_address: "Street",
+    locality: "City",
+    region: "State/Province",
     homepage: "Website",
     postcode: "Postcode",
 
