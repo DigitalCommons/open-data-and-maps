@@ -63,6 +63,7 @@ ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
   BAD_EDITION := yup
 endif
 ifeq ($(edition),final)
+  SRC_CSV_DIR := co-ops-uk-csv-data/
   DATASET_URI_BASE := https://w3id.org/coops-uk/2017/id/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   # Does this one really exist? :
@@ -71,6 +72,8 @@ ifeq ($(edition),final)
   # There is no max number of CSV rows:
   MAX_CSV_ROWS :=  100
 else ifeq ($(edition),test2017)
+  SRC_CSV_DIR := co-ops-uk-csv-test-data/
+  DATASET_URI_BASE := https://w3id.org/coops-uk/2017/id/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   IDENTIFIER_PATH ?= experimental/$(edition)/
 
@@ -112,7 +115,6 @@ SSH := ssh
 # N.B. http://unix.stackexchange.com/questions/94421/how-to-use-ssh-config-setting-for-each-server-by-rsync
 
 # Source files:
-SRC_CSV_DIR := co-ops-uk-csv-data/
 COOPS_UK_OUTLETS_CSV := $(SRC_CSV_DIR)open_data_outlets.csv
 COOPS_UK_ORGS_CSV := $(SRC_CSV_DIR)open_data_organisations.csv
 
