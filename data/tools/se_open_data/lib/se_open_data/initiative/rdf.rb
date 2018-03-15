@@ -113,6 +113,8 @@ module SeOpenData
 		 SeOpenData::RDF::CompaniesHouse.uri(initiative.companies_house_number)])
 	end
 	graph.insert([uri, config.essglobal_vocab.hasAddress, address_uri])
+
+	# Populate the Address:
 	graph.insert([address_uri, ::RDF.type, config.essglobal_vocab["Address"]])
 
 	# Map values onto their VCARD porperties:

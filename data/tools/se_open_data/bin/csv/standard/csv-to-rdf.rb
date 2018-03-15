@@ -77,20 +77,7 @@ config = SeOpenData::Initiative::RDF::Config.new(
 # Load CSV into data structures, for this particular standard
 collection = SeOpenData::Initiative::Collection.new(config)
 collection.add_from_csv(ARGF.read)
-
-# Create RDF for each initiative
-counter = SeOpenData::Utils::ProgressCounter.new("Saving RDF files for each initiative", collection.size)
-collection.each {|initiative|
-
-  initiative.rdf.save_rdfxml($options.outdir)
-  initiative.rdf.save_turtle($options.outdir)
-  counter.step
-}
-collection.rdf.save_index_rdfxml($options.outdir)
-collection.rdf.save_index_turtle($options.outdir)
-collection.rdf.save_one_big_rdfxml($options.outdir)
-collection.rdf.save_one_big_turtle($options.outdir)
-
+collection.serialize_everything($options.outdir)
 
 # Create RDF to list each initiative
 # Create one big RDF with all triples in it
