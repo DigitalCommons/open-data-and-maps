@@ -49,6 +49,10 @@ module SeOpenData
 	ch_num && !ch_num.empty? && SeOpenData::RDF::CompaniesHouse.uri(ch_num) || nil
       end
       def lat_lng
+	initiative.latitude && initiative.longitude && ! initiative.latitude.empty? && ! initiative.longitude.empty? ?
+	  { lat: initiative.latitude, lng: initiative.longitude } : nil
+      end
+      def geocontainer_lat_lng
 	initiative.geocontainer_lat && initiative.geocontainer_lon && ! initiative.geocontainer_lat.empty? && ! initiative.geocontainer_lon.empty? ?
 	  { lat: initiative.geocontainer_lat, lng: initiative.geocontainer_lon } : nil
       end
@@ -86,6 +90,13 @@ module SeOpenData
 	# Populate the Address:
 	graph.insert([address_uri, ::RDF.type, config.essglobal_vocab["Address"]])
 
+	# This is the actual lat/long as opposed to the lat/long of a geocontainer (such as a postcode)
+	loc = lat_lng
+	if loc
+	  graph.insert([address_uri, Config::Geo["lat"], ::RDF::Literal::Decimal.new(loc[:lat])])
+	  graph.insert([address_uri, Config::Geo["long"], ::RDF::Literal::Decimal.new(loc[:lng])])
+	end
+
 	# Map values onto their VCARD porperties:
 	{
 	  initiative.street_address => "street-address",
@@ -98,9 +109,10 @@ module SeOpenData
 	    graph.insert([address_uri, ::RDF::Vocab::VCARD[property], val])
 	  end
 	}
+
 	if geocontainer_uri
 	  graph.insert([address_uri, Config::Osspatialrelations.within, geocontainer_uri])
-	  loc = lat_lng
+	  loc = geocontainer_lat_lng
 	  if loc
 	    graph.insert([geocontainer_uri, Config::Geo["lat"], ::RDF::Literal::Decimal.new(loc[:lat])])
 	    graph.insert([geocontainer_uri, Config::Geo["long"], ::RDF::Literal::Decimal.new(loc[:lng])])

@@ -30,11 +30,19 @@ module SeOpenData
 	  homepage: "Website",
 	  companies_house_number: "Companies House Number",
 
-	  # Postcode location
-	  # Don't add these columns by hand!
-	  # Use bin/csv/standard/add-postcode-lat-long.rb to generate them from the postcode.
-	  # TODO - generalise this to be about any containing geographic area to which the 'within'
-	  # predicate can be applied.
+	  # latitude and longitude are for the exact geolocation of the SSE initiative,
+	  # if it is known. 
+	  # If only a postcode is known, see geocontainer, below.
+	  latitude: "Latitude",
+	  longitude: "Longitude",
+
+	  # Often, we don't know the exact lat/long of an SSE initiative, but we know about 
+	  # a geographic container which has a known lat/long.
+	  # The most common example of this is the postcode as a geographic container.
+	  #
+	  # Note that the utility `bin/csv/standard/add-postcode-lat-long.rb` will populate
+	  # these 3 fields based on the value of the Postcode, so don't do it manually!
+	  # This is used, for example, in the toolchain for generating the co-ops-uk 2017 RDF.
 	  geocontainer: "Geo Container",
 	  geocontainer_lat: "Geo Container Latitude",
 	  geocontainer_lon: "Geo Container Longitide"
