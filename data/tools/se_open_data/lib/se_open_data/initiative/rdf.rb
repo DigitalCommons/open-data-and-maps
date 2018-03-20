@@ -69,6 +69,9 @@ module SeOpenData
 	if initiative.name && !initiative.name.empty?
 	  graph.insert([uri, ::RDF::Vocab::GR.name, initiative.name])
 	end
+	if initiative.description && !initiative.description.empty?
+	  graph.insert([uri, ::RDF::Vocab::DC.description, ::RDF::Literal.new(initiative.description)])
+	end
 	if initiative.homepage && !initiative.homepage.empty?
 	  graph.insert([uri, ::RDF::Vocab::FOAF.homepage, initiative.homepage])
 	end

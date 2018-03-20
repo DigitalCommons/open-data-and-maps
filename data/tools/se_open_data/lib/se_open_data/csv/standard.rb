@@ -19,6 +19,7 @@ module SeOpenData
 	Headers = {
 	  id: "Identifier",
 	  name: "Name",
+	  description: "Description",
 	  # The allowed values for legal_form are taken from essglobal.
 	  legal_forms: "Legal Forms",
 	  street_address: "Street Address",
