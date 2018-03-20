@@ -30,33 +30,37 @@ module SeOpenData
 	    xml(:h1) {
 	      initiative.name
 	    } +
-	    xml(:h2) {
-	      "CSV data"
-	    } +
 	    table_of_csv_input +
-	    xml(:h2) {
-	      "Links to other datasets"
-	    } +
-	    xml(:ul) {
-	      xml(:li) {
-		geocontainer_link
-	      } +
-	      xml(:li) {
-		companies_house_link
-	      }
-	    } +
+	    links_to_other_datasets +
+	    links_to_rdf_browsers +
 	    html_fragment_for_inserted_code("RDF/XML serialization", rdf_file) +
 	    html_fragment_for_inserted_code("RDF Turtle serialization", ttl_file)
 	  }
 	}
       end
       def table_of_csv_input
+	xml(:h2) {
+	  "CSV data"
+	} +
 	table(
 	  headers: ["heading", "value"],
 	  rows: config.csv_standard::Headers.map {|key, col_heading|
 	    [col_heading, initiative.send(key) || ""]
 	  }
 	)
+      end
+      def links_to_other_datasets
+	xml(:h2) {
+	  "Links to other datasets"
+	} +
+	xml(:ul) {
+	  xml(:li) {
+	    geocontainer_link
+	  } +
+	  xml(:li) {
+	    companies_house_link
+	  }
+	}
       end
       def companies_house_link
 	uri = initiative.rdf.companies_house_uri
@@ -65,6 +69,24 @@ module SeOpenData
       def geocontainer_link
 	uri = initiative.rdf.geocontainer_uri
 	uri ?  link_to(uri, uri) : ""
+      end
+      def links_to_rdf_browsers
+	escaped_uri = CGI.escapeHTML(initiative.rdf.uri)
+	xml(:h2) {
+	  "Linked Data Browsers"
+	} +
+	xml(:p) {
+	  "You can look at this data, and follow its links using these tools:"
+	} +
+	xml(:ul) {
+	  xml(:li) {
+	    link_to("http://graphite.ecs.soton.ac.uk/browser/?uri=#{escaped_uri}", "Graphite browser") +
+	    ", courtesy of University of Southampton"
+	  } +
+	  xml(:li) {
+	    link_to("http://uri4uri.net/uri/#{escaped_uri}", "uri4uri.net")
+	  }
+	}
       end
     end
   end
