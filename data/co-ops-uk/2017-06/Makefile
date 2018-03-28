@@ -1,14 +1,15 @@
 # Hint: type 'make' to get the usage message.
 
 GENERATE_target := generate
+OLD_GENERATE_target := oldgenerate
 CSV_target := csv
-RDF_target := rdf
 TEST_target := test
 DEPLOY_target := deploy
 TRIPLESTORE_target := triplestore
 HELP_target := help
 SPARQLTEST_target := sparqltest
 .PHONY: $(HELP_target) $(GENERATE_target) $(DEPLOY_target) $(TRIPLESTORE_target) $(SPARQLTEST_target) $(CSV_target)
+.PHONY: $(OLD_GENERATE_target)
 .DEFAULT_GOAL: $(HELP_target)
 
 date ?= $(shell date -u +%Y%m%d)
@@ -28,24 +29,25 @@ $(HELP_target):
 	@echo "\t    $(COOPS_UK_OUTLETS_CSV)"
 	@$(call echo_if_edition_ok,"\\tResults are stored in the local directory $(GEN_DATA_DIR).")
 	@echo "make $(DEPLOY_target) edition=x"
-	@echo "\tDeploys the generated data to the data server $(SERVER)"
+	@echo "\tDeploys the generated data to the data server $(DEPLOYMENT_SERVER)"
+	@echo "\t TODO - UPDATE THIS DOC"
 	@$(call echo_if_edition_ok,"\\tLocal directory $(GEN_DATA_DIR) is copied to $(SERVER_PATH).")
 	@$(call echo_if_edition_ok,"\\tAfter deployment \(assuming content negotiation is configured properly\) data can be accessed at this URI:")
-	@$(call echo_if_edition_ok,"\\t\\t$(URI_BASE)$(DATASET)")
+	@$(call echo_if_edition_ok,"\\t\\t$(URI_BASE)")
 	@echo "\tWARNING: This replaces the directory on the server (i.e. files on the server may be deleted)."
 	@echo "make $(TRIPLESTORE_target) edition=x"
 	@echo "\tInstall deployed data into the triple store."
 	@echo "make $(TEST_target) edition=x stabledir=dir"
 	@echo "\tRun tests, and compare results with stabledir."
-	@$(call echo_if_edition_ok,"\\tCompare stabledir with $(GEN_RDF_DIR).")
+	@$(call echo_if_edition_ok,"\\tCompare stabledir with $(GEN_DOC_DIR).")
 	@echo "make $(SPARQLTEST_target) edition=x"
 	@echo "\tRuns some sparql queries, and by doing so documents some things."
 
 # Variables to be overridden from the command line:
 #
-# The value of SERVER would often be the name of a host set up in an ssh config file. 
+# The value of DEPLOYMENT_SERVER would often be the name of a host set up in an ssh config file. 
 # See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
-SERVER ?= parecco
+DEPLOYMENT_SERVER ?= ise-0-matt
 
 # SERVER_DIR must already exist when the DEPLOY_target is invoked
 SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
@@ -68,18 +70,14 @@ ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
 endif
 ifeq ($(edition),final)
   SRC_CSV_DIR := co-ops-uk-csv-data/
-  DATASET_URI_BASE := https://w3id.org/coops-uk/2017/id/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   # Does this one really exist? :
   #ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
-  IDENTIFIER_PATH ?= experimental/
   # There is no max number of CSV rows:
   MAX_CSV_ROWS :=  100
 else ifeq ($(edition),test2017)
   SRC_CSV_DIR := co-ops-uk-csv-test-data/
-  DATASET_URI_BASE := https://w3id.org/coops-uk/2017/id/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
-  IDENTIFIER_PATH ?= experimental/$(edition)/
 
   #MAX_CSV_ROWS := 100
   MAX_CSV_ROWS :=
@@ -89,6 +87,16 @@ else ifndef BAD_EDITION
   edition_errmsg := Error in Makefile - missing configuration for edition $(edition)
   BAD_EDITION := yup
 endif
+URI_SCHEME := https
+URI_HOST := w3id.org
+URI_PATH_PREFIX := coops-uk/2017/
+DATASET_URI_BASE := $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
+
+DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
+DEPLOYMENT_DOC_SUBDIR := $(URI_PATH_PREFIX)
+DEPLOYMENT_DOC_DIR := $(DEPLOYMENT_WEBROOT)$(DEPLOYMENT_DOC_SUBDIR)
+DEPLOYMENT_CSS_SUBDIR := css/$(URI_PATH_PREFIX)
+DEPLOYMENT_CSS_DIR := $(DEPLOYMENT_WEBROOT)$(DEPLOYMENT_CSS_SUBDIR)
 
 define echo_if_edition_ok
 @[ -z "$(BAD_EDITION)" ] && echo "$(1)" || true
@@ -97,15 +105,6 @@ define check_valid_edition
 @[ -z "$(BAD_EDITION)" ] || { echo "$(edition_errmsg)" && false; }
 endef
 
-# See https://github.com/p6data-coop/ise-linked-open-data/wiki/URIs for a discussion about "experimental"
-DATASET ?= co-ops-uk2017
-
-# Following data.gov.uk principles, URIs for real-world objects are under `id`, ...
-URI_PATTERN ?= id/$(IDENTIFIER_PATH)
-# ... and those for the documents about them are under `doc`:
-SERVER_DOC_DIR ?= doc/$(IDENTIFIER_PATH)
-
-URI_BASE := $(DATA_SERVER_URL)/$(URI_PATTERN)
 DOC_URL_BASE := $(DATA_SERVER_URL)/$(SERVER_DOC_DIR)
 
 # Programs used within this makefile:
@@ -115,9 +114,6 @@ RUBY := ruby
 RSYNC := rsync -avz 
 SSH := ssh
 
-# TODO - use rsync for transferring files to server. 
-# N.B. http://unix.stackexchange.com/questions/94421/how-to-use-ssh-config-setting-for-each-server-by-rsync
-
 # Source files:
 COOPS_UK_OUTLETS_CSV := $(SRC_CSV_DIR)open_data_outlets.csv
 COOPS_UK_ORGS_CSV := $(SRC_CSV_DIR)open_data_organisations.csv
@@ -126,16 +122,16 @@ COOPS_UK_ORGS_CSV := $(SRC_CSV_DIR)open_data_organisations.csv
 GEN_TRIPLES := generate-triples.rb
 
 # Directories
-GEN_DATA_DIR := generated-data/$(edition)/$(IDENTIFIER_PATH)
 GEN_SPARQL_DIR := generated-data/$(edition)/sparql/
 GEN_VIRTUOSO_DIR := generated-data/$(edition)/virtuoso/$(version)/
-DATA_DIR := $(GEN_DATA_DIR)$(DATASET)
 CSS_SRC_DIR := css/
-CSS_GEN_DIR := $(GEN_DATA_DIR)$(DATASET)/css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 
-GEN_RDF_DIR := generated-data/$(edition)/$(DATASET)/
+# Where to put files to be transferred to the web server where RDF can be dereferenced, and HTML provided:
+WWW_DIR := generated-data/$(edition)/www/
 GEN_CSV_DIR := generated-data/$(edition)/csv/
+GEN_DOC_DIR := $(WWW_DIR)doc/
+GEN_CSS_DIR := $(WWW_DIR)css/
 STD_CSV_DIR := $(GEN_CSV_DIR)standard/
 STD_COOPS_UK_OUTLETS_CSV := $(STD_CSV_DIR)open_data_outlets.csv
 STD_COOPS_UK_ORGS_CSV := $(STD_CSV_DIR)open_data_organisations.csv
@@ -183,11 +179,7 @@ $(STD_CSV_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
 
-$(DATA_DIR):
-	$(check_valid_edition)
-	mkdir -p $@
-
-$(GEN_RDF_DIR):
+$(GEN_DOC_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
 
@@ -201,10 +193,11 @@ $(GEN_VIRTUOSO_DIR):
 
 # Any css file in the source CSS dir will be copied to the corresponding geenrated_data dir.
 # The list of CSS_FILES will be passed to the GEN_TRIPLES ruby script for linking in HTML.
-$(CSS_GEN_DIR):
+
+$(GEN_CSS_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
-	cp -r $(CSS_SRC_DIR) $(CSS_GEN_DIR)
+	cp -r $(CSS_SRC_DIR) $(GEN_CSS_DIR)
 
 # Misc:
 TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
@@ -224,17 +217,15 @@ $(CSV_FOR_TESTING_TO_RDF): $(STD_COOPS_UK_WITH_LAT_LNG)
 	head -1 $< > $@
 	grep '[0-9],http' $<  | head -100 >> $@
 
-#$(RDF_target): $(CSV_FOR_TESTING_TO_RDF) | $(DATA_DIR)
-$(RDF_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(GEN_RDF_DIR)
+$(GENERATE_target): $(STD_COOPS_UK_WITH_LAT_LNG) $(GEN_CSS_DIR) | $(GEN_DOC_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
-	  --output-directory $(GEN_RDF_DIR) \
+	  --output-directory $(GEN_DOC_DIR) \
 	  --uri-prefix $(DATASET_URI_BASE) \
-	  --dataset $(DATASET) \
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  $<
 
-$(TEST_target): $(RDF_target)
-	diff -r $(stabledir) $(GEN_RDF_DIR)
+$(TEST_target): $(GENERATE_target)
+	diff -r $(stabledir) $(GEN_DOC_DIR)
 
 # The GEN_SPARQL_DIR will be copied over to the map-app services dir, for use by a PHP script
 # These file names must match exactly the filenames in the PHP script
@@ -242,7 +233,7 @@ MAP_APP_SPARQL_FILE := $(GEN_SPARQL_DIR)query.rq
 MAP_APP_ENDPOINT_FILE := $(GEN_SPARQL_DIR)endpoint.txt
 MAP_APP_GRAPH_FILE := $(GEN_SPARQL_DIR)default-graph-uri.txt
 
-$(GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR) $(GEN_SPARQL_DIR) 
+$(OLD_GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR) $(GEN_SPARQL_DIR) 
 	$(check_valid_edition)
 	echo "$(SPARQL_ENDPOINT)" > $(MAP_APP_ENDPOINT_FILE)
 	echo "$(GRAPH_NAME)" > $(MAP_APP_GRAPH_FILE)
@@ -268,8 +259,10 @@ SERVER_PATH := $(SERVER_DIR)$(SERVER_DOC_DIR)
 #  - make sure the target directory exists on the server
 #  - copy the generated data to the server
 $(DEPLOY_target):
-	$(SSH) $(SERVER) 'cd $(SERVER_DIR) && mkdir -p $(SERVER_DOC_DIR)'
-	$(RSYNC) --delete $(GEN_DATA_DIR) $(SERVER):$(SERVER_PATH)
+	$(SSH) $(DEPLOYMENT_SERVER) 'cd $(DEPLOYMENT_WEBROOT) && mkdir -p $(DEPLOYMENT_DOC_SUBDIR)'
+	$(RSYNC) --delete $(GEN_DOC_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_DOC_DIR)
+	$(SSH) $(DEPLOYMENT_SERVER) 'cd $(DEPLOYMENT_WEBROOT) && mkdir -p $(DEPLOYMENT_CSS_SUBDIR)'
+	$(RSYNC) --delete $(GEN_CSS_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_CSS_DIR)
 
 # We create a directory with the RDF that we need to load into our triplestore.
 # We do this by downloading (using curl) RDF that has already been deployed to the web.
@@ -293,6 +286,7 @@ VIRTUOSO_SQL_SCRIPT_BASENAME := loaddata.sql
 VIRTUOSO_SCRIPT_LOCAL := $(GEN_VIRTUOSO_DIR)$(VIRTUOSO_SQL_SCRIPT_BASENAME)
 VIRTUOSO_SCRIPT_REMOTE := $(VIRTUOSO_DATA_DIR)$(VIRTUOSO_SQL_SCRIPT_BASENAME)
 
+# TODO sort out path names here
 $(TRIPLESTORE_target): | $(GEN_VIRTUOSO_DIR)
 	$(check_valid_edition)
 	@echo "Creating files for upload to Virtuoso..."

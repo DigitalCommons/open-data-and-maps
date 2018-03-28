@@ -11,7 +11,8 @@ module SeOpenData
 	    super.insert_graph(g)
 	  end
 	end
-	OneBigFileSuffix = "_all"
+	OneBigFileBasename = "all"
+	IndexBasename = "index"
 	attr_reader :collection, :config
 	def initialize(collection, config)
 	  @collection, @config = collection, config
@@ -29,7 +30,7 @@ module SeOpenData
 	  }
 	end
 	def index_filename(outdir, ext)
-	  outdir + config.dataset + ext
+	  outdir + IndexBasename + ext
 	end
 	def save_one_big_rdfxml(outdir)
 	  f = one_big_filename(outdir, ".rdf")
@@ -44,7 +45,7 @@ module SeOpenData
 	  }
 	end
 	def one_big_filename(outdir, ext)
-	  outdir + config.dataset + OneBigFileSuffix + ext
+	  outdir + OneBigFileBasename + ext
 	end
 	private
 	def index_graph

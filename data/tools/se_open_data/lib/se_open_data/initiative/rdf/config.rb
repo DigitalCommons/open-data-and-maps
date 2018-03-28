@@ -8,6 +8,7 @@ module SeOpenData
 	Osspatialrelations = ::RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/")
 	Geo = ::RDF::Vocabulary.new("http://www.w3.org/2003/01/geo/wgs84_pos#")
 	Rov = ::RDF::Vocabulary.new("http://www.w3.org/ns/regorg#")
+	# TODO - remove dataset if it turns out to be obsolete (which is likely)
 	attr_reader :uri_prefix, :dataset, :essglobal_uri, :essglobal_vocab, :essglobal_standard, :postcodeunit_cache, :legal_form_lookup, :csv_standard
 	def initialize(uri_prefix, dataset, essglobal_uri, postcodeunit_cache_filename, csv_standard)
 	  @uri_prefix, @dataset, @essglobal_uri, @postcodeunit_cache = uri_prefix, dataset, essglobal_uri, postcodeunit_cache

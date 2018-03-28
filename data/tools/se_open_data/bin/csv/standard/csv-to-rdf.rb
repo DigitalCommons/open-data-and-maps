@@ -33,7 +33,7 @@ class OptParse
 	options.uri_prefix = uri
       end
       opts.on("--dataset DATASET",
-	      "The part of an initiative's URI that follows the uri-prefix") do |ds|
+	      "The part of an initiative's URI that follows the uri-prefix (PROBABLY OBSOLETE)") do |ds|
 	options.dataset = ds
       end
       opts.on("--essglobal-uri URI",
