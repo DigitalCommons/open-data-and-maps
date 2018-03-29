@@ -1,11 +1,16 @@
 module SeOpenData
   class Initiative
     class Collection < Array
+      OneBigFileBasename = "all"
+      IndexBasename = "index"
       attr_reader :config
       def initialize(config)
 	@config = config
 	@graph = nil	# Huh? What's this for?
 	super()
+      end
+      def html
+	@html ||= HTML::new(self, config)
       end
       def rdf
 	@rdf ||= RDF::new(self, config)
@@ -32,6 +37,13 @@ module SeOpenData
 	rdf.save_index_turtle($options.outdir)
 	rdf.save_one_big_rdfxml($options.outdir)
 	rdf.save_one_big_turtle($options.outdir)
+	html.save($options.outdir)
+      end
+      def index_filename(outdir, ext)
+	outdir + IndexBasename + ext
+      end
+      def one_big_filename(outdir, ext)
+	outdir + OneBigFileBasename + ext
       end
     end
   end

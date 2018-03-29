@@ -11,41 +11,33 @@ module SeOpenData
 	    super.insert_graph(g)
 	  end
 	end
-	OneBigFileBasename = "all"
-	IndexBasename = "index"
 	attr_reader :collection, :config
 	def initialize(collection, config)
 	  @collection, @config = collection, config
 	end
 	def save_index_rdfxml(outdir)
-	  f = index_filename(outdir, ".rdf")
+	  f = collection.index_filename(outdir, ".rdf")
 	  ::RDF::RDFXML::Writer.open(f, standard_prefixes: true, prefixes: config.prefixes) {|writer|
 	    writer << index_graph
 	  }
 	end
 	def save_index_turtle(outdir)
-	  f = index_filename(outdir, ".ttl")
+	  f = collection.index_filename(outdir, ".ttl")
 	  ::RDF::Turtle::Writer.open(f, standard_prefixes: true, prefixes: config.prefixes) {|writer|
 	    writer << index_graph
 	  }
 	end
-	def index_filename(outdir, ext)
-	  outdir + IndexBasename + ext
-	end
 	def save_one_big_rdfxml(outdir)
-	  f = one_big_filename(outdir, ".rdf")
+	  f = collection.one_big_filename(outdir, ".rdf")
 	  ::RDF::RDFXML::Writer.open(f, standard_prefixes: true, prefixes: config.prefixes) {|writer|
 	    writer << one_big_graph
 	  }
 	end
 	def save_one_big_turtle(outdir)
-	  f = one_big_filename(outdir, ".ttl")
+	  f = collection.one_big_filename(outdir, ".ttl")
 	  ::RDF::Turtle::Writer.open(f, standard_prefixes: true, prefixes: config.prefixes) {|writer|
 	    writer << one_big_graph
 	  }
-	end
-	def one_big_filename(outdir, ext)
-	  outdir + OneBigFileBasename + ext
 	end
 	private
 	def index_graph

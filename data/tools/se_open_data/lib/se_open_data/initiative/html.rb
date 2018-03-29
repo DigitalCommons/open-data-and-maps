@@ -6,7 +6,7 @@ require 'se_open_data/utils/html'
 module SeOpenData
   class Initiative
     class HTML
-      include SeOpenData::Utils::Xml
+      include SeOpenData::Utils::Xml	# for method xml()
       include SeOpenData::Utils::Html
       attr_reader :initiative, :config
       def initialize(initiative, config)
@@ -14,9 +14,7 @@ module SeOpenData
       end
       def save(outdir)
 	fname = File.name(initiative.id, outdir, ".html")
-	::File.open(fname, "w") {|f|
-	  f.write(html(outdir))
-	}
+	::File.open(fname, "w") {|f| f.write(html(outdir)) }
       end
       def html(outdir)
 	"<!DOCTYPE html>\n" + 
