@@ -4,6 +4,7 @@ GENERATE_target := generate
 OLD_GENERATE_target := oldgenerate
 CSV_target := csv
 TEST_target := test
+TESTGET_target := testget
 DEPLOY_target := deploy
 TRIPLESTORE_target := triplestore
 HELP_target := help
@@ -37,9 +38,12 @@ $(HELP_target):
 	@echo "\tWARNING: This replaces the directory on the server (i.e. files on the server may be deleted)."
 	@echo "make $(TRIPLESTORE_target) edition=x"
 	@echo "\tInstall deployed data into the triple store."
+	@echo "make $(TESTGET_target) edition=x"
+	@echo "\tCheck that redirection and content negotiation (done using w3id/.htaccess) is working."
+	@$(call echo_if_edition_ok,"\\tTests .htaccess at https://$(URI_HOST)/$(URI_PATH_PREFIX)")
 	@echo "make $(TEST_target) edition=x stabledir=dir"
 	@echo "\tRun tests, and compare results with stabledir."
-	@$(call echo_if_edition_ok,"\\tCompare stabledir with $(GEN_DOC_DIR).")
+	@$(call echo_if_edition_ok,"\\tCompare stabledir with $(TOP_OUTPUT_DIR).")
 	@echo "make $(SPARQLTEST_target) edition=x"
 	@echo "\tRuns some sparql queries, and by doing so documents some things."
 
@@ -48,10 +52,6 @@ $(HELP_target):
 # The value of DEPLOYMENT_SERVER would often be the name of a host set up in an ssh config file. 
 # See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
 DEPLOYMENT_SERVER ?= ise-0-matt
-
-# SERVER_DIR must already exist when the DEPLOY_target is invoked
-SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
-DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 
 # "one big file" of RDF will be created, mostly to make it straightforward to load the whole thing into Virtuoso.
 # See generate-triples.rb for how this is used.
@@ -69,18 +69,16 @@ ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
   BAD_EDITION := yup
 endif
 ifeq ($(edition),final)
+  URI_HOST := w3id.org
   SRC_CSV_DIR := co-ops-uk-csv-data/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   # Does this one really exist? :
   #ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
-  # There is no max number of CSV rows:
-  MAX_CSV_ROWS :=  100
 else ifeq ($(edition),test2017)
+  URI_HOST := w3id.solidarityeconomy.coop
   SRC_CSV_DIR := co-ops-uk-csv-test-data/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
 
-  #MAX_CSV_ROWS := 100
-  MAX_CSV_ROWS :=
   #CHECK_WEBSITES_FLAG := --check-websites
   ALLOW_BLANK_NODES_FLAG := --no-allow-blank-nodes
 else ifndef BAD_EDITION
@@ -88,8 +86,8 @@ else ifndef BAD_EDITION
   BAD_EDITION := yup
 endif
 URI_SCHEME := https
-URI_HOST := w3id.org
-URI_PATH_PREFIX := coops-uk/2017/
+DATASET_PATH := coops-uk/2017
+URI_PATH_PREFIX := $(DATASET_PATH)/
 DATASET_URI_BASE := $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
 
 DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
@@ -105,8 +103,6 @@ define check_valid_edition
 @[ -z "$(BAD_EDITION)" ] || { echo "$(edition_errmsg)" && false; }
 endef
 
-DOC_URL_BASE := $(DATA_SERVER_URL)/$(SERVER_DOC_DIR)
-
 # Programs used within this makefile:
 SCP := scp
 #RUBY := ruby2.4
@@ -121,15 +117,17 @@ COOPS_UK_ORGS_CSV := $(SRC_CSV_DIR)open_data_organisations.csv
 # Programs/scripts:
 GEN_TRIPLES := generate-triples.rb
 
+# Everything produces for theis edition goes here:
+TOP_OUTPUT_DIR := generated-data/$(edition)/
 # Directories
-GEN_SPARQL_DIR := generated-data/$(edition)/sparql/
-GEN_VIRTUOSO_DIR := generated-data/$(edition)/virtuoso/$(version)/
+GEN_SPARQL_DIR := $(TOP_OUTPUT_DIR)sparql/
+GEN_VIRTUOSO_DIR := $(TOP_OUTPUT_DIR)virtuoso/$(version)/
 CSS_SRC_DIR := css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 
 # Where to put files to be transferred to the web server where RDF can be dereferenced, and HTML provided:
-WWW_DIR := generated-data/$(edition)/www/
-GEN_CSV_DIR := generated-data/$(edition)/csv/
+WWW_DIR := $(TOP_OUTPUT_DIR)www/
+GEN_CSV_DIR := $(TOP_OUTPUT_DIR)csv/
 GEN_DOC_DIR := $(WWW_DIR)doc/
 GEN_CSS_DIR := $(WWW_DIR)css/
 STD_CSV_DIR := $(GEN_CSV_DIR)standard/
@@ -199,9 +197,6 @@ $(GEN_CSS_DIR):
 	mkdir -p $@
 	cp -r $(CSS_SRC_DIR) $(GEN_CSS_DIR)
 
-# Misc:
-TIMESTAMP =  $(shell date +%Y-%m-%dT%H.%M.%S)
-
 # Standard GNU make trick - see http://stackoverflow.com/a/7531247/685715
 nullstring :=
 space := $(nullstring) # end of the line
@@ -225,7 +220,29 @@ $(GENERATE_target): $(STD_COOPS_UK_WITH_LAT_LNG) $(GEN_CSS_DIR) | $(GEN_DOC_DIR)
 	  $<
 
 $(TEST_target): $(GENERATE_target)
-	diff -r $(stabledir) $(GEN_DOC_DIR)
+	diff -r $(stabledir) $(TOP_OUTPUT_DIR)
+
+# ------------------------------------------------------------------
+# Test content negotiation and redirection:
+TEST_INITIATIVE_URI_PATHS := R000001 R013429/BD234AA R013429/BH205RQ/2
+TEST_URI_PATHS := $(DATASET_PATH)/ $(addprefix $(URI_PATH_PREFIX),$(TEST_INITIATIVE_URI_PATHS))
+TEST_URIS := $(addprefix https://$(URI_HOST)/,$(TEST_URI_PATHS))
+
+define TESTGET_method
+@for n in $(TEST_URIS); do \
+	echo "\nAccept:\t$(1)";\
+	echo "TEST:\t$$n";\
+	curl -H 'Accept: $(1)' --silent --output /dev/null --write-out "CODE:\t%{http_code}\nRES:\t%{redirect_url}\n" $$n\
+	; done
+endef
+$(TESTGET_target): 
+	$(check_valid_edition)
+	@$(call TESTGET_method,text/html)
+	@$(call TESTGET_method,application/xhtml+xml)
+	@$(call TESTGET_method,application/rdf+xml)
+	@$(call TESTGET_method,text/turtle)
+
+# ------------------------------------------------------------------
 
 # The GEN_SPARQL_DIR will be copied over to the map-app services dir, for use by a PHP script
 # These file names must match exactly the filenames in the PHP script
@@ -234,6 +251,7 @@ MAP_APP_ENDPOINT_FILE := $(GEN_SPARQL_DIR)endpoint.txt
 MAP_APP_GRAPH_FILE := $(GEN_SPARQL_DIR)default-graph-uri.txt
 
 $(OLD_GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR) $(GEN_SPARQL_DIR) 
+	false
 	$(check_valid_edition)
 	echo "$(SPARQL_ENDPOINT)" > $(MAP_APP_ENDPOINT_FILE)
 	echo "$(GRAPH_NAME)" > $(MAP_APP_GRAPH_FILE)
@@ -288,6 +306,8 @@ VIRTUOSO_SCRIPT_REMOTE := $(VIRTUOSO_DATA_DIR)$(VIRTUOSO_SQL_SCRIPT_BASENAME)
 
 # TODO sort out path names here
 $(TRIPLESTORE_target): | $(GEN_VIRTUOSO_DIR)
+	@echo "Need to sort out paths before trying this"
+	false
 	$(check_valid_edition)
 	@echo "Creating files for upload to Virtuoso..."
 	@$(call GET_RDFXML_FOR_VIRTUOSO,$(URI_BASE)$(DATASET)$(ONE_BIG_FILE_SUFFIX),$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf)
