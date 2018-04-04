@@ -289,7 +289,7 @@ GET_RDFXML_CURL := curl --silent -H "Accept: application/rdf+xml" -L
 GET_RDFXML = echo "Creating $(2) from $(1)..." && $(GET_RDFXML_CURL) $(1) > $(2)
 GET_RDFXML_FOR_VIRTUOSO = $(call GET_RDFXML,$(1),$(GEN_VIRTUOSO_DIR)$(2))
 # Datasets on the Virtuoso server are put into a named graph:
-GRAPH_NAME := http://163.172.187.51/OntoWiki/index.php/coopsuk/
+GRAPH_NAME := $(DATASET_URI_BASE)
 
 # virtuoso server name, typically this is configured in ~/.ssh/config:
 VIRTUOSO_SERVER := ise-0-admin
@@ -306,11 +306,8 @@ VIRTUOSO_SCRIPT_REMOTE := $(VIRTUOSO_DATA_DIR)$(VIRTUOSO_SQL_SCRIPT_BASENAME)
 
 # TODO sort out path names here
 $(TRIPLESTORE_target): | $(GEN_VIRTUOSO_DIR)
-	@echo "Need to sort out paths before trying this"
-	false
 	$(check_valid_edition)
 	@echo "Creating files for upload to Virtuoso..."
-	@$(call GET_RDFXML_FOR_VIRTUOSO,$(URI_BASE)$(DATASET)$(ONE_BIG_FILE_SUFFIX),$(DATASET)$(ONE_BIG_FILE_SUFFIX).rdf)
 	@$(call GET_RDFXML_FOR_VIRTUOSO,$(ESSGLOBAL_URI)vocab/,essglobal_vocab.rdf)
 	@$(call GET_RDFXML_FOR_VIRTUOSO,$(ESSGLOBAL_URI)standard/legal-form,legal-form.skos)
 	@echo "Creating $(VIRTUOSO_NAMED_GRAPH_FILE)..."
