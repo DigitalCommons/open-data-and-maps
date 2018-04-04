@@ -16,7 +16,12 @@ module SeOpenData
 	  # Change encoding! This is a workaround for a problem that emerged when processing the orgs_csv file.
 	  #row.headers.each {|h| row[h].encode!(Encoding::ASCII_8BIT) unless row[h].nil? }
 	  # Why does it not work with UTF-8?  UPDATE - seems to work with UTF-8 for 2017 data.
-	  row.headers.each {|h| row[h].encode!(Encoding::UTF_8) unless row[h].nil? }
+	  row.headers.each {|h|
+	    if row[h].encoding != Encoding::UTF_8
+	      puts "ENCODING: #{row[h].encoding}"
+	    end
+	    row[h].encode!(Encoding::UTF_8) unless row[h].nil?
+	  }
 	  r = csv_row_reader.new(row)
 	  csv_out << output_headers.keys.map {|h| r.send(h) }
 	rescue StandardError => e # includes ArgumentError, RuntimeError, and many others.
