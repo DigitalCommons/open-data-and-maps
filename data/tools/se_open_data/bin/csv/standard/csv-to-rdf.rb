@@ -12,7 +12,6 @@ class OptParse
     options = OpenStruct.new
     options.outdir = nil
     options.uri_prefix = nil
-    options.dataset = nil
     options.essglobal_uri = nil
     options.postcodeunit_cache = nil
     options.csv_standard = SeOpenData::CSV::Standard::V1
@@ -31,10 +30,6 @@ class OptParse
       opts.on("--uri-prefix URI",
 	      "A string which prefixes every initiative's URI") do |uri|
 	options.uri_prefix = uri
-      end
-      opts.on("--dataset DATASET",
-	      "The part of an initiative's URI that follows the uri-prefix (PROBABLY OBSOLETE)") do |ds|
-	options.dataset = ds
       end
       opts.on("--essglobal-uri URI",
 	      "Base URI for the essglobal vocabulary. e.g. http://purl.org/essglobal") do |uri|
@@ -68,7 +63,6 @@ end
 $options = OptParse.parse(ARGV)
 config = SeOpenData::Initiative::RDF::Config.new(
   $options.uri_prefix,
-  $options.dataset,
   $options.essglobal_uri,
   $options.postcodeunit_cache,
   $options.csv_standard

@@ -15,7 +15,6 @@ module SeOpenData
 
 	dirsep = "/"
 	# The parent dir is assumed to already exist ...
-	#parent_dir = outdir + config.dataset + dirsep
 	parent_dir = outdir
 	initiative_path = id.split(dirsep)
 	# Last part of initiative_path is filename, not dir name.
