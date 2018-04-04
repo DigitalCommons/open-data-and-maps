@@ -17,6 +17,7 @@ module SeOpenData
 	::File.open(fname, "w") {|f| f.write(html(outdir)) }
       end
       def html(outdir)
+	begin
 	"<!DOCTYPE html>\n" + 
 	  xml(:html) {
 	  xml(:head) {
@@ -35,6 +36,11 @@ module SeOpenData
 	    html_fragment_for_inserted_code("RDF Turtle serialization", ttl_file)
 	  }
 	}
+	rescue => e
+	  puts "Exception creating html for initiative #{initiative.id}."
+	  puts e.inspect
+	  "<!DOCTYPE html>\n" 
+	end
       end
       def table_of_csv_input
 	xml(:h2) {
