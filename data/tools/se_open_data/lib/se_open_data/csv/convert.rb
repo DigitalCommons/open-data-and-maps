@@ -16,6 +16,9 @@ module SeOpenData
 	  # Change encoding! This is a workaround for a problem that emerged when processing the orgs_csv file.
 	  #row.headers.each {|h| row[h].encode!(Encoding::ASCII_8BIT) unless row[h].nil? }
 	  # Why does it not work with UTF-8?  UPDATE - seems to work with UTF-8 for 2017 data.
+	  #
+	  # UPDATE: See issue https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/57
+	  #         More investigation is needed to get to the bottom of this.
 	  row.headers.each {|h|
 	    if row[h].encoding != Encoding::UTF_8
 	      puts "ENCODING: #{row[h].encoding}"
