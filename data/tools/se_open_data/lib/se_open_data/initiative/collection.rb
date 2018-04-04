@@ -1,7 +1,6 @@
 module SeOpenData
   class Initiative
     class Collection < Array
-      OneBigFileBasename = "all"
       IndexBasename = "index"
       attr_reader :config
       def initialize(config)
@@ -42,8 +41,8 @@ module SeOpenData
       def index_filename(outdir, ext)
 	outdir + IndexBasename + ext
       end
-      def one_big_filename(outdir, ext)
-	outdir + OneBigFileBasename + ext
+      def one_big_filename(pathname_without_ext, ext)
+	pathname_without_ext + ext
       end
     end
   end

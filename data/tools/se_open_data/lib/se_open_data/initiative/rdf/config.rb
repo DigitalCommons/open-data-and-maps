@@ -8,11 +8,12 @@ module SeOpenData
 	Osspatialrelations = ::RDF::Vocabulary.new("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/")
 	Geo = ::RDF::Vocabulary.new("http://www.w3.org/2003/01/geo/wgs84_pos#")
 	Rov = ::RDF::Vocabulary.new("http://www.w3.org/ns/regorg#")
-	attr_reader :uri_prefix, :essglobal_uri, :essglobal_vocab, :essglobal_standard, :postcodeunit_cache, :legal_form_lookup, :csv_standard
-	def initialize(uri_prefix, essglobal_uri, postcodeunit_cache_filename, csv_standard)
+	attr_reader :uri_prefix, :essglobal_uri, :essglobal_vocab, :one_big_file_basename, :essglobal_standard, :postcodeunit_cache, :legal_form_lookup, :csv_standard
+	def initialize(uri_prefix, essglobal_uri, one_big_file_basename, postcodeunit_cache_filename, csv_standard)
 	  @uri_prefix, @essglobal_uri, @postcodeunit_cache = uri_prefix, essglobal_uri, postcodeunit_cache
 	  @essglobal_vocab = ::RDF::Vocabulary.new(essglobal_uri + "vocab/")
 	  @essglobal_standard = ::RDF::Vocabulary.new(essglobal_uri + "standard/")
+	  @one_big_file_basename = one_big_file_basename
 	  @postcodeunit_cache = SeOpenData::RDF::OsPostcodeUnit::Client.new(postcodeunit_cache_filename)
 	  @legal_form_lookup = SeOpenData::Essglobal::LegalForm.new(essglobal_uri)
 	  @csv_standard = csv_standard

@@ -13,6 +13,7 @@ class OptParse
     options.outdir = nil
     options.uri_prefix = nil
     options.essglobal_uri = nil
+    options.one_big_file_basename = nil
     options.postcodeunit_cache = nil
     options.csv_standard = SeOpenData::CSV::Standard::V1
 
@@ -34,6 +35,10 @@ class OptParse
       opts.on("--essglobal-uri URI",
 	      "Base URI for the essglobal vocabulary. e.g. http://purl.org/essglobal") do |uri|
         options.essglobal_uri = uri
+      end
+      opts.on("--one-big-file-basename BASENAME",
+	      "Filename (except .extension) for files with all generated data concatenated for loading into Virtuoso") do |basename|
+	options.one_big_file_basename = basename
       end
       opts.on("--postcodeunit-cache FILENAME",
 	      "JSON file where OS postcode unit results are cached") do |filename|
@@ -64,6 +69,7 @@ $options = OptParse.parse(ARGV)
 config = SeOpenData::Initiative::RDF::Config.new(
   $options.uri_prefix,
   $options.essglobal_uri,
+  $options.one_big_file_basename,
   $options.postcodeunit_cache,
   $options.csv_standard
 )

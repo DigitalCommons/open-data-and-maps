@@ -53,10 +53,6 @@ $(HELP_target):
 # See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
 DEPLOYMENT_SERVER ?= ise-0-matt
 
-# "one big file" of RDF will be created, mostly to make it straightforward to load the whole thing into Virtuoso.
-# See generate-triples.rb for how this is used.
-ONE_BIG_FILE_SUFFIX := _all
-
 CHECK_WEBSITES_FLAG := --no-check-websites
 ALLOW_BLANK_NODES_FLAG := --allow-blank-nodes
 
@@ -121,7 +117,10 @@ GEN_TRIPLES := generate-triples.rb
 TOP_OUTPUT_DIR := generated-data/$(edition)/
 # Directories
 GEN_SPARQL_DIR := $(TOP_OUTPUT_DIR)sparql/
-GEN_VIRTUOSO_DIR := $(TOP_OUTPUT_DIR)virtuoso/$(version)/
+GEN_VIRTUOSO_DIR := $(TOP_OUTPUT_DIR)virtuoso/
+# "one big file" of RDF will be created, mostly to make it straightforward to load the whole thing into Virtuoso.
+ONE_BIG_FILE_BASENAME := $(GEN_VIRTUOSO_DIR)all
+
 CSS_SRC_DIR := css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 
@@ -212,11 +211,12 @@ $(CSV_FOR_TESTING_TO_RDF): $(STD_COOPS_UK_WITH_LAT_LNG)
 	head -1 $< > $@
 	grep '[0-9],http' $<  | head -100 >> $@
 
-$(GENERATE_target): $(STD_COOPS_UK_WITH_LAT_LNG) $(GEN_CSS_DIR) | $(GEN_DOC_DIR)
+$(GENERATE_target): $(STD_COOPS_UK_WITH_LAT_LNG) $(GEN_CSS_DIR) | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
 	  --output-directory $(GEN_DOC_DIR) \
 	  --uri-prefix $(DATASET_URI_BASE) \
 	  --essglobal-uri $(ESSGLOBAL_URI) \
+	  --one-big-file-basename $(ONE_BIG_FILE_BASENAME) \
 	  $<
 
 $(TEST_target): $(GENERATE_target)
