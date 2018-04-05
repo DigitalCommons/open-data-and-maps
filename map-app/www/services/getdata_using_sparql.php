@@ -75,7 +75,7 @@ function request($url){
 
 	return $response;
 }
-$query_name = 'map-app';
+$query_name = 'coops-uk2017';
 $requestURL = getSparqlUrl($query_name);
 $response = request($requestURL);
 $res = json_decode($response, true);

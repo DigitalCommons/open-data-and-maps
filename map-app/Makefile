@@ -17,9 +17,8 @@ help:
 # Variables to be overridden from the command line:
 #
 # The value of SERVER would often be the name of a host set up in an ssh config file. 
-# See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
-SERVER ?= parecco
-SERVER_DIR ?= public_html/subdomains/solidarityeconomics.org/data/
+SERVER ?= ise-0-admin
+SERVER_DIR ?= /var/www/html/
 DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 
 LINT := eslint
@@ -27,7 +26,7 @@ RSYNC := rsync -avz
 
 SRC_DIR := www/
 BUILT_DIR := www-built/
-SERVER_APP_DIR := map-app/
+SERVER_APP_DIR := maps/coops-uk/2017/
 PACKAGER_OPTIMIZER := r.js
 BUILD_CONFIG := build.js
 
