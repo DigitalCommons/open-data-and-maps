@@ -21,7 +21,10 @@ module SeOpenData
 	"<!DOCTYPE html>\n" + 
 	  xml(:html) {
 	  xml(:head) {
-	    xml(:title) { initiative.name }
+	    xml(:title) { initiative.name } +
+	    config.css_files.map {|f|
+	      xml(:link, rel: "stylesheet", href: f)
+	    }.join
 	  } +
 	  xml(:body) {
 	    rdf_file = File.name(initiative.id, outdir, ".rdf")
@@ -29,11 +32,12 @@ module SeOpenData
 	    xml(:h1) {
 	      initiative.name
 	    } +
+	    summary +
 	    table_of_csv_input +
 	    links_to_other_datasets +
 	    links_to_rdf_browsers +
-	    html_fragment_for_inserted_code("RDF/XML serialization", rdf_file) +
-	    html_fragment_for_inserted_code("RDF Turtle serialization", ttl_file)
+	    html_fragment_for_inserted_code("Machine readable data: RDF/XML format", rdf_file) +
+	    html_fragment_for_inserted_code("Machine readable data: RDF Turtle format", ttl_file)
 	  }
 	}
 	rescue => e
@@ -42,9 +46,33 @@ module SeOpenData
 	  "<!DOCTYPE html>\n" 
 	end
       end
+      def summary
+	xml(:h2) {
+	  "Linked Data URI"
+	} +
+	xml(:p) {
+	  "This Linked Data URI can be used to view this page in a web browser, or by a computer program to access the same information in machine-readable formats:"
+	} +
+	xml(:ul) {
+	  xml(:li) {
+	    link_to(initiative.rdf.uri, initiative.rdf.uri)
+	  }
+	} +
+	xml(:p) {
+	  "This is part of a dataset which has its own Linked Data URI: This provides a human-readable list of contents if you click on it; It can also be used by computers to get a list of everything in the dataset in a machine-readable format:"
+	} +
+	xml(:ul) {
+	  xml(:li) {
+	    link_to(config.uri_prefix, config.uri_prefix)
+	  }
+	}
+      end
       def table_of_csv_input
 	xml(:h2) {
 	  "CSV data"
+	} +
+	xml(:p) {
+	  "This is the original information from which this Linked Data was generated and published on the web:"
 	} +
 	table(
 	  headers: ["heading", "value"],
@@ -54,25 +82,18 @@ module SeOpenData
 	)
       end
       def links_to_other_datasets
-	xml(:h2) {
-	  "Links to other datasets"
-	} +
-	xml(:ul) {
-	  xml(:li) {
-	    geocontainer_link
+	uris = [initiative.rdf.geocontainer_uri, initiative.rdf.companies_house_uri].compact
+	if !uris.empty?
+	  xml(:h2) {
+	    "Links to other datasets"
 	  } +
-	  xml(:li) {
-	    companies_house_link
+	  xml(:p) {
+	    "These are Linked Data URIs: You can click on these in your browser to see human-readable information; Computers can use the same Linked Data URIs to get machine-readable information:"
+	  } +
+	  xml(:ul) {
+	    uris.map {|uri| xml(:li) { link_to(uri, uri) } }.join
 	  }
-	}
-      end
-      def companies_house_link
-	uri = initiative.rdf.companies_house_uri
-	uri ?  link_to(uri, uri) : ""
-      end
-      def geocontainer_link
-	uri = initiative.rdf.geocontainer_uri
-	uri ?  link_to(uri, uri) : ""
+	end
       end
       def links_to_rdf_browsers
 	escaped_uri = CGI.escapeHTML(initiative.rdf.uri)
@@ -86,9 +107,6 @@ module SeOpenData
 	  xml(:li) {
 	    link_to("http://graphite.ecs.soton.ac.uk/browser/?uri=#{escaped_uri}", "Graphite browser") +
 	    ", courtesy of University of Southampton"
-	  } +
-	  xml(:li) {
-	    link_to("http://uri4uri.net/uri/#{escaped_uri}", "uri4uri.net")
 	  }
 	}
       end

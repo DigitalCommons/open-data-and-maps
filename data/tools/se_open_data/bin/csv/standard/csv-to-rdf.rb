@@ -15,6 +15,7 @@ class OptParse
     options.essglobal_uri = nil
     options.one_big_file_basename = nil
     options.map_app_sparql_query_filename = nil
+    options.css_files = nil
     options.postcodeunit_cache = nil
     options.csv_standard = SeOpenData::CSV::Standard::V1
 
@@ -44,6 +45,10 @@ class OptParse
       opts.on("--map-app-sparql-query-filename FILENAME",
 	      "Name of file where SPARQL query for map-app is to be written") do |filename|
 	options.map_app_sparql_query_filename = filename
+      end
+      opts.on("--css_files FILENAMES",
+	      "Comma-spearted list of CSS files for linking from generated HTML") do |filenames|
+	options.css_files = filenames.split(',')
       end
       opts.on("--postcodeunit-cache FILENAME",
 	      "JSON file where OS postcode unit results are cached") do |filename|
@@ -76,6 +81,7 @@ config = SeOpenData::Initiative::RDF::Config.new(
   $options.essglobal_uri,
   $options.one_big_file_basename,
   $options.map_app_sparql_query_filename,
+  $options.css_files,
   $options.postcodeunit_cache,
   $options.csv_standard
 )

@@ -137,6 +137,10 @@ ONE_BIG_FILE_BASENAME := $(GEN_VIRTUOSO_DIR)all
 
 CSS_SRC_DIR := css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
+DEPLOYED_CSS_FILES := $(CSS_FILES:css/%=/$(DEPLOYMENT_CSS_SUBDIR)%)
+$(info $(CSS_FILES))
+$(info $(DEPLOYED_CSS_FILES))
+
 
 # Where to put files to be transferred to the web server where RDF can be dereferenced, and HTML provided:
 WWW_DIR := $(TOP_OUTPUT_DIR)www/
@@ -242,6 +246,7 @@ $(GENERATE_target): $(STD_COOPS_UK_WITH_LAT_LNG) $(GEN_CSS_DIR) | $(GEN_DOC_DIR)
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  --one-big-file-basename $(ONE_BIG_FILE_BASENAME) \
 	  --map-app-sparql-query-filename $(MAP_APP_SPARQL_FILE) \
+	  --css-files '$(subst $(space),$(comma),$(DEPLOYED_CSS_FILES))' \
 	  $<
 
 $(TEST_target): $(GENERATE_target)
@@ -355,7 +360,7 @@ $(TRIPLESTORE_target): | $(GEN_VIRTUOSO_DIR)
 #DEFAULT_GRAPH_URI := http://163.172.187.51/OntoWiki/index.php/CoopsUKwithlatlong/ 
 DEFAULT_GRAPH_URI := $(GRAPH_NAME)
 SPARQL_FOR_GRAPH_LIST := sparql/list-graphs.rq 
-SPARQL_ENDPOINT := http://163.172.187.51:8890/sparql
+SPARQL_ENDPOINT := http://store1.solidarityeconomy.coop:8890/sparql
 SPARQL_CURL := curl -i -H "Accept: application/json" 
 
 list_sparql_graphs:
