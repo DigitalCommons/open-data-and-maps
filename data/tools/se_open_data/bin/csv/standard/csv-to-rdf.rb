@@ -14,6 +14,7 @@ class OptParse
     options.uri_prefix = nil
     options.essglobal_uri = nil
     options.one_big_file_basename = nil
+    options.map_app_sparql_query_filename = nil
     options.postcodeunit_cache = nil
     options.csv_standard = SeOpenData::CSV::Standard::V1
 
@@ -39,6 +40,10 @@ class OptParse
       opts.on("--one-big-file-basename BASENAME",
 	      "Filename (except .extension) for files with all generated data concatenated for loading into Virtuoso") do |basename|
 	options.one_big_file_basename = basename
+      end
+      opts.on("--map-app-sparql-query-filename FILENAME",
+	      "Name of file where SPARQL query for map-app is to be written") do |filename|
+	options.map_app_sparql_query_filename = filename
       end
       opts.on("--postcodeunit-cache FILENAME",
 	      "JSON file where OS postcode unit results are cached") do |filename|
@@ -70,6 +75,7 @@ config = SeOpenData::Initiative::RDF::Config.new(
   $options.uri_prefix,
   $options.essglobal_uri,
   $options.one_big_file_basename,
+  $options.map_app_sparql_query_filename,
   $options.postcodeunit_cache,
   $options.csv_standard
 )

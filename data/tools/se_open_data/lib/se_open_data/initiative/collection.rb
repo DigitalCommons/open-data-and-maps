@@ -14,6 +14,9 @@ module SeOpenData
       def rdf
 	@rdf ||= RDF::new(self, config)
       end
+      def sparql
+	@sparql ||= Sparql::new(self, config)
+      end
       def add_from_csv(input_io, csv_opts = {})
 	# The way this works is based on having column headings:
 	csv_opts.merge!(headers: true)
@@ -27,16 +30,17 @@ module SeOpenData
 	# Create RDF for each initiative
 	counter = SeOpenData::Utils::ProgressCounter.new("Saving RDF files for each initiative", size)
 	each {|initiative|
-	  initiative.rdf.save_rdfxml($options.outdir)
-	  initiative.rdf.save_turtle($options.outdir)
-	  initiative.html.save($options.outdir)
+	  initiative.rdf.save_rdfxml(outdir)
+	  initiative.rdf.save_turtle(outdir)
+	  initiative.html.save(outdir)
 	  counter.step
 	}
-	rdf.save_index_rdfxml($options.outdir)
-	rdf.save_index_turtle($options.outdir)
-	rdf.save_one_big_rdfxml($options.outdir)
-	rdf.save_one_big_turtle($options.outdir)
-	html.save($options.outdir)
+	rdf.save_index_rdfxml(outdir)
+	rdf.save_index_turtle(outdir)
+	rdf.save_one_big_rdfxml(outdir)
+	rdf.save_one_big_turtle(outdir)
+	html.save(outdir)
+	sparql.save_map_app_sparql_query
       end
       def index_filename(outdir, ext)
 	outdir + IndexBasename + ext
