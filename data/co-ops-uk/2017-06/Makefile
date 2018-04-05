@@ -30,10 +30,10 @@ $(HELP_target):
 	@echo "\tGenerates RDF/XML and turtle data from the Co-ops UK files:"
 	@echo "\t    $(COOPS_UK_ORGS_CSV)"
 	@echo "\t    $(COOPS_UK_OUTLETS_CSV)"
-	@$(call echo_if_edition_ok,"\\tResults are stored in the local directory $(GEN_DATA_DIR).")
+	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): Results are stored in the local directory $(TOP_OUTPUT_DIR).")
 	@echo "make $(DEPLOY_target) edition=x"
 	@echo "\tDeploys the generated data to the data server $(DEPLOYMENT_SERVER)"
-	@$(call echo_if_edition_ok,"\\tData from local directory $(TOP_OUTPUT_DIR) are copied to the server.")
+	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): Data from local directory $(TOP_OUTPUT_DIR) are copied to the server.")
 	@$(call echo_if_edition_ok,"\\tTo see exacly what is to be copied and how destructive that copy will be to the server:")
 	@$(call echo_if_edition_ok,"\\t\\tmake --dry-run $(DEPLOY_target) edition=$(edition)")
 	@echo "\tWARNING: This replaces the directory on the server (i.e. files on the server may be deleted)."
@@ -41,18 +41,20 @@ $(HELP_target):
 	@echo "\tInstall deployed data into the triple store."
 	@echo "make $(CLEAN_target) edition=x"
 	@echo "\tDeletes the generated data for edition x."
-	@$(call echo_if_edition_ok,"\\tWith edition=$(edition) - deletes $(TOP_OUTPUT_DIR)")
+	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): deletes $(TOP_OUTPUT_DIR)")
 	@echo "make $(TESTGET_target) edition=x"
 	@echo "\tTests the $(DEPLOY_target) step."
 	@echo "\tCheck that redirection and content negotiation (done using w3id/.htaccess) is working."
-	@$(call echo_if_edition_ok,"\\tTests .htaccess at https://$(URI_HOST)/$(URI_PATH_PREFIX)")
+	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): Tests .htaccess at https://$(URI_HOST)/$(URI_PATH_PREFIX)")
 	@echo "make $(TEST_target) edition=x stabledir=dir"
 	@echo "\tTests the $(GENERATE_target) step."
 	@echo "\tRun tests, and compare results with stabledir."
-	@$(call echo_if_edition_ok,"\\tCompare stabledir with $(TOP_OUTPUT_DIR).")
+	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): Compare stabledir with $(TOP_OUTPUT_DIR).")
 	@echo "make $(SPARQLTEST_target) edition=x"
 	@echo "\tTests the $(TRIPLESTORE_target) step."
-	@echo "\tRuns some sparql queries, and by doing so documents some things."
+	@echo "\tRuns some sparql queries: list named graphs; get map-app data."
+	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): You can see what commands will be run like this:")
+	@$(call echo_if_edition_ok,"\\t\\tmake --dry-run $(SPARQLTEST_target) edition=$(edition)")
 
 # Variables to be overridden from the command line:
 #
