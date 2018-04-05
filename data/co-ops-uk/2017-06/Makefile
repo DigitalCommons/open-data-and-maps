@@ -6,11 +6,13 @@ CSV_target := csv
 TEST_target := test
 TESTGET_target := testget
 DEPLOY_target := deploy
+CLEAN_target := clean
 TRIPLESTORE_target := triplestore
 HELP_target := help
 SPARQLTEST_target := sparqltest
-.PHONY: $(HELP_target) $(GENERATE_target) $(DEPLOY_target) $(TRIPLESTORE_target) $(SPARQLTEST_target) $(CSV_target)
-.PHONY: $(OLD_GENERATE_target)
+
+.PHONY: $(GENERATE_target) $(OLD_GENERATE_target) $(CSV_target) $(TEST_target) $(TESTGET_target) $(DEPLOY_target) $(CLEAN_target) $(TRIPLESTORE_target) $(HELP_target) $(SPARQLTEST_target)
+
 .DEFAULT_GOAL: $(HELP_target)
 
 date ?= $(shell date -u +%Y%m%d)
@@ -31,20 +33,25 @@ $(HELP_target):
 	@$(call echo_if_edition_ok,"\\tResults are stored in the local directory $(GEN_DATA_DIR).")
 	@echo "make $(DEPLOY_target) edition=x"
 	@echo "\tDeploys the generated data to the data server $(DEPLOYMENT_SERVER)"
-	@echo "\t TODO - UPDATE THIS DOC"
-	@$(call echo_if_edition_ok,"\\tLocal directory $(GEN_DATA_DIR) is copied to $(SERVER_PATH).")
-	@$(call echo_if_edition_ok,"\\tAfter deployment \(assuming content negotiation is configured properly\) data can be accessed at this URI:")
-	@$(call echo_if_edition_ok,"\\t\\t$(URI_BASE)")
+	@$(call echo_if_edition_ok,"\\tData from local directory $(TOP_OUTPUT_DIR) are copied to the server.")
+	@$(call echo_if_edition_ok,"\\tTo see exacly what is to be copied and how destructive that copy will be to the server:")
+	@$(call echo_if_edition_ok,"\\t\\tmake --dry-run $(DEPLOY_target) edition=$(edition)")
 	@echo "\tWARNING: This replaces the directory on the server (i.e. files on the server may be deleted)."
 	@echo "make $(TRIPLESTORE_target) edition=x"
 	@echo "\tInstall deployed data into the triple store."
+	@echo "make $(CLEAN_target) edition=x"
+	@echo "\tDeletes the generated data for edition x."
+	@$(call echo_if_edition_ok,"\\tWith edition=$(edition) - deletes $(TOP_OUTPUT_DIR)")
 	@echo "make $(TESTGET_target) edition=x"
+	@echo "\tTests the $(DEPLOY_target) step."
 	@echo "\tCheck that redirection and content negotiation (done using w3id/.htaccess) is working."
 	@$(call echo_if_edition_ok,"\\tTests .htaccess at https://$(URI_HOST)/$(URI_PATH_PREFIX)")
 	@echo "make $(TEST_target) edition=x stabledir=dir"
+	@echo "\tTests the $(GENERATE_target) step."
 	@echo "\tRun tests, and compare results with stabledir."
 	@$(call echo_if_edition_ok,"\\tCompare stabledir with $(TOP_OUTPUT_DIR).")
 	@echo "make $(SPARQLTEST_target) edition=x"
+	@echo "\tTests the $(TRIPLESTORE_target) step."
 	@echo "\tRuns some sparql queries, and by doing so documents some things."
 
 # Variables to be overridden from the command line:
@@ -150,7 +157,8 @@ CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/add-postcode-lat-l
 CSV_TO_RDF := $(SE_OPEN_DATA_BIN_DIR)csv/standard/csv-to-rdf.rb
 POSTCODE_LAT_LNG_CACHE := postcode_lat_lng.json
 
-
+####################
+# The pipeline for processing CSV files for Coops UK:
 
 $(STD_COOPS_UK_OUTLETS_CSV) : $(COOPS_UK_OUTLETS_CSV) $(COOPS_UK_OUTLETS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_OUTLETS_CSV)) $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(COOPS_UK_OUTLETS_CSV_CONVERTER) $< > $@
@@ -171,6 +179,9 @@ $(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_FIXED_DUPS_CSV)  |
 
 $(STD_COOPS_UK_WITH_LAT_LNG) : $(STD_COOPS_UK_DE_DUPED_CSV) $(CSV_POSTCODEUNIT_ADDER) | $(STD_CSV_DIR)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_POSTCODEUNIT_ADDER) --postcodeunit-cache $(POSTCODE_LAT_LNG_CACHE) $< > $@
+
+####################
+# Directories
 
 $(STD_CSV_DIR):
 	$(check_valid_edition)
@@ -200,6 +211,10 @@ $(GEN_CSS_DIR):
 nullstring :=
 space := $(nullstring) # end of the line
 comma := ,
+
+$(CLEAN_target):
+	$(check_valid_edition)
+	rm -r $(TOP_OUTPUT_DIR)
 
 #$(CSV_target): $(STD_COOPS_UK_ORGS_CSV) $(STD_COOPS_UK_OUTLETS_CSV) | $(STD_CSV_DIR)
 #$(CSV_target): $(STD_COOPS_UK_MERGED_CSV) | $(STD_CSV_DIR)
