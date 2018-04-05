@@ -74,12 +74,17 @@ ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
   BAD_EDITION := yup
 endif
 ifeq ($(edition),final)
+  # WARNING: --delete will delete files on the server that don't correspond
+  #         to files in the local directory of generated RDF and HTML:
+  RSYNC_FLAGS := --delete
   URI_HOST := w3id.org
   SRC_CSV_DIR := co-ops-uk-csv-data/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
   # Does this one really exist? :
   #ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
 else ifeq ($(edition),test2017)
+  # We don't want to delete existing files on the server when we're testing:
+  RSYNC_FLAGS :=
   URI_HOST := w3id.solidarityeconomy.coop
   SRC_CSV_DIR := co-ops-uk-csv-test-data/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
@@ -298,9 +303,9 @@ SERVER_PATH := $(SERVER_DIR)$(SERVER_DOC_DIR)
 #  - copy the generated data to the server
 $(DEPLOY_target):
 	$(SSH) $(DEPLOYMENT_SERVER) 'cd $(DEPLOYMENT_WEBROOT) && mkdir -p $(DEPLOYMENT_DOC_SUBDIR)'
-	$(RSYNC) --delete $(GEN_DOC_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_DOC_DIR)
+	$(RSYNC) $(RSYNC_FLAGS) $(GEN_DOC_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_DOC_DIR)
 	$(SSH) $(DEPLOYMENT_SERVER) 'cd $(DEPLOYMENT_WEBROOT) && mkdir -p $(DEPLOYMENT_CSS_SUBDIR)'
-	$(RSYNC) --delete $(GEN_CSS_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_CSS_DIR)
+	$(RSYNC) $(RSYNC_FLAGS) $(GEN_CSS_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_CSS_DIR)
 
 # We create a directory with the RDF that we need to load into our triplestore.
 # We do this by downloading (using curl) RDF that has already been deployed to the web.
