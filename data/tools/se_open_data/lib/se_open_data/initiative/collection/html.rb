@@ -11,7 +11,9 @@ module SeOpenData
 	end
 	def save(outdir)
 	  fname = collection.index_filename(outdir, ".html")
+	  $stdout.write "Saving #{fname}..."
 	  ::File.open(fname, "w") {|f| f.write(html(outdir)) }
+	  $stdout.write "\n"
 	end
 	def html(outdir)
 	  "<!DOCTYPE html>\n" + 

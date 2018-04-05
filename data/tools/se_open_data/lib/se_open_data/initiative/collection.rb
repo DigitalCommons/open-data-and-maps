@@ -38,7 +38,9 @@ module SeOpenData
 	rdf.save_index_rdfxml(outdir)
 	rdf.save_index_turtle(outdir)
 	rdf.save_one_big_rdfxml(outdir)
-	rdf.save_one_big_turtle(outdir)
+	# Skip saving the one big turtle, because we send only the RDF/XML file to the triplestore
+	# and generating this takes a while.
+	#rdf.save_one_big_turtle(outdir)
 	html.save(outdir)
 	sparql.save_map_app_sparql_query
       end
