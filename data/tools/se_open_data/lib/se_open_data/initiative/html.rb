@@ -93,6 +93,8 @@ module SeOpenData
 	  xml(:ul) {
 	    uris.map {|uri| xml(:li) { link_to(uri, uri) } }.join
 	  }
+	else
+	  ""
 	end
       end
       def links_to_rdf_browsers

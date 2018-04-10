@@ -58,4 +58,6 @@ endef
 
 deploy: build
 	$(call DEPLOY_DIR,$(BUILT_DIR),$(SERVER_APP_DIR))
-	@echo "HAVE YOU CHECKED THAT www/services/initiatives.json IS UP TO DATE?"
+	@echo "There are subdirectories of www/services that contain info for querying datasets via SPARQL."
+	@echo "Make sure they are up to date."
+	@echo "For example, see ../data/co-ops-uk/2017-06/generated-data/final/sparql/."
