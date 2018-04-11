@@ -1,7 +1,6 @@
 # Hint: type 'make' to get the usage message.
 
 GENERATE_target := generate
-OLD_GENERATE_target := oldgenerate
 CSV_target := csv
 TEST_target := test
 TESTGET_target := testget
@@ -11,12 +10,11 @@ TRIPLESTORE_target := triplestore
 HELP_target := help
 SPARQLTEST_target := sparqltest
 
-.PHONY: $(GENERATE_target) $(OLD_GENERATE_target) $(CSV_target) $(TEST_target) $(TESTGET_target) $(DEPLOY_target) $(CLEAN_target) $(TRIPLESTORE_target) $(HELP_target) $(SPARQLTEST_target)
+.PHONY: $(GENERATE_target) $(CSV_target) $(TEST_target) $(TESTGET_target) $(DEPLOY_target) $(CLEAN_target) $(TRIPLESTORE_target) $(HELP_target) $(SPARQLTEST_target)
 
 .DEFAULT_GOAL: $(HELP_target)
 
 date ?= $(shell date -u +%Y%m%d)
-version ?= $(shell date -u +%Y%m%d%H%M%S)
 
 $(HELP_target):
 	@echo USAGE
@@ -56,15 +54,6 @@ $(HELP_target):
 	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): You can see what commands will be run like this:")
 	@$(call echo_if_edition_ok,"\\t\\tmake --dry-run $(SPARQLTEST_target) edition=$(edition)")
 
-# Variables to be overridden from the command line:
-#
-# The value of DEPLOYMENT_SERVER would often be the name of a host set up in an ssh config file. 
-# See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
-DEPLOYMENT_SERVER ?= ise-0-matt
-
-CHECK_WEBSITES_FLAG := --no-check-websites
-ALLOW_BLANK_NODES_FLAG := --allow-blank-nodes
-
 # We maintain different editions of the data.
 # The 'edition' variable should be passed in as a command line argument.
 # Generated data for each edition is kept in it's own separate directory.
@@ -89,18 +78,29 @@ else ifeq ($(edition),test2017)
   SRC_CSV_DIR := co-ops-uk-csv-test-data/
   ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
 
-  #CHECK_WEBSITES_FLAG := --check-websites
-  ALLOW_BLANK_NODES_FLAG := --no-allow-blank-nodes
 else ifndef BAD_EDITION
   edition_errmsg := Error in Makefile - missing configuration for edition $(edition)
   BAD_EDITION := yup
 endif
 URI_SCHEME := https
-DATASET_PATH := coops-uk/2017
-URI_PATH_PREFIX := $(DATASET_PATH)/
+URI_PATH_PREFIX := coops-uk/2017/
+
+# Any CSS files in CSS_SRC_DIR will be deployed to DEPLOYMENT_CSS_DIR:
+CSS_SRC_DIR := css/
+
+# The value of DEPLOYMENT_SERVER would often be the name of a host set up in an ssh config file. 
+# See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
+DEPLOYMENT_SERVER ?= ise-0-matt
+DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
+
+# virtuoso server name, typically this is configured in ~/.ssh/config:
+VIRTUOSO_SERVER := ise-0-admin
+# Directory on virtuoso server which has been configured (DirsAllowed in virtuoso.ini)
+# ready for Bulk data loading:
+VIRTUOSO_ROOT_DATA_DIR := /home/admin/Virtuoso/BulkLoading/Data/
+
 DATASET_URI_BASE := $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
 
-DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
 DEPLOYMENT_DOC_SUBDIR := $(URI_PATH_PREFIX)
 DEPLOYMENT_DOC_DIR := $(DEPLOYMENT_WEBROOT)$(DEPLOYMENT_DOC_SUBDIR)
 DEPLOYMENT_CSS_SUBDIR := css/$(URI_PATH_PREFIX)
@@ -114,8 +114,6 @@ define check_valid_edition
 endef
 
 # Programs used within this makefile:
-SCP := scp
-#RUBY := ruby2.4
 RUBY := ruby
 RSYNC := rsync -avz 
 SSH := ssh
@@ -123,9 +121,6 @@ SSH := ssh
 # Source files:
 COOPS_UK_OUTLETS_CSV := $(SRC_CSV_DIR)open_data_outlets.csv
 COOPS_UK_ORGS_CSV := $(SRC_CSV_DIR)open_data_organisations.csv
-
-# Programs/scripts:
-GEN_TRIPLES := generate-triples.rb
 
 # Everything produces for theis edition goes here:
 TOP_OUTPUT_DIR := generated-data/$(edition)/
@@ -135,7 +130,6 @@ GEN_VIRTUOSO_DIR := $(TOP_OUTPUT_DIR)virtuoso/
 # "one big file" of RDF will be created, mostly to make it straightforward to load the whole thing into Virtuoso.
 ONE_BIG_FILE_BASENAME := $(GEN_VIRTUOSO_DIR)all
 
-CSS_SRC_DIR := css/
 CSS_FILES := $(wildcard $(CSS_SRC_DIR)*.css)
 DEPLOYED_CSS_FILES := $(CSS_FILES:css/%=/$(DEPLOYMENT_CSS_SUBDIR)%)
 $(info $(CSS_FILES))
@@ -210,9 +204,6 @@ $(GEN_VIRTUOSO_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
 
-# Any css file in the source CSS dir will be copied to the corresponding geenrated_data dir.
-# The list of CSS_FILES will be passed to the GEN_TRIPLES ruby script for linking in HTML.
-
 $(GEN_CSS_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
@@ -227,9 +218,6 @@ $(CLEAN_target):
 	$(check_valid_edition)
 	rm -r $(TOP_OUTPUT_DIR)
 
-#$(CSV_target): $(STD_COOPS_UK_ORGS_CSV) $(STD_COOPS_UK_OUTLETS_CSV) | $(STD_CSV_DIR)
-#$(CSV_target): $(STD_COOPS_UK_MERGED_CSV) | $(STD_CSV_DIR)
-#$(CSV_target): $(STD_COOPS_UK_DE_DUPED_CSV) | $(STD_CSV_DIR)
 $(CSV_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(STD_CSV_DIR)
 
 # For testing purposes, we generate a CSV with just the first 100 lines:
@@ -255,7 +243,7 @@ $(TEST_target): $(GENERATE_target)
 # ------------------------------------------------------------------
 # Test content negotiation and redirection:
 TEST_INITIATIVE_URI_PATHS := R000001 R013429/BD234AA R013429/BH205RQ/2
-TEST_URI_PATHS := $(DATASET_PATH)/ $(addprefix $(URI_PATH_PREFIX),$(TEST_INITIATIVE_URI_PATHS))
+TEST_URI_PATHS := $(URI_PATH_PREFIX) $(addprefix $(URI_PATH_PREFIX),$(TEST_INITIATIVE_URI_PATHS))
 TEST_URIS := $(addprefix https://$(URI_HOST)/,$(TEST_URI_PATHS))
 
 define TESTGET_method
@@ -280,29 +268,6 @@ MAP_APP_SPARQL_FILE := $(GEN_SPARQL_DIR)query.rq
 MAP_APP_ENDPOINT_FILE := $(GEN_SPARQL_DIR)endpoint.txt
 MAP_APP_GRAPH_FILE := $(GEN_SPARQL_DIR)default-graph-uri.txt
 
-$(OLD_GENERATE_target): $(GEN_TRIPLES) $(COOPS_UK_ORGS_CSV) $(COOPS_UK_OUTLETS_CSV) $(CSS_GEN_DIR) | $(DATA_DIR) $(GEN_SPARQL_DIR) 
-	false
-	$(check_valid_edition)
-	echo "$(SPARQL_ENDPOINT)" > $(MAP_APP_ENDPOINT_FILE)
-	echo "$(GRAPH_NAME)" > $(MAP_APP_GRAPH_FILE)
-	$(RUBY) $(GEN_TRIPLES) --organizations-csv $(COOPS_UK_ORGS_CSV) \
-		--outlets-csv $(COOPS_UK_OUTLETS_CSV) \
-		--output-dir $(GEN_DATA_DIR) \
-		--one-big-file-suffix $(ONE_BIG_FILE_SUFFIX) \
-		--map-app-sparql $(MAP_APP_SPARQL_FILE) \
-		--uri-base $(URI_BASE) \
-		--doc-url-base $(DOC_URL_BASE) \
-		--dataset $(DATASET) \
-		--css-files '$(subst $(space),$(comma),$(CSS_FILES))' \
-		--essglobal-uri $(ESSGLOBAL_URI) \
-		--max-csv-rows $(MAX_CSV_ROWS) \
-		$(CHECK_WEBSITES_FLAG) $(ALLOW_BLANK_NODES_FLAG)
-	@echo "**** Don't forget to copy $(GEN_SPARQL_DIR) to map-app/www/services"
-
-
-# Destination directory on server to which data is to be deployed:
-SERVER_PATH := $(SERVER_DIR)$(SERVER_DOC_DIR)
-
 # To deploy the generated data on the server, we need to 
 #  - make sure the target directory exists on the server
 #  - copy the generated data to the server
@@ -321,11 +286,7 @@ GET_RDFXML_FOR_VIRTUOSO = $(call GET_RDFXML,$(1),$(GEN_VIRTUOSO_DIR)$(2))
 # Datasets on the Virtuoso server are put into a named graph:
 GRAPH_NAME := $(DATASET_URI_BASE)
 
-# virtuoso server name, typically this is configured in ~/.ssh/config:
-VIRTUOSO_SERVER := ise-0-admin
-# Directory on virtuoso server which has been configured (DirsAllowed in virtuoso.ini)
-# ready for Bulk data loading:
-VIRTUOSO_ROOT_DATA_DIR := /home/admin/Virtuoso/BulkLoading/Data/
+version ?= $(shell date -u +%Y%m%d%H%M%S)
 VIRTUOSO_DATA_DIR := $(VIRTUOSO_ROOT_DATA_DIR)$(version)/
 # Virtuoso Buld RDF loading uses a file to provide the name of the graph:
 VIRTUOSO_NAMED_GRAPH_FILE := $(GEN_VIRTUOSO_DIR)global.graph
