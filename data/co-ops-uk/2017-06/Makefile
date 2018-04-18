@@ -1,7 +1,6 @@
 # Hint: type 'make' to get the usage message.
 
 GENERATE_target := generate
-CSV_target := csv
 TEST_target := test
 TESTGET_target := testget
 DEPLOY_target := deploy
@@ -10,20 +9,27 @@ TRIPLESTORE_target := triplestore
 HELP_target := help
 SPARQLTEST_target := sparqltest
 
-.PHONY: $(GENERATE_target) $(CSV_target) $(TEST_target) $(TESTGET_target) $(DEPLOY_target) $(CLEAN_target) $(TRIPLESTORE_target) $(HELP_target) $(SPARQLTEST_target)
+.PHONY: $(GENERATE_target) $(TEST_target) $(TESTGET_target) $(DEPLOY_target) $(CLEAN_target) $(TRIPLESTORE_target) $(HELP_target) $(SPARQLTEST_target)
 
-.DEFAULT_GOAL: $(HELP_target)
+.DEFAULT_GOAL := $(HELP_target)
 
 date ?= $(shell date -u +%Y%m%d)
+this_makefile := $(lastword $(MAKEFILE_LIST))
+possible_editions := $(filter-out $(this_makefile) common.mk,$(wildcard *.mk))
 
 $(HELP_target):
 	@echo USAGE
 	@echo -----
+	@echo "All options here require that the edition variable is defined on the command line:"
+	@echo "\tmake edition=x"
+	@echo "This will cause the file 'x.mk' to be included from the directory '$(EDITIONS_DIR)'."
+	@echo "Looking at .mk files there, possible values for x include:"
+	@echo "\t$(possible_editions)"
+	@echo ""
 	@echo "make $(HELP_target)"
 	@echo "\tPrints help."
 	@echo "make $(HELP_target) edition=x"
 	@echo "\tPrints help about a edition."
-	@echo "\tValid editions are: {$(EDITIONS)}"
 	@echo "make $(GENERATE_target) edition=x"
 	@echo "\tGenerates RDF/XML and turtle data from the Co-ops UK files:"
 	@echo "\t    $(COOPS_UK_ORGS_CSV)"
@@ -54,50 +60,36 @@ $(HELP_target):
 	@$(call echo_if_edition_ok,"\\tWith edition=$(edition): You can see what commands will be run like this:")
 	@$(call echo_if_edition_ok,"\\t\\tmake --dry-run $(SPARQLTEST_target) edition=$(edition)")
 
-# We maintain different editions of the data.
-# The 'edition' variable should be passed in as a command line argument.
-# Generated data for each edition is kept in it's own separate directory.
-EDITIONS := final test2017
-ifeq ($(words $(filter $(edition),$(EDITIONS))),0)
-  edition_errmsg := Unrecognized edition - you must use 'make edition=x' where x is one of {$(EDITIONS)}
-  BAD_EDITION := yup
-endif
-ifeq ($(edition),final)
-  # WARNING: --delete will delete files on the server that don't correspond
-  #         to files in the local directory of generated RDF and HTML:
-  RSYNC_FLAGS := --delete
-  URI_HOST := w3id.org
-  SRC_CSV_DIR := co-ops-uk-csv-data/
-  ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
-  # Does this one really exist? :
-  #ESSGLOBAL_URI := http://purl.org/essglobal/experimental/
-else ifeq ($(edition),test2017)
-  # We don't want to delete existing files on the server when we're testing:
-  RSYNC_FLAGS :=
-  URI_HOST := w3id.solidarityeconomy.coop
-  SRC_CSV_DIR := co-ops-uk-csv-test-data/
-  ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
+# If this Makefile is to be put in a directory other than the one in which common.mk exists
+# (and that is very likely), then make needs to be called with -I (--include-dir)
+include common.mk
+possible_editions := $(basename $(notdir $(wildcard $(EDITIONS_DIR)*.mk)))
 
-else ifndef BAD_EDITION
-  edition_errmsg := Error in Makefile - missing configuration for edition $(edition)
-  BAD_EDITION := yup
+# To configure a specific version - put variable definitions in the edition makefile fragment: 
+ifdef edition
+include $(EDITIONS_DIR)$(edition).mk
 endif
-URI_SCHEME := https
-URI_PATH_PREFIX := coops-uk/2017/
+
+# check_for_var will be called via $(eval $(call check_for_var,...
+# ... hence the need for $$. See https://www.gnu.org/software/make/manual/html_node/Eval-Function.html
+define check_for_var
+ifndef $(1)
+$$(info Variable not defined: $(1) - $(2))
+$$(error Fatal error - check that you have set edition=<x> on the command line, and that the file <x>.mk defines $(1))
+endif
+endef
+
+$(eval $(call check_for_var,TOP_OUTPUT_DIR,The top-level output directory))
+$(eval $(call check_for_var,STANDARD_CSV,The name of the CSV file, with standard columns, to convert to RDF))
+$(eval $(call check_for_var,SE_OPEN_DATA_LIB_DIR,Directory where the se_open_data library code exists))
+$(eval $(call check_for_var,SE_OPEN_DATA_BIN_DIR,Directory where the se_open_data library code exists))
+
+
+# We maintain different editions of the data.
+ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
 
 # Any CSS files in CSS_SRC_DIR will be deployed to DEPLOYMENT_CSS_DIR:
 CSS_SRC_DIR := css/
-
-# The value of DEPLOYMENT_SERVER would often be the name of a host set up in an ssh config file. 
-# See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/
-DEPLOYMENT_SERVER ?= ise-0-matt
-DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
-
-# virtuoso server name, typically this is configured in ~/.ssh/config:
-VIRTUOSO_SERVER := ise-0-admin
-# Directory on virtuoso server which has been configured (DirsAllowed in virtuoso.ini)
-# ready for Bulk data loading:
-VIRTUOSO_ROOT_DATA_DIR := /home/admin/Virtuoso/BulkLoading/Data/
 
 DATASET_URI_BASE := $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
 
@@ -118,12 +110,6 @@ RUBY := ruby
 RSYNC := rsync -avz 
 SSH := ssh
 
-# Source files:
-COOPS_UK_OUTLETS_CSV := $(SRC_CSV_DIR)open_data_outlets.csv
-COOPS_UK_ORGS_CSV := $(SRC_CSV_DIR)open_data_organisations.csv
-
-# Everything produces for theis edition goes here:
-TOP_OUTPUT_DIR := generated-data/$(edition)/
 # Directories
 GEN_SPARQL_DIR := $(TOP_OUTPUT_DIR)sparql/
 GEN_VIRTUOSO_DIR := $(TOP_OUTPUT_DIR)virtuoso/
@@ -138,60 +124,8 @@ $(info $(DEPLOYED_CSS_FILES))
 
 # Where to put files to be transferred to the web server where RDF can be dereferenced, and HTML provided:
 WWW_DIR := $(TOP_OUTPUT_DIR)www/
-GEN_CSV_DIR := $(TOP_OUTPUT_DIR)csv/
 GEN_DOC_DIR := $(WWW_DIR)doc/
 GEN_CSS_DIR := $(WWW_DIR)css/
-STD_CSV_DIR := $(GEN_CSV_DIR)standard/
-STD_COOPS_UK_OUTLETS_CSV := $(STD_CSV_DIR)open_data_outlets.csv
-STD_COOPS_UK_ORGS_CSV := $(STD_CSV_DIR)open_data_organisations.csv
-STD_COOPS_UK_MERGED_CSV := $(STD_CSV_DIR)co-ops-uk-merged.csv
-STD_COOPS_UK_FIXED_DUPS_CSV := $(STD_CSV_DIR)co-ops-uk-fixed-dups.csv
-STD_COOPS_UK_DE_DUPED_CSV := $(STD_CSV_DIR)co-ops-uk-de-duplicated.csv
-STD_COOPS_UK_DUPS_CSV := $(STD_CSV_DIR)co-ops-uk-ignored-duplicates.csv
-STD_COOPS_UK_WITH_LAT_LNG := $(STD_CSV_DIR)co-ops-uk-with-lat-lng.csv
-CSV_FOR_TESTING_TO_RDF := $(STD_CSV_DIR)co-ops-uk-with-lat-lng-for-testing.csv
-COOPS_UK_ORGS_CSV_CONVERTER := co-ops-uk-orgs-converter.rb
-COOPS_UK_OUTLETS_CSV_CONVERTER := co-ops-uk-outlets-converter.rb
-
-SE_OPEN_DATA_BIN_DIR := ../../tools/se_open_data/bin/
-SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
-CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)merge-csv-with-headers.rb
-CSV_DUP_FIXER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/fix-duplicates.rb
-CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/remove-duplicates.rb
-CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/add-postcode-lat-long.rb
-CSV_TO_RDF := $(SE_OPEN_DATA_BIN_DIR)csv/standard/csv-to-rdf.rb
-POSTCODE_LAT_LNG_CACHE := postcode_lat_lng.json
-
-####################
-# The pipeline for processing CSV files for Coops UK:
-
-$(STD_COOPS_UK_OUTLETS_CSV) : $(COOPS_UK_OUTLETS_CSV) $(COOPS_UK_OUTLETS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_OUTLETS_CSV)) $(STD_CSV_DIR)
-	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(COOPS_UK_OUTLETS_CSV_CONVERTER) $< > $@
-
-$(STD_COOPS_UK_ORGS_CSV) : $(COOPS_UK_ORGS_CSV) $(COOPS_UK_ORGS_CSV_CONVERTER) | $(dir $(STD_COOPS_UK_ORGS_CSV)) $(STD_CSV_DIR)
-	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(COOPS_UK_ORGS_CSV_CONVERTER) $< > $@
-
-$(STD_COOPS_UK_MERGED_CSV) : $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) $(CSV_MERGER)  | $(STD_CSV_DIR)
-	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_MERGER) $(STD_COOPS_UK_OUTLETS_CSV) $(STD_COOPS_UK_ORGS_CSV) > $@
-
-$(STD_COOPS_UK_FIXED_DUPS_CSV) : $(CSV_DUP_FIXER) $(STD_COOPS_UK_MERGED_CSV)  | $(STD_CSV_DIR)
-	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $^ > $@
-
-$(STD_COOPS_UK_DE_DUPED_CSV) : $(CSV_DE_DUPER) $(STD_COOPS_UK_FIXED_DUPS_CSV)  | $(STD_CSV_DIR)
-	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $^ > $@ 2> $(STD_COOPS_UK_DUPS_CSV)
-	@echo "Ignored duplicates have been written to $(STD_COOPS_UK_DUPS_CSV)"
-	@echo Total ignored: `wc -l $(STD_COOPS_UK_DUPS_CSV)`
-
-$(STD_COOPS_UK_WITH_LAT_LNG) : $(STD_COOPS_UK_DE_DUPED_CSV) $(CSV_POSTCODEUNIT_ADDER) | $(STD_CSV_DIR)
-	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_POSTCODEUNIT_ADDER) --postcodeunit-cache $(POSTCODE_LAT_LNG_CACHE) $< > $@
-
-####################
-# Directories
-
-$(STD_CSV_DIR):
-	$(check_valid_edition)
-	mkdir -p $@
-
 $(GEN_DOC_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
@@ -218,14 +152,13 @@ $(CLEAN_target):
 	$(check_valid_edition)
 	rm -r $(TOP_OUTPUT_DIR)
 
-$(CSV_target): $(STD_COOPS_UK_WITH_LAT_LNG) | $(STD_CSV_DIR)
-
 # For testing purposes, we generate a CSV with just the first 100 lines:
-$(CSV_FOR_TESTING_TO_RDF): $(STD_COOPS_UK_WITH_LAT_LNG)
-	head -1 $< > $@
-	grep '[0-9],http' $<  | head -100 >> $@
+#$(CSV_FOR_TESTING_TO_RDF): $(STANDARD_CSV)
+	#head -1 $< > $@
+	#grep '[0-9],http' $<  | head -100 >> $@
 
-$(GENERATE_target): $(STD_COOPS_UK_WITH_LAT_LNG) $(GEN_CSS_DIR) | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR) $(GEN_SPARQL_DIR)
+CSV_TO_RDF := $(SE_OPEN_DATA_BIN_DIR)csv/standard/csv-to-rdf.rb
+$(GENERATE_target): $(STANDARD_CSV) $(GEN_CSS_DIR) | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR) $(GEN_SPARQL_DIR)
 	echo "$(SPARQL_ENDPOINT)" > $(MAP_APP_ENDPOINT_FILE)
 	echo "$(GRAPH_NAME)" > $(MAP_APP_GRAPH_FILE)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
@@ -273,9 +206,9 @@ MAP_APP_GRAPH_FILE := $(GEN_SPARQL_DIR)default-graph-uri.txt
 #  - copy the generated data to the server
 $(DEPLOY_target):
 	$(SSH) $(DEPLOYMENT_SERVER) 'cd $(DEPLOYMENT_WEBROOT) && mkdir -p $(DEPLOYMENT_DOC_SUBDIR)'
-	$(RSYNC) $(RSYNC_FLAGS) $(GEN_DOC_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_DOC_DIR)
+	$(RSYNC) $(DEPLOYMENT_RSYNC_FLAGS) $(GEN_DOC_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_DOC_DIR)
 	$(SSH) $(DEPLOYMENT_SERVER) 'cd $(DEPLOYMENT_WEBROOT) && mkdir -p $(DEPLOYMENT_CSS_SUBDIR)'
-	$(RSYNC) $(RSYNC_FLAGS) $(GEN_CSS_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_CSS_DIR)
+	$(RSYNC) $(DEPLOYMENT_RSYNC_FLAGS) $(GEN_CSS_DIR) $(DEPLOYMENT_SERVER):$(DEPLOYMENT_CSS_DIR)
 
 # We create a directory with the RDF that we need to load into our triplestore.
 # We do this by downloading (using curl) RDF that has already been deployed to the web.
