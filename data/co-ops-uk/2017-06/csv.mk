@@ -49,7 +49,7 @@ COOPS_UK_ORGS_CSV_CONVERTER := co-ops-uk-orgs-converter.rb
 COOPS_UK_OUTLETS_CSV_CONVERTER := co-ops-uk-outlets-converter.rb
 
 # Scripts to be used in the pipeline:
-CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)merge-csv-with-headers.rb
+CSV_MERGER := $(SE_OPEN_DATA_BIN_DIR)csv/merge-with-headers.rb
 CSV_DUP_FIXER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/fix-duplicates.rb
 CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/remove-duplicates.rb
 CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/add-postcode-lat-long.rb
