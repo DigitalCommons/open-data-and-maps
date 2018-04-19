@@ -34,3 +34,4 @@ VIRTUOSO_SERVER := ise-0-admin
 # Directory on virtuoso server which has been configured (DirsAllowed in virtuoso.ini)
 # ready for Bulk data loading:
 VIRTUOSO_ROOT_DATA_DIR := /home/admin/Virtuoso/BulkLoading/Data/
+SPARQL_ENDPOINT := http://store1.solidarityeconomy.coop:8890/sparql

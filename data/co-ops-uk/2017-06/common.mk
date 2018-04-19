@@ -17,3 +17,6 @@ SE_OPEN_DATA_BIN_DIR := ../../tools/se_open_data/bin/
 # This is unnecessary if the library is installed as a gem (not yet possible as at April 2018)
 SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
 
+# Any CSS files in CSS_SRC_DIR will be deployed to the DEPLOYMENT_SERVER
+CSS_SRC_DIR := css/
+

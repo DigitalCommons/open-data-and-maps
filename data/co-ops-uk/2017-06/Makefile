@@ -14,8 +14,6 @@ SPARQLTEST_target := sparqltest
 .DEFAULT_GOAL := $(HELP_target)
 
 date ?= $(shell date -u +%Y%m%d)
-this_makefile := $(lastword $(MAKEFILE_LIST))
-possible_editions := $(filter-out $(this_makefile) common.mk,$(wildcard *.mk))
 
 $(HELP_target):
 	@echo USAGE
@@ -70,7 +68,7 @@ ifdef edition
 include $(EDITIONS_DIR)$(edition).mk
 endif
 
-# check_for_var will be called via $(eval $(call check_for_var,...
+# check_for_var will be called via $(eval $(call check_for_var,VAR_NAME,Description of variable))
 # ... hence the need for $$. See https://www.gnu.org/software/make/manual/html_node/Eval-Function.html
 define check_for_var
 ifndef $(1)
