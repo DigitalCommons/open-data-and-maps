@@ -24,6 +24,9 @@ $(eval $(call var_check,VIRTUOSO_SQL_SCRIPT,Name of SQL script file to be create
 $(eval $(call var_check,SPARQL_ENDPOINT,To be used for testing the triplestore once it has been populated))
 
 # Programs used within this makefile:
+RSYNC := rsync -avz 
+SSH := ssh
+
 
 GET_RDFXML_CURL := curl --silent -H "Accept: application/rdf+xml" -L 
 GET_RDFXML = echo "Creating $(2) from $(1)..." && $(GET_RDFXML_CURL) $(1) > $(2)

@@ -11,7 +11,6 @@ MAKEFILE_INC_DIR := $(dir $(lastword $(MAKEFILE_LIST)))inc/
 # Include from the current working dir (not usually where *this* makefile exists!)
 include common.mk
 
-$(info $(MAKEFILE_INC_DIR))
 include $(MAKEFILE_INC_DIR)gnu_make_std.mk
 include $(MAKEFILE_INC_DIR)var_check.mk
 include $(MAKEFILE_INC_DIR)load_edition.mk
