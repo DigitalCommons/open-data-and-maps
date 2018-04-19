@@ -20,3 +20,6 @@ SE_OPEN_DATA_LIB_DIR := $(abspath ../../tools/se_open_data/lib/)
 # Any CSS files in CSS_SRC_DIR will be deployed to the DEPLOYMENT_SERVER
 CSS_SRC_DIR := css/
 
+# A sample of Identifiers (from 'Identifiers' column in STANDARD_CSV)
+# to be used to test the deployment:
+TEST_INITIATIVE_IDENTIFIERS := R000001 R013429/BD234AA R013429/BH205RQ/2
