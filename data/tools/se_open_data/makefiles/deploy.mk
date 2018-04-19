@@ -18,8 +18,8 @@ include $(MAKEFILE_INC_DIR)load_edition.mk
 include $(MAKEFILE_INC_DIR)files.mk
 include $(MAKEFILE_INC_DIR)uris.mk
 
-$(eval $(call var_check,STANDARD_CSV,CSV file containing initiatives to be converted to RDF))
-$(eval $(call var_check,CSS_SRC_DIR,Directory containing CSS files (to be deployed)))
+$(eval $(call var_check,DEPLOYMENT_SERVER,Name of host defined in ssh config to deploy RDF to))
+$(eval $(call var_check,DEPLOYMENT_WEBROOT,Absolute pathname on DEPLOYMENT_SERVER of diretory to deploy to))
 
 # Programs used within this makefile:
 RSYNC := rsync -avz 
