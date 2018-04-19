@@ -32,11 +32,17 @@ DEPLOYMENT_CSS_DIR := $(DEPLOYMENT_WEBROOT)$(DEPLOYMENT_CSS_SUBDIR)
 
 DEPLOYED_CSS_FILES := $(CSS_FILES:css/%=/$(DEPLOYMENT_CSS_SUBDIR)%)
 
-# TODO s/MAP_APP/SPARQL/
-MAP_APP_SPARQL_FILE := $(GEN_SPARQL_DIR)query.rq
-MAP_APP_ENDPOINT_FILE := $(GEN_SPARQL_DIR)endpoint.txt
-MAP_APP_GRAPH_FILE := $(GEN_SPARQL_DIR)default-graph-uri.txt
+SPARQL_GET_ALL_FILE := $(GEN_SPARQL_DIR)query.rq
+SPARQL_LIST_GRAPHS_FILE := $(GEN_SPARQL_DIR)list-graphs.rq
+SPARQL_ENDPOINT_FILE := $(GEN_SPARQL_DIR)endpoint.txt
+SPARQL_GRAPH_NAME_FILE := $(GEN_SPARQL_DIR)default-graph-uri.txt
 
 # "one big file" of RDF will be created, mostly to make it straightforward to load the whole thing into Virtuoso.
 # To this variable will be appended .ttl (for turtle) or .rdf (for RDF/XML):
 ONE_BIG_FILE_BASENAME := $(GEN_VIRTUOSO_DIR)all
+
+# Virtuoso Bulk RDF loading uses a file to provide the name of the graph:
+VIRTUOSO_NAMED_GRAPH_FILE := $(GEN_VIRTUOSO_DIR)global.graph
+
+# Name of SQL script (created here) to achieve the bulk data loading:
+VIRTUOSO_SQL_SCRIPT := loaddata.sql

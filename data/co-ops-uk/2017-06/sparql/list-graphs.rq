@@ -1,5 +1,1 @@
-SELECT distinct ?g WHERE { 
-  GRAPH ?g { 
-    ?s ?p ?o
-  }
-}
+SELECT distinct ?g WHERE { GRAPH ?g { ?s ?p ?o } }

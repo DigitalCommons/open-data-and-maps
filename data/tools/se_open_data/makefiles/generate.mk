@@ -30,14 +30,14 @@ css: | $(GEN_CSS_DIR)
 	cp -r $(CSS_SRC_DIR) $(GEN_CSS_DIR)
 
 all: $(STANDARD_CSV) css | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR) $(GEN_SPARQL_DIR)
-	echo "$(SPARQL_ENDPOINT)" > $(MAP_APP_ENDPOINT_FILE)
-	echo "$(GRAPH_NAME)" > $(MAP_APP_GRAPH_FILE)
+	echo "$(SPARQL_ENDPOINT)" > $(SPARQL_ENDPOINT_FILE)
+	echo "$(GRAPH_NAME)" > $(SPARQL_GRAPH_NAME_FILE)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \
 	  --output-directory $(GEN_DOC_DIR) \
 	  --uri-prefix $(DATASET_URI_BASE) \
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  --one-big-file-basename $(ONE_BIG_FILE_BASENAME) \
-	  --map-app-sparql-query-filename $(MAP_APP_SPARQL_FILE) \
+	  --map-app-sparql-query-filename $(SPARQL_GET_ALL_FILE) \
 	  --css-files '$(subst $(space),$(comma),$(DEPLOYED_CSS_FILES))' \
 	  $<
 

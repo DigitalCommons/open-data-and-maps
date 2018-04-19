@@ -1,5 +1,7 @@
 # Hint: type 'make' to get the usage message.
 
+$(error This Makefile is now obsolete. Its components have been moved into separate makefiles under se_open_data/makefiles)
+
 GENERATE_target := generate
 TEST_target := test
 TESTGET_target := testget
