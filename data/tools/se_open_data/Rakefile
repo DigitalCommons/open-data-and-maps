@@ -4,7 +4,10 @@
 #
 # $ rake -T
 # rake doc   # Generate Ruby documentation
-# rake yard  # Generate Ruby documentation using yard
+# rake style                    # Run all style checks
+# rake style:ruby               # Run Ruby style checks using rubocop
+# rake style:ruby:auto_correct  # Auto-correct RuboCop offenses
+# rake yard                     # Generate Ruby documentation using yard
 
 desc 'Generate Ruby documentation using yard'
 task :yard do
