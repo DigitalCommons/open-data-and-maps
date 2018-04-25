@@ -5,8 +5,8 @@ module SeOpenData
     module Xml
       # Function for generating xml.
       # Example usage:
-      #    P6::Xml.xml(:div, id: "foo", class: "bar") {
-      #      P6::Xml.xml(:p) {
+      #    xml(:div, id: "foo", class: "bar") {
+      #      xml(:p) {
       #        "paragraph contents"
       #      }
       #    }

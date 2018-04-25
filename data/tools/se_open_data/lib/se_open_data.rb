@@ -1,4 +1,5 @@
 
+require_relative 'se_open_data/exceptions'
 require_relative 'se_open_data/csv/standard'
 require_relative 'se_open_data/csv/convert'
 require_relative 'se_open_data/csv/row_reader'

@@ -36,7 +36,7 @@ module SeOpenData
 	    opts[:rows].map {|row|
 	      xml(:tr) {
 		row.map {|col|
-		  xml(:td) { col }
+		  xml(:td) { col || "" }
 		}.join
 	      }
 	    }.join

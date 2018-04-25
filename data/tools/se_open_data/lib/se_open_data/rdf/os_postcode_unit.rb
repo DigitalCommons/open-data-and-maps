@@ -14,7 +14,7 @@ module SeOpenData
 	  })
 	end
 	def get(postcode)
-	  return nil unless postcode.ascii_only?
+	  return nil unless postcode && postcode.ascii_only?
 
 	  postcode_normalized = normalize(postcode)
 	  return nil if postcode_normalized.empty?
