@@ -37,8 +37,8 @@ class OptParse
 
       # Mandatory argument.
       opts.on("--postcodeunit-cache FILENAME",
-	      "JSON file where OS postcode unit results are cached") do |filename|
-	options.postcodeunit_cache = filename
+              "JSON file where OS postcode unit results are cached") do |filename|
+        options.postcodeunit_cache = filename
       end
 
       opts.separator ""
@@ -47,8 +47,8 @@ class OptParse
       # No argument, shows at tail.  This will print an options summary.
       # Try it and see!
       opts.on_tail("-h", "--help", "Show this message") do
-	puts opts
-	exit
+        puts opts
+        exit
       end
     end
 

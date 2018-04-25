@@ -27,35 +27,35 @@ class OptParse
 
       # Mandatory argument.
       opts.on("--output-directory DIR",
-	      "Directory where RDF serializations are to be created") do |dir|
-	options.outdir = dir
+              "Directory where RDF serializations are to be created") do |dir|
+        options.outdir = dir
       end
       opts.on("--uri-prefix URI",
-	      "A string which prefixes every initiative's URI") do |uri|
-	options.uri_prefix = uri
+              "A string which prefixes every initiative's URI") do |uri|
+        options.uri_prefix = uri
       end
       opts.on("--essglobal-uri URI",
-	      "Base URI for the essglobal vocabulary. e.g. http://purl.org/essglobal") do |uri|
+              "Base URI for the essglobal vocabulary. e.g. http://purl.org/essglobal") do |uri|
         options.essglobal_uri = uri
       end
       opts.on("--one-big-file-basename BASENAME",
-	      "Filename (except .extension) for files with all generated data concatenated for loading into Virtuoso") do |basename|
-	options.one_big_file_basename = basename
+              "Filename (except .extension) for files with all generated data concatenated for loading into Virtuoso") do |basename|
+        options.one_big_file_basename = basename
       end
       opts.on("--map-app-sparql-query-filename FILENAME",
-	      "Name of file where SPARQL query for map-app is to be written") do |filename|
-	options.map_app_sparql_query_filename = filename
+              "Name of file where SPARQL query for map-app is to be written") do |filename|
+        options.map_app_sparql_query_filename = filename
       end
       opts.on("--css_files FILENAMES",
-	      "Comma-spearted list of CSS files for linking from generated HTML") do |filenames|
-	options.css_files = filenames.split(',')
+              "Comma-spearted list of CSS files for linking from generated HTML") do |filenames|
+        options.css_files = filenames.split(',')
       end
       opts.on("--postcodeunit-cache FILENAME",
-	      "JSON file where OS postcode unit results are cached") do |filename|
-	options.postcodeunit_cache = filename
+              "JSON file where OS postcode unit results are cached") do |filename|
+        options.postcodeunit_cache = filename
       end
       opts.on("--csv-standard STANDARD",
-	      "WARNING: STANDARD is currently hardcoded!") do |standard|
+              "WARNING: STANDARD is currently hardcoded!") do |standard|
       end
 
       opts.separator ""
@@ -64,8 +64,8 @@ class OptParse
       # No argument, shows at tail.  This will print an options summary.
       # Try it and see!
       opts.on_tail("-h", "--help", "Show this message") do
-	puts opts
-	exit
+        puts opts
+        exit
       end
     end
 
