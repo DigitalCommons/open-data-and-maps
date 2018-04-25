@@ -6,15 +6,23 @@
 module SeOpenData
   module Utils
     class ProgressCounter
+
+      # @param explanation [String] description of the process whose progress is being counted
+      # @param size [Integer] total number of steps to complete the process
       def initialize(explanation, size)
         @todo = size
         @done = 0
         @prev_msg_size = 0
         $stdout.write explanation + " "
       end
-      def step(n = 1)
-        @done += n
-        pc = 100*@done/@todo
+
+      # Tell the Progress counter how many step have been made towards completion
+      # A message will be printed to stdout if the percentage complete has changed.
+      # 
+      # @param steps [Integer] number of steps made towards progress since last calling this method
+      def step(steps = 1)
+        @done += steps
+        pc = 100 * @done / @todo
         if pc != @prev_pc
           @prev_pc = pc
           msg = "(#{pc}%)"

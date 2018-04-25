@@ -11,9 +11,9 @@ module SeOpenData
       #      }
       #    }
       def xml(ele, attr = {})
-        "<#{ele}#{attr.keys.map{|k| " #{k}=\"#{attr[k]}\""}.join}>" + # Element opening tag with attributes.
-          (block_given? ? yield : "") + # Element contents.
-          "</#{ele}>"   # Element closing tag.
+        "<#{ele}#{attr.keys.map { |k| " #{k}=\"#{attr[k]}\"" }.join }>" +
+          (block_given? ? yield : '') +
+          "</#{ele}>"
       end
     end
   end
