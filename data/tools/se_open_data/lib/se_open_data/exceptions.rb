@@ -5,7 +5,7 @@ module SeOpenData
     class IgnoreCsvRow < StandardError
       # @param msg [String] the error message 
       def initialize(msg = "Ignoring CSV row")
-	super
+        super
       end
     end
   end

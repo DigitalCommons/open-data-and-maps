@@ -5,13 +5,13 @@ module SeOpenData
     class RowReader
       attr_reader :row, :headers
       def initialize(row, headers)
-	@row, @headers = row, headers
+        @row, @headers = row, headers
       end
       def postcode_normalized
-	postcode.upcase.gsub(/\s+/, "")
+        postcode.upcase.gsub(/\s+/, "")
       end
       def method_missing(method, *args, &block)
-	@headers.keys.include?(method) ?  @row[@headers[method]] : nil
+        @headers.keys.include?(method) ?  @row[@headers[method]] : nil
       end
     end
   end
