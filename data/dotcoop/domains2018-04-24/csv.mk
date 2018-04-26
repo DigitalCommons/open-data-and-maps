@@ -41,6 +41,7 @@ STD_MERGED_CSV := $(GEN_CSV_DIR)merged.csv
 STD_FIXED_DUPS_CSV := $(GEN_CSV_DIR)fixed-dups.csv
 STD_DE_DUPED_CSV := $(GEN_CSV_DIR)de-duplicated.csv
 STD_DUPS_CSV := $(GEN_CSV_DIR)ignored-duplicates.csv
+STD_URI_NAME_POSTCODE_CSV := $(GEN_CSV_DIR)uri-name-postcode.csv
 
 
 # Some local scripts to help with the conversion:
@@ -50,6 +51,7 @@ CLEAN_UK_CONVERTER := converter.rb
 CSV_DUP_FIXER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/fix-duplicates.rb
 CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/remove-duplicates.rb
 CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/add-postcode-lat-long.rb
+URI_NAME_POSTCODE_RUBY := $(SE_OPEN_DATA_BIN_DIR)csv/standard/make-uri-name-postcode.rb
 
 # The CSV_POSTCODEUNIT_ADDER script will convert postcodes into lat/long by 
 # getting linked data over the web. This is (currently) a slow process (plenty of room for speed ups!)
@@ -79,6 +81,10 @@ $(STD_DE_DUPED_CSV) : $(STD_FIXED_DUPS_CSV)  | $(GEN_CSV_DIR)
 $(STANDARD_CSV) : $(STD_DE_DUPED_CSV) | $(GEN_CSV_DIR)
 	$(RUBY) $(CSV_POSTCODEUNIT_ADDER) --postcodeunit-cache $(POSTCODE_LAT_LNG_CACHE) $< > $@
 
+# Create a CSV file from the STANDARD one with just a few columns: URI, Name and Normalized postcode
+$(STD_URI_NAME_POSTCODE_CSV): $(STANDARD_CSV) | $(GEN_CSV_DIR)
+	$(RUBY) $(URI_NAME_POSTCODE_RUBY) --uri-prefix $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX) $< > $@
+
 ####################
 # Directories
 
@@ -86,5 +92,5 @@ $(GEN_CSV_DIR):
 	$(check_valid_edition)
 	mkdir -p $@
 
-$(CSV_target): $(STANDARD_CSV) | $(GEN_CSV_DIR)
+$(CSV_target): $(STD_URI_NAME_POSTCODE_CSV) | $(GEN_CSV_DIR)
 

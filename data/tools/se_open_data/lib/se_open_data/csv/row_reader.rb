@@ -8,6 +8,7 @@ module SeOpenData
         @row, @headers = row, headers
       end
       def postcode_normalized
+        return "" unless postcode
         postcode.upcase.gsub(/\s+/, "")
       end
       def method_missing(method, *args, &block)
