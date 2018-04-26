@@ -75,7 +75,7 @@ function request($url){
 
 	return $response;
 }
-$query_name = 'coops-uk2017';
+$query_name = 'dotcoop';
 $requestURL = getSparqlUrl($query_name);
 $response = request($requestURL);
 $res = json_decode($response, true);

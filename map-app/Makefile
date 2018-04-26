@@ -26,7 +26,7 @@ RSYNC := rsync -avz
 
 SRC_DIR := www/
 BUILT_DIR := www-built/
-SERVER_APP_DIR := maps/coops-uk/2017/
+SERVER_APP_DIR := maps/dotcoop/
 PACKAGER_OPTIMIZER := r.js
 BUILD_CONFIG := build.js
 
