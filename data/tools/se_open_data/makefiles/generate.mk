@@ -37,6 +37,8 @@ all: $(STANDARD_CSV) css | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR) $(GEN_SPARQL_DIR)
 	  --uri-prefix $(DATASET_URI_BASE) \
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  --one-big-file-basename $(ONE_BIG_FILE_BASENAME) \
+	  --sameas-csv $(SAMEAS_CSV) \
+	  --sameas-headers $(SAMEAS_HEADERS) \
 	  --map-app-sparql-query-filename $(SPARQL_GET_ALL_FILE) \
 	  --css-files '$(subst $(space),$(comma),$(DEPLOYED_CSS_FILES))' \
 	  $<

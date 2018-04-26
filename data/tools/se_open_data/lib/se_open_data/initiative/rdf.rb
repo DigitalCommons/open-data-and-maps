@@ -29,8 +29,11 @@ module SeOpenData
         populate_graph(g)
         g
       end
+      def uri_s
+        "#{config.uri_prefix}#{initiative.id}"
+      end
       def uri
-        ::RDF::URI("#{config.uri_prefix}#{initiative.id}")
+        ::RDF::URI(uri_s)
       end
       def address_uri
         # We don't really weant to have to mint URIs for the Address, but OntoWiki doesn't seem to
@@ -116,6 +119,12 @@ module SeOpenData
           if loc
             graph.insert([geocontainer_uri, Config::Geo["lat"], ::RDF::Literal::Decimal.new(loc[:lat])])
             graph.insert([geocontainer_uri, Config::Geo["long"], ::RDF::Literal::Decimal.new(loc[:lng])])
+          end
+        end
+
+        if config.sameas.has_key? (uri_s)
+          config.sameas[uri_s].each do |sameas_uri|
+            graph.insert([uri, ::RDF::Vocab::OWL.sameAs, ::RDF::URI(sameas_uri)])
           end
         end
 

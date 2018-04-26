@@ -17,6 +17,8 @@ class OptParse
     options.map_app_sparql_query_filename = nil
     options.css_files = nil
     options.postcodeunit_cache = nil
+    options.sameas_csv = nil
+    options.sameas_headers = nil
     options.csv_standard = SeOpenData::CSV::Standard::V1
 
     opt_parser = OptionParser.new do |opts|
@@ -57,6 +59,14 @@ class OptParse
       opts.on("--csv-standard STANDARD",
               "WARNING: STANDARD is currently hardcoded!") do |standard|
       end
+      opts.on("--sameas-csv FILENAME",
+              "Name of CSV file with OWL sameAs relations. If defined, --sameas-headers mus be defined too") do |filename|
+        options.sameas_csv = filename
+      end
+      opts.on("--sameas-headers HEADERS", Array,
+              "CSV file where the equlivalent URIs are stored") do |headers|
+        options.sameas_headers = headers
+      end
 
       opts.separator ""
       opts.separator "Common options:"
@@ -83,7 +93,9 @@ config = SeOpenData::Initiative::RDF::Config.new(
   $options.map_app_sparql_query_filename,
   $options.css_files,
   $options.postcodeunit_cache,
-  $options.csv_standard
+  $options.csv_standard,
+  $options.sameas_csv,
+  $options.sameas_headers
 )
 
 # Load CSV into data structures, for this particular standard

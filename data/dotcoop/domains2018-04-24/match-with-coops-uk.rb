@@ -164,7 +164,7 @@ end
 # @todo - these should be passed to script as arguments
 COOPS_UK_CSV = "../../co-ops-uk/2017-06/generated-data/final/csv/uri-name-postcode.csv"
 DOTCOOP_CSV = "generated-data/experimental/csv/uri-name-postcode.csv"
-PERFECT_MATCH_CSV = "generated-data/experimental/csv/perfect_match.csv"
+PERFECT_MATCH_CSV = "generated-data/experimental/sameas.csv"
 CANDIDATE_MATCH_CSV = "generated-data/experimental/csv/candidate_match.csv"
 NO_MATCH_CSV = "generated-data/experimental/csv/no_match.csv"
 
