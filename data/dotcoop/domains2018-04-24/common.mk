@@ -24,4 +24,4 @@ CSS_SRC_DIR := css/
 
 # A sample of Identifiers (from 'Identifiers' column in STANDARD_CSV)
 # to be used to test the deployment:
-TEST_INITIATIVE_IDENTIFIERS := agile
+TEST_INITIATIVE_IDENTIFIERS := agile solidarityeconomy

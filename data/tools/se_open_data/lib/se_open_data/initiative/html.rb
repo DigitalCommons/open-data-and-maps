@@ -33,6 +33,7 @@ module SeOpenData
               initiative.name
             } +
             summary +
+            sameas_links +
             table_of_csv_input +
             links_to_other_datasets +
             links_to_rdf_browsers +
@@ -51,7 +52,7 @@ module SeOpenData
           "Linked Data URI"
         } +
         xml(:p) {
-          "This Linked Data URI can be used to view this page in a web browser, or by a computer program to access the same information in machine-readable formats:"
+          "This Linked Data URI can be used to view this page in a web browser, or by a computer program to access the same information in a machine-readable format:"
         } +
         xml(:ul) {
           xml(:li) {
@@ -66,6 +67,21 @@ module SeOpenData
             link_to(config.uri_prefix, config.uri_prefix)
           }
         }
+      end
+      def sameas_links
+        sameas = config.sameas[initiative.rdf.uri_s]
+        return "" if sameas.nil?
+
+        xml(:h2) {
+          initiative.name + " in other datasets"
+        } +
+        xml(:ul) {
+          sameas.map { |sameas_uri|
+            xml(:li) {
+              link_to(sameas_uri, sameas_uri)
+            }
+          }.join
+        } 
       end
       def table_of_csv_input
         xml(:h2) {

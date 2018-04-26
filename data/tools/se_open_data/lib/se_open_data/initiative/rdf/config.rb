@@ -36,6 +36,7 @@ module SeOpenData
             rdf: ::RDF.to_uri.to_s,
             vcard: ::RDF::Vocab::VCARD.to_uri.to_s,
             geo: ::RDF::Vocab::GEO.to_uri.to_s,
+            owl: ::RDF::Vocab::OWL.to_uri.to_s,
             essglobal: essglobal_vocab.to_uri.to_s,
             gr: ::RDF::Vocab::GR.to_uri.to_s,
             foaf: ::RDF::Vocab::FOAF.to_uri.to_s,
