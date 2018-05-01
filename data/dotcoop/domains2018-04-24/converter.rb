@@ -33,8 +33,9 @@ class DotCoopV1Reader < SeOpenData::CSV::RowReader
     domain.sub(/\.coop$/, "")
   end
   def homepage
-    raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
-    domain
+    #raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
+    #domain
+    nil
   end
   def legal_forms
     # Return a list of strings, separated by OutputStandard::SubFieldSeparator.
