@@ -18,6 +18,7 @@ include $(MAKEFILE_INC_DIR)load_edition.mk
 include $(MAKEFILE_INC_DIR)files.mk
 include $(MAKEFILE_INC_DIR)uris.mk
 
+$(eval $(call var_check,SAMEAS_CSV,CSV file containing pairs of URIs that refer to the same SSE initiative))
 $(eval $(call var_check,STANDARD_CSV,CSV file containing initiatives to be converted to RDF))
 $(eval $(call var_check,CSS_SRC_DIR,Directory containing CSS files (to be deployed)))
 
@@ -29,7 +30,7 @@ RUBY := ruby
 css: | $(GEN_CSS_DIR)
 	cp -r $(CSS_SRC_DIR) $(GEN_CSS_DIR)
 
-all: $(STANDARD_CSV) css | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR) $(GEN_SPARQL_DIR)
+all: $(STANDARD_CSV) $(SAMEAS_CSV) css | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR) $(GEN_SPARQL_DIR)
 	echo "$(SPARQL_ENDPOINT)" > $(SPARQL_ENDPOINT_FILE)
 	echo "$(GRAPH_NAME)" > $(SPARQL_GRAPH_NAME_FILE)
 	$(RUBY) -I $(SE_OPEN_DATA_LIB_DIR) $(CSV_TO_RDF) \

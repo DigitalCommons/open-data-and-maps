@@ -69,9 +69,9 @@ module SeOpenData
         }
       end
       def sameas_links
-        sameas = config.sameas[initiative.rdf.uri_s]
-        return "" if sameas.nil?
+        return "" unless config.sameas.has_key?(initiative.rdf.uri_s)
 
+        sameas = config.sameas[initiative.rdf.uri_s]
         xml(:h2) {
           initiative.name + " in other datasets"
         } +
