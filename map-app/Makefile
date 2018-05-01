@@ -19,14 +19,14 @@ help:
 # The value of SERVER would often be the name of a host set up in an ssh config file. 
 SERVER ?= ise-0-admin
 SERVER_DIR ?= /var/www/html/
-DATA_SERVER_URL ?= http://data.solidarityeconomics.org
+#DATA_SERVER_URL ?= http://data.solidarityeconomics.org
 
 LINT := eslint
 RSYNC := rsync -avz 
 
 SRC_DIR := www/
 BUILT_DIR := www-built/
-SERVER_APP_DIR := maps/dotcoop/
+SERVER_APP_DIR := maps/dotcoop-coopsuk/
 PACKAGER_OPTIMIZER := r.js
 BUILD_CONFIG := build.js
 
