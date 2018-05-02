@@ -78,7 +78,7 @@ define(["app/eventbus"], function(eventbus) {
 			return "<a title=\"" + uri + "\" href=\"" + uri +"\" rel=\"noopener noreferrer\" target=\"_blank\">" + text + "</a>";
 		}
 		var popupRows = [];
-		popupRows.push("View " + link(initiative.uri, "raw data summary") + " in a new tab");
+		popupRows.push("View " + link(initiative.uri, "details") + " in a new tab");
 		if (hasWithin) {
 			popupRows.push("View " + link(initiative.within, "geographic information") + " in a new tab");
 		}
@@ -89,13 +89,19 @@ define(["app/eventbus"], function(eventbus) {
 			popupRows.push("View " + link(initiative.regorg, "company registration") + " in a new tab");
 			//console.log(document.location.origin + document.location.pathname + "services/" + "phpinfo.php");
 			serviceToDisplaySimilarCompaniesURL = serviceToDisplaySimilarCompanies + "?company=" + encodeURIComponent(initiative.regorg);
-			console.log(serviceToDisplaySimilarCompaniesURL);
+			//console.log(serviceToDisplaySimilarCompaniesURL);
 			popupRows.push("View " + link(serviceToDisplaySimilarCompaniesURL, "similar companies nearby") + " in a new tab");
 		}
 
-		var popuptext = "<h4>" + initiative.name +  "</h4>" + popupRows.join("<br>");
+		var popuptext =
+			"<p>Dataset: " + initiative.dataset + "</p>" +
+			"<h4>" + initiative.name +  "</h4>" +
+			popupRows.join("<br>");
+
 		// See http://fontawesome.io/icons/ for a list of icon names (where we're using 'home'), below:
-		var options = {icon: 'home', popuptext: popuptext, hovertext: initiative.name, cluster: true, markerColor: markerColor};
+		var hovertext = initiative.name + " (" + initiative.dataset + ")";
+		var icon = initiative.dataset == 'dotcoop' ? 'globe' : 'certificate';
+		var options = {icon: icon, popuptext: popuptext, hovertext: hovertext, cluster: true, markerColor: markerColor};
 		view.addMarker(latlng, options, eventHandlers);
 	}
 	function onInitiativeLoadComplete() {

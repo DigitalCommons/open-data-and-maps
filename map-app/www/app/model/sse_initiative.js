@@ -8,6 +8,7 @@ define(["app/eventbus"], function(eventbus) {
 	function Initiative(e) {
 		Object.defineProperties(this, {
 			name: { value: e.name, enumerable: true },
+			dataset: { value: e.dataset, enumerable: true },
 			uri: { value: e.uri, enumerable: true },
 			within: { value: e.within, enumerable: true },
 			lat: { value: e.lat, enumerable: true },
@@ -55,8 +56,11 @@ define(["app/eventbus"], function(eventbus) {
 		}
 	}
 	function loadFromWebService() {
-		var service = "services/getdata_using_sparql.php";
-		//var service = "services/getdata.php";
+		loadDataset("coops-uk2017");
+		loadDataset("dotcoop");
+	}
+	function loadDataset(dataset) {
+		var service = "services/get_dataset.php?dataset=" + dataset;
 		var response = null;
 		var message = null;
 		eventbus.publish({topic: "Initiative.loadStarted", data: {message: "Loading data via " + service}});
@@ -97,7 +101,6 @@ define(["app/eventbus"], function(eventbus) {
 		}, 0);
 	}
 	var pub = {
-		add: add,
 		loadFromWebService: loadFromWebService
 	};
 	// Automatically load the data when the app is ready:

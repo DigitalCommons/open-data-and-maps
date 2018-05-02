@@ -6,6 +6,24 @@ require 'se_open_data'
 # This is the CSV standard that we're converting into:
 OutputStandard = SeOpenData::CSV::Standard::V1
 
+
+def domain_to_homepage(domain)
+  # WARNING: This is a time-consuming operation
+  # I expect it could be sped up considerably using Curl::Multi (see https://github.com/taf2/curb)
+  $stderr.puts "Finding effective URL for domain #{domain}"
+  effective_url = `curl -Ls -o /dev/null --max-time 10 -w %{url_effective} http://#{domain}`
+  $stderr.puts "effective URL: #{effective_url}"
+  res = nil
+  if effective_url && !effective_url.empty?
+    res = system("curl --output /dev/null --max-time 10 --silent --head --fail #{effective_url}") ? effective_url : nil
+    if res
+      $stderr.puts "URL OK: #{effective_url}"
+    else
+      $stderr.puts "URL not found: #{effective_url}"
+    end
+  end
+  res
+end
 class DotCoopV1Reader < SeOpenData::CSV::RowReader
   # Headers in input CSV (with Hash key symbols matching Hash key symbols in output CSV Headers)
   InputHeaders = {
@@ -33,9 +51,8 @@ class DotCoopV1Reader < SeOpenData::CSV::RowReader
     domain.sub(/\.coop$/, "")
   end
   def homepage
-    #raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
-    #domain
-    nil
+    raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
+    domain_to_homepage(domain)
   end
   def legal_forms
     # Return a list of strings, separated by OutputStandard::SubFieldSeparator.
