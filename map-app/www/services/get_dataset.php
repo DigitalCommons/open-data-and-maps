@@ -61,6 +61,12 @@ function request($url){
 	// return response, don't print/echo
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
+	// These settings should (untested) turn off caching
+	// Normally, we'd want all the caching we can get!
+	//curl_setopt($ch, CURLOPT_FORBID_REUSE, true); 
+	//curl_setopt($ch, CURLOPT_DNS_USE_GLOBAL_CACHE, false); 
+	//curl_setopt($ch, CURLOPT_FRESH_CONNECT, true); 
+
 	//curl_setopt($ch, CURLOPT_TIMEOUT, 300);
 	//curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
 
@@ -86,7 +92,7 @@ $res = json_decode($response, true);
 // The keys correspond to two things:
 //   1. The names of the variables used in the SPARQL query (see Initiative::create_sparql_files in generate-triples.rb)
 //   2. The names used in the JSON that is returned to the map-app
-$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg");
+$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg", "sameas");
 
 $result = array();
 foreach($res["results"]["bindings"] as $item) {
