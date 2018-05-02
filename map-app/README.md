@@ -1,3 +1,5 @@
+This page is out of date. Bringing it up to date is the subject of [this issue](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/32)
+
 # map-app
 
 This [web application](http://data.solidarityeconomics.org/map-app/) displays Solidarity Economy initiatives on a map. It is provided as an experimental demonstration platform to exercise linked open data being developed as part of the [P6Data](https://github.com/p6data-coop) project.
