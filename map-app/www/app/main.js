@@ -6,6 +6,11 @@ define(["model/sse_initiative", "app/console", "app/view", "app/debug"], functio
 		console.log("TODO - Check why is app/debug being loaded here - probably a leftover from clone origin.");
 		console.log("header, footer and left column have been reduce to zero in style.css.");
 
+		// Load the JSON config file
+		// See http://www.tutorialsteacher.com/d3js/loading-data-from-file-in-d3js#d3.json
+		// It's prob better to do this in a separate module (model/config ?? ), and
+		// just call that module from here.
+
 		// The code for each view is loaded by www/app/view.js
 		// Initialize the views:
 		view.init();
