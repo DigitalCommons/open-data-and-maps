@@ -39,8 +39,13 @@ requirejs.config({
 		// leaflet must be loaded before leafletAwesomeMarkers.
 		// See http://requirejs.org/docs/api.html#config-shim
 		// Note that this assumes that leafletAwesomeMarkers is NOT an AMD module.
-		'leaflet.awesome-markers.min': {
-			deps: 'leaflet'
+
+		// Following: https://github.com/lvoogdt/Leaflet.awesome-markers/issues/57:
+        'leaflet': {
+            exports : 'L'
+        },
+		'leafletAwesomeMarkers': {
+			deps: ['leaflet']
 		}
 	}
 });

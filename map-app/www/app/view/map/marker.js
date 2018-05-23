@@ -20,6 +20,12 @@ define(["leaflet", "leaflet.markercluster", "leafletAwesomeMarkers"], function(l
 		// options argument overrides our default options:
 		var opts = Object.assign(dfltOptions, options);
 
+		// This technique taken from https://github.com/lvoogdt/Leaflet.awesome-markers/issues/57
+		// Hopefully this fixes https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/24
+		// TODO - tidy up the overloading of the variable: leaflet.
+		var leaflet = require("leaflet");
+		var AwesomeMarkers = require("leafletAwesomeMarkers");
+
 		// Note that the dependency between AwesomeMarkers and leaflet is expressed as a 
 		// requireJS shim config in our main requireJS configuration.
 		var icon = leaflet.AwesomeMarkers.icon(opts);
