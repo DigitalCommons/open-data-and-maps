@@ -19,6 +19,7 @@
 	appDir: "www",
 
 	// We want the optimised build to go here:
+	// (Frequently overridden on node command line - see Makefile)
 	dir: "www-built",
 
 	// We don't want our built directory to contain js files that have been combined into app.js:
@@ -43,6 +44,6 @@
 
 	// Remove the text.js module (needed for the requirejs-json plugin) from lib in the built dir. : 
 	// TODO - Check: This may be a left-over from another project from which this was cloned!:
-	stubModules: ["text"],
+	//stubModules: ["text"],
 	optimizeCss: "standard"
 })

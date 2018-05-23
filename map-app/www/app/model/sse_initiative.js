@@ -1,5 +1,5 @@
 // Model for SSE Initiatives.
-define(["app/eventbus"], function(eventbus) {
+define(["app/eventbus", "model/config"], function(eventbus, config) {
 	"use strict";
 
 	var objects = [];
@@ -56,8 +56,11 @@ define(["app/eventbus"], function(eventbus) {
 		}
 	}
 	function loadFromWebService() {
-		loadDataset("coops-uk2017");
-		loadDataset("dotcoop");
+		var ds = config.namedDatasets();
+		var i;
+		for (i = 0; i < ds.length; i++) {
+			loadDataset(ds[i]);
+		}
 	}
 	function loadDataset(dataset) {
 		var service = "services/get_dataset.php?dataset=" + dataset;
@@ -104,6 +107,6 @@ define(["app/eventbus"], function(eventbus) {
 		loadFromWebService: loadFromWebService
 	};
 	// Automatically load the data when the app is ready:
-	eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});
+	//eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});
 	return pub;
 });

@@ -14,6 +14,8 @@ requirejs.config({
 		presenter: "../app/presenter",
 		data: "../app/data",
 
+		configuration: "../configuration",
+
 		//jQuery: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min",
 		// If we want to load D3 from a local source:
 		//d3: "d3.v3.min"
@@ -25,13 +27,13 @@ requirejs.config({
 		postal: "postal.min",
 		lodash: "lodash.core",
 
-		// In order to allow requireJs to have dependencies on JSON files, we need to pull in the require/json plugin:
-		//json: "require/json",
-		// The require/json plugin depends on text:
-		//text: "text"
-
 		leaflet: "leaflet.1.0.0.rc1",
-		leafletAwesomeMarkers: "leaflet.awesome-markers.min"
+		leafletAwesomeMarkers: "leaflet.awesome-markers.min",
+
+		// For expressing dependencies on json files:
+		json: "require/json",
+		// json uses the text module, se we need it too:
+		text: "require/text"
     },
 	shim: {
 		// leaflet must be loaded before leafletAwesomeMarkers.
