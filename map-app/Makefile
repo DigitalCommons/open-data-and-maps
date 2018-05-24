@@ -74,8 +74,11 @@ $(CONFIG_DIR):
 	mkdir -p $(CONFIG_DIR)
 	touch $(CONFIG_DIR)GENERATED_DIR-DO_NOT_STORE_SOURCE_HERE
 
+# When configuring, a link is prefered to a copy because:
+# with a link, any edits to SRC_CONFIG_JSON are immediately available for local debugging,
+# without having to make the configure target afresh:
 configure: | $(CONFIG_DIR)
-	cp -f $(SRC_CONFIG_JSON) $(TGT_CONFIG_JSON)
+	ln -f $(SRC_CONFIG_JSON) $(TGT_CONFIG_JSON)
 
 $(BUILD_DIR):
 	mkdir -p $@
