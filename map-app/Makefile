@@ -16,8 +16,9 @@ $(eval $(call var_check,SERVER,Name of server to which app is to be deployed))
 $(eval $(call var_check,SERVER_BASE_DIR,Base deployment directory on server (must pre-exist)))
 $(eval $(call var_check,SERVER_APP_SUBDIR,Directory under SERVER_BASE_DIR to deploy to (will be created during deployment)))
 $(eval $(call var_check,SRC_CONFIG_JSON,JSON config file to be loaded into the running map-app))
+$(eval $(call var_check,DEPLOYED_MAP_URL,URL where map will be found after deployment))
 
-.PHONY: help deploy lint build configure
+.PHONY: help lint configure build deploy-dry-run deploy
 .PHONY: build_map
 .DEFAULT_GOAL: help
 
@@ -30,11 +31,17 @@ help:
 	@echo "\tBuild the javascript app using $(PACKAGER_OPTIMIZER) according to the configuration in $(BUILD_CONFIG)."
 	@echo "make variant=<name> lint"
 	@echo "\tRun the linter $(LINT) on the javascrip app."
+	@echo "make variant=<name> deploy-dry-run"
+	@echo "\tRebuild then perform a dry-run of the deployment. Examine the results carefully!"
+	@echo "\tNote this has the side effect of creating a directory on the server, if it doesn't already exist."
 	@echo "make variant=<name> deploy"
-	@echo "\tDeploy to the server."
+	@echo "\tRebuild and then deploy to the server."
+	@echo "\tWARNING: Deploying to the service will delete files that don't match our local build!"
+	@echo "\tWARNING: Be absolutely sure that the target directory on the server is the right one!"
+	@echo "\tWARNING: Run 'make variant=$(variant) deploy-dry-run' first, and check the output!"
 
 LINT := eslint
-RSYNC := rsync -avz 
+RSYNC := rsync -avzc --delete
 
 SRC_DIR := www/
 
@@ -69,6 +76,8 @@ CONFIG_DIR := $(SRC_DIR)configuration/
 
 # This corresponds to the name used within other js files to refer to this config file:
 TGT_CONFIG_JSON := $(CONFIG_DIR)config.json
+TGT_VERSION_JSON := $(CONFIG_DIR)version.json
+DEPLOYED_VERSION_JSON := $(DEPLOYED_MAP_URL)$(subst $(SRC_DIR),,$(TGT_VERSION_JSON))
 
 $(CONFIG_DIR):
 	mkdir -p $(CONFIG_DIR)
@@ -79,6 +88,7 @@ $(CONFIG_DIR):
 # without having to make the configure target afresh:
 configure: | $(CONFIG_DIR)
 	ln -f $(SRC_CONFIG_JSON) $(TGT_CONFIG_JSON)
+	echo '{"variant": "$(variant)","timestamp": "'`date +%Y-%m-%dT%H:%M:%S%z`'"}' > $(TGT_VERSION_JSON)
 
 $(BUILD_DIR):
 	mkdir -p $@
@@ -98,11 +108,23 @@ SERVER_CMD = ssh $(SERVER) $(1)
 # $(2) is the name of the dir on the server (a sub-directory of $(SERVER_BASE_DIR))
 define DEPLOY_DIR
 $(call SERVER_CMD,'cd $(SERVER_BASE_DIR) && mkdir -p $(2)')
-$(RSYNC) $(1) $(SERVER):$(SERVER_BASE_DIR)$(2)
+$(RSYNC) $(3) $(1) $(SERVER):$(SERVER_BASE_DIR)$(2)
 endef
+
+deploy-dry-run: build
+	@echo "------------------------------------------------------------"
+	@echo " DEPLOY-DRY-RUN starts here:"
+	@sleep 2
+	@echo ""
+	$(call DEPLOY_DIR,$(BUILD_DIR),$(SERVER_APP_SUBDIR),--dry-run)
 
 deploy: build
 	$(call DEPLOY_DIR,$(BUILD_DIR),$(SERVER_APP_SUBDIR))
 	@echo "There are subdirectories of www/services that contain info for querying datasets via SPARQL."
 	@echo "Make sure they are up to date."
 	@echo "For example, see ../data/co-ops-uk/2017-06/generated-data/final/sparql/."
+	@echo ""
+	@echo "Checking that the deployed version matches the local version (next command should output nothing!):"
+	echo `curl -s $(DEPLOYED_VERSION_JSON)` | diff $(TGT_VERSION_JSON) -
+	@echo ""
+	@echo "NOW CHECK that the map is available at $(DEPLOYED_MAP_URL)"

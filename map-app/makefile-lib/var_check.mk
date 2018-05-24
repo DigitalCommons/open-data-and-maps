@@ -8,7 +8,7 @@
 define var_check
 ifndef $(1)
 $$(info Variable not defined: $(1) - $(2))
-$$(error Fatal error - check that you have set edition=<x> on the command line, and that the file <x>.mk defines $(1))
+$$(error Fatal error - check that you have set variant=<x> on the command line, and that the file variants/<x>.mk defines $(1))
 endif
 endef
 
