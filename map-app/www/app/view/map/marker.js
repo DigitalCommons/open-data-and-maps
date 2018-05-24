@@ -1,4 +1,4 @@
-define(["leaflet", "leaflet.markercluster", "leafletAwesomeMarkers"], function(leaflet, cluster, awesomeMarkers) {
+define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers"], function(leaflet, cluster, awesomeMarkers) {
 	"use strict";
 
 	var group = null;
@@ -8,6 +8,11 @@ define(["leaflet", "leaflet.markercluster", "leafletAwesomeMarkers"], function(l
 	var dfltOptions = {prefix: "fa"};	// "fa" selects the font-awesome icon set (we have no other)
 
 	function init(map) {
+		// This technique taken from https://github.com/lvoogdt/Leaflet.awesome-markers/issues/57
+		// Hopefully this fixes https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/24
+		// TODO - tidy up the overloading of the variable: leaflet.
+		var leaflet = require("leaflet");
+
 		group = leaflet.markerClusterGroup();
 		map.addLayer(group);
 	}
