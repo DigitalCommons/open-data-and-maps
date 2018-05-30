@@ -36,7 +36,7 @@ requirejs.config({
 
 		leaflet: "leaflet-1.3.1",
 		leafletAwesomeMarkers: "leaflet.awesome-markers.min",
-		leafletMarkerCluster: "leaflet.markercluster",
+		leafletMarkerCluster: "leaflet.markercluster-1.3.0",
 
 		// For expressing dependencies on json files:
 		json: "require/json",
