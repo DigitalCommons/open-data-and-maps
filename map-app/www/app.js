@@ -24,7 +24,14 @@ requirejs.config({
 		//topojson: "https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min",
 
 		// postal (eventbus) depends on lodash.
-		postal: "postal.min",
+		postal: "postal",
+
+		// postal.lodash.js is packaged with postal.js.
+		// But it produces an error. See https://github.com/postaljs/postal.js/issues/182
+		// lodash: "postal.lodash",
+		//
+		// So, I've used the core one direct from lodash:
+		// https://raw.githubusercontent.com/lodash/lodash/4.17.10-npm/core.js
 		lodash: "lodash.core",
 
 		leaflet: "leaflet.1.0.0.rc1",

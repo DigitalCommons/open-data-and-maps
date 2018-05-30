@@ -1,5 +1,6 @@
 # For Vim users:
 *.swp
+*.swo
 
 # General:
 *.zip
