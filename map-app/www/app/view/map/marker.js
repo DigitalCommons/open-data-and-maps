@@ -25,7 +25,9 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers"], function(le
 		var icon = leaflet.AwesomeMarkers.icon(opts);
 		this.marker = leaflet.marker(latlng, {icon: icon, title: hovertext});
 		// maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
-		this.marker.bindPopup(popuptext, { maxWidth: 800 });
+		// maxWidth:800 is needed if the font-size is set to 200% in CSS:
+		//this.marker.bindPopup(popuptext, { maxWidth: 800 });
+		this.marker.bindPopup(popuptext);
 
 		// Add the event handlers that are defined in model/pointseq:
 		Object.keys(eventHandlers).forEach(function(k) {
