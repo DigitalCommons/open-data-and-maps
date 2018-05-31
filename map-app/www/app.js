@@ -1,3 +1,4 @@
+"use strict";
 requirejs.config({
 	// By default, load modules from the lib directory:
     baseUrl: "lib",

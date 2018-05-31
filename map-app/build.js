@@ -12,7 +12,14 @@
 
 	paths: {
 		// We are not going to optimise d3 (after all, we're getting it from a CDN!)
-		d3: "empty:"
+		d3: "empty:",
+
+		// Mysteriously, the optimization seemed to be screwing things up for leafletAwesomeMarkers...
+		// Hopefully this fixes https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/24
+		leafletAwesomeMarkers: "empty:",
+
+		// While we're at it, let's not optimize other stuff too :-)
+		leafletMarkerCluster: "empty:"
 	},
 
 	// Our web app source is in www:
