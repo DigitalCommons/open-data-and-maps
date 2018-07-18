@@ -1,0 +1,14 @@
+
+html, body, .content, .map {
+    height: 100%;
+    width: 100vw;
+}
+/*
+.map {
+    height: 100%;
+    width: 100%;
+}
+*/
+.map {
+	background-image: url("../img/sandyfeet.jpg");
+}
