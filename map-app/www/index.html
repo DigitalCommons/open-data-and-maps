@@ -4,11 +4,12 @@
 		<meta charset="UTF-8">
 		<title>SE LOD Map</title>
 
-		<link rel="stylesheet" href="styles/style.css">
-		<link rel="stylesheet" href="lib/map-app.css">
 
 		<!-- Advice from Leaflet for preparing for mobile use: -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="lib/map-app.css">
+		<link rel="stylesheet" href="styles/style.css">
 
 		<!-- OPTION 1 - Load scripts before body: -->
 		<!-- data-main attribute tells require.js to load app.js after require.js loads. -->
@@ -17,13 +18,34 @@
 		the other to be loaded after the body: -->
 	</head>
 	<body>
-			<div class="mapContainer" id="map"></div>
-			<div id="protectingVeil" class="protectingVeil">
-				<div class="protectingVeilMessageContainer">
-					<p id="protectingVeilMessage"></p>
-				</div>
+		<!-- Sidebar -->
+		<div class="w3-sidebar w3-bar-block w3-border-right w3-mobile sidebar" style="display:none" id="mySidebar">
+			<button onclick="w3_close()" class="w3-bar-item w3-large w3-mobile">Close &times;</button>
+			<a href="#" class="w3-bar-item w3-button">Link 1</a>
+			<a href="#" class="w3-bar-item w3-button">Link 2</a>
+			<a href="#" class="w3-bar-item w3-button">Link 3</a>
+		</div>
+		<!-- Page Content -->
+		<div class="w3-teal content">
+			<div class="mapContainer" id="map">
 			</div>
-			<div class="buttonBox">
+				<div class="w3-display-container display-container">
+					<button class="w3-btn w3-teal w3-xlarge w3-opacity w3-display-topleft menu-button" onclick="w3_open()">☰</button>
+					<form class="w3-card-4 w3-light-grey w3-round w3-opacity w3-display-topright search-form" style="max-width:500px;width:50%;">
+						<input class="w3-input w3-border-0 w3-round w3-mobile" type="text">
+					</form>
+				</div>
+
+		</div>
+		<!--
+		<div id="protectingVeil" class="protectingVeil">
+			<div class="protectingVeilMessageContainer">
+				<p id="protectingVeilMessage"></p>
+			</div>
+		</div>
+		-->
+		<!--
+		<div class="buttonBox">
 				<input type="button" value="About" id="about-btn" class="main-btn" />
 				<!--
 				<input type="button" value="Other" id="other-btn" class="main-btn" />
@@ -34,5 +56,13 @@
 		<!--
 		<script data-main="app" src="lib/require.js"></script>
 		-->
+		<script>
+			function w3_open() {
+				document.getElementById("mySidebar").style.display = "block";
+			}
+			function w3_close() {
+				document.getElementById("mySidebar").style.display = "none";
+			}
+		</script>
 	</body>
 </html>

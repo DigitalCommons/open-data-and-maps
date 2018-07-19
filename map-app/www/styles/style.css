@@ -1,3 +1,5 @@
+/*
+*/
 body {
     padding: 0;
     margin: 0;
@@ -5,9 +7,23 @@ body {
 /* Settings from https://leafletjs.com/examples/mobile/
  * where they also say something about % and vh, and a bug in Chrome!
  */
-html, body, #map {
+html, body {
     height: 100%;
     width: 100vw;
+}
+.content, #map {
+    height: 100%;
+    width: 100%;
+}
+.display-container {
+	z-index: 30;
+	/*pointer-events: none;*/
+}
+.menu-button, .search-form {
+	/*pointer-events: initial;*/
+}
+.sidebar, .w3-sidebar {
+	z-index: 40;
 }
 
 .main-btn {
