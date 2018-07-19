@@ -22,6 +22,7 @@ html, body {
 .menu-button, .search-form {
 	/*pointer-events: initial;*/
 }
+/* @todo - can we avoid all this messing around with z-index, once the protecting vail has been removed? */ 
 .sidebar, .w3-sidebar {
 	z-index: 40;
 }

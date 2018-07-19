@@ -19,21 +19,29 @@
 	</head>
 	<body>
 		<!-- Sidebar -->
-		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-mobile sidebar" style="display:none" id="mySidebar">
-			<button onclick="w3_close()" class="w3-bar-item w3-large w3-mobile">Close &times;</button>
+		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile sidebar" style="display:none" id="mySidebar">
+			<button onclick="w3_close()" class="w3-bar-item w3-large w3-mobile w3-black">Close &times;</button>
+			<!--
 			<a href="#" class="w3-bar-item w3-button">Link 1</a>
 			<a href="#" class="w3-bar-item w3-button">Link 2</a>
 			<a href="#" class="w3-bar-item w3-button">Link 3</a>
+			-->
+			<!-- The About button's onclick handler (and other stuff too) is hooked up in the javascript -->
+			<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
 		</div>
 		<!-- Page Content -->
 		<div class="w3-teal content">
 			<div class="mapContainer" id="map">
 			</div>
 				<div class="w3-display-container display-container">
+					<!-- Menu button -->
 					<button class="w3-btn w3-teal w3-xlarge w3-opacity w3-display-topleft menu-button" onclick="w3_open()">☰</button>
-					<form class="w3-card-4 w3-light-grey w3-round w3-opacity w3-display-topright search-form" style="max-width:500px;width:50%;">
-						<input class="w3-input w3-border-0 w3-round w3-mobile" type="text">
+					<!--  Search box -->
+					<form id="search-form" class="w3-card-4 w3-light-grey w3-round w3-opacity w3-display-topright search-form" style="max-width:500px;width:50%;">
+						<input id="search-box" class="w3-input w3-border-0 w3-round w3-mobile" type="search" placeholder="search" />
+						<button type="submit"><i class="fa fa-search"></i></button>
 					</form>
+
 				</div>
 		</div>
 
