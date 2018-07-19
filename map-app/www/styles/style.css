@@ -22,8 +22,10 @@ html, body {
 .menu-button, .search-form {
 	/*pointer-events: initial;*/
 }
-/* @todo - can we avoid all this messing around with z-index, once the protecting vail has been removed? */ 
-.sidebar, .w3-sidebar {
+/* @todo - can we avoid all this messing around with z-index, once the protecting vail has been removed?
+ * It seems that leaflet uses z-index, as does w3.css. So we're having to weave a course between the two.
+ */ 
+.sidebar, .w3-sidebar, .w3-modal {
 	z-index: 40;
 }
 
