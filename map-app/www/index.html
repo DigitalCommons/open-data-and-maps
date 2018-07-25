@@ -4,7 +4,6 @@
 		<meta charset="UTF-8">
 		<title>SE LOD Map</title>
 
-
 		<!-- Advice from Leaflet for preparing for mobile use: -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -19,15 +18,56 @@
 	</head>
 	<body>
 		<!-- Sidebar -->
-		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile sidebar" style="display:none" id="mySidebar">
-			<button onclick="w3_close()" class="w3-bar-item w3-large w3-mobile w3-black">Close &times;</button>
-			<!--
-			<a href="#" class="w3-bar-item w3-button">Link 1</a>
-			<a href="#" class="w3-bar-item w3-button">Link 2</a>
-			<a href="#" class="w3-bar-item w3-button">Link 3</a>
-			-->
-			<!-- The About button's onclick handler (and other stuff too) is hooked up in the javascript -->
-			<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile sidebar"
+			style="display:none;flex-direction:column;" 
+			id="mySidebar">
+			<div style="flex: 0 1 auto;">
+				<div class="w3-cell-row">
+					<button onclick="w3_open()" class="w3-teal w3-cell w3-button w3-border-0 ">☰</button>
+					<div class="w3-cell w3-center">
+						<p>Main menu 2</p>
+					</div>
+					<button onclick="w3_close()" class="w3-teal w3-cell w3-right w3-button w3-border-0 ">&times;</button>
+				</div>
+			</div>
+			<!-- Fixed part of Sidebar that may change for different types of the sidebar (e.g. Search results) -->
+			<!-- If this is not a separate flex div, then it doesn't quite render properly on iPhone:
+			     the bottom of the div slightly overlaps the scrollable section of the sidebar below -->
+			<div style="flex: 0 1 auto;">
+				<div class="w3-cell-row">
+					<!-- Fwd/back navigation for moving between different instances of a type of sidebar
+					     (e.g. moving between different search results) -->
+					<!-- Minor issue: if we add the calss w3-mobile to these buttons, then each takes up a whole line
+					on an iPhone, instad of being next to each other on the same line. -->
+					<button class="w3-teal w3-cell w3-btn w3-border-0 "><i class="w3-small fa fa-arrow-left"></i></button>
+					<button class="w3-teal w3-cell w3-btn w3-border-0 "><i class="w3-small fa fa-arrow-right"></i></button>
+				</div>
+			</div>
+			<!-- scrollable part of sidebar -->
+			<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
+			<div style="flex: 1 1 auto;overflow-y:auto;height:100%">
+				<!-- The About button's onclick handler (and other stuff too) is hooked up in the javascript -->
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<!-- Populated with junk here to test scrolling -->
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<p> askjdh kasjhdf kajshdf ajshdfk hjaskdfjh kasuhdfk jahdsfk ha</p>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
+			</div>
 		</div>
 		<!-- Page Content -->
 		<div class="w3-teal content">
@@ -74,7 +114,7 @@
 			<input type="button" value="About" id="about-btn" class="main-btn" />
 			<input type="button" value="Other" id="other-btn" class="main-btn" />
 		</div>
-				-->
+		-->
 		<!-- OPTION 2 - Load scripts after body: -->
 		<!-- data-main attribute tells require.js to load app.js after require.js loads. -->
 		<!--
@@ -82,7 +122,7 @@
 		-->
 		<script>
 			function w3_open() {
-				document.getElementById("mySidebar").style.display = "block";
+				document.getElementById("mySidebar").style.display = "flex";
 			}
 			function w3_close() {
 				document.getElementById("mySidebar").style.display = "none";
