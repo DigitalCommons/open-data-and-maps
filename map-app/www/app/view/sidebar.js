@@ -18,7 +18,7 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 			attr('title', 'Show sidebar').
 			on('click', function() { view.showSidebar(); }).
 			append('i').
-			attr('class', 'fa fa-arrow-right');
+			attr('class', 'fa fa-angle-right');
 	};
 	proto.createHeader = function() {
 		// d3 selection redefines this, so hang onto it here:

@@ -17,15 +17,15 @@ html, body {
 }
 .display-container {
 	z-index: 30;
-	/*pointer-events: none;*/
 }
-.menu-button, .search-form {
-	/*pointer-events: initial;*/
+.search-form {
+	max-width:500px;
+	width:50%;
 }
 /* @todo - can we avoid all this messing around with z-index, once the protecting vail has been removed?
  * It seems that leaflet uses z-index, as does w3.css. So we're having to weave a course between the two.
  */ 
-.sidebar, .w3-sidebar, .w3-modal {
+.w3-sidebar, .w3-modal {
 	z-index: 40;
 }
 
