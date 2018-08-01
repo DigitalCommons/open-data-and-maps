@@ -57,6 +57,12 @@ define(["d3", "view/base"], function(d3, view) {
 		this.loadHistoryNavigation();	// back and forward buttons
 		this.loadScrollableSection();
 	};
+	proto.refresh = function() {
+		// Only refreshes things that may change in a sidebar
+		this.loadFixedSection();
+		this.loadHistoryNavigation();	// back and forward buttons
+		this.loadScrollableSection();
+	};
 	base.prototype = proto;
 
 	var pub = {

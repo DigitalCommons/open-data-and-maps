@@ -43,11 +43,15 @@ define(
 			d3.select("#protectingVeil").style("display", "inline");
 			d3.select("#protectingVeilMessage").text(msg);
 		}
+		function zoomAndPanTo(latLng) {
+			map.setView(latLng, 16, {"animate": true});
+		}
 		var pub = {
 			init: priv.init,
 			clearProtectingVeil: clearProtectingVeil,
 			showProtectingVeil: showProtectingVeil,
-			addMarker: addMarker
+			addMarker: addMarker,
+			zoomAndPanTo: zoomAndPanTo
 		};
 		settings = presenter.registerView(pub);
 		return pub;

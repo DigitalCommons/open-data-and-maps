@@ -110,6 +110,11 @@ define(["app/eventbus"], function(eventbus) {
 	function onInitiativeLoadMessage(data/*, envelope*/) {
 		view.showProtectingVeil(data.message);
 	}
+	function onInitiativeSelected(data) {
+		console.log('onInitiativeSelected');
+		console.log(data);
+		view.zoomAndPanTo({lon: data.lng, lat: data.lat});
+	}
 
 	function init() {
 		// subscribe to events published by the model:
@@ -117,6 +122,7 @@ define(["app/eventbus"], function(eventbus) {
 		eventbus.subscribe({topic: "Initiative.loadComplete", callback: onInitiativeLoadComplete});
 		eventbus.subscribe({topic: "Initiative.loadStarted", callback: onInitiativeLoadMessage});
 		eventbus.subscribe({topic: "Initiative.loadFailed", callback: onInitiativeLoadMessage});
+		eventbus.subscribe({topic: "Initiative.selected", callback: onInitiativeSelected});
 	}
 	var pub = {
 		registerView: registerView,

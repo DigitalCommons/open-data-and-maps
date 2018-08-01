@@ -10,6 +10,7 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 	proto.changeSidebar = function(name) {
 		console.log("presenter/sidebar/changeSidebar");
 		this.view.changeSidebar(name);
+		this.view.showSidebar();
 	};
 	Presenter.prototype = proto;
 

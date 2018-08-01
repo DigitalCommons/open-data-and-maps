@@ -19,6 +19,11 @@ define(["app/eventbus", "model/config"], function(eventbus, config) {
 		objects.push(this);
 		eventbus.publish({topic: "Initiative.new", data: this});
 	}
+	function search(text) {
+		// returns an array of sse objkects whose name contains the search text
+		var up = text.toUpperCase();
+		return objects.filter(i => i.name.toUpperCase().includes(up));
+	}
 	function loadNextInitiatives() {
 		var i, e;
 		var maxInitiativesToLoadPerFrame = 100;
@@ -104,7 +109,8 @@ define(["app/eventbus", "model/config"], function(eventbus, config) {
 		}, 0);
 	}
 	var pub = {
-		loadFromWebService: loadFromWebService
+		loadFromWebService: loadFromWebService,
+		search: search
 	};
 	// Automatically load the data when the app is ready:
 	//eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});

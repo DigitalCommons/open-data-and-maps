@@ -17,11 +17,28 @@ define(["app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], functi
 		//d3.event.stopPropagation();
 
 		var searchText = d3.select("#search-box").property("value");
+		this.presenter.performSearch(searchText);
 		console.log("Search submitted: [" + searchText + "]");
+		/*
 		document.getElementById('search-results').innerHTML = "<p>You searched for: " + searchText + "</p>" +
 			"<p><i class=\"w3-round w3-xxlarge fa fa-exclamation-triangle\"></i>" +
 			"Sorry, searching is not yet available, but coming soon</p>";
 		document.getElementById('search-results-container').style.display='block';
+	   */
+	};
+	proto.populateFixedSelection = function(selection) {
+		var pres = this.presenter;
+		selection.append('p').text(pres.getSearchString());
+	};
+	proto.populateScrollableSelection = function(selection) {
+		console.log(this.presenter.getMatches());
+		return this.presenter.getMatches().forEach(function(button) {
+			selection.append('button')
+			.attr("class", "w3-bar-item w3-button w3-mobile")
+			.attr("title", button.hovertext)
+			.on('click', button.onClick)
+			.text(button.label)
+		});
 	};
 
 	proto.createSearchBox = function() {
