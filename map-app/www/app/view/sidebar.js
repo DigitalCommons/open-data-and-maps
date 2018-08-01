@@ -1,38 +1,28 @@
 // Set up the various sidebars
-define(["d3", "view/sidebar/mainmenu", "view/sidebar/search"], function(d3, mainMenu, search) {
+define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/sidebar/search"], function(d3, view, presenter, mainMenu, search) {
 	"use strict";
 
-	var mainMenuSidebar;
-	var searchSidebar;
+	// This deals with the view object that controls the sidebar
+	// It is not itself a sidebar/view object, but contains objects of that type
+	
+	function SidebarView(){}
+	// inherit from the standard view base object:
+	var proto = Object.create(view.base.prototype);
 
-	// sidebar is the "base class" of all sidebars:
-	function sidebar(){}
-	//sidebar.prototype = {
-		//title: "Untitled"
-	//};
+	proto.createSidebars = function() {
+		this.searchSidebar = search.createSidebar();
+		this.mainMenuSidebar = mainMenu.createSidebar();
+	};
+	SidebarView.prototype = proto;
+	var view;
 
-	function init(viewBase) {
-		// sidebars inherit from viewBase:
-		var proto = Object.create(viewBase.prototype);
-
-		// add properties to sidebar:
-		proto.title = "Untitled";
-		proto.loadHtml = function() {
-			document.getElementById('sidebar-title').innerHTML = this.title;
-		};
-		sidebar.prototype = proto;
-		
-
-		// set up other sidebars to 'subclass' from sidebar:
-		mainMenu.init(sidebar);
-		search.init(sidebar);
-
-		searchSidebar = search.createSidebar();
-
-		mainMenuSidebar = mainMenu.createSidebar();
-		mainMenuSidebar.loadHtml();
-		console.log(mainMenuSidebar);
-		console.log(mainMenuSidebar.title);
+	function init() {
+		view = new SidebarView;
+		view.setPresenter(presenter.createPresenter(view));
+		view.createSidebars();
+		view.mainMenuSidebar.reload();
+		console.log(view.mainMenuSidebar);
+		console.log(view.mainMenuSidebar.title);
 	}
 	var pub = {
 		init: init

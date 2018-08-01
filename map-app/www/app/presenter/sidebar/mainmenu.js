@@ -1,9 +1,9 @@
-define(["app/eventbus", "model/config", "presenter"], function(eventbus, config, presenter) {
+define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(eventbus, config, sidebarPresenter) {
 	"use strict";
 
 	function Presenter(){}
 
-	var proto = Object.create(presenter.base.prototype);
+	var proto = Object.create(sidebarPresenter.base.prototype);
 	Presenter.prototype = proto;
 
 	// @todo 

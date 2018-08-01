@@ -34,6 +34,7 @@
 			<!-- If this is not a separate flex div, then it doesn't quite render properly on iPhone:
 			     the bottom of the div slightly overlaps the scrollable section of the sidebar below -->
 			<div style="flex: 0 1 auto;">
+				<div id="sidebar-fixed-section"></div>
 				<div class="w3-cell-row">
 					<!-- Fwd/back navigation for moving between different instances of a type of sidebar
 					     (e.g. moving between different search results) -->
@@ -45,7 +46,7 @@
 			</div>
 			<!-- scrollable part of sidebar -->
 			<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
-			<div style="flex: 1 1 auto;overflow-y:auto;height:100%">
+			<div id="sidebar-scrollable-section" style="flex: 1 1 auto;overflow-y:auto;height:100%">
 				<!-- The About button's onclick handler (and other stuff too) is hooked up in the javascript -->
 				<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>
 				<!-- Populated with junk here to test scrolling -->

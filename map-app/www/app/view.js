@@ -2,14 +2,6 @@
 define(["d3", "view/map", "view/sidebar"], function(d3, map, sidebar) {
 	"use strict";
 
-	// 'Base class' for all views:
-	var base = function(){
-	};
-	base.prototype = {
-		presenter: null,
-		setPresenter: function(p) { this.presenter = p; }
-	};
-
 	function init() {
 		// @todo - make obsolete
 		d3.select("#about-btn")
@@ -34,7 +26,7 @@ define(["d3", "view/map", "view/sidebar"], function(d3, map, sidebar) {
 		});
 
 		map.init();
-		sidebar.init(base);
+		sidebar.init();
 	}
 	var pub = {
 		init: init

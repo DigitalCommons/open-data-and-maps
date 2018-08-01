@@ -1,9 +1,9 @@
-define(["app/eventbus", "model/config", "model/sse_initiative", "presenter"], function(eventbus, config, sseInitiative, presenter) {
+define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sidebar/base"], function(eventbus, config, sseInitiative, sidebarPresenter) {
 	"use strict";
 
 	function Presenter(){}
 
-	var proto = Object.create(presenter.base.prototype);
+	var proto = Object.create(sidebarPresenter.base.prototype);
 	Presenter.prototype = proto;
 
 	function createPresenter(view) {
