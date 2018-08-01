@@ -18,16 +18,11 @@
 	</head>
 	<body>
 		<!-- Sidebar -->
-		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile sidebar"
+		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile"
 			style="display:none;flex-direction:column;" 
-			id="mySidebar">
+			id="sidebar">
 			<div style="flex: 0 1 auto;">
-				<div class="w3-cell-row">
-					<button onclick="w3_open()" class="w3-teal w3-cell w3-button w3-border-0 ">☰</button>
-					<div class="w3-cell w3-center">
-						<p id="sidebar-title">Main menu 2</p>
-					</div>
-					<button onclick="w3_close()" class="w3-teal w3-cell w3-right w3-button w3-border-0 ">&times;</button>
+				<div id="sidebar-header">
 				</div>
 			</div>
 			<!-- Fixed part of Sidebar that may change for different types of the sidebar (e.g. Search results) -->
@@ -35,7 +30,7 @@
 			     the bottom of the div slightly overlaps the scrollable section of the sidebar below -->
 			<div style="flex: 0 1 auto;">
 				<div id="sidebar-fixed-section"></div>
-				<div id="history-navigation"></div>
+				<div id="sidebar-history-navigation"></div>
 			</div>
 			<!-- scrollable part of sidebar -->
 			<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
@@ -47,9 +42,10 @@
 			<div class="mapContainer" id="map">
 			</div>
 			<div class="w3-display-container display-container">
-				<!-- Menu button -->
-				<button class="w3-btn w3-teal w3-xlarge w3-opacity w3-display-topleft menu-button" onclick="w3_open()">☰</button>
+				<div id="sidebar-button">
+				</div>
 				<!--  Search box -->
+				<div id="search-widget">
 				<form id="search-form" class="w3-card-4 w3-light-grey w3-round w3-opacity w3-display-topright search-form" style="max-width:500px;width:50%;">
 					<div class="w3-row w3-border-0">
 						<div class="w3-col" style="width:50px">
@@ -60,6 +56,7 @@
 						</div>
 					</div>
 				</form>
+				</div>
 			</div>
 		</div>
 		<!-- Search results -->
@@ -94,13 +91,5 @@
 		<!--
 		<script data-main="app" src="lib/require.js"></script>
 		-->
-		<script>
-			function w3_open() {
-				document.getElementById("mySidebar").style.display = "flex";
-			}
-			function w3_close() {
-				document.getElementById("mySidebar").style.display = "none";
-			}
-		</script>
 	</body>
 </html>

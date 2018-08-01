@@ -9,9 +9,56 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 	// inherit from the standard view base object:
 	var proto = Object.create(view.base.prototype);
 
+	proto.createOpenButton = function() {
+		// d3 selection redefines this, so hang onto it here:
+		var view = this;
+		var selection = this.d3selectAndClear('#sidebar-button').
+			append('button').
+			attr('class', 'w3-btn w3-teal w3-xlarge w3-opacity w3-display-topleft menu-button').
+			attr('title', 'Show sidebar').
+			on('click', function() { view.showSidebar(); }).
+			append('i').
+			attr('class', 'fa fa-arrow-right');
+	};
+	proto.createHeader = function() {
+		// d3 selection redefines this, so hang onto it here:
+		var view = this;
+		var selection = this.d3selectAndClear('#sidebar-header').attr('class', 'w3-cell-row');
+
+		// The sidebar has a button that cuases the main menu to be dispayed
+		selection.append('button').
+			attr('class', 'w3-teal w3-cell w3-button w3-border-0').
+			attr('title', 'Show main menu').
+			on('click', function() { console.log(this); view.changeSidebar('mainMenu'); }).
+			append('i').
+			attr('class', 'fa fa-bars');
+
+		// Where the sidebar title goes:
+		selection.append('div').
+			attr('class', 'w3-cell w3-center').
+			append('p').attr('id','sidebar-title');
+
+		// Button for clsing the sidebar:
+		selection.append('button').
+			attr('class', 'w3-teal w3-cell w3-right w3-button w3-border-0').
+			attr('title', 'Hide sidebar').
+			on('click', function() { view.hideSidebar(); }).
+			text('X');
+	};
 	proto.createSidebars = function() {
-		this.searchSidebar = search.createSidebar();
-		this.mainMenuSidebar = mainMenu.createSidebar();
+		this.sidebar = {
+			search: search.createSidebar(),
+			mainMenu: mainMenu.createSidebar()
+		};
+	};
+	proto.changeSidebar = function(name) {
+		this.sidebar[name].reload();
+	};
+	proto.showSidebar = function() {
+		d3.select('#sidebar').style('display', 'flex');
+	};
+	proto.hideSidebar = function() {
+		d3.select('#sidebar').style('display', 'none');
 	};
 	SidebarView.prototype = proto;
 	var view;
@@ -19,8 +66,10 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 	function init() {
 		view = new SidebarView;
 		view.setPresenter(presenter.createPresenter(view));
+		view.createOpenButton();
+		view.createHeader();
 		view.createSidebars();
-		view.mainMenuSidebar.reload();
+		view.changeSidebar('mainMenu');
 	}
 	var pub = {
 		init: init

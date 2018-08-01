@@ -10,6 +10,7 @@ define(["d3", "view/base"], function(d3, view) {
 
 	// add properties to sidebar:
 	proto.title = "Untitled";
+	proto.hasHistoryNavigation = true;	// by default - change this in derived sidebar view objects if necessary.
 
 	proto.populateScrollableSelection = function(selection) {
 		// override this default in derived view objects:
@@ -33,21 +34,22 @@ define(["d3", "view/base"], function(d3, view) {
 		// (e.g. moving between different search results)
 		var buttons = this.presenter.historyNavigation();
 		var buttonClasses = 'w3-teal w3-cell w3-btn w3-border-0';
-		var selection = this.d3selectAndClear('#history-navigation');
-		selection.attr('class', 'w3-cell-row').append('button').
-			// Minor issue: if we add the class w3-mobile to these buttons, then each takes up a whole line
-			// on an iPhone, instad of being next to each other on the same line.
-			attr('class', buttonClasses).
-			on('click', buttons.back.onClick).
-			append('i').
-			attr('class', 'w3-small fa fa-arrow-left');
+		var selection = this.d3selectAndClear('#sidebar-history-navigation');
+		if (this.hasHistoryNavigation) {
+			selection.attr('class', 'w3-cell-row').append('button').
+				// Minor issue: if we add the class w3-mobile to these buttons, then each takes up a whole line
+				// on an iPhone, instad of being next to each other on the same line.
+				attr('class', buttonClasses).
+				on('click', buttons.back.onClick).
+				append('i').
+				attr('class', 'w3-small fa fa-arrow-left');
 
-		selection.append('button').
-			attr('class', buttonClasses).
-			on('click', buttons.forward.onClick).
-			append('i').
-			attr('class', 'w3-small fa fa-arrow-right');
-
+			selection.append('button').
+				attr('class', buttonClasses).
+				on('click', buttons.forward.onClick).
+				append('i').
+				attr('class', 'w3-small fa fa-arrow-right');
+		}
 	};
 	proto.reload = function() {
 		this.loadHeader();

@@ -10,6 +10,7 @@ define(["app/eventbus", "presenter/sidebar/mainmenu", "view/sidebar/base"], func
 
 	// And adds some overrides and new properties of it's own:
 	proto.title = "Main menu";
+	proto.hasHistoryNavigation = false;
 
 	proto.getScrollableHtml = function() {
 		return this.presenter.getButtons().map(function(button) {

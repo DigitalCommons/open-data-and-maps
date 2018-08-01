@@ -10,6 +10,7 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 	};
 	proto.searchButtonClicked = function() {
 		console.log('searchButtonClicked');
+		eventbus.publish({topic: "Sidebar.loadSearch"});
 	};
 	proto.getButtons = function() {
 		return [
