@@ -4,6 +4,27 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 	function Presenter(){}
 
 	var proto = Object.create(sidebarPresenter.base.prototype);
+
+	proto.aboutButtonClicked = function() {
+		console.log('aboutButtonClicked');
+	};
+	proto.searchButtonClicked = function() {
+		console.log('searchButtonClicked');
+	};
+	proto.getButtons = function() {
+		return [
+			{
+				label: 'About',
+				hovertext: 'Information about this map',
+				onClick: this.aboutButtonClicked
+			},
+			{
+				label: 'Search',
+				hovertext: 'Show last search results',
+				onClick: this.searchButtonClicked
+			}
+		];
+	};
 	Presenter.prototype = proto;
 
 	// @todo 

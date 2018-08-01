@@ -27,10 +27,10 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 			return this.current();
 		},
 		isAtStart: function() {
-			return this.storate.length == 0 || this.index == 0;
+			return this.storage.length == 0 || this.index == 0;
 		},
 		isAtEnd: function() {
-			return this.storate.length == 0 || this.index == this.storage.length - 1;
+			return this.storage.length == 0 || this.index == this.storage.length - 1;
 		}
 	};
 
@@ -53,14 +53,15 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 	};
 
 	proto.historyNavigation = function() {
+		console.log("presenter/sidebar/base/historyNavigation");
 		return {
 			back: {
 				enabled: !this.contentStack.isAtStart(),
-				onClick: function() { this.backButtonClicked(); }
+				onClick: this.backButtonClicked
 			},
 			forward: {
 				enabled: !this.contentStack.isAtEnd(),
-				onClick: function() { this.forwardButtonClicked(); }
+				onClick: this.forwardButtonClicked
 			}
 		};
 	};

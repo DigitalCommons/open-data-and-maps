@@ -21,8 +21,6 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 		view.setPresenter(presenter.createPresenter(view));
 		view.createSidebars();
 		view.mainMenuSidebar.reload();
-		console.log(view.mainMenuSidebar);
-		console.log(view.mainMenuSidebar.title);
 	}
 	var pub = {
 		init: init

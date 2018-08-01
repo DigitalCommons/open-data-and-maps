@@ -10,29 +10,49 @@ define(["d3", "view/base"], function(d3, view) {
 
 	// add properties to sidebar:
 	proto.title = "Untitled";
-	proto.getFixedHtml = function() {
+
+	proto.populateScrollableSelection = function(selection) {
 		// override this default in derived view objects:
-		return "";
 	};
-	proto.getScrollableHtml = function() {
+	proto.populateFixedSelection = function(selection) {
 		// override this default in derived view objects:
-		return "";
 	};
 
 	proto.loadHeader = function() {
-		console.log("view/sidebar/loadHeader");
-		document.getElementById('sidebar-title').innerHTML = this.title;
+		var selection = this.d3selectAndClear('#sidebar-title');
+		selection.text(this.title);
 	};
 	proto.loadFixedSection = function() {
-		console.log("view/sidebar/loadFixedSection");
+		this.populateFixedSelection(this.d3selectAndClear('#sidebar-fixed-section'));
 	};
 	proto.loadScrollableSection = function() {
-		console.log("view/sidebar/loadScrollableSection");
-		document.getElementById('sidebar-scrollable-section').innerHTML = this.getScrollableHtml();
+		this.populateScrollableSelection(this.d3selectAndClear('#sidebar-scrollable-section'));
+	};
+	proto.loadHistoryNavigation = function() {
+		// Fwd/back navigation for moving around the contentStack of a particular sidebar
+		// (e.g. moving between different search results)
+		var buttons = this.presenter.historyNavigation();
+		var buttonClasses = 'w3-teal w3-cell w3-btn w3-border-0';
+		var selection = this.d3selectAndClear('#history-navigation');
+		selection.attr('class', 'w3-cell-row').append('button').
+			// Minor issue: if we add the class w3-mobile to these buttons, then each takes up a whole line
+			// on an iPhone, instad of being next to each other on the same line.
+			attr('class', buttonClasses).
+			on('click', buttons.back.onClick).
+			append('i').
+			attr('class', 'w3-small fa fa-arrow-left');
+
+		selection.append('button').
+			attr('class', buttonClasses).
+			on('click', buttons.forward.onClick).
+			append('i').
+			attr('class', 'w3-small fa fa-arrow-right');
+
 	};
 	proto.reload = function() {
 		this.loadHeader();
 		this.loadFixedSection();
+		this.loadHistoryNavigation();	// back and forward buttons
 		this.loadScrollableSection();
 	};
 	base.prototype = proto;

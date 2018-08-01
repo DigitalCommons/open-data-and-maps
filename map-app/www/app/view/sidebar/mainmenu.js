@@ -12,7 +12,20 @@ define(["app/eventbus", "presenter/sidebar/mainmenu", "view/sidebar/base"], func
 	proto.title = "Main menu";
 
 	proto.getScrollableHtml = function() {
-		return '<button id="about-btn" class="w3-bar-item w3-button w3-mobile">About</button>';
+		return this.presenter.getButtons().map(function(button) {
+			return '<button class="w3-bar-item w3-button w3-mobile">' +
+				button.label +
+				'</button>';
+		}).join('');
+	};
+	proto.populateScrollableSelection = function(selection) {
+		return this.presenter.getButtons().forEach(function(button) {
+			selection.append('button')
+			.attr("class", "w3-bar-item w3-button w3-mobile")
+			.attr("title", button.hovertext)
+			.on('click', button.onClick)
+			.text(button.label)
+		});
 	};
 	Sidebar.prototype = proto;
 
