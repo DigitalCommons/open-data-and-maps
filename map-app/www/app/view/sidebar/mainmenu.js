@@ -12,15 +12,8 @@ define(["app/eventbus", "presenter/sidebar/mainmenu", "view/sidebar/base"], func
 	proto.title = "Main menu";
 	proto.hasHistoryNavigation = false;
 
-	proto.getScrollableHtml = function() {
-		return this.presenter.getButtons().map(function(button) {
-			return '<button class="w3-bar-item w3-button w3-mobile">' +
-				button.label +
-				'</button>';
-		}).join('');
-	};
 	proto.populateScrollableSelection = function(selection) {
-		return this.presenter.getButtons().forEach(function(button) {
+		this.presenter.getButtons().forEach(function(button) {
 			selection.append('button')
 			.attr("class", "w3-bar-item w3-button w3-mobile")
 			.attr("title", button.hovertext)

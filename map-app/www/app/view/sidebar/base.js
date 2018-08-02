@@ -35,20 +35,18 @@ define(["d3", "view/base"], function(d3, view) {
 		var buttons = this.presenter.historyNavigation();
 		var buttonClasses = 'w3-teal w3-cell w3-btn w3-border-0';
 		var selection = this.d3selectAndClear('#sidebar-history-navigation');
-		if (this.hasHistoryNavigation) {
+		function createButton(b, faClass) {
 			selection.attr('class', 'w3-cell-row').append('button').
 				// Minor issue: if we add the class w3-mobile to these buttons, then each takes up a whole line
 				// on an iPhone, instad of being next to each other on the same line.
-				attr('class', buttonClasses).
-				on('click', buttons.back.onClick).
+				attr('class', buttonClasses + (b.disabled ? " w3-disabled" : "")).
+				on('click', function() { b.onClick(); }).
 				append('i').
-				attr('class', 'w3-small fa fa-arrow-left');
-
-			selection.append('button').
-				attr('class', buttonClasses).
-				on('click', buttons.forward.onClick).
-				append('i').
-				attr('class', 'w3-small fa fa-arrow-right');
+				attr('class', 'w3-small fa ' + faClass);
+		}
+		if (this.hasHistoryNavigation) {
+			createButton(buttons.back, "fa-arrow-left");
+			createButton(buttons.forward, "fa-arrow-right");
 		}
 	};
 	proto.reload = function() {

@@ -8,7 +8,7 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 
 	var proto = Object.create(presenter.base.prototype);
 	proto.changeSidebar = function(name) {
-		console.log("presenter/sidebar/changeSidebar");
+		//console.log("presenter/sidebar/changeSidebar");
 		this.view.changeSidebar(name);
 		this.view.showSidebar();
 	};

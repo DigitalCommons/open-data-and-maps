@@ -32,7 +32,7 @@ define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], 
 	};
 	proto.populateScrollableSelection = function(selection) {
 		console.log(this.presenter.getMatches());
-		return this.presenter.getMatches().forEach(function(button) {
+		this.presenter.getMatches().forEach(function(button) {
 			selection.append('button')
 			.attr("class", "w3-bar-item w3-button w3-mobile")
 			.attr("title", button.hovertext)

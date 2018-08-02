@@ -28,6 +28,9 @@ html, body {
 .w3-sidebar, .w3-modal {
 	z-index: 40;
 }
+.w3-sidebar {
+	width: 300px;
+}
 
 .main-btn {
 	height: 40px;

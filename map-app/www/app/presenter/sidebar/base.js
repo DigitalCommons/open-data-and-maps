@@ -21,7 +21,7 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 			return this.current();
 		},
 		next: function() {
-			if (this.index + 1 < this.storage.length - 1) {
+			if (this.index < this.storage.length - 1) {
 				this.index++;
 			}
 			return this.current();
@@ -46,22 +46,37 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 	proto.contentStack = new Stack();
 
 	proto.backButtonClicked = function() {
-		console.log("backButtonClicked");
+		// Closure to retain reference to this
+		var pres = this;
+		return function() {
+			//console.log("backButtonClicked");
+			//console.log(pres);
+			pres.contentStack.previous();
+			pres.view.refresh();
+		}
 	};
 	proto.forwardButtonClicked = function() {
-		console.log("forwardButtonClicked");
+		// Closure to retain reference to this
+		var pres = this;
+		return function() {
+			//console.log("forwardButtonClicked");
+			//console.log(pres);
+			pres.contentStack.next();
+			pres.view.refresh();
+		}
 	};
 
 	proto.historyNavigation = function() {
-		console.log("presenter/sidebar/base/historyNavigation");
+		//console.log("presenter/sidebar/base/historyNavigation");
+		//console.log(this);
 		return {
 			back: {
-				enabled: !this.contentStack.isAtStart(),
-				onClick: this.backButtonClicked
+				disabled: this.contentStack.isAtStart(),
+				onClick: this.backButtonClicked()
 			},
 			forward: {
-				enabled: !this.contentStack.isAtEnd(),
-				onClick: this.forwardButtonClicked
+				disabled: this.contentStack.isAtEnd(),
+				onClick: this.forwardButtonClicked()
 			}
 		};
 	};
