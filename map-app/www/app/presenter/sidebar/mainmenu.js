@@ -34,7 +34,7 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 	// That way, we have looser coupling :-)
 	
 	function createPresenter(view) {
-		var p = new Presenter;
+		var p = new Presenter();
 		p.registerView(view);
 		return p;
 	}

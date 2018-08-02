@@ -25,7 +25,7 @@ define(["app/eventbus", "presenter/sidebar/mainmenu", "view/sidebar/base"], func
 			.attr("class", "w3-bar-item w3-button w3-mobile")
 			.attr("title", button.hovertext)
 			.on('click', button.onClick)
-			.text(button.label)
+			.text(button.label);
 		});
 	};
 	Sidebar.prototype = proto;

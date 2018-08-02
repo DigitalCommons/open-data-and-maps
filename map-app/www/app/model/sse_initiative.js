@@ -22,7 +22,7 @@ define(["app/eventbus", "model/config"], function(eventbus, config) {
 	function search(text) {
 		// returns an array of sse objkects whose name contains the search text
 		var up = text.toUpperCase();
-		return objects.filter(i => i.name.toUpperCase().includes(up));
+		return objects.filter(function(i) { return i.name.toUpperCase().includes(up); });
 	}
 	function loadNextInitiatives() {
 		var i, e;

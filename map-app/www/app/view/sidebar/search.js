@@ -1,5 +1,5 @@
 // The view aspects of the Main Menu sidebar
-define(["app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], function(eventbus, presenter, sidebarView) {
+define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], function(d3, eventbus, presenter, sidebarView) {
 	"use strict";
 
 	// Our local Sidebar object:
@@ -37,7 +37,7 @@ define(["app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], functi
 			.attr("class", "w3-bar-item w3-button w3-mobile")
 			.attr("title", button.hovertext)
 			.on('click', button.onClick)
-			.text(button.label)
+			.text(button.label);
 		});
 	};
 

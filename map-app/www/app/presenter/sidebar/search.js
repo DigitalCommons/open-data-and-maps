@@ -40,8 +40,8 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			return current.matches.map(function(e) {
 				return {
 					label: e.name,
-					onClick: function() { p.showInitiative(e);}
-				}
+					onClick: function() { p.showInitiative(e); }
+				};
 			});
 		}
 		else {
@@ -51,7 +51,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	Presenter.prototype = proto;
 
 	function createPresenter(view) {
-		var p = new Presenter;
+		var p = new Presenter();
 		p.registerView(view);
 		return p;
 	}
