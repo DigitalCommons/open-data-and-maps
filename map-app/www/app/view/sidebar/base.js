@@ -19,10 +19,6 @@ define(["d3", "view/base"], function(d3, view) {
 		// override this default in derived view objects:
 	};
 
-	proto.loadHeader = function() {
-		var selection = this.d3selectAndClear('#sidebar-title');
-		selection.text(this.title);
-	};
 	proto.loadFixedSection = function() {
 		this.populateFixedSelection(this.d3selectAndClear('#sidebar-fixed-section'));
 	};
@@ -33,30 +29,25 @@ define(["d3", "view/base"], function(d3, view) {
 		// Fwd/back navigation for moving around the contentStack of a particular sidebar
 		// (e.g. moving between different search results)
 		var buttons = this.presenter.historyNavigation();
-		var buttonClasses = 'w3-teal w3-cell w3-btn w3-border-0';
+		var buttonClasses = 'w3-teal w3-cell w3-right w3-btn w3-border-0';
 		var selection = this.d3selectAndClear('#sidebar-history-navigation');
-		function createButton(b, faClass) {
-			selection.attr('class', 'w3-cell-row').append('button').
+		function createButton(b, faClass, hovertext) {
+			selection.append('button').
 				// Minor issue: if we add the class w3-mobile to these buttons, then each takes up a whole line
 				// on an iPhone, instad of being next to each other on the same line.
 				attr('class', buttonClasses + (b.disabled ? " w3-disabled" : "")).
+				attr('title', hovertext).
 				on('click', function() { b.onClick(); }).
 				append('i').
-				attr('class', 'w3-small fa ' + faClass);
+				attr('class', 'fa ' + faClass);
 		}
 		if (this.hasHistoryNavigation) {
-			createButton(buttons.back, "fa-arrow-left");
-			createButton(buttons.forward, "fa-arrow-right");
+			// inserted in this order becasue of w3-right on each button
+			createButton(buttons.forward, "fa-arrow-right", "Later search results");
+			createButton(buttons.back, "fa-arrow-left", "Earlier search results");
 		}
 	};
-	proto.reload = function() {
-		this.loadHeader();
-		this.loadFixedSection();
-		this.loadHistoryNavigation();	// back and forward buttons
-		this.loadScrollableSection();
-	};
 	proto.refresh = function() {
-		// Only refreshes things that may change in a sidebar
 		this.loadFixedSection();
 		this.loadHistoryNavigation();	// back and forward buttons
 		this.loadScrollableSection();

@@ -15,7 +15,7 @@ define(["app/eventbus", "presenter/sidebar/mainmenu", "view/sidebar/base"], func
 	proto.populateScrollableSelection = function(selection) {
 		this.presenter.getButtons().forEach(function(button) {
 			selection.append('button')
-			.attr("class", "w3-bar-item w3-button w3-mobile")
+			.attr("class", "w3-bar-item w3-button w3-mobile" + (button.disabled ? " w3-disabled" : ""))
 			.attr("title", button.hovertext)
 			.on('click', button.onClick)
 			.text(button.label);

@@ -28,17 +28,23 @@ define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], 
 	};
 	proto.populateFixedSelection = function(selection) {
 		var pres = this.presenter;
-		selection.append('p').text(pres.getSearchString());
+		selection.append("div").attr("class", "w3-container").append('p').text("Search: " + pres.getSearchString());
 	};
 	proto.populateScrollableSelection = function(selection) {
 		console.log(this.presenter.getMatches());
-		this.presenter.getMatches().forEach(function(button) {
+		var matches = this.presenter.getMatches();
+		if (matches.length > 0) {
+		matches.forEach(function(match) {
 			selection.append('button')
 			.attr("class", "w3-bar-item w3-button w3-mobile")
-			.attr("title", button.hovertext)
-			.on('click', button.onClick)
-			.text(button.label);
+			.attr("title", match.hovertext)
+			.on('click', match.onClick)
+			.text(match.label);
 		});
+		}
+		else {
+			selection.append('div').attr("class", "w3-container w3-center").append('p').text("Nothing matched the search");
+		}
 	};
 
 	proto.createSearchBox = function() {
@@ -53,12 +59,13 @@ define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], 
 			attr('class', 'w3-row w3-border-0');
 		selection.append('div').
 			attr('class', 'w3-col').
-			style('width', '50px').
+			attr('title', "Click to search").
+			style('width', '60px').
 			append('button').
 			attr('type', 'submit').
-			attr('class', 'w3-border-0').
+			attr('class', 'w3-btn w3-border-0').
 			append('i').
-			attr('class', 'w3-xxlarge fa fa-search');
+			attr('class', 'w3-xlarge fa fa-search');
 		selection.append('div').attr('class', 'w3-rest').
 			append('input').
 			attr('id', 'search-box').

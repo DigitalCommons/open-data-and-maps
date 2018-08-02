@@ -7,16 +7,15 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	proto.performSearch = function(text) {
 		console.log("Search submitted: [" + text + "]");
 		// We need to make sure that the search sidebar is loaded
-		eventbus.publish({topic: "Sidebar.loadSearch"});
 		if (text.length > 0) {
+			eventbus.publish({topic: "Sidebar.showSearch"});
 			var results = sseInitiative.search(text);
 			console.log(results);
-			if (results.length > 0) {
-				this.contentStack.append({
-					searchString: text,
-					matches: results
-				});
-			}
+			this.contentStack.append({
+				searchString: text,
+				matches: results
+			});
+			eventbus.publish({topic: "Search.resultsExist"});
 			this.view.refresh();
 		}
 	};

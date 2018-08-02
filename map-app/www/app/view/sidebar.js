@@ -20,10 +20,18 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 			append('i').
 			attr('class', 'fa fa-angle-right');
 	};
-	proto.createHeader = function() {
+	proto.createButtonRow = function() {
 		// d3 selection redefines this, so hang onto it here:
 		var that = this;
 		var selection = this.d3selectAndClear('#sidebar-header').attr('class', 'w3-cell-row');
+
+		// Button for hiding the sidebar:
+		selection.append('button').
+			attr('class', 'w3-teal w3-cell w3-button w3-border-0').
+			attr('title', 'Hide sidebar').
+			on('click', function() { that.hideSidebar(); }).
+			append('i').
+			attr('class', 'fa fa-angle-left');
 
 		// The sidebar has a button that cuases the main menu to be dispayed
 		selection.append('button').
@@ -33,17 +41,10 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 			append('i').
 			attr('class', 'fa fa-bars');
 
-		// Where the sidebar title goes:
-		selection.append('div').
-			attr('class', 'w3-cell w3-center').
-			append('p').attr('id', 'sidebar-title');
+		// This is where the navigation buttons will go.
+		// These are recreated when the sidebar is changed, e.g. from MainMenu to Search.
+		selection = selection.append("i").attr("id", "sidebar-history-navigation");
 
-		// Button for clsing the sidebar:
-		selection.append('button').
-			attr('class', 'w3-teal w3-cell w3-right w3-button w3-border-0').
-			attr('title', 'Hide sidebar').
-			on('click', function() { that.hideSidebar(); }).
-			text('X');
 	};
 	proto.createSidebars = function() {
 		this.sidebar = {
@@ -52,12 +53,14 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 		};
 	};
 	proto.changeSidebar = function(name) {
-		this.sidebar[name].reload();
+		this.sidebar[name].refresh();
 	};
 	proto.showSidebar = function() {
 		d3.select('#sidebar').style('display', 'flex');
 	};
 	proto.hideSidebarIfItTakesWholeScreen = function() {
+		// @todo - improve this test - 
+		// it is not really testing the predicate suggested by the name iof the function.
 		if (window.innerWidth <= 600) {
 			d3.select('#sidebar').style('display', 'none');
 		}
@@ -72,7 +75,7 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 		view = new SidebarView();
 		view.setPresenter(presenter.createPresenter(view));
 		view.createOpenButton();
-		view.createHeader();
+		view.createButtonRow();
 		view.createSidebars();
 		view.changeSidebar('mainMenu');
 	}
