@@ -14,7 +14,9 @@ define(
 				var k = Object.keys(eventHandlers);
 				// For the contextmenu docs, see https://github.com/aratcliffe/Leaflet.contextmenu.
 				map = leaflet.map("map", {
-					contextmenu: true,
+					// set to true to re-enable context menu.
+					// See https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/78
+					contextmenu: false,
 					contextmenuWidth: 140,
 					contextmenuItems: presenter.getContextmenuItems()
 				});

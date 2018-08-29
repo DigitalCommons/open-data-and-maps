@@ -10,6 +10,9 @@ define(["app/eventbus"], function(eventbus) {
 	}
 	// TODO - return contextmenuitems as a property of settings in registerView.
 	function getContextmenuItems() {
+		// The context menu has been disabled (in www/app/view/map.js), in accordance with 
+		// https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/78
+		// So, don't expect this to do anything!
 		return [
 			{
 				text: "Placehoder 1 - does nothing",
