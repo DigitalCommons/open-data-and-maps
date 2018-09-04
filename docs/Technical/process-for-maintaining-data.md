@@ -112,10 +112,171 @@ Imagine running a 'mapjam' workshop where the focus was on a spreadsheet.
 
 Not only is this ugly and unfriendly, but it also lacks a method to intereactively position something on a map.
 
+### Maintaining a dataset using uMap
 
-TODO - document scenarios
-- New data created in map jam
-- Situation where someone else hosts map and data
+From https://wiki.openstreetmap.org/wiki/UMap:
+
+> uMap lets you create a map with OpenStreetMap layers and embed it in your site. 
+
+... and it's a great open source tool for creating a map based on OSM.
+But our problem is a bit different: our goal is to maintain an LOD dataset, rather than to create a map.
+This section contains findings from an investigation into using uMap to maintain an LOD dataset.
+
+The most commonly used instance of uMap is hoseted at https://umap.openstreetmap.fr/
+
+> Free usage without charge open to anyone. Warning, the service is very busy but does not offer any commercial support; it is not warrantied to work permanently and may temporarily be unavailable 
+
+
+#### Authentication and authorization
+
+uMap does not itself support autentication of the person editing it.
+
+There are 2 settings for authorization:
+- the whole world can edit the map, or
+- only those with the 'secret link' (a URL with a long string of seemingly random characters in it) can edit the map.
+
+This is a very weak form of protection. URLs tend to get copied, e.g. in emails, and can then easily escape into the wild.
+It is unreasonable for the 'average user' to understand the differences between 2 URLs - one of which grants permission to edit the data, and the other which does not.
+
+With this scheme, it would not be possible to track who had made which changes to the data.
+
+#### Importing data into uMap
+
+uMap can import a variety of formats, including CSV.
+
+We created an [experimental CSV file](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/blob/master/data/umap/experiments/example-umap-import.csv)
+for testing. It was based on a CSV file that was generated during the process of converting CSV to RDF.
+Here's a fragment of the CSV:
+```
+Identifier,Name,Description,Legal Forms,Street Address,Locality,Region,Postcode,Country Name,Website,Companies House Number,IgnoredLat,IgnoredLong,Geo Container,Latitude,Longitide
+2020,20/20 Housing Co-operative,,Cooperative,,,,B13 8AB,,,,,,http://data.ordnancesurvey.co.uk/id/postcodeunit/B138AB,52.451880,-1.889728
+2rivers,M&S Community Energy Society,,Cooperative,,,,LA14 2PN,,https://www.mandsenergysociety.com/,,,,http://data.ordnancesurvey.co.uk/id/postcodeunit/LA142PN,54.118489,-3.241650
+3mules,3 Mules Coop LLP,,Cooperative,,,,M155RF,,,,,,http://data.ordnancesurvey.co.uk/id/postcodeunit/M155RF,53.465469,-2.248348
+```
+
+Most importantly, the headers in the first row of the CSV must be understandable by uMap. 
+This applies particularly to 
+- Latitude
+- Longitude
+
+The data was successfully loaded into uMap.
+
+#### Editing fields
+
+All of the fields included in the original CSV are now available for editing.
+
+The lat and long fields are editable by dragging the icon on the map.
+This is so easy to do that it is easy to do by accident!!
+
+In the example CSV file, there's a column called 'Identifier'. 
+This should not be edited!
+But there does not seem to be a way to prevent this, other than deleting it from the CSV input.
+But if we do that, we won't have it available when we want to export the data.
+
+#### Creating new initiatives
+
+Right-click on the map and choose `Add Marker` from the context menu.
+
+Interestingly: the fields available for input match those provided in the input CSV file.
+
+#### Saving data on uMap
+
+Question: What happens if more than one instance of the map has been updated in different browsers at the same time?
+In an attempt to test this, I tried loading the uMap into Safari (I had originally been working in Chrome): The button to edit the map did not appear in Safari. Why not?
+I then tried in Firefox, with the same result: no edit button. Why? Perhaps this is to do with authentication/authorization?
+Solution: It's about editing permissions! For example, you can share the 'secret link' (ho ho) that allows the map to be edited.
+
+Answer: You get an error message after clicking `Save`:
+> Woops! Someone else seems to have edited the data. You can save anyway, but this will erase the changes made by others.
+
+That allows you to choose between wiping out all of your changes, or wiping out all of someone else's changes. 
+I don't think there's an option to see what changes you are about to wipe out.
+
+#### Exporting data
+
+Do this via the icon whose hovertext is `Embed and share this map`.
+This opens a dialogue which allows on to choose to download `Full Map Data`.
+This downloads a file with extension `.umap` which is in JSON format.
+Here's a fragment:
+```
+        {
+          "type": "Feature",
+          "properties": {
+            "Identifier": "2020",
+            "Name": "20/20 Housing Co-operative",
+            "Description": "",
+            "Legal Forms": "Cooperative",
+            "Street Address": "",
+            "Locality": "",
+            "Region": "",
+            "Postcode": "B13 8AB",
+            "Country Name": "",
+            "Website": "",
+            "Companies House Number": "",
+            "IgnoredLat": "",
+            "IgnoredLong": "",
+            "Geo Container": "http://data.ordnancesurvey.co.uk/id/postcodeunit/B138AB"
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -1.889728,
+              52.45188
+            ]
+          }
+        },
+
+```
+
+#### How to update our LOD
+
+At any point, we can take a dump of the JSON from the uMap.
+This requires 'expert' intervention to decide when to do this.
+The mechanism for creating the JSON dump is via the uMap user interface.
+If this is the only mechanism for doing this, then it is difficult to automate.
+
+#### Problems with uMap as a dataset editor
+
+We need to bare in mind that uMap is intended to edit a map, not a dataset.
+It is a general-purpose tool that does not understand the peculiarities of our requirements.
+
+Users may reasonably think that the uMap *is* the production map.
+If they have any problems with the somewhat complicated process of converting the uMap data into LOD, then they may well fall back on the uMap as their map, and in doing so, our goals to create LOD will not be met.
+
+The process of taking uMap data and creating LOD will require manual steps by an 'expert'. 
+So there is likely to be delay (could easily be hours or even days) between ediiting uMap and the results being available on the LOD-based map.
+
+It's very easy to accidentally move a Marker. 
+If the user clicks on a marker, then holds down the mouse for a short while, any subsequent mouse movement will be interpretted as a request to relocate the marker.
+Accidents are inevitable.
+
+Currently, we often locate initiatives approximately using postcode. 
+But we also provide LOD fields for specifying the location more accurately.
+In the LOD, we can distinguish between initiatives that are using the approximate location, and those that have a precise location specified.
+This distinction is likely to be lost in uMap.
+
+We must provide a unique identifier (from which the URI id derived) for each initiative.
+This must be included in the data we load into uMap so that we can track which initiative is being updated.
+This becomes broken if the user modifies the identifier within uMap.
+But it is not possible to specify that the identifier field cannot be edited in uMap.
+
+uMap saves changes to the data for the whole dataset as one big lump.
+So, if the data is being edited by two instances of uMap at the same time, there is the potential to loose a large amount of data.
+
+We can't specify validation criteria for fields. 
+In particular, when we have a field that can only take one of a fixed set of possible values (and that's normal for fields specifying taxonomic info), we can't enforce this.
+Workaround: invalid field values will have to be cleaned up manually.
+
+The Linked Data we generate for sse initiatives is located by a point (lat, long).
+uMap allows features to be created which are polylines or polygons.
+If a user exploits this feature of uMap, it will appear to work (the feature is created in uMap),
+but we won't be able to generate LOD from the result.
+
+
+
+ 
+
+
 
 TODO - objectives. The underlying requirement is maintain a dataset. The triplestore is (probably) the 'master' copy of the data
 
