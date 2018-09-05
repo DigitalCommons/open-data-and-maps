@@ -127,7 +127,7 @@ The most commonly used instance of uMap is hoseted at https://umap.openstreetmap
 > Free usage without charge open to anyone. Warning, the service is very busy but does not offer any commercial support; it is not warrantied to work permanently and may temporarily be unavailable 
 
 
-#### Authentication and authorization
+#### Authentication and authorization in uMap
 
 uMap does not itself support autentication of the person editing it.
 
@@ -161,7 +161,7 @@ This applies particularly to
 
 The data was successfully loaded into uMap.
 
-#### Editing fields
+#### Editing fields on uMap
 
 All of the fields included in the original CSV are now available for editing.
 
@@ -173,7 +173,7 @@ This should not be edited!
 But there does not seem to be a way to prevent this, other than deleting it from the CSV input.
 But if we do that, we won't have it available when we want to export the data.
 
-#### Creating new initiatives
+#### Creating new initiatives on uMap
 
 Right-click on the map and choose `Add Marker` from the context menu.
 
@@ -192,7 +192,7 @@ Answer: You get an error message after clicking `Save`:
 That allows you to choose between wiping out all of your changes, or wiping out all of someone else's changes. 
 I don't think there's an option to see what changes you are about to wipe out.
 
-#### Exporting data
+#### Exporting data from uMap
 
 Do this via the icon whose hovertext is `Embed and share this map`.
 This opens a dialogue which allows on to choose to download `Full Map Data`.
@@ -228,51 +228,84 @@ Here's a fragment:
 
 ```
 
-#### How to update our LOD
+#### How to update our LOD from uMap
 
 At any point, we can take a dump of the JSON from the uMap.
 This requires 'expert' intervention to decide when to do this.
 The mechanism for creating the JSON dump is via the uMap user interface.
 If this is the only mechanism for doing this, then it is difficult to automate.
 
+The JSON must then be copied to a place where it can be picked up be a conversion process.
+
+The conversion process may well find errors (given the list of problems below).
+It is unfortunate that these errors may only be found days after the error was made, during a uMap editing session.
+Errors are always easier to fix if they can be reported at the time they are made.
+
+If there are several JSON dumps, then it will require 'expert' intervention to select which ones to process, which to ignore, what order to process them in etc.
+
 #### Problems with uMap as a dataset editor
 
 We need to bare in mind that uMap is intended to edit a map, not a dataset.
 It is a general-purpose tool that does not understand the peculiarities of our requirements.
 
-Users may reasonably think that the uMap *is* the production map.
+- Users may reasonably think that the uMap *is* the production map.
 If they have any problems with the somewhat complicated process of converting the uMap data into LOD, then they may well fall back on the uMap as their map, and in doing so, our goals to create LOD will not be met.
 
-The process of taking uMap data and creating LOD will require manual steps by an 'expert'. 
+- The process of taking uMap data and creating LOD will require manual steps by an 'expert'. 
 So there is likely to be delay (could easily be hours or even days) between ediiting uMap and the results being available on the LOD-based map.
 
-It's very easy to accidentally move a Marker. 
+- It's very easy to accidentally move a Marker. 
 If the user clicks on a marker, then holds down the mouse for a short while, any subsequent mouse movement will be interpretted as a request to relocate the marker.
 Accidents are inevitable.
 
-Currently, we often locate initiatives approximately using postcode. 
+- Currently, we often locate initiatives approximately using postcode. 
 But we also provide LOD fields for specifying the location more accurately.
 In the LOD, we can distinguish between initiatives that are using the approximate location, and those that have a precise location specified.
 This distinction is likely to be lost in uMap.
 
-We must provide a unique identifier (from which the URI id derived) for each initiative.
+- We must provide a unique identifier (from which the URI id derived) for each initiative.
 This must be included in the data we load into uMap so that we can track which initiative is being updated.
 This becomes broken if the user modifies the identifier within uMap.
 But it is not possible to specify that the identifier field cannot be edited in uMap.
 
-uMap saves changes to the data for the whole dataset as one big lump.
+- uMap saves changes to the data for the whole dataset as one big lump.
 So, if the data is being edited by two instances of uMap at the same time, there is the potential to loose a large amount of data.
 
-We can't specify validation criteria for fields. 
+- We can't specify validation criteria for fields. 
 In particular, when we have a field that can only take one of a fixed set of possible values (and that's normal for fields specifying taxonomic info), we can't enforce this.
 Workaround: invalid field values will have to be cleaned up manually.
 
-The Linked Data we generate for sse initiatives is located by a point (lat, long).
+- The Linked Data we generate for sse initiatives is located by a point (lat, long).
 uMap allows features to be created which are polylines or polygons.
 If a user exploits this feature of uMap, it will appear to work (the feature is created in uMap),
 but we won't be able to generate LOD from the result.
 
 
+
+### Update existing map software to provide editor
+
+Of course, we don't want to develop more software if we don't have to.
+But the list of problems withe uMap is sufficiently long that we should at least consider what might be required.
+
+Developing our own editor allows us to exploit our domain-specific needs, to get a made-to-measure solution.
+
+### How it might work
+
+First we need to authenticate any user, and check their authorization to change the dataset.
+Any changes they make will be tagged with something to identify them (e.g. user name).
+
+Let's assume that we are going to modify the triple store directly.
+
+The editor can work at a fine level of granularity: the change to any field in the data can be treated as an atomic transaction.
+
+To sketch a possible architectire:
+- user modifies a field
+- the modification request is sent to the web server that served the map
+- the web server invokes an *update engine*, a process to implement the modification
+- the update engine requests updates to the triplestore using SPARQL 1.1 update (see [Virtuoso SPARQL 1.1. Update Examples](http://vos.openlinksw.com/owiki/wiki/VOS/VirtTipsAndTricksSPARQL11Update)
+- the update engine returns the success or failure to the original requester (the map app).
+
+TODO: read [Deploying PHP applications using Virtuoso as Application Server](http://vos.openlinksw.com/owiki/wiki/VOS/VirtuosoPHP).
 
  
 
