@@ -280,6 +280,10 @@ uMap allows features to be created which are polylines or polygons.
 If a user exploits this feature of uMap, it will appear to work (the feature is created in uMap),
 but we won't be able to generate LOD from the result.
 
+- Sometimes we can't generate a geo-location for an initiative (e.g. due to an error in the postcode). 
+But we still create LOD for the initiative.
+These initiatives will never appear on a uMap, so the uMap can't be used to give them a geo-location.
+
 
 
 ### Update existing map software to provide editor
@@ -289,7 +293,7 @@ But the list of problems withe uMap is sufficiently long that we should at least
 
 Developing our own editor allows us to exploit our domain-specific needs, to get a made-to-measure solution.
 
-### How it might work
+#### How it might work
 
 First we need to authenticate any user, and check their authorization to change the dataset.
 Any changes they make will be tagged with something to identify them (e.g. user name).
@@ -307,7 +311,91 @@ To sketch a possible architectire:
 
 TODO: read [Deploying PHP applications using Virtuoso as Application Server](http://vos.openlinksw.com/owiki/wiki/VOS/VirtuosoPHP).
 
+#### Authentication
+
+We need to provide a way for a user to authenticate (login).
+The [PHP-Auth library](https://github.com/delight-im/PHP-Auth) looks excellent.
+It includes things like email verification, which is nice.
+
+Presumably we'd use [PHP Mail](https://www.w3schools.com/php/php_ref_mail.asp) for sending email.
+We shouldn't need to receive email. (I think).
+
+This requires that we have mail set up on the web server.
+A good option may be SSMTP which should allow us to use an existing SMTP server (e.g. webarch), without the need to get `sendmail` up and running in a way that satisfies gmail, etc.
+
+#### User Interface
+
+After authentication, an authorized user can then see a button, or menu option that puts the app into `edit-mode`.
+
+In `edit-mode`, new menu options appear for each initiative's marker:
+- re-position
+- edit details
+
+There may be some extra options that recognize the difference between a marker that has been positioned precisely, as opposed to one that is positioned via its geo-container (e.g. postcode). 
+
+When re-positioning, the marker becomes draggable. We need to decide what user action makes the marker no longer draggable.
+
+When editing details, a form is presented, perhaps in the sidebar, perhaps in a modal dialogue.
+
+Changes are sent to the web server as 'transactions'. There needs to be a way to display feedback from the server to these transactions (errors, warnings, confirmations).
+
+An undo mechanism would be highly desirable. 
+
+This mechanism should support highly granular changes: usually one field at a time.
+
+#### Editor configuration and validation
+
+Some editable fields are plain text. Others require some configuration.
+For example, when the field value comes from a fixed set (e.g. often the case for taxonomy items), a suitable UI widget should be used (e.g. drop-down menu, radio buttons, etc).
+
+We should look at configuring these directly from the LD triples that describe the field. 
+Using this mechanism, it also becomes possible to switch language where translations are available (as is the case for many fields in ESSGLOBAL).
+
+Properly configured UI components reduce the chance of error.
+If further validation is needed, we should investigate if this can also be specified in the LD triples that define the field.
+
+##### Configuring new fields
+
+There are two scenarios to consider:
+- An initiative has no data for a particular field, but that field is commonly used for initiatives.
+- We want to introduce a new field that is not used by any initiative.
+
+These are both common scenarios.
+We need to design a method for doing this that is as lightweight as possible, making it easy to add new fields.
+
+Perhaps field definitions are available as triples from the triplestore, and these are loaded into the app when it is put into `edit-mode`?
+
+#### What about initiatives without a valid geo-location?
+
+In the absense of precise location information, our current approach is to create LOD with approximate geo-location using, for example, postcodes.
+Sometimes, there is not a postcode for which we can find a geo-location (e.g. missing postode, error in postcode, new postcode, no geo-location available (e.g. for Northern Ireland postcodes) etc).
+We still create LOD for these iitiatives, by obviously, they can't appear on a map.
+
+We should provide a way to list these locationless initiatives so that the user can drag them to a position on the map.
+Ideally, the UI lets us drag them directly onto the map. 
+In any case, there should be a context menu (or similar thing) that allows the locationless initiative to be selected and then positioned.
+
+#### Editing on a mobile device?
+
+It may be that we restrict editing to desktop devices (more accurately, to devices that have enough pixels to simultaneously show a sidebar and the map).
+More investigation needed.
+
+#### Additions to LOD
+
+We should include a `modification time` to show when something was last modified.
+It would probably be sufficient to do this per initiative, rather than per 'field'.
+
+We may want to provide an audit trail for the changes to each initiative.
+
+It is likely to be useful if each initiative has a `comment` predicate, possible a list of comments.
+This can be used for anything that an editor wants to add that is not possible in the fixed set of existing fields.
+
+
+
+
  
+
+
 
 
 
