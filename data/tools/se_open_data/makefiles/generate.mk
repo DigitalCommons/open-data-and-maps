@@ -18,7 +18,7 @@ include $(MAKEFILE_INC_DIR)load_edition.mk
 include $(MAKEFILE_INC_DIR)files.mk
 include $(MAKEFILE_INC_DIR)uris.mk
 
-$(eval $(call var_check,SAMEAS_CSV,CSV file containing pairs of URIs that refer to the same SSE initiative))
+$(eval $(call var_check_warning,SAMEAS_CSV,CSV file containing pairs of URIs that refer to the same SSE initiative))
 $(eval $(call var_check,STANDARD_CSV,CSV file containing initiatives to be converted to RDF))
 $(eval $(call var_check,CSS_SRC_DIR,Directory containing CSS files (to be deployed)))
 
@@ -38,8 +38,8 @@ all: $(STANDARD_CSV) $(SAMEAS_CSV) css | $(GEN_DOC_DIR) $(GEN_VIRTUOSO_DIR) $(GE
 	  --uri-prefix $(DATASET_URI_BASE) \
 	  --essglobal-uri $(ESSGLOBAL_URI) \
 	  --one-big-file-basename $(ONE_BIG_FILE_BASENAME) \
-	  --sameas-csv $(SAMEAS_CSV) \
-	  --sameas-headers $(SAMEAS_HEADERS) \
+	  --sameas-csv '$(SAMEAS_CSV)' \
+	  --sameas-headers '$(SAMEAS_HEADERS)' \
 	  --map-app-sparql-query-filename $(SPARQL_GET_ALL_FILE) \
 	  --css-files '$(subst $(space),$(comma),$(DEPLOYED_CSS_FILES))' \
 	  $<

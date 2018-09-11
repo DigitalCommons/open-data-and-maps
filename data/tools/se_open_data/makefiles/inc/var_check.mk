@@ -12,3 +12,10 @@ $$(error Fatal error - check that you have set edition=<x> on the command line, 
 endif
 endef
 
+define var_check_warning
+ifndef $(1)
+$$(info Variable not defined: $(1) - $(2))
+$$(warning Warning - To fix it, check that you have set edition=<x> on the command line, and that the file <x>.mk defines $(1))
+endif
+endef
+

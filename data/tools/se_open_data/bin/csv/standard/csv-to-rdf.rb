@@ -61,7 +61,8 @@ class OptParse
       end
       opts.on("--sameas-csv FILENAME",
               "Name of CSV file with OWL sameAs relations. If defined, --sameas-headers mus be defined too") do |filename|
-        options.sameas_csv = filename
+        #$stderr.puts "--sameas-csv FILENAME: |#{filename}|"
+        options.sameas_csv = filename.empty? ? nil : filename
       end
       opts.on("--sameas-headers HEADERS", Array,
               "CSV file where the equlivalent URIs are stored") do |headers|
