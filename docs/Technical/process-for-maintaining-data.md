@@ -307,9 +307,12 @@ To sketch a possible architectire:
 - the modification request is sent to the web server that served the map
 - the web server invokes an *update engine*, a process to implement the modification
 - the update engine requests updates to the triplestore using SPARQL 1.1 update (see [Virtuoso SPARQL 1.1. Update Examples](http://vos.openlinksw.com/owiki/wiki/VOS/VirtTipsAndTricksSPARQL11Update)
+Note that I don't think (needs checking) that Virtuoso supports `INSERT DATA`, but it supports `INSERT`.
+There are various methods of securing a SPARQL endpoint on Virtuoso, oncluding OAUTH, WebID and 'digest authentication'.
 - the update engine returns the success or failure to the original requester (the map app).
 
 TODO: read [Deploying PHP applications using Virtuoso as Application Server](http://vos.openlinksw.com/owiki/wiki/VOS/VirtuosoPHP).
+Does that provide a better way to interface the web server (serving map-app) to Virtuoso?
 
 #### Authentication
 
@@ -322,6 +325,7 @@ We shouldn't need to receive email. (I think).
 
 This requires that we have mail set up on the web server.
 A good option may be SSMTP which should allow us to use an existing SMTP server (e.g. webarch), without the need to get `sendmail` up and running in a way that satisfies gmail, etc.
+See http://edoceo.com/howto/ssmtp for example configurations.
 
 #### User Interface
 
