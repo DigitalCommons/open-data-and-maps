@@ -6,6 +6,7 @@ module SeOpenData
       attr_reader :row, :headers
       def initialize(row, headers)
         @row, @headers = row, headers
+        @comments = []
       end
       def postcode_normalized
         return "" unless postcode
@@ -13,6 +14,13 @@ module SeOpenData
       end
       def method_missing(method, *args, &block)
         @headers.keys.include?(method) ?  @row[@headers[method]] : nil
+      end
+      def add_comment(comment)
+        @comments << comment
+      end
+      def row_with_comments
+        new_row = ::CSV::Row.new(row.headers(), row.fields)
+        new_row << @comments.join("\n")
       end
     end
   end
