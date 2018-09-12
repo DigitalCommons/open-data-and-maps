@@ -18,6 +18,9 @@ module SeOpenData
             CGI.escapeHTML(::File.open(filename, "rb").read)
           }
         }
+        # Ongoing investigations into encoding issues:
+        # This fails with an error that something can't be converted.
+        #}.encode(Encoding::UTF_8)
       end
       def save_file(opts)       # named params :html, :dir, :basename, :filename
         # Only use :dir and :basename if :filename is missing:

@@ -34,11 +34,27 @@ module SeOpenData
             } +
             summary +
             sameas_links +
+            # The positioning of this begin/rescule block is part of an ongoing investigation into 
+            # problems with incompatible encodings. 
+            begin
             table_of_csv_input +
             links_to_other_datasets +
             links_to_rdf_browsers +
             html_fragment_for_inserted_code("Machine readable data: RDF/XML format", rdf_file) +
             html_fragment_for_inserted_code("Machine readable data: RDF Turtle format", ttl_file)
+            rescue => e
+              puts "Exception involving html_fragment_for_inserted_code for initiative #{initiative.id}."
+              puts "initiative.name encoding: #{initiative.name.encoding}"
+              puts "summary encoding: #{summary.encoding}"
+              puts "sameas_links encoding: #{sameas_links.encoding}"
+              puts "table_of_csv_input encoding: #{table_of_csv_input.encoding}"
+              puts "links_to_other_datasets encoding: #{links_to_other_datasets.encoding}"
+              puts "links_to_rdf_browsers encoding: #{links_to_rdf_browsers.encoding}"
+              puts "html_fragment_for_inserted_code(, rdf_file)  encoding: #{html_fragment_for_inserted_code("Machine readable data: RDF/XML format", rdf_file) .encoding}"
+              puts "html_fragment_for_inserted_code(, ttl_file)  encoding: #{html_fragment_for_inserted_code("Machine readable data: RDF/XML format", ttl_file) .encoding}"
+              puts e.inspect
+              "" 
+            end
           }
         }
         rescue => e
