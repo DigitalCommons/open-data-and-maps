@@ -26,8 +26,7 @@ CSV_target := csv
 .DEFAULT_GOAL := $(CSV_target)
 
 # Source files:
-$(warn Need to add or combine Newcastle and Gateshead data)
-ORIGINAL_CSV := $(SRC_CSV_DIR)DA-Groups-and-Engagement-Gateshead.csv
+ORIGINAL_CSV := $(SRC_CSV_DIR)DA-Groups-and-Engagement-Combined.csv
 
 # Here's the directory where we generate intermediate csv files
 GEN_CSV_DIR := $(TOP_OUTPUT_DIR)csv/
