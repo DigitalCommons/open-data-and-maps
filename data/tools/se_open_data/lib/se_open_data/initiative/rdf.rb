@@ -60,15 +60,19 @@ module SeOpenData
           { lat: initiative.geocontainer_lat, lng: initiative.geocontainer_lon } : nil
       end
       def legal_form_uris
-        # Returns array of URIs
-        initiative.legal_forms.split(config.csv_standard::SubFieldSeparator).map {|form|
-          if config.legal_form_lookup.has_label?(form)
-            ::RDF::URI(config.legal_form_lookup.concept_uri(form))
-          else
-            $stderr.puts "Could not find legal-form: #{form}"
-            nil
-          end
-        }.compact       # To remove any nil elements added above.
+        # @returns array of URIs
+        if initiative.legal_forms.nil?
+          []
+        else
+          initiative.legal_forms.split(config.csv_standard::SubFieldSeparator).map {|form|
+            if config.legal_form_lookup.has_label?(form)
+              ::RDF::URI(config.legal_form_lookup.concept_uri(form))
+            else
+              $stderr.puts "Could not find legal-form: #{form}"
+              nil
+            end
+          }.compact       # To remove any nil elements added above.
+        end
       end
 
       def populate_graph(graph)
