@@ -11,13 +11,20 @@ def website_to_homepage(website)
   $stderr.puts("Need to implement website_to_homepage")
   website
 end
-def street_address_to_postcode(street_address)
-  $stderr.puts("Need to implement street_address_to_postcode")
+def uk_postcode?(s)
+  uk_postcode_regex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/
+  uk_postcode_regex.match(s)
+end
 
+def street_address_to_postcode(street_address)
   if street_address.nil?
     nil
   else
-    street_address.rstrip.split("\n").last.upcase.gsub(/[^A-Z0-9 ]/, "")
+    postcode = street_address.rstrip.split("\n").last.upcase.gsub(/[^A-Z0-9 ]/, "")
+    unless uk_postcode?(postcode)
+      $stderr.puts "Doesn't match postcode regex: #{postcode}"
+    end
+    postcode
   end
 end
 def domain_to_homepage(domain)  # UNUSED
