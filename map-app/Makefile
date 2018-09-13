@@ -17,8 +17,9 @@ $(eval $(call var_check,SERVER_BASE_DIR,Base deployment directory on server (mus
 $(eval $(call var_check,SERVER_APP_SUBDIR,Directory under SERVER_BASE_DIR to deploy to (will be created during deployment)))
 $(eval $(call var_check,SRC_CONFIG_JSON,JSON config file to be loaded into the running map-app))
 $(eval $(call var_check,DEPLOYED_MAP_URL,URL where map will be found after deployment))
+$(eval $(call var_check_warning,HTACCESS_FILE,Name of .htaccess file to be deployed to server,If absent no .htaccess will be deployed and that's usually fine))
 
-.PHONY: help lint configure build deploy-dry-run deploy
+.PHONY: help lint configure build deploy-dry-run deploy deploy_htaccess
 .PHONY: build_map
 .DEFAULT_GOAL: help
 
@@ -111,6 +112,15 @@ $(call SERVER_CMD,'cd $(SERVER_BASE_DIR) && mkdir -p $(2)')
 $(RSYNC) $(3) $(1) $(SERVER):$(SERVER_BASE_DIR)$(2)
 endef
 
+ifdef HTACCESS_FILE
+deploy_htaccess:
+	@echo "$(HTACCESS_FILE) will be copied"
+	$(RSYNC)  $(HTACCESS_FILE) $(SERVER):$(SERVER_BASE_DIR)$(SERVER_APP_SUBDIR).htaccess
+else
+deploy_htaccess:
+	@echo "No htaccess file"
+endif
+
 deploy-dry-run: build
 	@echo "------------------------------------------------------------"
 	@echo " DEPLOY-DRY-RUN starts here:"
@@ -118,7 +128,7 @@ deploy-dry-run: build
 	@echo ""
 	$(call DEPLOY_DIR,$(BUILD_DIR),$(SERVER_APP_SUBDIR),--dry-run)
 
-deploy: build
+deploy: build deploy_htaccess
 	$(call DEPLOY_DIR,$(BUILD_DIR),$(SERVER_APP_SUBDIR))
 	@echo "There are subdirectories of www/services that contain info for querying datasets via SPARQL."
 	@echo "Make sure they are up to date."

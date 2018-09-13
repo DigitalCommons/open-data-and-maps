@@ -12,3 +12,10 @@ $$(error Fatal error - check that you have set variant=<x> on the command line, 
 endif
 endef
 
+define var_check_warning
+ifndef $(1)
+$$(info Variable not defined: $(1) - $(2))
+$$(warning $(3))
+endif
+endef
+

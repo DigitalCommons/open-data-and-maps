@@ -17,3 +17,4 @@ DEPLOYED_MAP_URL := https://internal.solidarityeconomy.coop/maps/$(SERVER_APP_SU
 # JSON file for this configuration, to be loaded into the running map-app:
 SRC_CONFIG_JSON := variants/$(PARENT_VARIANT)/config.json
 
+HTACCESS_FILE := variants/$(PARENT_VARIANT)/internal-newcastle-pilot.htaccess
