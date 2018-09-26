@@ -15,7 +15,7 @@ module SeOpenData
             heading
           } +
           xml(:pre) {
-            CGI.escapeHTML(::File.open(filename, "rb").read)
+            CGI.escapeHTML(::File.open(filename, "r").read)
           }
         }
         # Ongoing investigations into encoding issues:
