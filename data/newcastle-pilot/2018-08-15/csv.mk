@@ -43,6 +43,9 @@ STD_DE_DUPED_CSV := $(GEN_CSV_DIR)de-duplicated.csv
 STD_DUPS_CSV := $(GEN_CSV_DIR)ignored-duplicates.csv
 STD_URI_NAME_POSTCODE_CSV := $(GEN_CSV_DIR)uri-name-postcode.csv
 
+# CSV report file (copy of the original, but with a column of comments added)
+REPORT_CSV := $(GEN_CSV_DIR)report.csv
+
 
 # Some local scripts to help with the conversion:
 ORIGINAL_CONVERTER := converter.rb
@@ -65,7 +68,7 @@ RUBY := ruby -I $(SE_OPEN_DATA_LIB_DIR)
 
 # Convert original csv to the standard csv:
 $(STD_ORIGINAL_CSV) : $(ORIGINAL_CSV) $(ORIGINAL_CONVERTER) | $(GEN_CSV_DIR)
-	$(RUBY) $(ORIGINAL_CONVERTER) $< > $@
+	$(RUBY) $(ORIGINAL_CONVERTER) $(REPORT_CSV) $< > $@
 
 # Where duplicate id values are found, add a number in order to de-duplicate them:
 $(STD_FIXED_DUPS_CSV) : $(STD_ORIGINAL_CSV)  | $(GEN_CSV_DIR)

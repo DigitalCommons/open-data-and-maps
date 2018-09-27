@@ -3,6 +3,10 @@
 
 require 'se_open_data'
 
+# EXPECTS the name of the report CSV file to be provided as a simple argument:
+ReportCsv = ARGV.shift
+$stderr.puts "A report will be written to #{ReportCsv}"
+
 # This is the CSV standard that we're converting into:
 OutputStandard = SeOpenData::CSV::Standard::V1
 
@@ -103,7 +107,7 @@ end
 #   The return value of the method in DotCoopV1Reader whose name is symbol, or
 #   Empty if neither of the above apply.
  
-SeOpenData::CSV.set_csv_comment_filename("input_csv_with_comments.csv")
+SeOpenData::CSV.set_csv_comment_filename(ReportCsv)
 SeOpenData::CSV.convert(
   # Output:
   $stdout, OutputStandard::Headers,
