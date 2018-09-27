@@ -9,8 +9,12 @@ define(["json!configuration/config", "json!configuration/version.json"], functio
 		//console.log(config_json);
 		return config_json.namedDatasets;
 	}
+	function htmlTitle() {
+		return config_json.htmlTitle;
+	}
 	var pub = {
-		namedDatasets: namedDatasets
+		namedDatasets: namedDatasets,
+		htmlTitle: htmlTitle
 	};
 	return pub;
 });
