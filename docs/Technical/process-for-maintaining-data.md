@@ -327,6 +327,8 @@ This requires that we have mail set up on the web server.
 A good option may be SSMTP which should allow us to use an existing SMTP server (e.g. webarch), without the need to get `sendmail` up and running in a way that satisfies gmail, etc.
 See http://edoceo.com/howto/ssmtp for example configurations.
 
+If we want to use [WebId 1.0](https://www.w3.org/2005/Incubator/webid/spec/), there's a go how-to guide [WebID – A Guide For The Clueless](https://trueg.wordpress.com/2012/03/15/webid-a-guide-for-the-clueless/).
+
 #### User Interface
 
 After authentication, an authorized user can then see a button, or menu option that puts the app into `edit-mode`.
