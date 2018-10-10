@@ -108,10 +108,12 @@ define(["app/eventbus"], function(eventbus) {
 		view.addMarker(latlng, options, eventHandlers);
 	}
 	function onInitiativeLoadComplete() {
-		view.clearProtectingVeil();
+		/* The protecting veil is now obsolete. */
+		//view.clearProtectingVeil();
 	}
 	function onInitiativeLoadMessage(data/*, envelope*/) {
-		view.showProtectingVeil(data.message);
+		/* The protecting veil is now obsolete. */
+		//view.showProtectingVeil(data.message);
 	}
 	function onInitiativeSelected(data) {
 		console.log('onInitiativeSelected');

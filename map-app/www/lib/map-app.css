@@ -10,6 +10,7 @@
  * The css for specific re-uses of this app go in www/styles/
  */
 div.protectingVeil
+/* The protecting veil is now obsolete. */
 {
 	/* This code was taken from http://stackoverflow.com/a/159962/685715 */
     background-color: white;
@@ -37,10 +38,12 @@ div.mapContainer {
 	z-index: 10;	/* lower than z-index of protectingVeil. */
 }
 div.protectingVeilMessageContainer {
+	/* The protecting veil is now obsolete. */
 	position:relative;
 	height: 100%;
 }
 div.protectingVeilMessageContainer p {
+	/* The protecting veil is now obsolete. */
 	/* Code to centre text taken from https://www.w3.org/Style/Examples/007/center.en.html */
 	margin: 0;
 	font-size: 250%;

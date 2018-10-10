@@ -38,20 +38,21 @@ define(
 		function addMarker(latlng, options, eventHandlers) {
 			return new markerView.Marker(map, latlng, options, eventHandlers);
 		}
-		function clearProtectingVeil() {
-			d3.select("#protectingVeil").style("display", "none");
-		}
-		function showProtectingVeil(msg) {
-			d3.select("#protectingVeil").style("display", "inline");
-			d3.select("#protectingVeilMessage").text(msg);
-		}
+		/* The protecting veil is now obsolete. */
+		//function clearProtectingVeil() {
+			//d3.select("#protectingVeil").style("display", "none");
+		//}
+		//function showProtectingVeil(msg) {
+			//d3.select("#protectingVeil").style("display", "inline");
+			//d3.select("#protectingVeilMessage").text(msg);
+		//}
 		function zoomAndPanTo(latLng) {
 			map.setView(latLng, 16, {"animate": true});
 		}
 		var pub = {
 			init: priv.init,
-			clearProtectingVeil: clearProtectingVeil,
-			showProtectingVeil: showProtectingVeil,
+			//clearProtectingVeil: clearProtectingVeil,
+			//showProtectingVeil: showProtectingVeil,
 			addMarker: addMarker,
 			zoomAndPanTo: zoomAndPanTo
 		};
