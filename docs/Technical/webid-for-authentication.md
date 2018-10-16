@@ -185,3 +185,28 @@ Needs investigation. Why does it say `Client certificate SAN field is not set` w
 ```
 bombyx:~/SEA/gen-webid-cert$ openssl x509 -in webid.pem -text
 ```
+
+Testing using `http://id.myopenlink.net/ods/webid_demo.html` seems to have succeeded:
+
+> Successfully located the Public Key associated with the agent identified by this certificate. The following information was obtained by de-referencing (looking-up) the WebID value of the certificate's Subject Alternative Name (SAN) field:
+
+```
+WebID - https://w3id.solidarityeconomy.coop/people/matt/profile#me
+Public Key URI - No such info
+Subject - /CN=WebID for Matt Wallis/UID=https://w3id.solidarityeconomy.coop/people/matt/profile#me
+MD5 - FB:B3:17:72:69:C9:86:AB:F9:E1:2D:CF:1A:A9:7B:94
+SHA1 - 9C:BB:FF:38:1A:10:44:49:3F:CD:6A:3A:2A:D1:3C:A2:C3:78:E1:90
+Timestamp in ISO 8601 format - 2018-10-09T18:07:02.824340
+Certificate WebID lookup (de-reference) completed in 1323 msec.
+URI denoting Public Key (for Signature Verification) - http://id.myopenlink.net/issuer/key/dba/id_rsa
+Server Public Key:
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuBJPs/ItWb5YHOIWvJBq
+uBSXOggGF7PHgDbKVKIn/X3FXKra3WX1tATVl0mZSXU26QlOdJsovjCQWoU3TQAd
+jnYU9fsaic9jHzJFAVWRKy+TNC2hl3Dc0Sw6Urfs5oioGRpxOnX34laLfAp0qeMq
+um0tRtNY5coKmeDsY/2CeI1i5JBM4eVPWT4IoDcGQm76KHluzYIczuoPr1Gnj7yP
+OBs/LlVjPHhMJqMcup/UAIYAS0fjSN46vao6o2LHMwHxSWFilTHm2SKGP4S/iBL+
+PLBHA7wrS0P39qiLuFv+r0lY0M0gxGmlZZB88Kjt0s9nOSllPB1k2trYnJtDJGCK
+OwIDAQAB
+-----END PUBLIC KEY-----
+```
