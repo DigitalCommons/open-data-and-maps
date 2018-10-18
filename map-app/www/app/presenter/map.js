@@ -2,6 +2,7 @@ define(["app/eventbus"], function(eventbus) {
 	"use strict";
 
 	var view;
+	var markerForInitiative = {};
 	var serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
 		"services/" + "display_similar_companies/main.php";
 	function registerView(v) {
@@ -64,7 +65,9 @@ define(["app/eventbus"], function(eventbus) {
 	function onInitiativeNew(data/*, envelope*/) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
-		var eventHandlers = {};
+		var eventHandlers = {
+			click: function(e) { console.log("Initiative clicked"); console.log(initiative); }
+		};
 
 		// It's easier to find on the map initiatives with websites, andthose with links to Companies House
 		// if we set the colour of the marker accordingly:
@@ -105,7 +108,7 @@ define(["app/eventbus"], function(eventbus) {
 		var hovertext = initiative.name + " (" + initiative.dataset + ")";
 		var icon = initiative.dataset == 'dotcoop' ? 'globe' : 'certificate';
 		var options = {icon: icon, popuptext: popuptext, hovertext: hovertext, cluster: true, markerColor: markerColor};
-		view.addMarker(latlng, options, eventHandlers);
+		markerForInitiative[initiative.uniqueId] = view.addMarker(latlng, options, eventHandlers);
 	}
 	function onInitiativeLoadComplete() {
 		/* The protecting veil is now obsolete. */
@@ -118,6 +121,9 @@ define(["app/eventbus"], function(eventbus) {
 	function onInitiativeSelected(data) {
 		console.log('onInitiativeSelected');
 		console.log(data);
+		//console.log(markerForInitiative);
+		console.log(markerForInitiative[data.uniqueId]);
+		markerForInitiative[data.uniqueId].marker.setIcon(view.makeSelectedIcon());
 		view.zoomAndPanTo({lon: data.lng, lat: data.lat});
 	}
 

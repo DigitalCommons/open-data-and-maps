@@ -28,6 +28,8 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			return "";
 		}
 	};
+	// TODO - shoud this (and others?) be a regular function (private to this module),
+	//        rather than in the prototype?
 	proto.showInitiative = function(e) {
 		console.log(e);
 		eventbus.publish({topic: "Initiative.selected", data: e});

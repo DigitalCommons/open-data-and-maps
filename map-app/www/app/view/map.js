@@ -49,11 +49,17 @@ define(
 		function zoomAndPanTo(latLng) {
 			map.setView(latLng, 16, {"animate": true});
 		}
+		function makeSelectedIcon() {
+			// TODO: This should not be here (in view/map.js)
+			//       Probably better in view/map/Marker.js.
+			return leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
+		}
 		var pub = {
 			init: priv.init,
 			//clearProtectingVeil: clearProtectingVeil,
 			//showProtectingVeil: showProtectingVeil,
 			addMarker: addMarker,
+			makeSelectedIcon: makeSelectedIcon,
 			zoomAndPanTo: zoomAndPanTo
 		};
 		settings = presenter.registerView(pub);

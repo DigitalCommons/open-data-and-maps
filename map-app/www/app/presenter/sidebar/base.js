@@ -52,6 +52,10 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 			//console.log("backButtonClicked");
 			//console.log(pres);
 			pres.contentStack.previous();
+			// TODO: Think: maybe better to call a method on pres that indicates thay
+			//       the contentStack has been changed.
+			//       Then it is up to the pres to perform other actions related to this
+			//       (e.g. where it affects which initiatives are selected)
 			pres.view.refresh();
 		}
 	};

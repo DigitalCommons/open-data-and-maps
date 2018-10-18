@@ -10,6 +10,7 @@ define(["app/eventbus", "model/config"], function(eventbus, config) {
 			name: { value: e.name, enumerable: true },
 			dataset: { value: e.dataset, enumerable: true },
 			uri: { value: e.uri, enumerable: true },
+			uniqueId: { value: e.uri, enumerable: true },
 			within: { value: e.within, enumerable: true },
 			lat: { value: e.lat, enumerable: true },
 			lng: { value: e.lng, enumerable: true },
