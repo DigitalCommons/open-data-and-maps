@@ -1,17 +1,12 @@
+
 // The view aspects of the Main Menu sidebar
-define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], function(d3, eventbus, presenter, sidebarView) {
+define(["d3", "view/base", "presenter/searchbox"], function(d3, viewBase, presenter) {
 	"use strict";
 
-	// Our local Sidebar object:
-	function Sidebar(){}
+	function SearchBoxView(){}
+	// inherit from the standard view base object:
+	var proto = Object.create(viewBase.base.prototype);
 
-	// Our local Sidebar inherits from sidebar:
-	var proto = Object.create(sidebarView.base.prototype);
-
-	// And adds some overrides and new properties of it's own:
-	proto.title = "Search";
-
-	/*
 	proto.searchSubmitted = function() {
 		// By default, submitting the form will cause a page reload!
 		d3.event.preventDefault();
@@ -20,30 +15,13 @@ define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], 
 		var searchText = d3.select("#search-box").property("value");
 		this.presenter.performSearch(searchText);
 		console.log("Search submitted: [" + searchText + "]");
+		/*
+		document.getElementById('search-results').innerHTML = "<p>You searched for: " + searchText + "</p>" +
+			"<p><i class=\"w3-round w3-xxlarge fa fa-exclamation-triangle\"></i>" +
+			"Sorry, searching is not yet available, but coming soon</p>";
+		document.getElementById('search-results-container').style.display='block';
+	   */
 	};
-	*/
-	proto.populateFixedSelection = function(selection) {
-		var pres = this.presenter;
-		selection.append("div").attr("class", "w3-container").append('p').text("Search: " + pres.getSearchString());
-	};
-	proto.populateScrollableSelection = function(selection) {
-		console.log(this.presenter.getMatches());
-		var matches = this.presenter.getMatches();
-		if (matches.length > 0) {
-		matches.forEach(function(match) {
-			selection.append('button')
-			.attr("class", "w3-bar-item w3-button w3-mobile")
-			.attr("title", match.hovertext)
-			.on('click', match.onClick)
-			.text(match.label);
-		});
-		}
-		else {
-			selection.append('div').attr("class", "w3-container w3-center").append('p').text("Nothing matched the search");
-		}
-	};
-
-	/*
 	proto.createSearchBox = function() {
 		// d3 selection redefines this, so hang onto it here:
 		var view = this;
@@ -71,18 +49,18 @@ define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], 
 			attr('placeholder', 'search');
 
 	};
-   */
+	SearchBoxView.prototype = proto;
+	//var view;
 
-	Sidebar.prototype = proto;
-
-	function createSidebar() {
-		var sb = new Sidebar;
-		sb.setPresenter(presenter.createPresenter(sb));
-		//sb.createSearchBox();
-		return sb;
+	function init() {
+		const view = new SearchBoxView();
+		view.setPresenter(presenter.createPresenter(view));
+		view.createSearchBox();
+		return view;
 	}
 	var pub = {
-		createSidebar: createSidebar
+		init: init
 	};
+
 	return pub;
 });

@@ -4,6 +4,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	function Presenter(){}
 
 	var proto = Object.create(sidebarPresenter.base.prototype);
+	/*
 	proto.performSearch = function(text) {
 		console.log("Search submitted: [" + text + "]");
 		// We need to make sure that the search sidebar is loaded
@@ -19,6 +20,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			this.view.refresh();
 		}
 	};
+   */
 	proto.getSearchString = function() {
 		var current = this.contentStack.current();
 		if (typeof current !== 'undefined') {
@@ -49,11 +51,25 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			return [];
 		}
 	};
+
+	proto.onInitiativeResults = function(data) {
+		// TODO - handle better when data.results is empty
+		//        Prob don't want to put them on the stack?
+		//        But still need to show the fact that there are no results.
+		this.contentStack.append({
+			searchString: data.text,
+			matches: data.results
+		});
+		eventbus.publish({topic: "Search.resultsExist"});
+		this.view.refresh();
+	}
+
 	Presenter.prototype = proto;
 
 	function createPresenter(view) {
 		var p = new Presenter();
 		p.registerView(view);
+		eventbus.subscribe({topic: "Search.initiativeResults", callback: function(data) { p.onInitiativeResults(data); } });
 		return p;
 	}
 	var pub = {
