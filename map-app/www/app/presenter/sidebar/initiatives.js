@@ -35,11 +35,19 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			return [];
 		}
 	};
+	proto.historyButtonsUsed = function(lastContent) {
+		console.log("sidebar/initiatives historyButtonsUsed");
+		//TODO - de-select last content? select current content?
+		console.log(lastContent);
+		this.view.refresh();
+	};
 
 	proto.onInitiativeResults = function(data) {
 		// TODO - handle better when data.results is empty
 		//        Prob don't want to put them on the stack?
 		//        But still need to show the fact that there are no results.
+		const lastContent = this.contentStack.current();
+		//TODO: de-select last content? select current content?
 		this.contentStack.append({
 			searchString: data.text,
 			matches: data.results
@@ -54,6 +62,14 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		console.log("ctrlKey: " + ctrlKey);
 		console.log(mouseEvent);
 		console.log(initiative);
+		// TODO: deselect last content, add and select this content?
+		const lastContent = this.contentStack.current();
+		this.contentStack.append({
+			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
+			searchString: "selection",
+			matches: [initiative]
+		});
+		this.view.refresh();
 	}
 
 	Presenter.prototype = proto;
