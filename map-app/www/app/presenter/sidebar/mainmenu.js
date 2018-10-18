@@ -5,14 +5,11 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 
 	var proto = Object.create(sidebarPresenter.base.prototype);
 
-	// We wan't to disable the 'Search results' button if there are no search results:
-	proto.searchResultsExist = false;
-
 	proto.aboutButtonClicked = function() {
 		console.log('aboutButtonClicked');
 	};
-	proto.searchButtonClicked = function() {
-		console.log('searchButtonClicked');
+	proto.initiativesButtonClicked = function() {
+		console.log('initiativesButtonClicked');
 		eventbus.publish({topic: "Sidebar.showSearch"});
 	};
 	proto.getButtons = function() {
@@ -24,10 +21,10 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 				onClick: this.aboutButtonClicked
 			},
 			{
-				label: 'Search results',
-				disabled: !this.searchResultsExist,
-				hovertext: 'Show search results',
-				onClick: this.searchButtonClicked
+				label: 'Initiatives',
+				disabled: false,
+				hovertext: 'Search results and details about initiatives',
+				onClick: this.initiativesButtonClicked
 			}
 		];
 	};
@@ -41,7 +38,6 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 	function createPresenter(view) {
 		var p = new Presenter();
 		p.registerView(view);
-		eventbus.subscribe({topic: "Search.resultsExist", callback: function() { p.searchResultsExist = true; }});
 		return p;
 	}
 	var pub = {

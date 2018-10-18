@@ -1,5 +1,5 @@
 // The view aspects of the Main Menu sidebar
-define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], function(d3, eventbus, presenter, sidebarView) {
+define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/base"], function(d3, eventbus, presenter, sidebarView) {
 	"use strict";
 
 	// Our local Sidebar object:
@@ -9,7 +9,7 @@ define(["d3", "app/eventbus", "presenter/sidebar/search", "view/sidebar/base"], 
 	var proto = Object.create(sidebarView.base.prototype);
 
 	// And adds some overrides and new properties of it's own:
-	proto.title = "Search";
+	proto.title = "Initiatives";
 
 	/*
 	proto.searchSubmitted = function() {

@@ -1,5 +1,5 @@
 // Set up the various sidebars
-define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/sidebar/search"], function(d3, viewBase, presenter, mainMenu, search) {
+define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/sidebar/initiatives"], function(d3, viewBase, presenter, mainMenu, initiatives) {
 	"use strict";
 
 	// This deals with the view object that controls the sidebar
@@ -42,13 +42,13 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 			attr('class', 'fa fa-bars');
 
 		// This is where the navigation buttons will go.
-		// These are recreated when the sidebar is changed, e.g. from MainMenu to Search.
+		// These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
 		selection = selection.append("i").attr("id", "sidebar-history-navigation");
 
 	};
 	proto.createSidebars = function() {
 		this.sidebar = {
-			search: search.createSidebar(),
+			initiatives: initiatives.createSidebar(),
 			mainMenu: mainMenu.createSidebar()
 		};
 	};

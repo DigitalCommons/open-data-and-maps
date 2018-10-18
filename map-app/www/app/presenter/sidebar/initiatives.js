@@ -60,7 +60,6 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			searchString: data.text,
 			matches: data.results
 		});
-		eventbus.publish({topic: "Search.resultsExist"});
 		this.view.refresh();
 	}
 
