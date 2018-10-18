@@ -4,23 +4,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	function Presenter(){}
 
 	var proto = Object.create(sidebarPresenter.base.prototype);
-	/*
-	proto.performSearch = function(text) {
-		console.log("Search submitted: [" + text + "]");
-		// We need to make sure that the search sidebar is loaded
-		if (text.length > 0) {
-			eventbus.publish({topic: "Sidebar.showSearch"});
-			var results = sseInitiative.search(text);
-			console.log(results);
-			this.contentStack.append({
-				searchString: text,
-				matches: results
-			});
-			eventbus.publish({topic: "Search.resultsExist"});
-			this.view.refresh();
-		}
-	};
-   */
+
 	proto.getSearchString = function() {
 		var current = this.contentStack.current();
 		if (typeof current !== 'undefined') {

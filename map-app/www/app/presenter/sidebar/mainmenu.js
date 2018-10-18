@@ -10,7 +10,7 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 	};
 	proto.initiativesButtonClicked = function() {
 		console.log('initiativesButtonClicked');
-		eventbus.publish({topic: "Sidebar.showSearch"});
+		eventbus.publish({topic: "Sidebar.showInitiatives"});
 	};
 	proto.getButtons = function() {
 		return [
