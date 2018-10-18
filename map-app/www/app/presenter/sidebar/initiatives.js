@@ -46,6 +46,15 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		});
 		this.view.refresh();
 	}
+	proto.onInitiativeClicked = function(data) {
+		const initiative = data.initiative;
+		const mouseEvent = data.mouseEvent;
+		const ctrlKey = data.mouseEvent.originalEvent.ctrlKey;
+		console.log("Initiative clicked");
+		console.log("ctrlKey: " + ctrlKey);
+		console.log(mouseEvent);
+		console.log(initiative);
+	}
 
 	Presenter.prototype = proto;
 
@@ -53,6 +62,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		var p = new Presenter();
 		p.registerView(view);
 		eventbus.subscribe({topic: "Search.initiativeResults", callback: function(data) { p.onInitiativeResults(data); } });
+		eventbus.subscribe({topic: "Initiative.clicked", callback: function(data) { p.onInitiativeClicked(data); } });
 		return p;
 	}
 	var pub = {

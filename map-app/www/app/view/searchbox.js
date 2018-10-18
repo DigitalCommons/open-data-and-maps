@@ -46,7 +46,7 @@ define(["d3", "view/base", "presenter/searchbox"], function(d3, viewBase, presen
 			attr('id', 'search-box').
 			attr('class', 'w3-input w3-border-0 w3-round w3-mobile').
 			attr('type', 'search').
-			attr('placeholder', 'search');
+			attr('placeholder', 'Search initiatives');
 
 	};
 	SearchBoxView.prototype = proto;

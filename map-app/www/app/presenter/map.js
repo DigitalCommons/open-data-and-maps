@@ -66,7 +66,9 @@ define(["app/eventbus"], function(eventbus) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
 		var eventHandlers = {
-			click: function(e) { console.log("Initiative clicked"); console.log(initiative); }
+			click: function(e) {
+				eventbus.publish({topic: "Initiative.clicked", data: {initiative: initiative, mouseEvent: e}});
+			}
 		};
 
 		// It's easier to find on the map initiatives with websites, andthose with links to Companies House
