@@ -35,9 +35,9 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 	Sidebar.prototype = proto;
 
 	function createSidebar() {
-		var sb = new Sidebar;
-		sb.setPresenter(presenter.createPresenter(sb));
-		return sb;
+		var view = new Sidebar;
+		view.setPresenter(presenter.createPresenter(view));
+		return view;
 	}
 	var pub = {
 		createSidebar: createSidebar

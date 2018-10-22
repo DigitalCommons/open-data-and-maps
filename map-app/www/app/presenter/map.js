@@ -1,16 +1,14 @@
-define(["app/eventbus"], function(eventbus) {
+define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 	"use strict";
 
-	var view;
+	function Presenter(){}
+
+	var proto = Object.create(presenter.base.prototype);
+
 	var markerForInitiative = {};
 	var serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
 		"services/" + "display_similar_companies/main.php";
-	function registerView(v) {
-		view = v;
-		return { };	// return settings
-	}
-	// TODO - return contextmenuitems as a property of settings in registerView.
-	function getContextmenuItems() {
+	proto.getContextmenuItems = function() {
 		// The context menu has been disabled (in www/app/view/map.js), in accordance with 
 		// https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/78
 		// So, don't expect this to do anything!
@@ -56,13 +54,13 @@ define(["app/eventbus"], function(eventbus) {
 				}
 			}
 		];
-	}
-	function getMapEventHandlers() {
+	};
+	proto.getMapEventHandlers = function() {
 		return {
 			click: function(e) { console.log("Map clicked" + e.latlng); }
 		};
-	}
-	function onInitiativeNew(data/*, envelope*/) {
+	};
+	proto.onInitiativeNew = function(data/*, envelope*/) {
 		var initiative = data;
 		var latlng = [initiative.lat, initiative.lng];
 		var eventHandlers = {
@@ -110,38 +108,39 @@ define(["app/eventbus"], function(eventbus) {
 		var hovertext = initiative.name + " (" + initiative.dataset + ")";
 		var icon = initiative.dataset == 'dotcoop' ? 'globe' : 'certificate';
 		var options = {icon: icon, popuptext: popuptext, hovertext: hovertext, cluster: true, markerColor: markerColor};
-		markerForInitiative[initiative.uniqueId] = view.addMarker(latlng, options, eventHandlers);
-	}
-	function onInitiativeLoadComplete() {
+		markerForInitiative[initiative.uniqueId] = this.view.addMarker(latlng, options, eventHandlers);
+	};
+	proto.onInitiativeLoadComplete = function() {
 		/* The protecting veil is now obsolete. */
 		//view.clearProtectingVeil();
-	}
-	function onInitiativeLoadMessage(data/*, envelope*/) {
+	};
+	proto.onInitiativeLoadMessage = function(data/*, envelope*/) {
 		/* The protecting veil is now obsolete. */
 		//view.showProtectingVeil(data.message);
-	}
-	function onInitiativeSelected(data) {
+	};
+	proto.onInitiativeSelected = function(data) {
 		console.log('onInitiativeSelected');
 		console.log(data);
 		//console.log(markerForInitiative);
 		console.log(markerForInitiative[data.uniqueId]);
-		markerForInitiative[data.uniqueId].marker.setIcon(view.makeSelectedIcon());
-		view.zoomAndPanTo({lon: data.lng, lat: data.lat});
-	}
+		markerForInitiative[data.uniqueId].marker.setIcon(this.view.makeSelectedIcon());
+		this.view.zoomAndPanTo({lon: data.lng, lat: data.lat});
+	};
 
-	function init() {
-		// subscribe to events published by the model:
-		eventbus.subscribe({topic: "Initiative.new", callback: onInitiativeNew});
-		eventbus.subscribe({topic: "Initiative.loadComplete", callback: onInitiativeLoadComplete});
-		eventbus.subscribe({topic: "Initiative.loadStarted", callback: onInitiativeLoadMessage});
-		eventbus.subscribe({topic: "Initiative.loadFailed", callback: onInitiativeLoadMessage});
-		eventbus.subscribe({topic: "Initiative.selected", callback: onInitiativeSelected});
+	Presenter.prototype = proto;
+
+	function createPresenter(view) {
+		var p = new Presenter();
+		p.registerView(view);
+		eventbus.subscribe({topic: "Initiative.new", callback: function(data) { p.onInitiativeNew(data); } });
+		eventbus.subscribe({topic: "Initiative.loadComplete", callback: function(data) { p.onInitiativeLoadComplete(data); } });
+		eventbus.subscribe({topic: "Initiative.loadStarted", callback: function(data) { p.onInitiativeLoadMessage(data); } });
+		eventbus.subscribe({topic: "Initiative.loadFailed", callback: function(data) { p.onInitiativeLoadMessage(data); } });
+		eventbus.subscribe({topic: "Initiative.selected", callback: function(data) { p.onInitiativeSelected(data); } });
+		return p;
 	}
 	var pub = {
-		registerView: registerView,
-		getMapEventHandlers: getMapEventHandlers,
-		getContextmenuItems: getContextmenuItems
+		createPresenter: createPresenter
 	};
-	init();
 	return pub;
 });
