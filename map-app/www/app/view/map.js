@@ -35,14 +35,15 @@ define(
 			this.unselectedCluster = leaflet.markerClusterGroup();
 			this.selectedCluster = leaflet.markerClusterGroup();
 			this.map.addLayer(this.unselectedCluster);
+			this.map.addLayer(this.selectedCluster);
+			markerView.setSelectedCluster(this.selectedCluster);
+			markerView.setUnselectedCluster(this.unselectedCluster);
 		};
-		//proto.addMarker = function(latlng, options, eventHandlers) {
 		proto.addMarker = function(initiative) {
-			//return markerView.createMarker(this.map, this.unselectedCluster, latlng, options, eventHandlers);
-			return markerView.createMarker(this.map, this.unselectedCluster, initiative);
+			return markerView.createMarker(this.map, initiative);
 		};
 		proto.setSelected = function(initiative) {
-			markerView.setSelected(this.selectedCluster, initiative);
+			markerView.setSelected(initiative);
 		};
 		/* The protecting veil is now obsolete. */
 		//function clearProtectingVeil() {

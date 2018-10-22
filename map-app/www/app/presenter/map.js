@@ -61,53 +61,6 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 	};
 	proto.onInitiativeNew = function(data/*, envelope*/) {
 		var initiative = data;
-		//var latlng = [initiative.lat, initiative.lng];
-		//var eventHandlers = {
-			//click: function(e) {
-				//eventbus.publish({topic: "Initiative.clicked", data: {initiative: initiative, mouseEvent: e}});
-			//}
-		//};
-//
-		//// It's easier to find on the map initiatives with websites, andthose with links to Companies House
-		//// if we set the colour of the marker accordingly:
-		//// Available colours can be found in the docs: https://github.com/lvoogdt/Leaflet.awesome-markers
-		//var hasWww = initiative.www && initiative.www.length > 0;
-		//var hasReg = initiative.regorg && initiative.regorg.length > 0;
-		//var hasWithin = initiative.within && initiative.within.length > 0;
-		//var markerColor = (hasWww && hasReg) ? 'purple' : hasWww ? 'blue' : hasReg ? 'red' : 'green';
-		//var serviceToDisplaySimilarCompaniesURL;
-//
-		//// For info about rel="noopener noreferrer",
-		//// see https://www.thesitewizard.com/html-tutorial/open-links-in-new-window-or-tab.shtml
-		//function link(uri, text) {
-			//return "<a title=\"" + uri + "\" href=\"" + uri +"\" rel=\"noopener noreferrer\" target=\"_blank\">" + text + "</a>";
-		//}
-		//var popupRows = [];
-		//popupRows.push("View " + link(initiative.uri, "details") + " in a new tab");
-		//if (hasWithin) {
-			//popupRows.push("View " + link(initiative.within, "geographic information") + " in a new tab");
-		//}
-		//if (hasWww) {
-			//popupRows.push("View " + link(initiative.www, "website") + " in a new tab");
-		//}
-		//if (hasReg) {
-			//popupRows.push("View " + link(initiative.regorg, "company registration") + " in a new tab");
-			////console.log(document.location.origin + document.location.pathname + "services/" + "phpinfo.php");
-			//serviceToDisplaySimilarCompaniesURL = serviceToDisplaySimilarCompanies + "?company=" + encodeURIComponent(initiative.regorg);
-			////console.log(serviceToDisplaySimilarCompaniesURL);
-			//popupRows.push("View " + link(serviceToDisplaySimilarCompaniesURL, "similar companies nearby") + " in a new tab");
-		//}
-//
-		//var popuptext =
-			//"<p>Dataset: " + initiative.dataset + "</p>" +
-			//"<h4>" + initiative.name +  "</h4>" +
-			//popupRows.join("<br>");
-//
-		//// See http://fontawesome.io/icons/ for a list of icon names (where we're using 'home'), below:
-		//var hovertext = initiative.name + " (" + initiative.dataset + ")";
-		//var icon = initiative.dataset == 'dotcoop' ? 'globe' : 'certificate';
-		//var options = {icon: icon, popuptext: popuptext, hovertext: hovertext, cluster: true, markerColor: markerColor};
-		////markerForInitiative[initiative.uniqueId] = this.view.addMarker(latlng, options, eventHandlers);
 		this.view.addMarker(initiative);
 	};
 	proto.onInitiativeLoadComplete = function() {

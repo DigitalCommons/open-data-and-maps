@@ -3,6 +3,8 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 
 	// Keep a mapping between initiatives and their Markers:
 	const markerForInitiative = {};
+	let selectedCluster = null;
+	let unselectedCluster = null;
 
 
 	function MarkerView(){}
@@ -14,7 +16,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 	const dfltOptions = {prefix: "fa"};	// "fa" selects the font-awesome icon set (we have no other)
 
 	//proto.create = function(map, cluster, latlng, options, eventHandlers) {
-	proto.create = function(map, cluster, initiative) {
+	proto.create = function(map, initiative) {
 
 		//var popuptext = options.popuptext || hovertext || "Sorry. Popup text missing!";
 		//var hovertext = options.hovertext || "Hover text goes here.";
@@ -52,31 +54,44 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		}, this);
 
 		//this.parent = options.cluster ? group : map;
-		this.parent = cluster;
-		this.parent.addLayer(this.marker);
+		//this.parent = cluster;
+		this.cluster = unselectedCluster;
+		this.cluster.addLayer(this.marker);
 		markerForInitiative[initiative.uniqueId] = this;
 	};
-	function setSelected(cluster, initiative) {
+	proto.setSelected = function(initiative) {
 		const icon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
-		//TODO sort out clustering
-		markerForInitiative[initiative.uniqueId].marker.setIcon(icon);
+		this.marker.setIcon(icon);
+		this.cluster.removeLayer(this.marker);
+		this.cluster = selectedCluster;
+		this.cluster.addLayer(this.marker);
+	};
+
+	function setSelected(initiative) {
+		markerForInitiative[initiative.uniqueId].setSelected(initiative);
 	}
 	proto.destroy = function() {
-		this.parent.removeLayer(this.marker);
+		this.cluster.removeLayer(this.marker);
 	};
 	MarkerView.prototype = proto;
 
-	//function createMarker(map, cluster, latlng, options, eventHandlers) {
-	function createMarker(map, cluster, initiative) {
+	function createMarker(map, initiative) {
 		const view = new MarkerView();
 		view.setPresenter(presenter.createPresenter(view));
-		//view.create(map, cluster, latlng, options, eventHandlers);
-		view.create(map, cluster, initiative);
+		view.create(map, initiative);
 		return view;
+	}
+	function setSelectedCluster(cluster) {
+		selectedCluster = cluster;
+	}
+	function setUnselectedCluster(cluster) {
+		unselectedCluster = cluster;
 	}
 
 	var pub = {
 		createMarker: createMarker,
+		setSelectedCluster: setSelectedCluster, 
+		setUnselectedCluster: setUnselectedCluster, 
 		setSelected: setSelected
 	};
 	return pub;
