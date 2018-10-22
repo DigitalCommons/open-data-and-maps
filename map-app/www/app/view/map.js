@@ -33,10 +33,16 @@ define(
 			leaflet.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 18}).addTo(this.map);
 
 			this.unselectedCluster = leaflet.markerClusterGroup();
+			this.selectedCluster = leaflet.markerClusterGroup();
 			this.map.addLayer(this.unselectedCluster);
 		};
-		proto.addMarker = function(latlng, options, eventHandlers) {
-			return markerView.createMarker(this.map, this.unselectedCluster, latlng, options, eventHandlers);
+		//proto.addMarker = function(latlng, options, eventHandlers) {
+		proto.addMarker = function(initiative) {
+			//return markerView.createMarker(this.map, this.unselectedCluster, latlng, options, eventHandlers);
+			return markerView.createMarker(this.map, this.unselectedCluster, initiative);
+		};
+		proto.setSelected = function(initiative) {
+			markerView.setSelected(this.selectedCluster, initiative);
 		};
 		/* The protecting veil is now obsolete. */
 		//function clearProtectingVeil() {
@@ -49,11 +55,11 @@ define(
 		proto.zoomAndPanTo = function(latLng) {
 			this.map.setView(latLng, 16, {"animate": true});
 		};
-		proto.makeSelectedIcon = function() {
-			// TODO: This should not be here (in view/map.js)
-			//       Probably better in view/map/Marker.js.
-			return leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
-		};
+		//proto.makeSelectedIcon = function() {
+			//// TODO: This should not be here (in view/map.js)
+			////       Probably better in view/map/Marker.js.
+			//return leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
+		//};
 		MapView.prototype = proto;
 		function init() {
 			const view = new MapView();
