@@ -32,10 +32,11 @@ define(
 
 			leaflet.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 18}).addTo(this.map);
 
-			markerView.init(this.map);
+			this.unselectedCluster = leaflet.markerClusterGroup();
+			this.map.addLayer(this.unselectedCluster);
 		};
 		proto.addMarker = function(latlng, options, eventHandlers) {
-			return new markerView.Marker(this.map, latlng, options, eventHandlers);
+			return markerView.createMarker(this.map, this.unselectedCluster, latlng, options, eventHandlers);
 		};
 		/* The protecting veil is now obsolete. */
 		//function clearProtectingVeil() {

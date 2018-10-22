@@ -1,18 +1,15 @@
-define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers"], function(leaflet, cluster, awesomeMarkers) {
+define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base", "presenter/map/marker"], function(leaflet, cluster, awesomeMarkers, viewBase, presenter) {
 	"use strict";
 
-	var group = null;
+	function MarkerView(){}
+	// inherit from the standard view base object:
+	var proto = Object.create(viewBase.base.prototype);
 
 	// Using font-awesome icons, the available choices can be seen here:
 	// http://fortawesome.github.io/Font-Awesome/icons/
 	var dfltOptions = {prefix: "fa"};	// "fa" selects the font-awesome icon set (we have no other)
 
-	function init(map) {
-		group = leaflet.markerClusterGroup();
-		map.addLayer(group);
-	}
-
-	function Marker(map, latlng, options, eventHandlers) {
+	proto.create = function(map, cluster, latlng, options, eventHandlers) {
 
 		var popuptext = options.popuptext || hovertext || "Sorry. Popup text missing!";
 		var hovertext = options.hovertext || "Hover text goes here.";
@@ -34,16 +31,24 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers"], function(le
 			this.marker.on(k, eventHandlers[k]);
 		}, this);
 
-		this.parent = options.cluster ? group : map;
+		//this.parent = options.cluster ? group : map;
+		this.parent = cluster;
 		this.parent.addLayer(this.marker);
-	}
-	Marker.prototype.destroy = function() {
+	};
+	proto.destroy = function() {
 		this.parent.removeLayer(this.marker);
 	};
+	MarkerView.prototype = proto;
+
+	function createMarker(map, cluster, latlng, options, eventHandlers) {
+		const view = new MarkerView();
+		view.setPresenter(presenter.createPresenter(view));
+		view.create(map, cluster, latlng, options, eventHandlers);
+		return view;
+	}
 
 	var pub = {
-		init: init,
-		Marker: Marker
+		createMarker: createMarker
 	};
 	return pub;
 });

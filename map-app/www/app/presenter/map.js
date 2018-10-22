@@ -113,10 +113,12 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 	proto.onInitiativeLoadComplete = function() {
 		/* The protecting veil is now obsolete. */
 		//view.clearProtectingVeil();
+		// TODO - hook this up to a log?
 	};
 	proto.onInitiativeLoadMessage = function(data/*, envelope*/) {
 		/* The protecting veil is now obsolete. */
 		//view.showProtectingVeil(data.message);
+		// TODO - hook this up to a log?
 	};
 	proto.onInitiativeSelected = function(data) {
 		console.log('onInitiativeSelected');
