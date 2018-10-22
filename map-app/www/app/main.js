@@ -11,15 +11,8 @@ define(["model/sse_initiative", "app/console", "app/view", "app/debug"], functio
 		view.init();
 		// Each view will ensure that the code for its presenter is loaded.
 
-		// This is a hack.
-		// The desired functionality is that the map has finished displaying by the time
-		// the event is published.
-		// A timeout may be the way to get back to the event loop (so the map can be shown),
-		// but the choice of 1000ms is an arbitrary hack.
-		// TODO: investigate leaflet.Map.load event. Is this what we want?
-		setTimeout(function() {
-			sseInitiative.loadFromWebService();
-		}, 1000);
+		// Ask the model to load the data for the initiatives:
+		sseInitiative.loadFromWebService();
 	}
 	var pub = {
 		init: init
