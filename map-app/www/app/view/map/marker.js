@@ -16,6 +16,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 	const dfltOptions = {prefix: "fa"};	// "fa" selects the font-awesome icon set (we have no other)
 
 	proto.create = function(map, initiative) {
+		this.initiative = initiative;
 
 		const hovertext = this.presenter.getHoverText(initiative);
 
@@ -37,14 +38,33 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		//this.marker.bindPopup(popuptext, { maxWidth: 800 });
 		this.marker.bindPopup(this.presenter.getPopupText(initiative));
 
-		const eventHandlers = this.presenter.getEventHandlers(initiative);
-		Object.keys(eventHandlers).forEach(function(k) {
-			this.marker.on(k, eventHandlers[k]);
-		}, this);
+		//const eventHandlers = this.presenter.getEventHandlers(initiative);
+		//Object.keys(eventHandlers).forEach(function(k) {
+			//this.marker.on(k, eventHandlers[k]);
+		//}, this);
+		const that = this;
+		this.marker.on('click', function(e) {
+			that.onClick(e);
+		});
 
 		this.cluster = unselectedCluster;
 		this.cluster.addLayer(this.marker);
 		markerForInitiative[initiative.uniqueId] = this;
+	};
+	proto.onClick = function(e) {
+		console.log("MarkerView.onclick");
+		// Browser seems to consume the ctrl key: ctrl-click is like right-buttom-click (on Chrome)
+		if (e.originalEvent.ctrlKey) { console.log("ctrl"); }
+		if (e.originalEvent.altKey) { console.log("alt"); }
+		if (e.originalEvent.metaKey) { console.log("meta"); }
+		if (e.originalEvent.shiftKey) { console.log("shift"); }
+		if (e.originalEvent.shiftKey) {
+			this.presenter.toggleSelected(this.initiative);
+		}
+		else {
+			console.log(this.initiative);
+			this.presenter.setSelected(this.initiative);
+		}
 	};
 	proto.setSelected = function(initiative) {
 		const icon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});

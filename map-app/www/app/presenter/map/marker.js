@@ -4,13 +4,23 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 	function Presenter(){}
 
 	const proto = Object.create(presenter.base.prototype);
-	proto.getEventHandlers = function(initiative) {
-		return {
-			click: function(e) {
-				eventbus.publish({topic: "Initiative.clicked", data: {initiative: initiative, mouseEvent: e}});
-			}
-		};
-	}
+
+	proto.toggleSelected = function(initiative) {
+		eventbus.publish({topic: "Marker.SelectionToggled", data: initiative});
+	};
+	proto.setSelected = function(initiative) {
+		eventbus.publish({topic: "Marker.SelectionSet", data: initiative});
+	};
+
+	// We're now leaving for the view to set up its own eventhandlers, 
+	// so this is obsolete ... until we change our minds :-)
+//	proto.getEventHandlers = function(initiative) {
+//		return {
+//			click: function(e) {
+//				eventbus.publish({topic: "Initiative.clicked", data: {initiative: initiative, mouseEvent: e}});
+//			}
+//		};
+//	}
 	proto.getLatLng = function(initiative) {
 		return [initiative.lat, initiative.lng];
 	};
@@ -18,6 +28,7 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 		return initiative.name + " (" + initiative.dataset + ")";
 	};
 	proto.getPopupText = function(initiative) {
+		// TODO - make obsolete
 		const hasWww = initiative.www && initiative.www.length > 0;
 		const hasReg = initiative.regorg && initiative.regorg.length > 0;
 		const hasWithin = initiative.within && initiative.within.length > 0;

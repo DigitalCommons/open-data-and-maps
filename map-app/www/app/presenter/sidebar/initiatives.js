@@ -54,16 +54,9 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		});
 		this.view.refresh();
 	}
-	proto.onInitiativeClicked = function(data) {
-		const initiative = data.initiative;
-		const mouseEvent = data.mouseEvent;
-		const ctrlKey = data.mouseEvent.originalEvent.ctrlKey;
-		console.log("Initiative clicked");
-		console.log("ctrlKey: " + ctrlKey);
-		console.log(mouseEvent);
+	proto.onMarkerSelectionSet = function(data) {
+		const initiative = data;
 		console.log(initiative);
-		// TODO: deselect last content, add and select this content?
-		const lastContent = this.contentStack.current();
 		this.contentStack.append({
 			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
 			searchString: "selection",
@@ -71,14 +64,34 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		});
 		this.view.refresh();
 	}
-
+	proto.onMarkerSelectionToggled = function(data) {
+		const initiative = data;
+		const curr = this.contentStack.current();
+		// Make a clone of the current matches:
+		const initiatives = (typeof curr != 'undefined') ? curr.matches.slice(0) : [];
+		const index = initiatives.indexOf(initiative);
+		if (index == -1) {
+			initiatives.push(initiative);
+		}
+		else {
+			// remove elment form array (sigh)
+			initiatives.splice(index, 1);
+		}
+		this.contentStack.append({
+			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
+			searchString: "selection",
+			matches: initiatives
+		});
+		this.view.refresh();
+	}
 	Presenter.prototype = proto;
 
 	function createPresenter(view) {
 		var p = new Presenter();
 		p.registerView(view);
 		eventbus.subscribe({topic: "Search.initiativeResults", callback: function(data) { p.onInitiativeResults(data); } });
-		eventbus.subscribe({topic: "Initiative.clicked", callback: function(data) { p.onInitiativeClicked(data); } });
+		eventbus.subscribe({topic: "Marker.SelectionToggled", callback: function(data) { p.onMarkerSelectionToggled(data); } });
+		eventbus.subscribe({topic: "Marker.SelectionSet", callback: function(data) { p.onMarkerSelectionSet(data); } });
 		return p;
 	}
 	var pub = {
