@@ -8,20 +8,20 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	proto.getSearchString = function() {
 		var current = this.contentStack.current();
 		if (typeof current !== 'undefined') {
-			return current.searchString;
+			return current.searchString || "";
 		}
 		else {
 			return "";
 		}
 	};
 	function getInitiativesFromStackItem(item) {
-		return (typeof item !== 'undefined') ? item.matches : [];
+		return (typeof item !== 'undefined') ? item.initiatives : [];
 	}
-	proto.getMatches = function() {
+	proto.getInitiatives = function() {
 		var p = this;
 		var current = this.contentStack.current();
 		if (typeof current !== 'undefined') {
-			return current.matches.map(function(e) {
+			return current.initiatives.map(function(e) {
 				return {
 					label: e.name,
 					onClick: function() { p.onInitiativeClickedInSidebar(e); }
@@ -75,7 +75,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		//TODO: de-select last content? select current content?
 		this.contentStack.append({
 			searchString: data.text,
-			matches: data.results
+			initiatives: data.results
 		});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
@@ -89,7 +89,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		this.contentStack.append({
 			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
 			searchString: "selection",
-			matches: [initiative]
+			initiatives: [initiative]
 		});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
@@ -102,7 +102,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		this.contentStack.append({
 			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
 			searchString: "selection",
-			matches: [initiative]
+			initiatives: [initiative]
 		});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
@@ -110,8 +110,8 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	proto.onMarkerSelectionToggled = function(data) {
 		const initiative = data;
 		const lastContent = this.contentStack.current();
-		// Make a clone of the current matches:
-		const initiatives = (typeof lastContent != 'undefined') ? lastContent.matches.slice(0) : [];
+		// Make a clone of the current initiatives:
+		const initiatives = (typeof lastContent != 'undefined') ? lastContent.initiatives.slice(0) : [];
 		const index = initiatives.indexOf(initiative);
 		if (index == -1) {
 			initiatives.push(initiative);
@@ -123,7 +123,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		this.contentStack.append({
 			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
 			searchString: "selection",
-			matches: initiatives
+			initiatives: initiatives
 		});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();

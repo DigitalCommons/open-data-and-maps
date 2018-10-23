@@ -12,12 +12,12 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 	proto.title = "Initiatives";
 
 	proto.populateFixedSelection = function(selection) {
-		var pres = this.presenter;
+		const pres = this.presenter;
 		selection.append("div").attr("class", "w3-container").append('p').text("Search: " + pres.getSearchString());
 	};
 	proto.populateScrollableSelection = function(selection) {
-		console.log(this.presenter.getMatches());
-		var matches = this.presenter.getMatches();
+		console.log(this.presenter.getInitiatives());
+		var matches = this.presenter.getInitiatives();
 		if (matches.length > 0) {
 		matches.forEach(function(match) {
 			selection.append('button')
