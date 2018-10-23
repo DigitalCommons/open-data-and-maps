@@ -73,12 +73,28 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 		//view.showProtectingVeil(data.message);
 		// TODO - hook this up to a log?
 	};
-	proto.onInitiativeSelected = function(data) {
-		const initiative = data;
-		console.log('onInitiativeSelected');
-		console.log(initiative);
-		this.view.setSelected(initiative);
-		this.view.zoomAndPanTo({lon: initiative.lng, lat: initiative.lat});
+	proto.onMarkersNeedToShowLatestSelection = function(data) {
+		console.log("onMarkersNeedToShowLatestSelection");
+		const that = this;
+
+		data.unselected.forEach(function(e) {
+			that.view.setUnselected(e);
+		});
+		data.selected.forEach(function(e) {
+			that.view.setSelected(e);
+		});
+	}
+//	proto.onInitiativeSelected = function(data) {
+//		const initiative = data;
+//		console.log('onInitiativeSelected');
+//		console.log(initiative);
+//		this.view.setSelected(initiative);
+//		this.view.zoomAndPanTo({lon: initiative.lng, lat: initiative.lat});
+//	};
+	proto.onMapNeedsToBeZoomedAndPanned = function(data) {
+		console.log("onMapNeedsToBeZoomedAndPanned");
+		const latLngBounds = data;
+		this.view.fitBounds(latLngBounds);
 	};
 
 	Presenter.prototype = proto;
@@ -90,7 +106,10 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 		eventbus.subscribe({topic: "Initiative.loadComplete", callback: function(data) { p.onInitiativeLoadComplete(data); } });
 		eventbus.subscribe({topic: "Initiative.loadStarted", callback: function(data) { p.onInitiativeLoadMessage(data); } });
 		eventbus.subscribe({topic: "Initiative.loadFailed", callback: function(data) { p.onInitiativeLoadMessage(data); } });
-		eventbus.subscribe({topic: "Initiative.selected", callback: function(data) { p.onInitiativeSelected(data); } });
+		// TODO - strip out this mechanism from everywhere it appears:
+		//eventbus.subscribe({topic: "Initiative.selected", callback: function(data) { p.onInitiativeSelected(data); } });
+		eventbus.subscribe({topic: "Markers.needToShowLatestSelection", callback: function(data) { p.onMarkersNeedToShowLatestSelection(data); } });
+		eventbus.subscribe({topic: "Map.needsToBeZoomedAndPanned", callback: function(data) { p.onMapNeedsToBeZoomedAndPanned(data); } });
 		return p;
 	}
 	var pub = {

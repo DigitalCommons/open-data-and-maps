@@ -3,8 +3,8 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 
 	// Keep a mapping between initiatives and their Markers:
 	const markerForInitiative = {};
-	let selectedCluster = null;
-	let unselectedCluster = null;
+	let selectedClusterGroup = null;
+	let unselectedClusterGroup = null;
 
 
 	function MarkerView(){}
@@ -47,7 +47,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 			that.onClick(e);
 		});
 
-		this.cluster = unselectedCluster;
+		this.cluster = unselectedClusterGroup;
 		this.cluster.addLayer(this.marker);
 		markerForInitiative[initiative.uniqueId] = this;
 	};
@@ -59,23 +59,33 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		if (e.originalEvent.metaKey) { console.log("meta"); }
 		if (e.originalEvent.shiftKey) { console.log("shift"); }
 		if (e.originalEvent.shiftKey) {
-			this.presenter.toggleSelected(this.initiative);
+			this.presenter.notifySelectionToggled(this.initiative);
 		}
 		else {
 			console.log(this.initiative);
-			this.presenter.setSelected(this.initiative);
+			this.presenter.notifySelectionSet(this.initiative);
 		}
+	};
+	proto.setUnselected = function(initiative) {
+		const icon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'blue', iconColor: 'white', icon: 'certificate', cluster: false});
+		this.marker.setIcon(icon);
+		this.cluster.removeLayer(this.marker);
+		this.cluster = unselectedClusterGroup;
+		this.cluster.addLayer(this.marker);
 	};
 	proto.setSelected = function(initiative) {
 		const icon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
 		this.marker.setIcon(icon);
 		this.cluster.removeLayer(this.marker);
-		this.cluster = selectedCluster;
+		this.cluster = selectedClusterGroup;
 		this.cluster.addLayer(this.marker);
 	};
 
 	function setSelected(initiative) {
 		markerForInitiative[initiative.uniqueId].setSelected(initiative);
+	}
+	function setUnselected(initiative) {
+		markerForInitiative[initiative.uniqueId].setUnselected(initiative);
 	}
 	proto.destroy = function() {
 		this.cluster.removeLayer(this.marker);
@@ -88,18 +98,19 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		view.create(map, initiative);
 		return view;
 	}
-	function setSelectedCluster(cluster) {
-		selectedCluster = cluster;
+	function setSelectedClusterGroup(clusterGroup) {
+		selectedClusterGroup = clusterGroup;
 	}
-	function setUnselectedCluster(cluster) {
-		unselectedCluster = cluster;
+	function setUnselectedClusterGroup(clusterGroup) {
+		unselectedClusterGroup = clusterGroup;
 	}
 
 	var pub = {
 		createMarker: createMarker,
-		setSelectedCluster: setSelectedCluster, 
-		setUnselectedCluster: setUnselectedCluster, 
-		setSelected: setSelected
+		setSelectedClusterGroup: setSelectedClusterGroup, 
+		setUnselectedClusterGroup: setUnselectedClusterGroup, 
+		setSelected: setSelected,
+		setUnselected: setUnselected
 	};
 	return pub;
 });

@@ -32,18 +32,21 @@ define(
 
 			leaflet.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 18}).addTo(this.map);
 
-			this.unselectedCluster = leaflet.markerClusterGroup();
-			this.selectedCluster = leaflet.markerClusterGroup();
-			this.map.addLayer(this.unselectedCluster);
-			this.map.addLayer(this.selectedCluster);
-			markerView.setSelectedCluster(this.selectedCluster);
-			markerView.setUnselectedCluster(this.unselectedCluster);
+			this.unselectedClusterGroup = leaflet.markerClusterGroup();
+			this.selectedClusterGroup = leaflet.markerClusterGroup();
+			this.map.addLayer(this.unselectedClusterGroup);
+			this.map.addLayer(this.selectedClusterGroup);
+			markerView.setSelectedClusterGroup(this.selectedClusterGroup);
+			markerView.setUnselectedClusterGroup(this.unselectedClusterGroup);
 		};
 		proto.addMarker = function(initiative) {
 			return markerView.createMarker(this.map, initiative);
 		};
 		proto.setSelected = function(initiative) {
 			markerView.setSelected(initiative);
+		};
+		proto.setUnselected = function(initiative) {
+			markerView.setUnselected(initiative);
 		};
 		/* The protecting veil is now obsolete. */
 		//function clearProtectingVeil() {
@@ -53,7 +56,11 @@ define(
 			//d3.select("#protectingVeil").style("display", "inline");
 			//d3.select("#protectingVeilMessage").text(msg);
 		//}
+		proto.fitBounds = function(latLngBounds) {
+			this.map.fitBounds(latLngBounds);
+		};
 		proto.zoomAndPanTo = function(latLng) {
+			console.log("zoomAndPanTo");
 			this.map.setView(latLng, 16, {"animate": true});
 		};
 		//proto.makeSelectedIcon = function() {

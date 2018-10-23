@@ -14,12 +14,9 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			return "";
 		}
 	};
-	// TODO - shoud this (and others?) be a regular function (private to this module),
-	//        rather than in the prototype?
-	proto.showInitiative = function(e) {
-		console.log(e);
-		eventbus.publish({topic: "Initiative.selected", data: e});
-	};
+	function getInitiativesFromStackItem(item) {
+		return (typeof item !== 'undefined') ? item.matches : [];
+	}
 	proto.getMatches = function() {
 		var p = this;
 		var current = this.contentStack.current();
@@ -27,7 +24,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			return current.matches.map(function(e) {
 				return {
 					label: e.name,
-					onClick: function() { p.showInitiative(e); }
+					onClick: function() { p.onInitiativeClickedInSidebar(e); }
 				};
 			});
 		}
@@ -35,10 +32,38 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			return [];
 		}
 	};
+	proto.notifyMarkersNeedToShowNewSelection = function(lastContent) {
+		eventbus.publish({
+			topic: "Markers.needToShowLatestSelection",
+			data: {
+				unselected: getInitiativesFromStackItem(lastContent),
+				selected: getInitiativesFromStackItem(this.contentStack.current())
+			}
+		});
+	}
+	function arrayMax(array) {
+		return array.reduce((a, b) => Math.max(a, b));
+	}
+	function arrayMin(array) {
+		return array.reduce((a, b) => Math.min(a, b));
+	}
+	proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function() {
+		const initiatives = getInitiativesFromStackItem(this.contentStack.current());
+		const lats = initiatives.map(x => x.lat);
+		const lngs = initiatives.map(x => x.lng);
+
+		if (initiatives.length > 0) {
+			eventbus.publish({
+				topic: "Map.needsToBeZoomedAndPanned",
+				data: [[arrayMin(lats), arrayMin(lngs)], [arrayMax(lats), arrayMax(lngs)]]
+			});
+		}
+	}
 	proto.historyButtonsUsed = function(lastContent) {
 		console.log("sidebar/initiatives historyButtonsUsed");
 		//TODO - de-select last content? select current content?
 		console.log(lastContent);
+		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
 	};
 
@@ -52,29 +77,47 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			searchString: data.text,
 			matches: data.results
 		});
+		this.notifyMarkersNeedToShowNewSelection(lastContent);
+		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
 		this.view.refresh();
 	}
-	proto.onMarkerSelectionSet = function(data) {
+	proto.onInitiativeClickedInSidebar = function(data) {
 		const initiative = data;
+		//eventbus.publish({topic: "Initiative.selected", data: e});
 		console.log(initiative);
+		const lastContent = this.contentStack.current();
 		this.contentStack.append({
 			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
 			searchString: "selection",
 			matches: [initiative]
 		});
+		this.notifyMarkersNeedToShowNewSelection(lastContent);
+		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
+		this.view.refresh();
+	};
+	proto.onMarkerSelectionSet = function(data) {
+		const initiative = data;
+		console.log(initiative);
+		const lastContent = this.contentStack.current();
+		this.contentStack.append({
+			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
+			searchString: "selection",
+			matches: [initiative]
+		});
+		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
 	}
 	proto.onMarkerSelectionToggled = function(data) {
 		const initiative = data;
-		const curr = this.contentStack.current();
+		const lastContent = this.contentStack.current();
 		// Make a clone of the current matches:
-		const initiatives = (typeof curr != 'undefined') ? curr.matches.slice(0) : [];
+		const initiatives = (typeof lastContent != 'undefined') ? lastContent.matches.slice(0) : [];
 		const index = initiatives.indexOf(initiative);
 		if (index == -1) {
 			initiatives.push(initiative);
 		}
 		else {
-			// remove elment form array (sigh)
+			// remove elment form array (sigh - is this really the best array method for this?)
 			initiatives.splice(index, 1);
 		}
 		this.contentStack.append({
@@ -82,8 +125,10 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			searchString: "selection",
 			matches: initiatives
 		});
+		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
 	}
+
 	Presenter.prototype = proto;
 
 	function createPresenter(view) {

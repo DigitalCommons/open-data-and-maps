@@ -5,10 +5,10 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 
 	const proto = Object.create(presenter.base.prototype);
 
-	proto.toggleSelected = function(initiative) {
+	proto.notifySelectionToggled = function(initiative) {
 		eventbus.publish({topic: "Marker.SelectionToggled", data: initiative});
 	};
-	proto.setSelected = function(initiative) {
+	proto.notifySelectionSet = function(initiative) {
 		eventbus.publish({topic: "Marker.SelectionSet", data: initiative});
 	};
 
@@ -80,7 +80,6 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 	function createPresenter(view) {
 		const p = new Presenter();
 		p.registerView(view);
-		//eventbus.subscribe({topic: "Initiative.new", callback: function(data) { p.onInitiativeNew(data); } });
 		return p;
 	}
 	var pub = {
