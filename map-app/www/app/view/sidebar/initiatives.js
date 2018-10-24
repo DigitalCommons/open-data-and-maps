@@ -12,8 +12,11 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 	proto.title = "Initiatives";
 
 	proto.populateFixedSelection = function(selection) {
-		const pres = this.presenter;
-		selection.append("div").attr("class", "w3-container").append('p').text("Search: " + pres.getSearchString());
+		let textContent = "Initiatives";	// default content, if no initiatives to show
+		if (this.presenter.currentItemExists()) {
+			const item = this.presenter.currentItem();
+		}
+		selection.append("div").attr("class", "w3-container").append('p').text("Search: " + this.presenter.getSearchString());
 	};
 	proto.populateScrollableSelection = function(selection) {
 		console.log(this.presenter.getInitiatives());

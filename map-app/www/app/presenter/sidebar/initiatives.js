@@ -1,9 +1,19 @@
 define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sidebar/base"], function(eventbus, config, sseInitiative, sidebarPresenter) {
 	"use strict";
 
+	function StackItem(initiatives) {
+		this.initiatives = initiatives;
+	}
+	function SearchResults(initiatives, searchString) {
+		StackItem.call(this, initiatives);
+		this.searchString = searchString;
+	}
+	SearchResults.prototype = Object.create(StackItem.prototype);
+
 	function Presenter(){}
 
 	var proto = Object.create(sidebarPresenter.base.prototype);
+
 
 	proto.getSearchString = function() {
 		var current = this.contentStack.current();
@@ -31,6 +41,12 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		else {
 			return [];
 		}
+	};
+	proto.currentItem = function() {
+	};
+	proto.currentItemExists = function() {
+		// returns true only if the contentStack is empty
+		return typeof this.contentStack.current() !== 'undefined';
 	};
 	proto.notifyMarkersNeedToShowNewSelection = function(lastContent) {
 		eventbus.publish({
