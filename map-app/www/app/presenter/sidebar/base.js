@@ -7,8 +7,22 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 	}
 	Stack.prototype = {
 		append: function(obj) {
-			this.storage[this.storage.length] = obj;
-			this.index = this.storage.length - 1;
+			// This implementation behaves like a typical browser - you loose everything beyond the current
+			// when you add something new:
+			if (this.index < this.storage.length - 1) {
+				// There are items beyond the current one, which we shall remove
+				const itemsToRemove = this.storage.length - this.index;
+				this.index++;
+				this.storage.splice(this.index, itemsToRemove, obj);
+			}
+			else {
+				// Just add the new item to the end
+				this.storage[this.storage.length] = obj;
+				this.index = this.storage.length - 1;
+			}
+			// This implementation adds things to the very end, so the stack grows and grows:
+			//this.storage[this.storage.length] = obj;
+			//this.index = this.storage.length - 1;
 		},
 		current: function() {
 			// returns undefined if the stack is empty
