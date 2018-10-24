@@ -4,7 +4,13 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	function StackItem(initiatives) {
 		this.initiatives = initiatives;
 	}
+	StackItem.prototype.isSearchResults = function() {
+		// TODO - surely there's a more direct way to decide if this is a SearchResults object?
+		return this.hasOwnProperty('searchString');
+	}
+
 	function SearchResults(initiatives, searchString) {
+		// isa StackItem
 		StackItem.call(this, initiatives);
 		this.searchString = searchString;
 	}
@@ -15,34 +21,35 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	var proto = Object.create(sidebarPresenter.base.prototype);
 
 
-	proto.getSearchString = function() {
-		var current = this.contentStack.current();
-		if (typeof current !== 'undefined') {
-			return current.searchString || "";
-		}
-		else {
-			return "";
-		}
-	};
-	function getInitiativesFromStackItem(item) {
-		return (typeof item !== 'undefined') ? item.initiatives : [];
-	}
-	proto.getInitiatives = function() {
-		var p = this;
-		var current = this.contentStack.current();
-		if (typeof current !== 'undefined') {
-			return current.initiatives.map(function(e) {
-				return {
-					label: e.name,
-					onClick: function() { p.onInitiativeClickedInSidebar(e); }
-				};
-			});
-		}
-		else {
-			return [];
-		}
-	};
+//	proto.getSearchString = function() {
+//		var current = this.contentStack.current();
+//		if (typeof current !== 'undefined') {
+//			return current.searchString || "";
+//		}
+//		else {
+//			return "";
+//		}
+//	};
+//	function getInitiativesFromStackItem(item) {
+//		return (typeof item !== 'undefined') ? item.initiatives : [];
+//	}
+//	proto.getInitiatives = function() {
+//		var p = this;
+//		var current = this.contentStack.current();
+//		if (typeof current !== 'undefined') {
+//			return current.initiatives.map(function(e) {
+//				return {
+//					label: e.name,
+//					onClick: function() { p.onInitiativeClickedInSidebar(e); }
+//				};
+//			});
+//		}
+//		else {
+//			return [];
+//		}
+//	};
 	proto.currentItem = function() {
+		return this.contentStack.current();
 	};
 	proto.currentItemExists = function() {
 		// returns true only if the contentStack is empty
@@ -52,8 +59,10 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		eventbus.publish({
 			topic: "Markers.needToShowLatestSelection",
 			data: {
-				unselected: getInitiativesFromStackItem(lastContent),
-				selected: getInitiativesFromStackItem(this.contentStack.current())
+				//unselected: getInitiativesFromStackItem(lastContent),
+				//selected: getInitiativesFromStackItem(this.contentStack.current())
+				unselected: lastContent ? lastContent.initiatives : [],
+				selected: this.contentStack.current().initiatives
 			}
 		});
 	}
@@ -64,7 +73,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		return array.reduce((a, b) => Math.min(a, b));
 	}
 	proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function() {
-		const initiatives = getInitiativesFromStackItem(this.contentStack.current());
+		const initiatives = this.contentStack.current().initiatives;
 		const lats = initiatives.map(x => x.lat);
 		const lngs = initiatives.map(x => x.lng);
 
@@ -89,10 +98,11 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		//        But still need to show the fact that there are no results.
 		const lastContent = this.contentStack.current();
 		//TODO: de-select last content? select current content?
-		this.contentStack.append({
-			searchString: data.text,
-			initiatives: data.results
-		});
+		this.contentStack.append(new SearchResults(data.results, data.text));
+		//this.contentStack.append({
+		//	searchString: data.text,
+		//	initiatives: data.results
+		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
 		this.view.refresh();
@@ -102,11 +112,12 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		//eventbus.publish({topic: "Initiative.selected", data: e});
 		console.log(initiative);
 		const lastContent = this.contentStack.current();
-		this.contentStack.append({
-			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
-			searchString: "selection",
-			initiatives: [initiative]
-		});
+		this.contentStack.append(new StackItem([initiative]));
+		//this.contentStack.append({
+		//	// TODO - need to distinguish between initiatives searched for an thos that come via selections.
+		//	searchString: "selection",
+		//	initiatives: [initiative]
+		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
 		this.view.refresh();
@@ -115,11 +126,12 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		const initiative = data;
 		console.log(initiative);
 		const lastContent = this.contentStack.current();
-		this.contentStack.append({
-			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
-			searchString: "selection",
-			initiatives: [initiative]
-		});
+		this.contentStack.append(new StackItem([initiative]));
+		//this.contentStack.append({
+		//	// TODO - need to distinguish between initiatives searched for an thos that come via selections.
+		//	searchString: "selection",
+		//	initiatives: [initiative]
+		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
 	}
@@ -136,11 +148,12 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			// remove elment form array (sigh - is this really the best array method for this?)
 			initiatives.splice(index, 1);
 		}
-		this.contentStack.append({
-			// TODO - need to distinguish between initiatives searched for an thos that come via selections.
-			searchString: "selection",
-			initiatives: initiatives
-		});
+		this.contentStack.append(new StackItem(initiatives));
+		//this.contentStack.append({
+		//	// TODO - need to distinguish between initiatives searched for an thos that come via selections.
+		//	searchString: "selection",
+		//	initiatives: initiatives
+		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
 	}
