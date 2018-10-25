@@ -20,34 +20,6 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 
 	var proto = Object.create(sidebarPresenter.base.prototype);
 
-
-//	proto.getSearchString = function() {
-//		var current = this.contentStack.current();
-//		if (typeof current !== 'undefined') {
-//			return current.searchString || "";
-//		}
-//		else {
-//			return "";
-//		}
-//	};
-//	function getInitiativesFromStackItem(item) {
-//		return (typeof item !== 'undefined') ? item.initiatives : [];
-//	}
-//	proto.getInitiatives = function() {
-//		var p = this;
-//		var current = this.contentStack.current();
-//		if (typeof current !== 'undefined') {
-//			return current.initiatives.map(function(e) {
-//				return {
-//					label: e.name,
-//					onClick: function() { p.onInitiativeClickedInSidebar(e); }
-//				};
-//			});
-//		}
-//		else {
-//			return [];
-//		}
-//	};
 	proto.currentItem = function() {
 		return this.contentStack.current();
 	};
@@ -59,8 +31,6 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		eventbus.publish({
 			topic: "Markers.needToShowLatestSelection",
 			data: {
-				//unselected: getInitiativesFromStackItem(lastContent),
-				//selected: getInitiativesFromStackItem(this.contentStack.current())
 				unselected: lastContent ? lastContent.initiatives : [],
 				selected: this.contentStack.current().initiatives
 			}
@@ -88,9 +58,8 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		eventbus.publish({topic: "Sidebar.showInitiatives"});
 	};
 	proto.historyButtonsUsed = function(lastContent) {
-		console.log("sidebar/initiatives historyButtonsUsed");
-		//TODO - de-select last content? select current content?
-		console.log(lastContent);
+		//console.log("sidebar/initiatives historyButtonsUsed");
+		//console.log(lastContent);
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
 	};
@@ -100,12 +69,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		//        Prob don't want to put them on the stack?
 		//        But still need to show the fact that there are no results.
 		const lastContent = this.contentStack.current();
-		//TODO: de-select last content? select current content?
 		this.contentStack.append(new SearchResults(data.results, data.text));
-		//this.contentStack.append({
-		//	searchString: data.text,
-		//	initiatives: data.results
-		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
 		this.notifySidebarNeedsToShowInitiatives();
@@ -113,29 +77,18 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	}
 	proto.onInitiativeClickedInSidebar = function(data) {
 		const initiative = data;
-		//eventbus.publish({topic: "Initiative.selected", data: e});
-		console.log(initiative);
+		//console.log(initiative);
 		const lastContent = this.contentStack.current();
 		this.contentStack.append(new StackItem([initiative]));
-		//this.contentStack.append({
-		//	// TODO - need to distinguish between initiatives searched for an thos that come via selections.
-		//	searchString: "selection",
-		//	initiatives: [initiative]
-		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
 		this.view.refresh();
 	};
 	proto.onMarkerSelectionSet = function(data) {
 		const initiative = data;
-		console.log(initiative);
+		//console.log(initiative);
 		const lastContent = this.contentStack.current();
 		this.contentStack.append(new StackItem([initiative]));
-		//this.contentStack.append({
-		//	// TODO - need to distinguish between initiatives searched for an thos that come via selections.
-		//	searchString: "selection",
-		//	initiatives: [initiative]
-		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifySidebarNeedsToShowInitiatives();
 		this.view.refresh();
@@ -154,11 +107,6 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			initiatives.splice(index, 1);
 		}
 		this.contentStack.append(new StackItem(initiatives));
-		//this.contentStack.append({
-		//	// TODO - need to distinguish between initiatives searched for an thos that come via selections.
-		//	searchString: "selection",
-		//	initiatives: initiatives
-		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.view.refresh();
 	}
