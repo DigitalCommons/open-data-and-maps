@@ -11,6 +11,11 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 	// And adds some overrides and new properties of it's own:
 	proto.title = "Initiatives";
 
+	const sectionHeadingClasses = "w3-bar-item w3-tiny w3-light-grey w3-padding-small";
+	const hoverColour = " w3-hover-light-blue";
+	const accordionClasses = "w3-bar-item w3-tiny w3-light-grey w3-padding-small" + hoverColour;
+	const sectionClasses = "w3-bar-item w3-small w3-white w3-padding-small";
+
 	proto.populateFixedSelection = function(selection) {
 		let textContent = "Initiatives";	// default content, if no initiatives to show
 		if (this.presenter.currentItemExists()) {
@@ -26,10 +31,33 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 		selection.append("div").attr("class", "w3-container").append('p').text(textContent);
 		//selection.append("div").attr("class", "w3-container").append('p').text("Search: " + this.presenter.getSearchString());
 	};
+	proto.geekZoneContentAtD3Selection = function(selection, initiative) {
+		const that = this;
+		const s = selection.append('div').attr('class', "w3-bar-block");
+		if (initiative.lat) {
+			s.append('div')
+			.attr('class', sectionClasses)
+			.text("Latitude: " + initiative.lat)
+			;
+		}
+		if (initiative.lng) {
+			s.append('div')
+			.attr('class', sectionClasses)
+			.text("Longitude: " + initiative.lng)
+			;
+		}
+		if (initiative.within) {
+			s.append('div')
+			.attr('class', sectionClasses + hoverColour)
+			.text("Ordnance Survey postcode data")
+			.style('cursor', 'pointer')
+			.on('click', function(e) { that.openInNewTabOrWindow(initiative.within); })
+			;
+		}
+
+		//selection.append('div').text("foo");
+	};
 	proto.populateSelectionWithOneInitiative = function(selection, initiative) {
-		const sectionHeadingClasses = "w3-bar-item w3-tiny w3-light-grey w3-padding-small";
-		const sectionClasses = "w3-bar-item w3-small w3-white w3-padding-small";
-		const hoverColour = " w3-hover-light-blue";
 		const s = selection.append('div').attr('class', "w3-bar-block");
 		const that = this;
 		if (initiative.www) {
@@ -38,9 +66,25 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 			.attr('class', sectionClasses + hoverColour)
 			.text(initiative.www)
 			.style('cursor', 'pointer')
-			.on('click', function(e) { that.openInNewTabOrWindow(initiative.www); });
+			.on('click', function(e) { that.openInNewTabOrWindow(initiative.www); })
+			;
 			//s.append('div').attr('class', sectionClasses).html(this.htmlToOpenLinkInNewTab(initiative.www, initiative.www, {title: "foo"}));
 		}
+		s.append('div').attr('class', sectionHeadingClasses).text("description");
+		s.append('div')
+		.attr('class', sectionClasses)
+		.text("We're still working on putting the description of the initiative here. It should be available quite soon.")
+		;
+		// Make an accordion for opening up the geek zone
+		that.makeAccordionAtD3Selection({
+			selection: s,
+			heading: "Geek zone",
+			headingClasses: accordionClasses,
+			makeContentAtD3Selection: function(contentD3Selection) {
+				that.geekZoneContentAtD3Selection(contentD3Selection, initiative);
+			},
+			hideContent: true
+		});
 //		s.append('div').attr('class', "w3-bar-item w3-tiny w3-light-grey w3-padding-small").text("foo");
 //		s.append('div').attr('class', "w3-bar-item w3-padding-small w3-small w3-light-blue").append('p').text("kakjsh kajsh ajhsf ksdh fhsd fhskd jhf ksd fkhsdkfh ksdjhf kjshdf kjshd fkhjsdkfh skdhf ldfkg hlsdhf ksdjhf kajhsdf kshdf kajsh fksjhdk fhsdkf");
 //		s.append('div').attr('class', "w3-bar-item w3-small").text("bar");
