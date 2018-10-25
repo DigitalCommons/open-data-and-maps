@@ -27,6 +27,23 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 		//selection.append("div").attr("class", "w3-container").append('p').text("Search: " + this.presenter.getSearchString());
 	};
 	proto.populateSelectionWithOneInitiative = function(selection, initiative) {
+		const sectionHeadingClasses = "w3-bar-item w3-tiny w3-light-grey w3-padding-small";
+		const sectionClasses = "w3-bar-item w3-small w3-white w3-padding-small";
+		const hoverColour = " w3-hover-light-blue";
+		const s = selection.append('div').attr('class', "w3-bar-block");
+		const that = this;
+		if (initiative.www) {
+			s.append('div').attr('class', sectionHeadingClasses).text("website");
+			s.append('div')
+			.attr('class', sectionClasses + hoverColour)
+			.text(initiative.www)
+			.style('cursor', 'pointer')
+			.on('click', function(e) { that.openInNewTabOrWindow(initiative.www); });
+			//s.append('div').attr('class', sectionClasses).html(this.htmlToOpenLinkInNewTab(initiative.www, initiative.www, {title: "foo"}));
+		}
+//		s.append('div').attr('class', "w3-bar-item w3-tiny w3-light-grey w3-padding-small").text("foo");
+//		s.append('div').attr('class', "w3-bar-item w3-padding-small w3-small w3-light-blue").append('p').text("kakjsh kajsh ajhsf ksdh fhsd fhskd jhf ksd fkhsdkfh ksdjhf kjshdf kjshd fkhjsdkfh skdhf ldfkg hlsdhf ksdjhf kajhsdf kshdf kajsh fksjhdk fhsdkf");
+//		s.append('div').attr('class', "w3-bar-item w3-small").text("bar");
 	};
 	proto.populateSelectionWithListOfInitiatives = function(selection, initiatives) {
 		const pres = this.presenter;
