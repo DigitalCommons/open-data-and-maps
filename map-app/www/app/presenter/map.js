@@ -5,8 +5,6 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 
 	var proto = Object.create(presenter.base.prototype);
 
-	var serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
-		"services/" + "display_similar_companies/main.php";
 	proto.getContextmenuItems = function() {
 		// The context menu has been disabled (in www/app/view/map.js), in accordance with 
 		// https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/78
