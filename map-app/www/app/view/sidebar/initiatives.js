@@ -46,12 +46,32 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 			.text("Longitude: " + initiative.lng)
 			;
 		}
+		if (initiative.uri) {
+			s.append('div')
+			.attr('class', sectionClasses + hoverColour)
+			.text("Detailed data for this initiative")
+			.style('cursor', 'pointer')
+			.on('click', function(e) { that.openInNewTabOrWindow(initiative.uri); })
+			;
+		}
 		if (initiative.within) {
 			s.append('div')
 			.attr('class', sectionClasses + hoverColour)
 			.text("Ordnance Survey postcode data")
 			.style('cursor', 'pointer')
 			.on('click', function(e) { that.openInNewTabOrWindow(initiative.within); })
+			;
+		}
+		if (initiative.regorg) {
+			const serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
+				"services/" + "display_similar_companies/main.php";
+			const serviceToDisplaySimilarCompaniesURL = serviceToDisplaySimilarCompanies + "?company=" + encodeURIComponent(initiative.regorg);
+			s.append('div')
+			.attr('class', sectionClasses + hoverColour)
+			.attr('title', "A tech demo of federated Linked Open Data queries!")
+			.text("Display similar companies nearby using Companies House data")
+			.style('cursor', 'pointer')
+			.on('click', function(e) { that.openInNewTabOrWindow(serviceToDisplaySimilarCompaniesURL); })
 			;
 		}
 
