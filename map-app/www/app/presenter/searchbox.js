@@ -8,7 +8,6 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter"], fu
 		console.log("Search submitted: [" + text + "]");
 		// We need to make sure that the search sidebar is loaded
 		if (text.length > 0) {
-			eventbus.publish({topic: "Sidebar.showInitiatives"});
 			var results = sseInitiative.search(text);
 			console.log(results);
 			eventbus.publish({topic: "Search.initiativeResults", data: {text: text, results: results}});

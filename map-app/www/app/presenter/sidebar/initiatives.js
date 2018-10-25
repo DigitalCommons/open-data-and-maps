@@ -84,6 +84,9 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			});
 		}
 	}
+	proto.notifySidebarNeedsToShowInitiatives = function() {
+		eventbus.publish({topic: "Sidebar.showInitiatives"});
+	};
 	proto.historyButtonsUsed = function(lastContent) {
 		console.log("sidebar/initiatives historyButtonsUsed");
 		//TODO - de-select last content? select current content?
@@ -105,6 +108,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
+		this.notifySidebarNeedsToShowInitiatives();
 		this.view.refresh();
 	}
 	proto.onInitiativeClickedInSidebar = function(data) {
@@ -133,6 +137,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		//	initiatives: [initiative]
 		//});
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
+		this.notifySidebarNeedsToShowInitiatives();
 		this.view.refresh();
 	}
 	proto.onMarkerSelectionToggled = function(data) {
