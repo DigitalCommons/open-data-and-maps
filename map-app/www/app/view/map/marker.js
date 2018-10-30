@@ -36,11 +36,13 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		});
 
 		const icon = unselectedIcon;
-		this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {icon: icon, title: hovertext});
+		//this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {icon: icon, title: hovertext});
+		this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {icon: icon});
 		// maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
 		// maxWidth:800 is needed if the font-size is set to 200% in CSS:
 		//this.marker.bindPopup(popuptext, { maxWidth: 800 });
-		this.marker.bindPopup(this.presenter.getPopupText(initiative));
+		//this.marker.bindPopup(this.presenter.getPopupText(initiative));
+		this.marker.bindTooltip(this.presenter.getHoverText(initiative));
 
 		//const eventHandlers = this.presenter.getEventHandlers(initiative);
 		//Object.keys(eventHandlers).forEach(function(k) {
@@ -49,6 +51,14 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		const that = this;
 		this.marker.on('click', function(e) {
 			that.onClick(e);
+		});
+		this.marker.on('mouseover', function(e) {
+			console.log('mouseover');
+			console.log(that.initiative);
+		});
+		this.marker.on('mouseout', function(e) {
+			console.log('mouseout');
+			console.log(that.initiative);
 		});
 
 		this.cluster = unselectedClusterGroup;
@@ -82,6 +92,21 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		this.cluster = selectedClusterGroup;
 		this.cluster.addLayer(this.marker);
 	};
+	proto.showTooltip = function(initiative) {
+		// This variation zooms the map, and makes sure the marker can
+		// be seen, spiderifying if needed.
+		// But this auto-zooming maybe more than the user bargained for!
+		// It might disrupt their flow.
+		//this.cluster.zoomToShowLayer(this.marker);
+		const cluster = selectedClusterGroup.getVisibleParent(this.marker);
+		if (cluster && typeof cluster.spiderfy === 'function') {
+			cluster.spiderfy();
+		}
+		this.marker.openTooltip();
+	};
+	proto.hideTooltip = function(initiative) {
+		this.marker.closeTooltip();
+	};
 
 	function setSelected(initiative) {
 		markerForInitiative[initiative.uniqueId].setSelected(initiative);
@@ -106,13 +131,21 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 	function setUnselectedClusterGroup(clusterGroup) {
 		unselectedClusterGroup = clusterGroup;
 	}
+	function showTooltip(initiative) {
+		markerForInitiative[initiative.uniqueId].showTooltip(initiative);
+	}
+	function hideTooltip(initiative) {
+		markerForInitiative[initiative.uniqueId].hideTooltip(initiative);
+	}
 
 	var pub = {
 		createMarker: createMarker,
 		setSelectedClusterGroup: setSelectedClusterGroup, 
 		setUnselectedClusterGroup: setUnselectedClusterGroup, 
 		setSelected: setSelected,
-		setUnselected: setUnselected
+		setUnselected: setUnselected,
+		showTooltip: showTooltip,
+		hideTooltip: hideTooltip
 	};
 	return pub;
 });

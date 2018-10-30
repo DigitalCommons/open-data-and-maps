@@ -54,6 +54,18 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 			});
 		}
 	}
+	proto.notifyShowInitiativeTooltip = function(initiative) {
+		eventbus.publish({
+			topic: "Map.needToShowInitiativeTooltip",
+			data: initiative
+		});
+	};
+	proto.notifyHideInitiativeTooltip = function(initiative) {
+		eventbus.publish({
+			topic: "Map.needToHideInitiativeTooltip",
+			data: initiative
+		});
+	};
 	proto.notifySidebarNeedsToShowInitiatives = function() {
 		eventbus.publish({topic: "Sidebar.showInitiatives"});
 	};
@@ -83,6 +95,12 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
 		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
 		this.view.refresh();
+	};
+	proto.onInitiativeMouseoverInSidebar = function(initiative) {
+		this.notifyShowInitiativeTooltip(initiative);
+	};
+	proto.onInitiativeMouseoutInSidebar = function(initiative) {
+		this.notifyHideInitiativeTooltip(initiative);
 	};
 	proto.onMarkerSelectionSet = function(data) {
 		const initiative = data;

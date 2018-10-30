@@ -81,7 +81,13 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 		data.selected.forEach(function(e) {
 			that.view.setSelected(e);
 		});
-	}
+	};
+	proto.onNeedToShowInitiativeTooltip = function(data) {
+		this.view.showTooltip(data);
+	};
+	proto.onNeedToHideInitiativeTooltip = function(data) {
+		this.view.hideTooltip(data);
+	};
 //	proto.onInitiativeSelected = function(data) {
 //		const initiative = data;
 //		console.log('onInitiativeSelected');
@@ -108,6 +114,8 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 		//eventbus.subscribe({topic: "Initiative.selected", callback: function(data) { p.onInitiativeSelected(data); } });
 		eventbus.subscribe({topic: "Markers.needToShowLatestSelection", callback: function(data) { p.onMarkersNeedToShowLatestSelection(data); } });
 		eventbus.subscribe({topic: "Map.needsToBeZoomedAndPanned", callback: function(data) { p.onMapNeedsToBeZoomedAndPanned(data); } });
+		eventbus.subscribe({topic: "Map.needToShowInitiativeTooltip", callback: function(data) {p.onNeedToShowInitiativeTooltip(data); }});
+		eventbus.subscribe({topic: "Map.needToHideInitiativeTooltip", callback: function(data) {p.onNeedToHideInitiativeTooltip(data); }});
 		return p;
 	}
 	var pub = {

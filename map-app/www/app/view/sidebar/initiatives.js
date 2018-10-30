@@ -111,6 +111,8 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 			// TODO - shift-click should remove initiative from selection,
 			//        just like shift-clicking a marker.
 			.on('click', function(e) { pres.onInitiativeClickedInSidebar(initiative); } )
+			.on('mouseover', function(e) { pres.onInitiativeMouseoverInSidebar(initiative); })
+			.on('mouseout', function(e) { pres.onInitiativeMouseoutInSidebar(initiative); })
 			.text(initiative.name);
 		});
 	};

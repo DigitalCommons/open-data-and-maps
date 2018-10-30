@@ -48,6 +48,12 @@ define(
 		proto.setUnselected = function(initiative) {
 			markerView.setUnselected(initiative);
 		};
+		proto.showTooltip = function(initiative) {
+			markerView.showTooltip(initiative);
+		};
+		proto.hideTooltip = function(initiative) {
+			markerView.hideTooltip(initiative);
+		};
 		/* The protecting veil is now obsolete. */
 		//function clearProtectingVeil() {
 			//d3.select("#protectingVeil").style("display", "none");
