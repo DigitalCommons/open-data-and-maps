@@ -3,6 +3,10 @@ define(
 	function(d3, leaflet, contextmenu, viewBase, presenter, markerView) {
 		"use strict";
 
+		const config = {
+			putSelectedMarkersInClusterGroup: false
+		};
+
 		function MapView(){}
 		// inherit from the standard view base object:
 		var proto = Object.create(viewBase.base.prototype);
@@ -33,9 +37,15 @@ define(
 			leaflet.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 18}).addTo(this.map);
 
 			this.unselectedClusterGroup = leaflet.markerClusterGroup();
-			this.selectedClusterGroup = leaflet.markerClusterGroup();
 			this.map.addLayer(this.unselectedClusterGroup);
-			this.map.addLayer(this.selectedClusterGroup);
+			if (config.putSelectedMarkersInClusterGroup) {
+				this.selectedClusterGroup = leaflet.markerClusterGroup();
+				this.map.addLayer(this.selectedClusterGroup);
+			}
+			else {
+				// If we're here, then selectedClusterGroup is a BAD NAME for this property!
+				this.selectedClusterGroup = this.map;
+			}
 			markerView.setSelectedClusterGroup(this.selectedClusterGroup);
 			markerView.setUnselectedClusterGroup(this.unselectedClusterGroup);
 		};

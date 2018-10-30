@@ -3,6 +3,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 
 	// Keep a mapping between initiatives and their Markers:
 	const markerForInitiative = {};
+	// CAUTION: this may be either a ClusterGroup, or the map itself
 	let selectedClusterGroup = null;
 	let unselectedClusterGroup = null;
 
@@ -89,6 +90,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 	proto.setSelected = function(initiative) {
 		this.marker.setIcon(selectedIcon);
 		this.cluster.removeLayer(this.marker);
+		// CAUTION: this may be either a ClusterGroup, or the map itself
 		this.cluster = selectedClusterGroup;
 		this.cluster.addLayer(this.marker);
 	};
@@ -98,14 +100,19 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		// But this auto-zooming maybe more than the user bargained for!
 		// It might disrupt their flow.
 		//this.cluster.zoomToShowLayer(this.marker);
-		const cluster = selectedClusterGroup.getVisibleParent(this.marker);
-		if (cluster && typeof cluster.spiderfy === 'function') {
-			cluster.spiderfy();
-		}
+
+		// This variation spiderfys the cluster to which the marker belongs.
+		// This only works if selectedClusterGroup is actually a ClusterGroup!
+		//const cluster = selectedClusterGroup.getVisibleParent(this.marker);
+		//if (cluster && typeof cluster.spiderfy === 'function') {
+			//cluster.spiderfy();
+		//}
 		this.marker.openTooltip();
+		this.marker.setZIndexOffset(1000);
 	};
 	proto.hideTooltip = function(initiative) {
 		this.marker.closeTooltip();
+		this.marker.setZIndexOffset(0);
 	};
 
 	function setSelected(initiative) {
@@ -126,6 +133,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		return view;
 	}
 	function setSelectedClusterGroup(clusterGroup) {
+		// CAUTION: this may be either a ClusterGroup, or the map itself
 		selectedClusterGroup = clusterGroup;
 	}
 	function setUnselectedClusterGroup(clusterGroup) {
