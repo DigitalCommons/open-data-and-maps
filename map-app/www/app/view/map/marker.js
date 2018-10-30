@@ -6,6 +6,12 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 	let selectedClusterGroup = null;
 	let unselectedClusterGroup = null;
 
+	// Note that the dependency between AwesomeMarkers and leaflet is expressed as a
+	// requireJS shim config in our main requireJS configuration.
+	// It seems that all of our leaflet Markers can share the same AwesomeMarker icon,
+	// they don't need to have one each:
+	const unselectedIcon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'blue', iconColor: 'white', icon: 'certificate', cluster: false});
+	const selectedIcon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
 
 	function MarkerView(){}
 	// inherit from the standard view base object:
@@ -29,9 +35,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 			markerColor: this.presenter.getMarkerColor(initiative)
 		});
 
-		// Note that the dependency between AwesomeMarkers and leaflet is expressed as a 
-		// requireJS shim config in our main requireJS configuration.
-		const icon = leaflet.AwesomeMarkers.icon(opts);
+		const icon = unselectedIcon;
 		this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {icon: icon, title: hovertext});
 		// maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
 		// maxWidth:800 is needed if the font-size is set to 200% in CSS:
@@ -67,15 +71,13 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		}
 	};
 	proto.setUnselected = function(initiative) {
-		const icon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'blue', iconColor: 'white', icon: 'certificate', cluster: false});
-		this.marker.setIcon(icon);
+		this.marker.setIcon(unselectedIcon);
 		this.cluster.removeLayer(this.marker);
 		this.cluster = unselectedClusterGroup;
 		this.cluster.addLayer(this.marker);
 	};
 	proto.setSelected = function(initiative) {
-		const icon = leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
-		this.marker.setIcon(icon);
+		this.marker.setIcon(selectedIcon);
 		this.cluster.removeLayer(this.marker);
 		this.cluster = selectedClusterGroup;
 		this.cluster.addLayer(this.marker);

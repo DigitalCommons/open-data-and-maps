@@ -108,6 +108,8 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 			selection.append('button')
 			.attr("class", "w3-bar-item w3-button w3-mobile")
 			.attr("title", "Click to see details here and on map")
+			// TODO - shift-click should remove initiative from selection,
+			//        just like shift-clicking a marker.
 			.on('click', function(e) { pres.onInitiativeClickedInSidebar(initiative); } )
 			.text(initiative.name);
 		});
