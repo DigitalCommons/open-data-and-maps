@@ -1,5 +1,5 @@
 // Set up the various sidebars
-define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/sidebar/initiatives"], function(d3, viewBase, presenter, mainMenu, initiatives) {
+define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/sidebar/initiatives", "view/sidebar/about"], function(d3, viewBase, presenter, mainMenu, initiatives, about) {
 	"use strict";
 
 	// This deals with the view object that controls the sidebar
@@ -48,6 +48,7 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 	};
 	proto.createSidebars = function() {
 		this.sidebar = {
+			about: about.createSidebar(),
 			initiatives: initiatives.createSidebar(),
 			mainMenu: mainMenu.createSidebar()
 		};

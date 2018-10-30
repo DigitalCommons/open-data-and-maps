@@ -84,12 +84,24 @@ $(CONFIG_DIR):
 	mkdir -p $(CONFIG_DIR)
 	touch $(CONFIG_DIR)GENERATED_DIR-DO_NOT_STORE_SOURCE_HERE
 
+## We're going to add git commit info to the version info:
+WORKING_COPY_MODIFIED = $(shell git status --porcelain --untracked-files=no .)
+
+# The above git status command will return nothing if nothing has been modified
+ifeq ($(WORKING_COPY_MODIFIED),)
+        MODIFIED_TAG :=
+else
+        MODIFIED_TAG := -modified
+endif
+COMMIT_HASH := $(shell git rev-parse --short HEAD)$(MODIFIED_TAG)
+
+
 # When configuring, a link is prefered to a copy because:
 # with a link, any edits to SRC_CONFIG_JSON are immediately available for local debugging,
 # without having to make the configure target afresh:
 configure: | $(CONFIG_DIR)
 	ln -f $(SRC_CONFIG_JSON) $(TGT_CONFIG_JSON)
-	echo '{"variant": "$(variant)","timestamp": "'`date +%Y-%m-%dT%H:%M:%S%z`'"}' > $(TGT_VERSION_JSON)
+	echo '{"variant": "$(variant)","timestamp": "'`date +%Y-%m-%dT%H:%M:%S%z`'", "gitcommit": "$(COMMIT_HASH)"}' > $(TGT_VERSION_JSON)
 
 $(BUILD_DIR):
 	mkdir -p $@

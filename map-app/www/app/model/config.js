@@ -12,7 +12,19 @@ define(["json!configuration/config", "json!configuration/version.json"], functio
 	function htmlTitle() {
 		return config_json.htmlTitle;
 	}
+	function getSoftwareVariant() {
+		return version_json.variant;
+	}
+	function getSoftwareTimestamp() {
+		return version_json.timestamp;
+	}
+	function getSoftwareGitCommit() {
+		return version_json.gitcommit;
+	}
 	var pub = {
+		getSoftwareTimestamp: getSoftwareTimestamp,
+		getSoftwareVariant: getSoftwareVariant,
+		getSoftwareGitCommit: getSoftwareGitCommit,
 		namedDatasets: namedDatasets,
 		htmlTitle: htmlTitle
 	};

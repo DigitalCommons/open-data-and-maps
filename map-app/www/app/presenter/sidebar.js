@@ -19,6 +19,7 @@ define(["app/eventbus", "model/config", "presenter"], function(eventbus, config,
 		var p = new Presenter;
 		p.registerView(view);
 		eventbus.subscribe({topic: "Sidebar.showInitiatives", callback: function() { p.changeSidebar('initiatives'); }});
+		eventbus.subscribe({topic: "Sidebar.showAbout", callback: function() { p.changeSidebar('about'); }});
 		eventbus.subscribe({topic: "Initiative.selected", callback: function() { view.hideSidebarIfItTakesWholeScreen(); } });
 
 		return p;
