@@ -314,6 +314,8 @@ There are various methods of securing a SPARQL endpoint on Virtuoso, oncluding O
 TODO: read [Deploying PHP applications using Virtuoso as Application Server](http://vos.openlinksw.com/owiki/wiki/VOS/VirtuosoPHP).
 Does that provide a better way to interface the web server (serving map-app) to Virtuoso?
 
+TODO: Look into alternatives: [SPARQL 1.1 Update](https://www.w3.org/TR/sparql11-update/), [SPARQL 1.1 Graph Store HTTP Protocol](https://www.w3.org/TR/sparql11-http-rdf-update/), [Linked Data Platform 1.0](https://www.w3.org/TR/ldp/), [Solid](https://github.com/solid/solid)
+
 #### Authentication
 
 We need to provide a way for a user to authenticate (login).
