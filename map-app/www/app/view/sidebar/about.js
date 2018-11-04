@@ -48,7 +48,9 @@ define(["d3", "app/eventbus", "presenter/sidebar/about", "view/sidebar/base"], f
 	};
 	proto.populateScrollableSelection = function(selection) {
 		const that = this;
-		selection.append('div').attr("class", "w3-container w3-center").append('p').text("Information about this map will be available here soon.");
+		//selection.append('div').attr("class", "w3-container w3-center").append('p').text("Information about this map will be available here soon.");
+		//selection.append('div').attr("class", "w3-container w3-center").html(that.presenter.aboutHtml());
+		selection.append('div').attr("class", "w3-container").html(that.presenter.aboutHtml());
 		// Make an accordion for opening up the geek zone
 		this.makeAccordionAtD3Selection({
 			selection: selection,

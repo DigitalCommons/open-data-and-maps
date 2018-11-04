@@ -12,6 +12,9 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 			gitcommit: config.getSoftwareGitCommit()
 		};
 	};
+	proto.aboutHtml = function() {
+		return config.aboutHtml();
+	};
 
 	Presenter.prototype = proto;
 
