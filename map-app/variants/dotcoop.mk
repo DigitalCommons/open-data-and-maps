@@ -13,3 +13,6 @@ DEPLOYED_MAP_URL := https://maps.solidarityeconomy.coop/$(SERVER_APP_SUBDIR)
 
 # JSON file for this configuration, to be loaded into the running map-app:
 SRC_CONFIG_JSON := variants/$(variant)/config.json
+
+# Directory for config files to be used for this variant of the map:
+SRC_CONFIG_DIR := variants/$(variant)/
