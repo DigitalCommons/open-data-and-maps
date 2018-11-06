@@ -1,6 +1,9 @@
 
 # WebId for Authentication
 
+- [WebId wiki](https://www.w3.org/wiki/WebID)
+- [Virtuoso: Securing your SPARQL Endpoint via WebID](http://vos.openlinksw.com/owiki/wiki/VOS/VirtSPARQLSecurityWebID)
+
 ## Experimentation
 
 I've created a WebId using a clone of https://github.com/njh/gen-webid-cert.

@@ -7,6 +7,7 @@ define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(even
 
 	proto.aboutButtonClicked = function() {
 		console.log('aboutButtonClicked');
+		eventbus.publish({topic: "Sidebar.showAbout"});
 	};
 	proto.initiativesButtonClicked = function() {
 		console.log('initiativesButtonClicked');

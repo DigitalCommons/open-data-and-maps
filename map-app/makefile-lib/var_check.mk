@@ -19,3 +19,9 @@ $$(warning $(3))
 endif
 endef
 
+define var_obsolete
+ifdef $(1)
+$$(warning Variable is defined: $(1) This variable is now OBSOLETE - best to remove it from your makefile)
+endif
+endef
+

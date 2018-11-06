@@ -15,12 +15,13 @@ include $(MAKEFILE_INC_DIR)load_variant.mk
 $(eval $(call var_check,SERVER,Name of server to which app is to be deployed))
 $(eval $(call var_check,SERVER_BASE_DIR,Base deployment directory on server (must pre-exist)))
 $(eval $(call var_check,SERVER_APP_SUBDIR,Directory under SERVER_BASE_DIR to deploy to (will be created during deployment)))
-$(eval $(call var_check,SRC_CONFIG_JSON,JSON config file to be loaded into the running map-app))
+$(eval $(call var_check,SRC_CONFIG_DIR,Directory with config files to copy when 'make configure' is run))
 $(eval $(call var_check,DEPLOYED_MAP_URL,URL where map will be found after deployment))
 $(eval $(call var_check_warning,HTACCESS_FILE,Name of .htaccess file to be deployed to server,If absent no .htaccess will be deployed and that's usually fine))
+$(eval $(call var_obsolete,SRC_CONFIG_JSON))
 
 .PHONY: help lint configure build deploy-dry-run deploy deploy_htaccess
-.PHONY: build_map
+.PHONY: build_map clean_config
 .DEFAULT_GOAL: help
 
 help:
@@ -40,6 +41,8 @@ help:
 	@echo "\tWARNING: Deploying to the service will delete files that don't match our local build!"
 	@echo "\tWARNING: Be absolutely sure that the target directory on the server is the right one!"
 	@echo "\tWARNING: Run 'make variant=$(variant) deploy-dry-run' first, and check the output!"
+	@echo ""
+	@echo "Configured version: $(shell cat $(TGT_VERSION_JSON))"
 
 LINT := eslint
 RSYNC := rsync -avzc --delete
@@ -75,21 +78,55 @@ JS_FILES := $(SRC_DIR)app.js $(shell find $(APP_DIR) -name '*.js')
 # It will be built (along with all the other files) when the build target is run, ready for deployment.
 CONFIG_DIR := $(SRC_DIR)configuration/
 
-# This corresponds to the name used within other js files to refer to this config file:
-TGT_CONFIG_JSON := $(CONFIG_DIR)config.json
+# The running map-app will be expecting various files to be 
+# available in $(CONFIG_DIR).
+# Here we create the names of those expected files:
 TGT_VERSION_JSON := $(CONFIG_DIR)version.json
+CONFIG_FILES_TO_COPY := config.json about.html
+TGT_CONFIG_FILES := $(addprefix $(CONFIG_DIR),$(CONFIG_FILES_TO_COPY))
+
+# The DEPLOYED_VERSION_JSON is used as part of a test:
 DEPLOYED_VERSION_JSON := $(DEPLOYED_MAP_URL)$(subst $(SRC_DIR),,$(TGT_VERSION_JSON))
+
+# This is where we generate individual goals for each of the TGT_CONFIG_FILES:
+# This helps us to get explicit messages when a variant fails
+# to contain one of the required config files.
+define CONFIG_template
+$(CONFIG_DIR)$(1) : $(SRC_CONFIG_DIR)$(1)
+	ln -f $$< $$@
+endef
+
+# Generate one makefile fragment for each config file that just
+# requires a simple link to be made to 'copy' it:
+$(foreach file,$(CONFIG_FILES_TO_COPY),$(eval $(call CONFIG_template,$(file))))
 
 $(CONFIG_DIR):
 	mkdir -p $(CONFIG_DIR)
 	touch $(CONFIG_DIR)GENERATED_DIR-DO_NOT_STORE_SOURCE_HERE
 
+## We're going to add git commit info to the version info:
+WORKING_COPY_MODIFIED = $(shell git status --porcelain --untracked-files=no .)
+
+# The above git status command will return nothing if nothing has been modified
+ifeq ($(WORKING_COPY_MODIFIED),)
+        MODIFIED_TAG :=
+else
+        MODIFIED_TAG := -modified
+endif
+COMMIT_HASH := $(shell git rev-parse --short HEAD)$(MODIFIED_TAG)
+
+
 # When configuring, a link is prefered to a copy because:
 # with a link, any edits to SRC_CONFIG_JSON are immediately available for local debugging,
 # without having to make the configure target afresh:
-configure: | $(CONFIG_DIR)
-	ln -f $(SRC_CONFIG_JSON) $(TGT_CONFIG_JSON)
-	echo '{"variant": "$(variant)","timestamp": "'`date +%Y-%m-%dT%H:%M:%S%z`'"}' > $(TGT_VERSION_JSON)
+
+# We always want the config filesto be created afresh,
+# so we delete them first:
+clean_config:
+	rm -f $(TGT_CONFIG_FILES)
+
+configure: clean_config $(TGT_CONFIG_FILES) | $(CONFIG_DIR)
+	echo '{"variant": "$(variant)","timestamp": "'`date +%Y-%m-%dT%H:%M:%S%z`'", "gitcommit": "$(COMMIT_HASH)"}' > $(TGT_VERSION_JSON)
 
 $(BUILD_DIR):
 	mkdir -p $@

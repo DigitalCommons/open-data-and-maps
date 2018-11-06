@@ -1,5 +1,5 @@
 // Model for SSE Initiatives.
-define(["app/eventbus", "model/config"], function(eventbus, config) {
+define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 	"use strict";
 
 	var objects = [];
@@ -75,8 +75,18 @@ define(["app/eventbus", "model/config"], function(eventbus, config) {
 		eventbus.publish({topic: "Initiative.loadStarted", data: {message: "Loading data via " + service}});
 		// We want to allow the effects of publishing the above event to take place in the UI before
 		// continuing with the loading of the data, so we allow the event queue to be processed:
-		setTimeout(function() {
+		//setTimeout(function() {
+			d3.json(service).then(function(json) {
+				// This now uses d3.fetch and the fetch API.
+				// TODO - error handling
+				// TODO - publish events (e.g. loading, success, failure)
+				//        so that the UI can display info about datasets.
+				console.log(json);
+				add(json.data);
+			});
+			/*
 			d3.json(service, function(error, json) {
+			// This is the old version based on xmlHttpRequest
 				if (error) {
 					console.warn(error);
 					try {
@@ -108,6 +118,7 @@ define(["app/eventbus", "model/config"], function(eventbus, config) {
 				}
 			});
 		}, 0);
+		*/
 	}
 	var pub = {
 		loadFromWebService: loadFromWebService,
