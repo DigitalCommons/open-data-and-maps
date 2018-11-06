@@ -91,7 +91,7 @@ DEPLOYED_VERSION_JSON := $(DEPLOYED_MAP_URL)$(subst $(SRC_DIR),,$(TGT_VERSION_JS
 # This is where we generate individual goals for each of the TGT_CONFIG_FILES:
 # This helps us to get explicit messages when a variant fails
 # to contain one of the required config files.
-define CONFIG_template =
+define CONFIG_template
 $(CONFIG_DIR)$(1) : $(SRC_CONFIG_DIR)$(1)
 	ln -f $$< $$@
 endef
