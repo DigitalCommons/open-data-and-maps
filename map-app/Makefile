@@ -20,7 +20,7 @@ $(eval $(call var_check,DEPLOYED_MAP_URL,URL where map will be found after deplo
 $(eval $(call var_check_warning,HTACCESS_FILE,Name of .htaccess file to be deployed to server,If absent no .htaccess will be deployed and that's usually fine))
 $(eval $(call var_obsolete,SRC_CONFIG_JSON))
 
-.PHONY: help lint configure build deploy-dry-run deploy deploy_htaccess
+.PHONY: help lint configure build deploy-dry-run deploy deploy_htaccess add_htaccess_to_build
 .PHONY: build_map clean_config
 .DEFAULT_GOAL: help
 
@@ -158,6 +158,17 @@ deploy_htaccess:
 	@echo "No htaccess file"
 endif
 
+ifdef HTACCESS_FILE
+add_htaccess_to_build:
+	@echo "$(HTACCESS_FILE) will be copied"
+	cp $(HTACCESS_FILE) $(BUILD_DIR).htaccess
+else
+add_htaccess_to_build:
+	@echo "No htaccess file"
+endif
+
+
+
 deploy-dry-run: build
 	@echo "------------------------------------------------------------"
 	@echo " DEPLOY-DRY-RUN starts here:"
@@ -165,7 +176,7 @@ deploy-dry-run: build
 	@echo ""
 	$(call DEPLOY_DIR,$(BUILD_DIR),$(SERVER_APP_SUBDIR),--dry-run)
 
-deploy: build deploy_htaccess
+deploy: build add_htaccess_to_build
 	$(call DEPLOY_DIR,$(BUILD_DIR),$(SERVER_APP_SUBDIR))
 	@echo "There are subdirectories of www/services that contain info for querying datasets via SPARQL."
 	@echo "Make sure they are up to date."
