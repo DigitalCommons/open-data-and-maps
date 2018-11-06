@@ -25,8 +25,8 @@ DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
 # Flags used with the rsync command:
 # WARNING: --delete will delete files on the server that don't correspond
 #         to files in the local directory of generated RDF and HTML:
-$(warn Temprarily omitting the --delete flag from rsync)
-#DEPLOYMENT_RSYNC_FLAGS := --delete
+#$(warn Temprarily omitting the --delete flag from rsync)
+DEPLOYMENT_RSYNC_FLAGS := --delete
 
 ###########################################
 # Set up the triplestore:
