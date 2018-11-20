@@ -9,6 +9,7 @@
 	// Read requirejs.config from the following file, 
 	// then override and augment these values in the rest of this build file.
 	mainConfigFile: "www/app.js",
+	waitSeconds: 200,
 
 	paths: {
 		// We are not going to optimise d3 (after all, we're getting it from a CDN!)
