@@ -46,7 +46,7 @@ requirejs.config({
 		// https://raw.githubusercontent.com/lodash/lodash/4.17.10-npm/core.js
 		lodash: "lodash.core",
 
-		leaflet: "leaflet-1.3.1",
+		leaflet: "leaflet",
 		leafletAwesomeMarkers: "leaflet.awesome-markers.min",
 		leafletMarkerCluster: "leaflet.markercluster-1.3.0",
 
