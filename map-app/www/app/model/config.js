@@ -1,8 +1,11 @@
-define(["json!configuration/config", "json!configuration/version.json", "d3"], function(config_json, version_json, d3) {
+define(["json!configuration/config", "json!configuration/version.json", "text!configuration/about.html!strip", "d3"], function(config_json, version_json, about_html, d3) {
 	"use strict";
 
 	var html = {};
 	console.log(version_json);
+	console.log(about_html);
+	html.about = about_html;
+	/*
 	d3.text("configuration/about.html").then(function(aboutHtml) {
 		// TODO - error handling
 		// TODO - can we use d3.html to parse the about.html?
@@ -11,6 +14,7 @@ define(["json!configuration/config", "json!configuration/version.json", "d3"], f
 		console.log(aboutHtml);
 		html.about = aboutHtml;
 	});
+	*/
 	function aboutHtml() {
 		return html.about;
 	}
