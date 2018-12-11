@@ -53,11 +53,3 @@ div.protectingVeilMessageContainer p {
     margin-right: -50%;
     transform: translate(-50%, -50%)
 }
-div.buttonBox {
-	top: 0px;
-	right: 0px;
-	width: 100px;
-	margin: 0;
-	position:absolute;
-	z-index: 30;
-}

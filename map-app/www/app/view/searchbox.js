@@ -15,12 +15,6 @@ define(["d3", "view/base", "presenter/searchbox"], function(d3, viewBase, presen
 		var searchText = d3.select("#search-box").property("value");
 		this.presenter.performSearch(searchText);
 		console.log("Search submitted: [" + searchText + "]");
-		/*
-		document.getElementById('search-results').innerHTML = "<p>You searched for: " + searchText + "</p>" +
-			"<p><i class=\"w3-round w3-xxlarge fa fa-exclamation-triangle\"></i>" +
-			"Sorry, searching is not yet available, but coming soon</p>";
-		document.getElementById('search-results-container').style.display='block';
-	   */
 	};
 	proto.createSearchBox = function() {
 		// d3 selection redefines this, so hang onto it here:
