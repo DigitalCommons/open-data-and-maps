@@ -144,6 +144,7 @@ SERVER_CMD = ssh $(SERVER) $(1)
 # Define macro for deploying directories to the server:
 # $(1) is the name of a local directory whose contents are to be deployed.
 # $(2) is the name of the dir on the server (a sub-directory of $(SERVER_BASE_DIR))
+# $(3) extra args for rsync
 define DEPLOY_DIR
 $(call SERVER_CMD,'cd $(SERVER_BASE_DIR) && mkdir -p $(2)')
 $(RSYNC) $(3) $(1) $(SERVER):$(SERVER_BASE_DIR)$(2)
