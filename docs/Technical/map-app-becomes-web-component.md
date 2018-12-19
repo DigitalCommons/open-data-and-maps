@@ -103,6 +103,18 @@ Then we can see if this works.
 
 UPDATE: It works! See [this commit](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/commit/2ddaa658b3fb2b2c377d0e3ba8b37b2ac6e953c9)
 
-The next step is to get the above created in the shadow DOM, but there may be extra hurdles that appear at that point!
-For example, we'll also need (or will we?) to have the loaded `app.js` in the shadow DOM.
+### Creating and using a web component
+
+We need to create a web component fo the map-app, and to add that web component into `index.html` in place of the code currently in the `<body>`.
+
+UPDATE: This now works, although we're not yet able to add the customer element to the shadow DOM. See [this commit](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/commit/e66b8a4e4f4ec4fc665f67023f6dcf0c98ae5315).
+This requires that we load `index-using-web-component.html` instead of `index.html`.
+
+### Moving the require.js loader into the shadow DOM
+
+The next step is to get require.js to load the app into the shadow DOM, but there may be extra hurdles that appear at that point! For that, we need `<script data-main="app" src="lib/require.js">` itself to be added to the shadow DOM.
+
+A benefit of doing this is that the client that uses the web component need not make require.js visible.
+
+It may also be that this step is essential in order to get anything working at all! For example, if the top lovel element (e.g. the `map` and the `sidebar`) have been attached to the shadow DOM, then how can the javascript in the `app.js` access these?
 
