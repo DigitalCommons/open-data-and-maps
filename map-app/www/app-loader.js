@@ -10,7 +10,7 @@
 	//    app.js        (the application to be loaded by require.js)
 	//    require.js    (to do the loading)
 	//
-	const target = document.getElementsByTagName('head')[0];
+	const target = document.getElementsByTagName('body')[0];
 	const loader = document.createElement('script');
 	const dataMain = document.createAttribute('data-main');
 	dataMain.value = 'app';	// i.e. app.js
