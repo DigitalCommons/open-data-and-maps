@@ -101,6 +101,8 @@ Perhaps we can perform an experiment whereby:
 
 Then we can see if this works.
 
+UPDATE: It works! See [this commit](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/commit/2ddaa658b3fb2b2c377d0e3ba8b37b2ac6e953c9)
+
 The next step is to get the above created in the shadow DOM, but there may be extra hurdles that appear at that point!
 For example, we'll also need (or will we?) to have the loaded `app.js` in the shadow DOM.
 
