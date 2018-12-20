@@ -38,12 +38,10 @@
 
 	`;
 	class MapApp extends HTMLElement {
-		// element to which the above template is to be attached.
-		// To properly encapsulate the map-app, this should be the shadow DOM 
-		// attached to this custom element.
-		// However, that did not work on first try!
-		// So, as a temporary fix, append to the <map-app> element in the normal DOM
-		//mapAppHost: null;
+
+		// If we want to monitor changes to <map-app> attributes, we say which ones here:
+		//     static get observedAttributes() { return ['display']; };
+		// and then handle the changes in attributeChangedCallback
 
 		constructor() {
 			// establish prototype chain
@@ -71,11 +69,6 @@
 			// But if we do this without using the shadow DOM, we get the following runtime error:
 			//
 			//   "Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children"
-
-			// For testing only:
-			// const script = document.createElement('script');
-			// script.innerText = 'console.log("Script inside template");';
-			// this.mapAppHost.appendChild(script);
 		}
 		connectedCallback() {
 			console.log("MapApp connectedCallback");
@@ -97,8 +90,15 @@
 			loader.setAttributeNode(src);
 			this.mapAppHost.appendChild(loader);
 		}
+		attributeChangedCallback(name, oldValue, newValue) {
+			console.log("MapApp attributeChangedCallback");
+
+			// force the window to emit a resize event:
+			// This hack was to workaround a problem, with leaflet's map not initializing correctly,
+			// until it had handled a resize event.
+			// But I think this is fixed by not having the map-box with `display: none`
+			//window.dispatchEvent(new Event('resize'));
+		}
 	}
 	customElements.define('map-app', MapApp);
-
-
 })();

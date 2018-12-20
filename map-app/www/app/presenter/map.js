@@ -1,4 +1,4 @@
-define(["app/eventbus", "presenter"], function(eventbus, presenter) {
+define(["app/eventbus", "model/sse_initiative", "presenter"], function(eventbus, sse_initiative, presenter) {
 	"use strict";
 
 	function Presenter(){}
@@ -54,12 +54,20 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 	};
 	proto.getMapEventHandlers = function() {
 		return {
-			click: function(e) { console.log("Map clicked" + e.latlng); }
+			click: function(e) { console.log("Map clicked" + e.latlng); },
+			load: function(e) { console.log("Map loaded"); },
+			resize: function(e) { console.log("Map resize"); }
 		};
 	};
 	proto.onInitiativeNew = function(data/*, envelope*/) {
 		var initiative = data;
 		this.view.addMarker(initiative);
+	};
+	proto.onInitiativeDatasetLoaded = function(data) {
+		//console.log("onInitiativeDatasetLoaded");
+		//console.log(data);
+		//console.log(data.latLngBounds());
+		this.view.fitBounds(sse_initiative.latLngBounds());
 	};
 	proto.onInitiativeLoadComplete = function() {
 		/* The protecting veil is now obsolete. */
@@ -106,10 +114,11 @@ define(["app/eventbus", "presenter"], function(eventbus, presenter) {
 	function createPresenter(view) {
 		var p = new Presenter();
 		p.registerView(view);
+		eventbus.subscribe({topic: "Initiative.datasetLoaded", callback: function(data) { p.onInitiativeDatasetLoaded(data); } });
 		eventbus.subscribe({topic: "Initiative.new", callback: function(data) { p.onInitiativeNew(data); } });
-		eventbus.subscribe({topic: "Initiative.loadComplete", callback: function(data) { p.onInitiativeLoadComplete(data); } });
-		eventbus.subscribe({topic: "Initiative.loadStarted", callback: function(data) { p.onInitiativeLoadMessage(data); } });
-		eventbus.subscribe({topic: "Initiative.loadFailed", callback: function(data) { p.onInitiativeLoadMessage(data); } });
+		//eventbus.subscribe({topic: "Initiative.loadComplete", callback: function(data) { p.onInitiativeLoadComplete(data); } });
+		//eventbus.subscribe({topic: "Initiative.loadStarted", callback: function(data) { p.onInitiativeLoadMessage(data); } });
+		//eventbus.subscribe({topic: "Initiative.loadFailed", callback: function(data) { p.onInitiativeLoadMessage(data); } });
 		// TODO - strip out this mechanism from everywhere it appears:
 		//eventbus.subscribe({topic: "Initiative.selected", callback: function(data) { p.onInitiativeSelected(data); } });
 		eventbus.subscribe({topic: "Markers.needToShowLatestSelection", callback: function(data) { p.onMarkersNeedToShowLatestSelection(data); } });

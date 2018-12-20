@@ -25,6 +25,20 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 		var up = text.toUpperCase();
 		return objects.filter(function(i) { return i.name.toUpperCase().includes(up); });
 	}
+	function latLngBounds() {
+		// @returns an a pair of lat-long pairs that define the bounding box of all the initiatives,
+		// The first element is south-west, the second north east
+		//
+		// Careful: isNaN(null) returns false ...
+		const lats = objects.filter(obj => obj.lat !== null && !isNaN(obj.lat)).map(obj => obj.lat);
+		const lngs = objects.filter(obj => obj.lng !== null && !isNaN(obj.lng)).map(obj => obj.lng);
+		const west = Math.min.apply(Math, lngs);
+		const east = Math.max.apply(Math, lngs);
+		const south = Math.min.apply(Math, lats);
+		const north = Math.max.apply(Math, lats);
+
+		return [[south, west], [north, east]];
+	}
 	function loadNextInitiatives() {
 		var i, e;
 		var maxInitiativesToLoadPerFrame = 100;
@@ -81,8 +95,9 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 				// TODO - error handling
 				// TODO - publish events (e.g. loading, success, failure)
 				//        so that the UI can display info about datasets.
-				console.log(json);
+				//console.log(json);
 				add(json.data);
+				eventbus.publish({topic: "Initiative.datasetLoaded"});
 			});
 			/*
 			d3.json(service, function(error, json) {
@@ -122,7 +137,8 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 	}
 	var pub = {
 		loadFromWebService: loadFromWebService,
-		search: search
+		search: search,
+		latLngBounds: latLngBounds
 	};
 	// Automatically load the data when the app is ready:
 	//eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});
