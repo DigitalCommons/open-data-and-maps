@@ -11,9 +11,16 @@ html, body {
     height: 100%;
     width: 100vw;
 }
-.content, #map {
+.map-app-content, #map {
     height: 100%;
     width: 100%;
+}
+.map-app-content {
+	/* The map, and some of its controls have an absolute position, relative to the
+	 * map-app-content element.
+	 * Without this, the absolute position of the map would be relative to the <body> of the document.
+	 */
+	position: relative;
 }
 .display-container {
 	z-index: 30;
@@ -30,26 +37,6 @@ html, body {
 }
 .w3-sidebar {
 	width: 300px;
-}
-
-.main-btn {
-	height: 40px;
-	width: 100%;
-	background-color: #29506D;
-	color: #718EA4;
-	font-size: 100%;	/* CSS mystery: why is this necesary? Without it, font size is small. */
-	border: 1px solid #042037;
-	padding: 4px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-.main-btn:hover {
-	background-color: #123652;
-}
-/* :active must come after :hover (ffs) */
-.main-btn:active {
-	background-color: #718EA4;
-	color: #29506D;
 }
 div.leaflet-popup-content {
 	/* NB also requires setting maxWidth in leaflet Marker bindpopup, to make popup wide enough for big text */

@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<!-- Page Content -->
-		<div class="w3-teal content">
+		<div class="w3-teal map-app-content">
 			<div class="mapContainer" id="map">
 			</div>
 			<div class="w3-display-container display-container">
@@ -43,7 +43,7 @@
 		// attached to this custom element.
 		// However, that did not work on first try!
 		// So, as a temporary fix, append to the <map-app> element in the normal DOM
-		parentElement: null;
+		//mapAppHost: null;
 
 		constructor() {
 			// establish prototype chain
@@ -57,19 +57,34 @@
 			//
 			// attaches shadow tree and returns shadow root reference
 			// https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
-			//this.parentElement = this.attachShadow({ mode: 'open' });
+			//
+			// this.mapAppHost = this.attachShadow({ mode: 'open' });
 
 			// Workaround: DON'T USE THE SHADOW DOM:
-			this.parentElement = this;
-			this.parentElement.appendChild(tmpl.content.cloneNode(true));
+			this.mapAppHost = this;
+
+			// Perhaps, if we were using the shadow DOM, then we could append
+			// the template contents here:
+			//
+			//   this.mapAppHost.appendChild(tmpl.content.cloneNode(true));
+			//
+			// But if we do this without using the shadow DOM, we get the following runtime error:
+			//
+			//   "Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children"
 
 			// For testing only:
-			const script = document.createElement('script');
-			script.innerText = 'console.log("Script inside template");';
-			this.parentElement.appendChild(script);
+			// const script = document.createElement('script');
+			// script.innerText = 'console.log("Script inside template");';
+			// this.mapAppHost.appendChild(script);
 		}
 		connectedCallback() {
 			console.log("MapApp connectedCallback");
+
+			// @todo - do we need to put a guard here in case this callback
+			//         is called more than once?
+
+			// See comments in constructor about why we're doing this here:
+			this.mapAppHost.appendChild(tmpl.content.cloneNode(true));
 
 			// Get require.js to load the app:
 			// <script data-main="app" src="lib/require.js"></script> 
@@ -80,7 +95,7 @@
 			const src = document.createAttribute('src');
 			src.value = 'lib/require.js';
 			loader.setAttributeNode(src);
-			this.parentElement.appendChild(loader);
+			this.mapAppHost.appendChild(loader);
 		}
 	}
 	customElements.define('map-app', MapApp);
