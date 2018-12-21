@@ -125,6 +125,8 @@ See [web-component-loader.js](https://github.com/SolidarityEconomyAssociation/op
 ### Next steps
 
 - Move all files withing the map-app 'bundle' into a single directory (check: is this more-or-less already done?) so that a client wanting to use the <map-app> custom element can just refer to a single file within that directory, and ignore the rest of what's inside it.
+- Make the site display on start-up in the map/site demo at https://internal.solidarityeconomy.coop/experiments/14-kinda-working-with-map-and-site/# 
+  The problem here is with (a) map-box must be `display: flex` at start up, to get the map properly initiatlized, and (b) the site needs to be `display: flex` to be visible at start-up, and if there's both `display:flex`, then they share the same flex container and are both visible at once. Something's gotta give!
 - Fix bug #127
 - Rename map-app `ids` and `classes`, prefixing them with `map-app-` - to reduce likely name clashes.
 - Move the `<link>` elements that include CSS into the `<map-app>` template.
