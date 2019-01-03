@@ -129,5 +129,5 @@ See [web-component-loader.js](https://github.com/SolidarityEconomyAssociation/op
   The problem here is with (a) map-box must be `display: flex` at start up, to get the map properly initiatlized, and (b) the site needs to be `display: flex` to be visible at start-up, and if there's both `display:flex`, then they share the same flex container and are both visible at once. Something's gotta give! This is [#129](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/129) - now FIXED.
 - Map-app should not interfere with console, bug #127
 - Rename map-app `ids` and `classes`, prefixing them with `map-app-` - to reduce likely name clashes.
-- Move the `<link>` elements that include CSS into the `<map-app>` template.
+- (DONE!) Move the `<link>` elements that include CSS into the `<map-app>` template. Done in [commit](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/commit/eace06530fd4d76fb0bdd3785c7741226ed5310e).
 - Check that the CSS is no poluting things it doesn't need to (e.g. `<body`)
