@@ -12,32 +12,32 @@
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile"
 			style="display:none;flex-direction:column;" 
-			id="sidebar">
+			id="map-app-sidebar">
 			<div style="flex: 0 1 auto;">
-				<div id="sidebar-header">
+				<div id="map-app-sidebar-header">
 				</div>
 			</div>
 			<!-- Fixed part of Sidebar that may change for different types of the sidebar (e.g. Search results) -->
 			<!-- If this is not a separate flex div, then it doesn't quite render properly on iPhone:
 			     the bottom of the div slightly overlaps the scrollable section of the sidebar below -->
 			<div style="flex: 0 1 auto;">
-				<div id="sidebar-fixed-section"></div>
+				<div id="map-app-sidebar-fixed-section"></div>
 			</div>
 			<!-- scrollable part of sidebar -->
 			<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
-			<div id="sidebar-scrollable-section" class="w3-white" style="flex: 1 1 auto;overflow-y:auto;height:100%">
+			<div id="map-app-sidebar-scrollable-section" class="w3-white" style="flex: 1 1 auto;overflow-y:auto;height:100%">
 			</div>
 		</div>
 		<!-- Page Content -->
 		<div class="w3-teal map-app-content">
-			<div class="mapContainer" id="map">
+			<div class="map-app-map-container" id="map-app-leaflet-map">
 			</div>
-			<div class="w3-display-container display-container">
+			<div class="w3-display-container map-app-display-container">
 				<!--  Button to show sidebar -->
-				<div id="sidebar-button">
+				<div id="map-app-sidebar-button">
 				</div>
 				<!--  Search box -->
-				<div id="search-widget">
+				<div id="map-app-search-widget">
 				</div>
 			</div>
 		</div>

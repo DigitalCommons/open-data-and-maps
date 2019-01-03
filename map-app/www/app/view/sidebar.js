@@ -12,9 +12,9 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 	proto.createOpenButton = function() {
 		// d3 selection redefines this, so hang onto it here:
 		var that = this;
-		var selection = this.d3selectAndClear('#sidebar-button').
+		var selection = this.d3selectAndClear('#map-app-sidebar-button').
 			append('button').
-			attr('class', 'w3-btn w3-teal w3-xlarge w3-opacity w3-display-topleft menu-button').
+			attr('class', 'w3-btn w3-teal w3-xlarge w3-opacity w3-display-topleft').
 			attr('title', 'Show sidebar').
 			on('click', function() { that.showSidebar(); }).
 			append('i').
@@ -23,7 +23,7 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 	proto.createButtonRow = function() {
 		// d3 selection redefines this, so hang onto it here:
 		var that = this;
-		var selection = this.d3selectAndClear('#sidebar-header').attr('class', 'w3-cell-row');
+		var selection = this.d3selectAndClear('#map-app-sidebar-header').attr('class', 'w3-cell-row');
 
 		// Button for hiding the sidebar:
 		selection.append('button').
@@ -43,7 +43,7 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 
 		// This is where the navigation buttons will go.
 		// These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
-		selection = selection.append("i").attr("id", "sidebar-history-navigation");
+		selection = selection.append("i").attr("id", "map-app-sidebar-history-navigation");
 
 	};
 	proto.createSidebars = function() {
@@ -57,17 +57,17 @@ define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/s
 		this.sidebar[name].refresh();
 	};
 	proto.showSidebar = function() {
-		d3.select('#sidebar').style('display', 'flex');
+		d3.select('#map-app-sidebar').style('display', 'flex');
 	};
 	proto.hideSidebarIfItTakesWholeScreen = function() {
 		// @todo - improve this test - 
 		// it is not really testing the predicate suggested by the name iof the function.
 		if (window.innerWidth <= 600) {
-			d3.select('#sidebar').style('display', 'none');
+			d3.select('#map-app-sidebar').style('display', 'none');
 		}
 	};
 	proto.hideSidebar = function() {
-		d3.select('#sidebar').style('display', 'none');
+		d3.select('#map-app-sidebar').style('display', 'none');
 	};
 	SidebarView.prototype = proto;
 	var view;
