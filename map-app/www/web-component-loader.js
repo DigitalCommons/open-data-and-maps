@@ -6,6 +6,9 @@
 (function(){
 	let tmpl = document.createElement('template');
 	tmpl.innerHTML = `
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="lib/map-app.css">
+		<link rel="stylesheet" href="styles/style.css">
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile"
 			style="display:none;flex-direction:column;" 
