@@ -105,7 +105,7 @@ UPDATE: It works! See [this commit](https://github.com/SolidarityEconomyAssociat
 
 ### Creating and using a web component
 
-We need to create a web component fo the map-app, and to add that web component into `index.html` in place of the code currently in the `<body>`.
+We need to create a web component for the map-app, and to add that web component into `index.html` in place of the code currently in the `<body>`.
 
 UPDATE: This now works, although we're not yet able to add the customer element to the shadow DOM. See [this commit](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/commit/e66b8a4e4f4ec4fc665f67023f6dcf0c98ae5315).
 This requires that we load `index-using-web-component.html` instead of `index.html`.
@@ -118,3 +118,16 @@ A benefit of doing this is that the client that uses the web component need not 
 
 It may also be that this step is essential in order to get anything working at all! For example, if the top lovel element (e.g. the `map` and the `sidebar`) have been attached to the shadow DOM, then how can the javascript in the `app.js` access these?
 
+UPDATE: In and experiment, the element `<script data-main="app" src="lib/require.js">` was added to the shadow DOM. 
+But nothing seemed to load.
+See [web-component-loader.js](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/blob/web-component/map-app/www/web-component-loader.js) for the (commented-out) implementation.
+
+### Next steps
+
+- Move all files withing the map-app 'bundle' into a single directory (check: is this more-or-less already done?) so that a client wanting to use the <map-app> custom element can just refer to a single file within that directory, and ignore the rest of what's inside it.
+- Make the site display on start-up in the map/site demo at https://internal.solidarityeconomy.coop/experiments/14-kinda-working-with-map-and-site/# 
+  The problem here is with (a) map-box must be `display: flex` at start up, to get the map properly initiatlized, and (b) the site needs to be `display: flex` to be visible at start-up, and if there's both `display:flex`, then they share the same flex container and are both visible at once. Something's gotta give!
+- Fix bug #127
+- Rename map-app `ids` and `classes`, prefixing them with `map-app-` - to reduce likely name clashes.
+- Move the `<link>` elements that include CSS into the `<map-app>` template.
+- Check that the CSS is no poluting things it doesn't need to (e.g. `<body`)
