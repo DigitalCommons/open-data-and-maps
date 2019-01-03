@@ -30,17 +30,12 @@
 				width: 100%;
 			}
 			#map-box {
-				/* The map-box must be displayed initially, so that the map initialized correctly
-				 * It is hidden as a way of, well, err, hiding it.
-				 * In other words, DO NOT use `display: none;` here:
-				 */
-				display: flex;
-				visibility: hidden;
+				display: none;
 				height: 100%;
 				width: 100%;
 			}
 			#site-box {
-				display: none;
+				display: flex;
 				flex-direction: row;
 
 				justify-content: flex-start; /* align items in Main Axis */
@@ -74,34 +69,45 @@
 				console.log("Map");
 				document.getElementById("site-box").style.display = "none";
 				document.getElementById("map-box").style.display = "flex";
-				document.getElementById("map-box").style.visibility = "visible";
-				//const mapapp = document.getElementsByTagName("map-app")[0];
-				//mapapp.setAttribute("display", "");
+
+				/* Removing the deferload attribute will cause the map-app to be loaded.
+				 * It is essential that this is not done until the map-box is ready
+				 * to display the map (in this case, it has display: flex)
+				 * If the attribute has already been removed, this will have no effect
+				 */
+				const mapapp = document.getElementsByTagName("map-app")[0];
+				mapapp.removeAttribute("deferload");
 			}	
 			function navbarSiteClicked(btn) {
 				console.log("Site");
 				document.getElementById("map-box").style.display = "none";
 				document.getElementById("site-box").style.display = "flex";
 			}	
-			function pageLoaded() {
-				console.log("pageLoaded");
-				document.getElementById("map-box").style.display = "none";
-				document.getElementById("site-box").style.display = "none";
-			}
 		</script>
 		<script src="web-component-loader.js"></script>
 
 	</head>
-	</body onload="pageLoaded()">
+	<body>
 		<div class="w3-teal page-content flexbox-column">
+			<!-- Navigation bar -->
 			<div class="w3-bar w3-black">
 				<a href="#" class="w3-bar-item w3-button" onclick="navbarMapClicked(this)">Map</a>
 				<a href="#" class="w3-bar-item w3-button" onclick="navbarSiteClicked(this)">Site</a>
 			</div>
 			
+			<!-- map-app container -->
 			<div class="flexbox-item-grow" id="map-box">
-				<map-app></map-app>
+				<!-- deferload is important here because the map will not initialize properly 
+				     when we have #map-box {display:none; }
+					 The deferload attribute MUST be removed (after the map-box has been
+					 set to display it). See function navbarMapClicked().
+					 -->
+				<map-app deferload></map-app>
 			</div>
+
+			<!-- container for another navigable element of the site
+			     There may be several of these
+				 -->
 			<div class="flexbox-item-grow" id="site-box">
 				<div class="w3-blue" id="site">
 					<div class="w3-indigo w3-center">

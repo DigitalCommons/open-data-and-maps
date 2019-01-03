@@ -1,5 +1,8 @@
 'use strict';
 
+/* Definitions for the Custom Element <map-app>
+ */
+
 (function(){
 	let tmpl = document.createElement('template');
 	tmpl.innerHTML = `
@@ -40,15 +43,17 @@
 	class MapApp extends HTMLElement {
 
 		// If we want to monitor changes to <map-app> attributes, we say which ones here:
-		//     static get observedAttributes() { return ['display']; };
-		// and then handle the changes in attributeChangedCallback
+		static get observedAttributes() { return ['deferload']; };
+		// and then handle the changes in attributeChangedCallback.
 
 		constructor() {
 			// establish prototype chain
 			super();
 
-			console.log("MapApp constructor");
+			//console.log("MapApp constructor");
 
+			// Guard against initializing the map more than once:
+			this.map_initialized = false;
 
 			// For proper encapsulation: USE THE SHADOW DOM:
 			// (need more work to debug it - doesn't seem to load via require.js when we do this)
@@ -71,33 +76,47 @@
 			//   "Uncaught DOMException: Failed to construct 'CustomElement': The result must not have children"
 		}
 		connectedCallback() {
-			console.log("MapApp connectedCallback");
+			//console.log("MapApp connectedCallback");
 
-			// @todo - do we need to put a guard here in case this callback
-			//         is called more than once?
+			/* As a workaround to issue https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/129,
+			 * the map-app can be specified to have defered loading:
 
-			// See comments in constructor about why we're doing this here:
-			this.mapAppHost.appendChild(tmpl.content.cloneNode(true));
+				<map-app deferload></map-app>
 
-			// Get require.js to load the app:
-			// <script data-main="app" src="lib/require.js"></script> 
-			const loader = document.createElement('script');
-			const dataMain = document.createAttribute('data-main');
-			dataMain.value = 'app';	// i.e. app.js
-			loader.setAttributeNode(dataMain);
-			const src = document.createAttribute('src');
-			src.value = 'lib/require.js';
-			loader.setAttributeNode(src);
-			this.mapAppHost.appendChild(loader);
+			 * This is necessary when the containing element is not initially displayed.
+			 * In this case, the map won't be loaded until the `deferload` attribute is removed -
+			 * this is handled by attributeChangedCallback()
+			 */
+			this.loadMapUnlessDeferred();
 		}
 		attributeChangedCallback(name, oldValue, newValue) {
-			console.log("MapApp attributeChangedCallback");
+			//console.log("MapApp attributeChangedCallback");
 
-			// force the window to emit a resize event:
-			// This hack was to workaround a problem, with leaflet's map not initializing correctly,
-			// until it had handled a resize event.
-			// But I think this is fixed by not having the map-box with `display: none`
-			//window.dispatchEvent(new Event('resize'));
+			if (name === 'deferload') {
+				this.loadMapUnlessDeferred();
+			}
+		}
+		loadMapUnlessDeferred() {
+			/* The map should be loaded only once, and only when <map-app> has no `deferload` attribute:
+			 */
+			if (!this.map_initialized && !this.hasAttribute('deferload')) {
+				this.map_initialized = true;
+				//console.log("Initialilze map");
+
+				// See comments in constructor about why we're doing this here:
+				this.mapAppHost.appendChild(tmpl.content.cloneNode(true));
+
+				// Get require.js to load the app:
+				// <script data-main="app" src="lib/require.js"></script> 
+				const loader = document.createElement('script');
+				const dataMain = document.createAttribute('data-main');
+				dataMain.value = 'app';	// i.e. app.js
+				loader.setAttributeNode(dataMain);
+				const src = document.createAttribute('src');
+				src.value = 'lib/require.js';
+				loader.setAttributeNode(src);
+				this.mapAppHost.appendChild(loader);
+			}
 		}
 	}
 	customElements.define('map-app', MapApp);
