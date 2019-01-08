@@ -1,5 +1,5 @@
 // The view aspects of the Main Menu sidebar
-define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/base"], function(d3, eventbus, presenter, sidebarView) {
+define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/base", "model/config"], function(d3, eventbus, presenter, sidebarView, config) {
 	"use strict";
 
 	// Our local Sidebar object:
@@ -63,7 +63,7 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 		}
 		if (initiative.regorg) {
 			const serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
-				"services/" + "display_similar_companies/main.php";
+				config.getServicesPath() + "display_similar_companies/main.php";
 			const serviceToDisplaySimilarCompaniesURL = serviceToDisplaySimilarCompanies + "?company=" + encodeURIComponent(initiative.regorg);
 			s.append('div')
 			.attr('class', sectionClasses + hoverColour)

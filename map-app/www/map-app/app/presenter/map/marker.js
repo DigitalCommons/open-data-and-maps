@@ -1,11 +1,11 @@
-define(["app/eventbus", "presenter"], function(eventbus, presenter) {
+define(["app/eventbus", "presenter", "model/config"], function(eventbus, presenter, config) {
 	"use strict";
 
 	function Presenter(){}
 
 	const proto = Object.create(presenter.base.prototype);
 	const serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
-		"services/" + "display_similar_companies/main.php";
+		config.getServicesPath() + "display_similar_companies/main.php";
 
 	proto.notifySelectionToggled = function(initiative) {
 		eventbus.publish({topic: "Marker.SelectionToggled", data: initiative});

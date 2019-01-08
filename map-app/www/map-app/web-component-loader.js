@@ -6,9 +6,6 @@
 (function(){
 	let tmpl = document.createElement('template');
 	tmpl.innerHTML = `
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<link rel="stylesheet" href="lib/map-app.css">
-		<link rel="stylesheet" href="styles/style.css">
 		<!-- Sidebar -->
 		<div class="w3-sidebar w3-teal w3-bar-block w3-border-right w3-animate-left w3-mobile"
 			style="display:none;flex-direction:column;" 
@@ -113,10 +110,11 @@
 				// <script data-main="app" src="lib/require.js"></script> 
 				const loader = document.createElement('script');
 				const dataMain = document.createAttribute('data-main');
-				dataMain.value = 'app';	// i.e. app.js
+				dataMain.value = 'map-app/app';	// i.e. app.js
 				loader.setAttributeNode(dataMain);
 				const src = document.createAttribute('src');
-				src.value = 'lib/require.js';
+				// TODO: IT IS BAD that the path map-app is hard-coded. Sort it out!
+				src.value = 'map-app/lib/require.js';
 				loader.setAttributeNode(src);
 				this.mapAppHost.appendChild(loader);
 			}

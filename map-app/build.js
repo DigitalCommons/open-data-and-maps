@@ -8,7 +8,7 @@
 ({
 	// Read requirejs.config from the following file, 
 	// then override and augment these values in the rest of this build file.
-	mainConfigFile: "www/app.js",
+	mainConfigFile: "www/map-app/app.js",
 	waitSeconds: 200,
 
 	paths: {

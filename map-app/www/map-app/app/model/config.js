@@ -37,10 +37,14 @@ define(["json!configuration/config", "json!configuration/version.json", "text!co
 	function getSoftwareGitCommit() {
 		return version_json.gitcommit;
 	}
+	function getServicesPath() {
+		return "map-app/services/";
+	}
 	var pub = {
 		getSoftwareTimestamp: getSoftwareTimestamp,
 		getSoftwareVariant: getSoftwareVariant,
 		getSoftwareGitCommit: getSoftwareGitCommit,
+		getServicesPath: getServicesPath,
 		namedDatasets: namedDatasets,
 		htmlTitle: htmlTitle,
 		aboutHtml: aboutHtml

@@ -83,7 +83,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 		}
 	}
 	function loadDataset(dataset) {
-		var service = "services/get_dataset.php?dataset=" + dataset;
+		var service = config.getServicesPath() + "get_dataset.php?dataset=" + dataset;
 		var response = null;
 		var message = null;
 		eventbus.publish({topic: "Initiative.loadStarted", data: {message: "Loading data via " + service}});
