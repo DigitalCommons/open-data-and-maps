@@ -17,7 +17,7 @@ define(
 			var i, eventHandlers = this.presenter.getMapEventHandlers();
 			var k = Object.keys(eventHandlers);
 			// For the contextmenu docs, see https://github.com/aratcliffe/Leaflet.contextmenu.
-			this.map = leaflet.map("map", {
+			this.map = leaflet.map("map-app-leaflet-map", {
 				// set to true to re-enable context menu.
 				// See https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/78
 				contextmenu: false,

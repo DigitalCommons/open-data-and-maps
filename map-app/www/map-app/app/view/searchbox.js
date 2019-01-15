@@ -19,10 +19,10 @@ define(["d3", "view/base", "presenter/searchbox"], function(d3, viewBase, presen
 	proto.createSearchBox = function() {
 		// d3 selection redefines this, so hang onto it here:
 		var view = this;
-		var selection = this.d3selectAndClear('#search-widget');
+		var selection = this.d3selectAndClear('#map-app-search-widget');
 		selection = selection.append('form').
-			attr('id', 'search-form').
-			attr('class', 'w3-card-4 w3-light-grey w3-round w3-opacity w3-display-topright search-form').
+			attr('id', 'map-app-search-form').
+			attr('class', 'w3-card-4 w3-light-grey w3-round w3-opacity w3-display-topright map-app-search-form').
 			on('submit', function() { view.searchSubmitted(); }).
 			append('div').
 			attr('class', 'w3-row w3-border-0');

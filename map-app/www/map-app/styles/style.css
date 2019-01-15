@@ -1,0 +1,41 @@
+.map-app-content, #map {
+    height: 100%;
+    width: 100%;
+}
+.map-app-content {
+	/* The map, and some of its controls have an absolute position, relative to the
+	 * map-app-content element.
+	 * Without this, the absolute position of the map would be relative to the <body> of the document.
+	 */
+	position: relative;
+}
+.map-app-display-container {
+	z-index: 30;
+}
+div.map-app-map-container {
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 10;
+}
+.map-app-search-form {
+	max-width:500px;
+	width:50%;
+}
+/* @todo - can we avoid all this messing around with z-index, once the protecting vail has been removed?
+ * It seems that leaflet uses z-index, as does w3.css. So we're having to weave a course between the two.
+ */ 
+.w3-sidebar, .w3-modal {
+	z-index: 40;
+}
+.w3-sidebar {
+	width: 300px;
+}
+div.leaflet-popup-content {
+	/* NB also requires setting maxWidth in leaflet Marker bindpopup, to make popup wide enough for big text */
+	/* 200% works well for presentations: */
+	/*font-size: 200%; */
+}

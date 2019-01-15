@@ -47,7 +47,7 @@ help:
 LINT := eslint
 RSYNC := rsync -avzc --delete
 
-SRC_DIR := www/
+SRC_DIR := www/map-app/
 
 # All builds live under the same directory
 BUILD_TOP_DIR := builds/
@@ -92,7 +92,7 @@ DEPLOYED_VERSION_JSON := $(DEPLOYED_MAP_URL)$(subst $(SRC_DIR),,$(TGT_VERSION_JS
 # This helps us to get explicit messages when a variant fails
 # to contain one of the required config files.
 define CONFIG_template
-$(CONFIG_DIR)$(1) : $(SRC_CONFIG_DIR)$(1)
+$(CONFIG_DIR)$(1) : $(SRC_CONFIG_DIR)$(1) | $(CONFIG_DIR)
 	ln -f $$< $$@
 endef
 

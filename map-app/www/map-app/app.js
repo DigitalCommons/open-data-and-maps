@@ -1,7 +1,9 @@
 "use strict";
 requirejs.config({
+	//appDir: "map-app",
+	// baseUrl is relative to appDir.
 	// By default, load modules from the lib directory:
-    baseUrl: "lib",
+    baseUrl: "map-app/lib",
     // except, if the module ID starts with "app",
     // load it from the app directory. Paths
     // config is relative to the baseUrl, and

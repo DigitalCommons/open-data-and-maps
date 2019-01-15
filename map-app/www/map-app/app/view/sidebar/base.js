@@ -20,17 +20,17 @@ define(["d3", "view/base"], function(d3, view) {
 	};
 
 	proto.loadFixedSection = function() {
-		this.populateFixedSelection(this.d3selectAndClear('#sidebar-fixed-section'));
+		this.populateFixedSelection(this.d3selectAndClear('#map-app-sidebar-fixed-section'));
 	};
 	proto.loadScrollableSection = function() {
-		this.populateScrollableSelection(this.d3selectAndClear('#sidebar-scrollable-section'));
+		this.populateScrollableSelection(this.d3selectAndClear('#map-app-sidebar-scrollable-section'));
 	};
 	proto.loadHistoryNavigation = function() {
 		// Fwd/back navigation for moving around the contentStack of a particular sidebar
 		// (e.g. moving between different search results)
 		var buttons = this.presenter.historyNavigation();
 		var buttonClasses = 'w3-teal w3-cell w3-right w3-btn w3-border-0';
-		var selection = this.d3selectAndClear('#sidebar-history-navigation');
+		var selection = this.d3selectAndClear('#map-app-sidebar-history-navigation');
 		function createButton(b, faClass, hovertext) {
 			selection.append('button').
 				// Minor issue: if we add the class w3-mobile to these buttons, then each takes up a whole line
