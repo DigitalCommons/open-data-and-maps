@@ -34,6 +34,7 @@ module SeOpenData
         def prefixes
           {
             rdf: ::RDF.to_uri.to_s,
+            dc: ::RDF::Vocab::DC.to_uri.to_s,
             vcard: ::RDF::Vocab::VCARD.to_uri.to_s,
             geo: ::RDF::Vocab::GEO.to_uri.to_s,
             owl: ::RDF::Vocab::OWL.to_uri.to_s,
