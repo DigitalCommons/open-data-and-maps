@@ -8,6 +8,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 	function Initiative(e) {
 		Object.defineProperties(this, {
 			name: { value: e.name, enumerable: true },
+			desc: { value: e.desc, enumerable: true },
 			dataset: { value: e.dataset, enumerable: true },
 			uri: { value: e.uri, enumerable: true },
 			uniqueId: { value: e.uri, enumerable: true },

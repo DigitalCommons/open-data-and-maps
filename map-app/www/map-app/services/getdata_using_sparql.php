@@ -1,4 +1,8 @@
 <?php 
+// WARNING!!!
+// IS THIS STILL IN USE???
+// OR DO YOU WANT TO EDIT get_dataset.php INSTEAD??
+//
 // Based on code originally written by:
 // Author: John Wright
 // Website: http://johnwright.me/blog
@@ -83,7 +87,7 @@ $res = json_decode($response, true);
 // The keys correspond to two things:
 //   1. The names of the variables used in the SPARQL query (see Initiative::create_sparql_files in generate-triples.rb)
 //   2. The names used in the JSON that is returned to the map-app
-$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg");
+$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg", "desc");
 
 $result = array();
 foreach($res["results"]["bindings"] as $item) {

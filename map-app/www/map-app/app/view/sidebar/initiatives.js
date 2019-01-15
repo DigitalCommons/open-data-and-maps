@@ -89,7 +89,7 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 		s.append('div').attr('class', sectionHeadingClasses).text("description");
 		s.append('div')
 		.attr('class', sectionClasses)
-		.text("We're still working on putting the description of the initiative here. It should be available quite soon.")
+		.text(initiative.desc || "No description available")
 		;
 		// Make an accordion for opening up the geek zone
 		that.makeAccordionAtD3Selection({
