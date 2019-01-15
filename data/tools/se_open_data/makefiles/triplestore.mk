@@ -57,6 +57,10 @@ all: | $(GEN_VIRTUOSO_DIR)
 	@echo "**** The final step is to load the data into Virtuoso with graph named $(GRAPH_NAME):"
 	@echo "**** Execute the following command, providing the password for the Virtuoso dba user:"
 	@echo "****\tssh $(VIRTUOSO_SERVER) 'isql-vt localhost dba <password> $(VIRTUOSO_SCRIPT_REMOTE)'"
+	@echo ""
+	@echo "**** IMPORTANT!"
+	@echo "**** Ensure that the map-app is using an appropriate SPARQL query."
+	@echo "**** There's an example at $(SPARQL_GET_ALL_FILE)"
 
 .PHONY: list_sparql_graphs get_info_for_map_app
 
