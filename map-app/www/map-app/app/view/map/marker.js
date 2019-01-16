@@ -20,6 +20,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 
 	// Using font-awesome icons, the available choices can be seen here:
 	// http://fortawesome.github.io/Font-Awesome/icons/
+	// TODO: delete?
 	const dfltOptions = {prefix: "fa"};	// "fa" selects the font-awesome icon set (we have no other)
 
 	proto.create = function(map, initiative) {
@@ -28,6 +29,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		const hovertext = this.presenter.getHoverText(initiative);
 
 		// options argument overrides our default options:
+		// TODO: delete?
 		const opts = Object.assign(dfltOptions, {
 			icon: this.presenter.getIcon(initiative),
 			popuptext: this.presenter.getPopupText(initiative),
@@ -116,10 +118,16 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 	};
 
 	function setSelected(initiative) {
-		markerForInitiative[initiative.uniqueId].setSelected(initiative);
+		const marker = markerForInitiative[initiative.uniqueId];
+		if (marker) {
+			marker.setSelected(initiative);
+		}
 	}
 	function setUnselected(initiative) {
-		markerForInitiative[initiative.uniqueId].setUnselected(initiative);
+		const marker = markerForInitiative[initiative.uniqueId];
+		if (marker) {
+			marker.setUnselected(initiative);
+		}
 	}
 	proto.destroy = function() {
 		this.cluster.removeLayer(this.marker);
@@ -140,10 +148,16 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		unselectedClusterGroup = clusterGroup;
 	}
 	function showTooltip(initiative) {
-		markerForInitiative[initiative.uniqueId].showTooltip(initiative);
+		const marker = markerForInitiative[initiative.uniqueId];
+		if (marker) {
+			marker.showTooltip(initiative);
+		}
 	}
 	function hideTooltip(initiative) {
-		markerForInitiative[initiative.uniqueId].hideTooltip(initiative);
+		const marker = markerForInitiative[initiative.uniqueId];
+		if (marker) {
+			marker.hideTooltip(initiative);
+		}
 	}
 
 	var pub = {

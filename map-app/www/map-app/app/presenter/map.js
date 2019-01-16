@@ -61,7 +61,9 @@ define(["app/eventbus", "model/sse_initiative", "presenter"], function(eventbus,
 	};
 	proto.onInitiativeNew = function(data/*, envelope*/) {
 		var initiative = data;
-		this.view.addMarker(initiative);
+		if (initiative.hasGeoLocation()) {
+			this.view.addMarker(initiative);
+		}
 	};
 	proto.onInitiativeDatasetLoaded = function(data) {
 		//console.log("onInitiativeDatasetLoaded");

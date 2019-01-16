@@ -19,6 +19,9 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 			regorg: { value: e.regorg, enumerable: true }
 		});
 		objects.push(this);
+		this.hasGeoLocation = function() {
+			return this.lat && this.lng;
+		}
 		eventbus.publish({topic: "Initiative.new", data: this});
 	}
 	function search(text) {

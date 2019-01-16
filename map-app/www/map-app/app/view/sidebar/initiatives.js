@@ -33,16 +33,20 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 	proto.geekZoneContentAtD3Selection = function(selection, initiative) {
 		const that = this;
 		const s = selection.append('div').attr('class', "w3-bar-block");
-		if (initiative.lat) {
+		if (initiative.hasGeoLocation()) {
 			s.append('div')
 			.attr('class', sectionClasses)
 			.text("Latitude: " + initiative.lat)
 			;
-		}
-		if (initiative.lng) {
 			s.append('div')
 			.attr('class', sectionClasses)
 			.text("Longitude: " + initiative.lng)
+			;
+		}
+		else {
+			s.append('div')
+			.attr('class', sectionClasses)
+			.text("Initiative has no latitude/longitude")
 			;
 		}
 		if (initiative.uri) {

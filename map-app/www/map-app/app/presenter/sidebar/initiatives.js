@@ -43,7 +43,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		return array.reduce((a, b) => Math.min(a, b));
 	}
 	proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function() {
-		const initiatives = this.contentStack.current().initiatives;
+		const initiatives = this.contentStack.current().initiatives.filter(x => x.hasGeoLocation());
 		const lats = initiatives.map(x => x.lat);
 		const lngs = initiatives.map(x => x.lng);
 
