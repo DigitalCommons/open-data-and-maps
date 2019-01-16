@@ -20,13 +20,7 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 		let textContent = "Initiatives";	// default content, if no initiatives to show
 		if (this.presenter.currentItemExists()) {
 			const item = this.presenter.currentItem();
-			const initiatives = item.initiatives;
-			if (initiatives.length === 1) {
-				textContent = initiatives[0].name;
-			}
-			else if (item.isSearchResults()) {
-				textContent = "Search: " + item.searchString;
-			}
+			textContent = item.headingText();
 		}
 		selection.append("div").attr("class", "w3-container").append('p').text(textContent);
 	};
@@ -130,10 +124,9 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 			const initiatives = item.initiatives;
 			switch (initiatives.length) {
 				case 0:
-					if (item.isSearchResults())
-				{
-					selection.append('div').attr("class", "w3-container w3-center").append('p').text("Nothing matched the search");
-				}
+					if (item.textOnEmpty()) {
+						selection.append('div').attr("class", "w3-container w3-center").append('p').text(item.textOnEmpty());
+					}
 				break;
 				case 1:
 					this.populateSelectionWithOneInitiative(selection, initiatives[0]);

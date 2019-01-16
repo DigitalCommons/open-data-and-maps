@@ -4,9 +4,15 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	function StackItem(initiatives) {
 		this.initiatives = initiatives;
 	}
-	StackItem.prototype.isSearchResults = function() {
-		// TODO - surely there's a more direct way to decide if this is a SearchResults object?
-		return this.hasOwnProperty('searchString');
+	StackItem.prototype.textOnEmpty = function() {
+		// What text should be displayed in the list of initiatives if that list is empty
+		return '';
+	}
+	StackItem.prototype.headingText = function() {
+		if (this.initiatives.length === 1) {
+			return this.initiatives[0].name;
+		}
+		return '';
 	}
 
 	function SearchResults(initiatives, searchString) {
@@ -15,6 +21,18 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		this.searchString = searchString;
 	}
 	SearchResults.prototype = Object.create(StackItem.prototype);
+	SearchResults.prototype.textOnEmpty = function() {
+		// What text should be displayed in the list of initiatives if that list is empty
+		return 'Nothing matched the search';
+	};
+	SearchResults.prototype.headingText = function() {
+		if (this.initiatives.length === 1) {
+			return StackItem.call(this);
+		}
+		else {
+			return "Search: " + this.searchString;
+		}
+	};
 
 	function Presenter(){}
 
