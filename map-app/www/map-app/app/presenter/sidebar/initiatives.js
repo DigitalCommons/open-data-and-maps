@@ -14,6 +14,9 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		}
 		return '';
 	}
+	StackItem.prototype.appendInitiative = function(initiative) {
+		this.initiatives.push(initiative);
+	}
 
 	function SearchResults(initiatives, searchString) {
 		// isa StackItem
@@ -34,7 +37,38 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		}
 	};
 
-	function Presenter(){}
+	function AllInitiatives() {
+		// isa StackItem
+		StackItem.call(this, []);
+	}
+	AllInitiatives.prototype = Object.create(StackItem.prototype);
+	AllInitiatives.prototype.textOnEmpty = function() {
+		// What text should be displayed in the list of initiatives if that list is empty
+		return 'No initiatives';
+	};
+	AllInitiatives.prototype.headingText = function() {
+		return "All initiatives";
+	};
+
+	// TODO - what are we going to do with this Initiative object?
+	//        Do we want a place to hold UI state (e.g. selected)?
+	//        Or should that be held only in the DOM?
+	//        We should duplicate this state outside the DOM only if it is necessary for performance reasons.
+	const all_initiatives = [];
+	function Initiative(i) {
+		Object.defineProperties(this, {
+			model: { value: i, enumerable: true }
+		});
+		all_initiatives.push();
+	}
+
+	// This is the presenter object for this module:
+	function Presenter(){
+		// There is a single StackItem for displaying all initiatives.
+		// However, this same StackItem can be placed at more than one
+		// position in the history stack (as an optimization - to avoid duplication).
+		this.allInitiativesItem = new AllInitiatives();
+	}
 
 	var proto = Object.create(sidebarPresenter.base.prototype);
 
@@ -44,6 +78,13 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	proto.currentItemExists = function() {
 		// returns true only if the contentStack is empty
 		return typeof this.contentStack.current() !== 'undefined';
+	};
+	proto.onInitiativeNew = function(data/*, envelope*/) {
+		var initiative = data;
+		// TODO - Is there really a reason for creating a new Initiative object?
+		//        If not, then don't!
+		//new Initiative(initiative);
+		this.allInitiativesItem.appendInitiative(initiative);
 	};
 	proto.notifyMarkersNeedToShowNewSelection = function(lastContent) {
 		eventbus.publish({
@@ -91,6 +132,12 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		//console.log("sidebar/initiatives historyButtonsUsed");
 		//console.log(lastContent);
 		this.notifyMarkersNeedToShowNewSelection(lastContent);
+		this.view.refresh();
+	};
+	proto.listAll = function() {
+		console.log("presenter/sidebar/initiatives: listAll");
+		this.contentStack.append(this.allInitiativesItem);
+		this.notifySidebarNeedsToShowInitiatives();
 		this.view.refresh();
 	};
 
@@ -152,6 +199,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	function createPresenter(view) {
 		var p = new Presenter();
 		p.registerView(view);
+		eventbus.subscribe({topic: "Initiative.new", callback: function(data) { p.onInitiativeNew(data); } });
 		eventbus.subscribe({topic: "Search.initiativeResults", callback: function(data) { p.onInitiativeResults(data); } });
 		eventbus.subscribe({topic: "Marker.SelectionToggled", callback: function(data) { p.onMarkerSelectionToggled(data); } });
 		eventbus.subscribe({topic: "Marker.SelectionSet", callback: function(data) { p.onMarkerSelectionSet(data); } });

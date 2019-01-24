@@ -12,6 +12,11 @@ define(["d3", "view/base"], function(d3, view) {
 	proto.title = "Untitled";
 	proto.hasHistoryNavigation = true;	// by default - change this in derived sidebar view objects if necessary.
 
+	// override this in derived object to add control buttons.
+	proto.controlButtons = function() {
+		return [];
+	};
+
 	proto.populateScrollableSelection = function(selection) {
 		// override this default in derived view objects:
 	};
@@ -46,6 +51,9 @@ define(["d3", "view/base"], function(d3, view) {
 			createButton(buttons.forward, "fa-arrow-right", "Later search results");
 			createButton(buttons.back, "fa-arrow-left", "Earlier search results");
 		}
+		this.controlButtons().forEach(function(e) {
+			createButton(e, e.icon, e.hovertext);
+		});
 	};
 	proto.refresh = function() {
 		this.loadFixedSection();

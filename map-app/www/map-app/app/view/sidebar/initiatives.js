@@ -16,6 +16,21 @@ define(["d3", "app/eventbus", "presenter/sidebar/initiatives", "view/sidebar/bas
 	const accordionClasses = "w3-bar-item w3-tiny w3-light-grey w3-padding-small" + hoverColour;
 	const sectionClasses = "w3-bar-item w3-small w3-white w3-padding-small";
 
+	proto.controlButtons = function() {
+		const that = this;
+		return [
+			{
+				disabled: false,
+				onClick: function() { return that.listAllButtonClicked(); },
+				icon: "fa-list-ul",
+				hovertext: "Show all initiatives"
+			}
+		];
+	};
+	proto.listAllButtonClicked = function() {
+		console.log("view/sidebar/initiatives: listAllButtonClicked");
+		this.presenter.listAll();
+	};
 	proto.populateFixedSelection = function(selection) {
 		let textContent = "Initiatives";	// default content, if no initiatives to show
 		if (this.presenter.currentItemExists()) {
