@@ -33,6 +33,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 		return objects.filter(function(i) { return i.name.toUpperCase().includes(up); });
 	}
 	function sortInitiatives() {
+		console.log(`sorting ${objects.length} initiatives`);
 		// Optimization:
 		// We could just have sorted the array here, but we don't want to perform a String.toLowerCase
 		// any more times than we need to, so we're doing it just once for each initiative
@@ -91,6 +92,14 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 				loadNextInitiatives();
 			});
 		}
+		else {
+			// No more initiatives to load. 
+
+			// We sort the initiatives so that the default order for viewing lists of
+			// initiatives is sorted, and we don't want to have to re-sort the list each time the
+			// UI wants to display a list.
+			sortInitiatives();
+		}
 	}
 	function add(json) {
 		initiativesToLoad = initiativesToLoad.concat(json);
@@ -133,11 +142,6 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 				//        so that the UI can display info about datasets.
 				//console.log(json);
 				add(json.data);
-
-				// We sort the initiatives so that the default order for viewing lists of
-				// initiatives is sorted, and we don't want to have to re-sort the list each time the
-				// UI wants to display a list.
-				sortInitiatives();
 
 				eventbus.publish({topic: "Initiative.datasetLoaded"});
 			});
