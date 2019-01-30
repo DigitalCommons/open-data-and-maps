@@ -17,50 +17,47 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	StackItem.prototype.appendInitiative = function(initiative) {
 		this.initiatives.push(initiative);
 	}
+	StackItem.prototype.replaceInitiatives = function(initiatives) {
+		this.initiatives = initiatives;
+	}
 
 	function SearchResults(initiatives, searchString) {
-		// isa StackItem
 		StackItem.call(this, initiatives);
 		this.searchString = searchString;
 	}
+	// SearchResults isa StackItem:
 	SearchResults.prototype = Object.create(StackItem.prototype);
+
 	SearchResults.prototype.textOnEmpty = function() {
 		// What text should be displayed in the list of initiatives if that list is empty
 		return 'Nothing matched the search';
 	};
 	SearchResults.prototype.headingText = function() {
 		if (this.initiatives.length === 1) {
-			return StackItem.call(this);
+			return this.initiatives[0].name;
 		}
 		else {
-			return "Search: " + this.searchString;
+			return `Search: "${this.searchString}" (${this.initiatives.length})`;
 		}
 	};
 
 	function AllInitiatives() {
-		// isa StackItem
+		// This item gets populated with initiatives each time the user
+		// asks to see the list of all initiatives. Why?
+		// So that things work acceptably when the user asks to see the list
+		// both before and after all the initiatives have finished loading.
 		StackItem.call(this, []);
 	}
+	// AllInitiatives isa StackItem:
 	AllInitiatives.prototype = Object.create(StackItem.prototype);
+
 	AllInitiatives.prototype.textOnEmpty = function() {
 		// What text should be displayed in the list of initiatives if that list is empty
 		return 'No initiatives';
 	};
 	AllInitiatives.prototype.headingText = function() {
-		return "All initiatives";
+		return `All initiatives (${this.initiatives.length})`;
 	};
-
-	// TODO - what are we going to do with this Initiative object?
-	//        Do we want a place to hold UI state (e.g. selected)?
-	//        Or should that be held only in the DOM?
-	//        We should duplicate this state outside the DOM only if it is necessary for performance reasons.
-	const all_initiatives = [];
-	function Initiative(i) {
-		Object.defineProperties(this, {
-			model: { value: i, enumerable: true }
-		});
-		all_initiatives.push();
-	}
 
 	// This is the presenter object for this module:
 	function Presenter(){
@@ -70,6 +67,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 		this.allInitiativesItem = new AllInitiatives();
 	}
 
+	// Presenter isa sidebarPresenter.bae object:
 	var proto = Object.create(sidebarPresenter.base.prototype);
 
 	proto.currentItem = function() {
@@ -78,13 +76,6 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	proto.currentItemExists = function() {
 		// returns true only if the contentStack is empty
 		return typeof this.contentStack.current() !== 'undefined';
-	};
-	proto.onInitiativeNew = function(data/*, envelope*/) {
-		var initiative = data;
-		// TODO - Is there really a reason for creating a new Initiative object?
-		//        If not, then don't!
-		//new Initiative(initiative);
-		this.allInitiativesItem.appendInitiative(initiative);
 	};
 	proto.notifyMarkersNeedToShowNewSelection = function(lastContent) {
 		eventbus.publish({
@@ -136,6 +127,7 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	};
 	proto.listAll = function() {
 		console.log("presenter/sidebar/initiatives: listAll");
+		this.allInitiativesItem.replaceInitiatives(sseInitiative.allInitiatives());
 		this.contentStack.append(this.allInitiativesItem);
 		this.notifySidebarNeedsToShowInitiatives();
 		this.view.refresh();
@@ -199,7 +191,6 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	function createPresenter(view) {
 		var p = new Presenter();
 		p.registerView(view);
-		eventbus.subscribe({topic: "Initiative.new", callback: function(data) { p.onInitiativeNew(data); } });
 		eventbus.subscribe({topic: "Search.initiativeResults", callback: function(data) { p.onInitiativeResults(data); } });
 		eventbus.subscribe({topic: "Marker.SelectionToggled", callback: function(data) { p.onMarkerSelectionToggled(data); } });
 		eventbus.subscribe({topic: "Marker.SelectionSet", callback: function(data) { p.onMarkerSelectionSet(data); } });

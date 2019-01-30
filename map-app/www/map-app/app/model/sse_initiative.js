@@ -24,10 +24,42 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 		}
 		eventbus.publish({topic: "Initiative.new", data: this});
 	}
+	function allInitiatives() {
+		return objects;
+	};
 	function search(text) {
 		// returns an array of sse objkects whose name contains the search text
 		var up = text.toUpperCase();
 		return objects.filter(function(i) { return i.name.toUpperCase().includes(up); });
+	}
+	function sortInitiatives() {
+		// Optimization:
+		// We could just have sorted the array here, but we don't want to perform a String.toLowerCase
+		// any more times than we need to, so we're doing it just once for each initiative
+		// and keeping that in a temporary arrap (mapped).
+		// Code based on
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Sorting_with_map
+		//
+		// Temporary array holds objects with position and sort-value:
+		var mapped = objects.map(function(el, i) {
+			return { index: i, value: el.name.toLowerCase() };
+		});
+
+		// Sorting the mapped array containing the reduced values
+		mapped.sort(function(a, b) {
+			if (a.value > b.value) {
+				return 1;
+			}
+			if (a.value < b.value) {
+				return -1;
+			}
+			return 0;
+		});
+
+		// Now use mapped to re-order objects:
+		objects = mapped.map(function(el){
+			return objects[el.index];
+		});
 	}
 	function latLngBounds() {
 		// @returns an a pair of lat-long pairs that define the bounding box of all the initiatives,
@@ -101,6 +133,12 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 				//        so that the UI can display info about datasets.
 				//console.log(json);
 				add(json.data);
+
+				// We sort the initiatives so that the default order for viewing lists of
+				// initiatives is sorted, and we don't want to have to re-sort the list each time the
+				// UI wants to display a list.
+				sortInitiatives();
+
 				eventbus.publish({topic: "Initiative.datasetLoaded"});
 			});
 			/*
@@ -140,6 +178,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 		*/
 	}
 	var pub = {
+		allInitiatives,
 		loadFromWebService: loadFromWebService,
 		search: search,
 		latLngBounds: latLngBounds
