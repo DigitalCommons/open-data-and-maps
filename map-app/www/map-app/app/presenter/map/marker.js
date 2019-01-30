@@ -27,7 +27,10 @@ define(["app/eventbus", "presenter", "model/config"], function(eventbus, present
 		return [initiative.lat, initiative.lng];
 	};
 	proto.getHoverText = function(initiative) {
-		return initiative.name + " (" + initiative.dataset + ")";
+		// It is configurable whther or not we show the dataset in brackets
+		// after the name of the initiaive:
+		const datasetText = config.showDatasetInHoverText() ? ` (${initiative.dataset})` : '';
+		return initiative.name + datasetText;
 	};
 	proto.getPopupText = function(initiative) {
 		// TODO - make obsolete

@@ -3,7 +3,7 @@ define(["json!configuration/config", "json!configuration/version.json", "text!co
 
 	var html = {};
 	console.log(version_json);
-	console.log(about_html);
+	//console.log(about_html);
 	html.about = about_html;
 	/*
 	d3.text("configuration/about.html").then(function(aboutHtml) {
@@ -40,6 +40,9 @@ define(["json!configuration/config", "json!configuration/version.json", "text!co
 	function getServicesPath() {
 		return "map-app/services/";
 	}
+	function showDatasetInHoverText() {
+	   return config_json.showDatasetInHoverText;
+	}
 	var pub = {
 		getSoftwareTimestamp: getSoftwareTimestamp,
 		getSoftwareVariant: getSoftwareVariant,
@@ -47,7 +50,8 @@ define(["json!configuration/config", "json!configuration/version.json", "text!co
 		getServicesPath: getServicesPath,
 		namedDatasets: namedDatasets,
 		htmlTitle: htmlTitle,
-		aboutHtml: aboutHtml
+		aboutHtml: aboutHtml,
+		showDatasetInHoverText: showDatasetInHoverText
 	};
 	return pub;
 });
