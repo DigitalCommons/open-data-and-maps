@@ -82,15 +82,19 @@ define(["app/eventbus", "model/sse_initiative", "presenter"], function(eventbus,
 		// TODO - hook this up to a log?
 	};
 	proto.onMarkersNeedToShowLatestSelection = function(data) {
-		console.log("onMarkersNeedToShowLatestSelection");
+		console.log("onMarkersNeedToShowLatestSelection - PERFORMANCE BOTTELNECK!");
 		const that = this;
 
+		// Consider using d3 data joins? https://bost.ocks.org/mike/join/
+		// Also consider reducing the amount of work done (DOM manipulation) in view/map/marker.js set(Un)Selected.
+		// Maybe we should be using React? !
 		data.unselected.forEach(function(e) {
 			that.view.setUnselected(e);
 		});
 		data.selected.forEach(function(e) {
 			that.view.setSelected(e);
 		});
+		console.log("onMarkersNeedToShowLatestSelection done");
 	};
 	proto.onNeedToShowInitiativeTooltip = function(data) {
 		this.view.showTooltip(data);
