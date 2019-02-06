@@ -17,15 +17,23 @@ module SeOpenData
         end
         @lookup = {}
         query.execute(graph).each do |solution|
-          @lookup[solution.label.to_s.gsub(/ /, "")] = solution
+          #puts "LegalForm: #{solution.label}"
+          #@lookup[solution.label.to_s.gsub(/ /, "")] = solution
+          @lookup[to_key(solution.label.to_s)] = solution
         end
       end
       def has_label? (label)
-        @lookup.has_key?(label.gsub(/ /, ""))
+        #@lookup.has_key?(label.gsub(/ /, ""))
+        @lookup.has_key?(to_key(label))
       end
       def concept_uri(label)
-        @lookup[label.gsub(/ /, "")].concept.to_s
+        #@lookup[label.gsub(/ /, "")].concept.to_s
+        @lookup[to_key(label)].concept.to_s
       end
+      def to_key(label)
+        label.upcase.gsub(/ /, "")
+      end
+
     end
   end
 end

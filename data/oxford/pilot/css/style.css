@@ -1,0 +1,19 @@
+body { 
+  font-family: Avenir, Verdana, Arial, Helvetica, sans-serif;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #78BC3F;
+}
+pre {
+  font-family: Monaco, "Courier New", Courier, monospace;
+  max-width: 1000px;
+  padding: 10px;
+  overflow-x: auto;
+  background-color: #9BDA67;
+}
+tr:nth-child(even) {
+  background: #9BDA67;
+}
+tr:nth-child(odd) {
+  background: #BEEC97;
+}
