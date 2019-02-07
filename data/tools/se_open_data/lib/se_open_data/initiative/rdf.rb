@@ -74,6 +74,21 @@ module SeOpenData
           }.compact       # To remove any nil elements added above.
         end
       end
+      def activities_uris
+        # @returns array of URIs
+        if initiative.activities.nil?
+          []
+        else
+          initiative.activities.split(config.csv_standard::SubFieldSeparator).map {|activity|
+            if config.activities_lookup.has_label?(activity)
+              ::RDF::URI(config.activities_lookup.concept_uri(activity))
+            else
+              $stderr.puts "Could not find activities: #{activity}"
+              nil
+            end
+          }.compact       # To remove any nil elements added above.
+        end
+      end
 
       def populate_graph(graph)
         graph.insert([uri, ::RDF.type, config.initiative_rdf_type])
@@ -88,6 +103,9 @@ module SeOpenData
         end
         legal_form_uris.each {|legal_form_uri|
           graph.insert([uri, config.essglobal_vocab.legalForm, legal_form_uri])
+        }
+        activities_uris.each {|activities_uri|
+          graph.insert([uri, config.essglobal_vocab.economicSector, activities_uri])
         }
         if companies_house_uri
           graph.insert([uri, Config::Rov.hasRegisteredOrganization, companies_house_uri])
