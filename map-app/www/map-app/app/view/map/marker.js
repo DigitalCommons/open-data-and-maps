@@ -1,4 +1,7 @@
-define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base", "presenter/map/marker"], function(leaflet, cluster, awesomeMarkers, viewBase, presenter) {
+		/* WORK IN PROGRESS!
+define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base", "presenter/map/marker", "view/map/clustercontrol"], function(leaflet, markerCluster, awesomeMarkers, viewBase, presenter, clustercontrol) {
+*/
+define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base", "presenter/map/marker"], function(leaflet, markerCluster, awesomeMarkers, viewBase, presenter) {
 	"use strict";
 
 	// Keep a mapping between initiatives and their Markers:
@@ -64,9 +67,11 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 			console.log(that.initiative);
 		});
 
-		this.cluster = unselectedClusterGroup;
-		this.cluster.addLayer(this.marker);
+		this.clusterGroup = selectedClusterGroup;
+		this.clusterGroup.addLayer(this.marker);
 		markerForInitiative[initiative.uniqueId] = this;
+
+		this.spideredCluster = null;
 	};
 	proto.onClick = function(e) {
 		console.log("MarkerView.onclick");
@@ -84,24 +89,24 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		}
 	};
 	proto.setUnselected = function(initiative) {
-		this.marker.setIcon(unselectedIcon);
-		this.cluster.removeLayer(this.marker);
-		this.cluster = unselectedClusterGroup;
-		this.cluster.addLayer(this.marker);
+		//this.marker.setIcon(unselectedIcon);
+		this.clusterGroup.removeLayer(this.marker);
+		//this.clusterGroup = unselectedClusterGroup;
+		//this.clusterGroup.addLayer(this.marker);
 	};
 	proto.setSelected = function(initiative) {
-		this.marker.setIcon(selectedIcon);
-		this.cluster.removeLayer(this.marker);
+		//this.marker.setIcon(selectedIcon);
+		//this.clusterGroup.removeLayer(this.marker);
 		// CAUTION: this may be either a ClusterGroup, or the map itself
-		this.cluster = selectedClusterGroup;
-		this.cluster.addLayer(this.marker);
+		//this.clusterGroup = selectedClusterGroup;
+		this.clusterGroup.addLayer(this.marker);
 	};
 	proto.showTooltip = function(initiative) {
 		// This variation zooms the map, and makes sure the marker can
 		// be seen, spiderifying if needed.
 		// But this auto-zooming maybe more than the user bargained for!
 		// It might disrupt their flow.
-		//this.cluster.zoomToShowLayer(this.marker);
+		//this.clusterGroup.zoomToShowLayer(this.marker);
 
 		// This variation spiderfys the cluster to which the marker belongs.
 		// This only works if selectedClusterGroup is actually a ClusterGroup!
@@ -109,10 +114,27 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		//if (cluster && typeof cluster.spiderfy === 'function') {
 			//cluster.spiderfy();
 		//}
+		//console.log(this.marker);
+		//console.log(this.clusterGroup.getVisibleParent(this.marker));
+		/* WORK IN PROGRESS!
+		clustercontrol.ensureSpiderify(this.marker, this.clusterGroup);
+		const cluster = this.clusterGroup.getVisibleParent(this.marker);
+		if (cluster !== null && (typeof cluster.spiderfy === 'function')) {
+			this.spideredCluster = cluster;
+			this.spideredCluster.spiderfy();
+		}	   
+	   */
 		this.marker.openTooltip();
 		this.marker.setZIndexOffset(1000);
 	};
 	proto.hideTooltip = function(initiative) {
+		/* WORK IN PROGRESS!
+		clustercontrol.releaseSpiderify(this.marker, this.clusterGroup);
+		if (this.spideredCluster !== null) {
+			this.spideredCluster.unspiderfy();
+			this.spideredCluster = null;
+		}	   
+	   */
 		this.marker.closeTooltip();
 		this.marker.setZIndexOffset(0);
 	};
@@ -130,7 +152,7 @@ define(["leaflet", "leafletMarkerCluster", "leafletAwesomeMarkers", "view/base",
 		}
 	}
 	proto.destroy = function() {
-		this.cluster.removeLayer(this.marker);
+		this.clusterGroup.removeLayer(this.marker);
 	};
 	MarkerView.prototype = proto;
 

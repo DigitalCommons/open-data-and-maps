@@ -127,8 +127,11 @@ define(["app/eventbus", "model/config", "model/sse_initiative", "presenter/sideb
 	};
 	proto.listAll = function() {
 		console.log("presenter/sidebar/initiatives: listAll");
+		const lastContent = this.contentStack.current();
 		this.allInitiativesItem.replaceInitiatives(sseInitiative.allInitiatives());
 		this.contentStack.append(this.allInitiativesItem);
+		this.notifyMarkersNeedToShowNewSelection(lastContent);
+		this.notifyMapNeedsToNeedsToBeZoomedAndPanned();
 		this.notifySidebarNeedsToShowInitiatives();
 		this.view.refresh();
 	};

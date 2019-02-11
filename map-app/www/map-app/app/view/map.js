@@ -4,7 +4,7 @@ define(
 		"use strict";
 
 		const config = {
-			putSelectedMarkersInClusterGroup: false
+			putSelectedMarkersInClusterGroup: true
 		};
 
 		function MapView(){}
