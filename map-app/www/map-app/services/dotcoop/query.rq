@@ -10,7 +10,7 @@ PREFIX rov: <http://www.w3.org/ns/regorg#>
 PREFIX osspatialrelations: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
 PREFIX : <http://w3id2.solidarityeconomy.coop/dotcoop/>
 
-SELECT ?name ?uri ?lat ?lng
+SELECT ?name ?uri ?lat ?lng ?www
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
