@@ -2,6 +2,9 @@
 *.swp
 *.swo
 
+# For VSCode users
+*.vscode
+
 # General:
 *.zip
 

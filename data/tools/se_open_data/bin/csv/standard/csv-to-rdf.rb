@@ -48,7 +48,7 @@ class OptParse
               "Name of file where SPARQL query for map-app is to be written") do |filename|
         options.map_app_sparql_query_filename = filename
       end
-      opts.on("--css_files FILENAMES",
+      opts.on("--css-files FILENAMES",
               "Comma-spearted list of CSS files for linking from generated HTML") do |filenames|
         options.css_files = filenames.split(',')
       end

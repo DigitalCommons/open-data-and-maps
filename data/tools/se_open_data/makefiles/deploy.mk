@@ -21,7 +21,7 @@ $(eval $(call var_check,DEPLOYMENT_SERVER,Name of host defined in ssh config to 
 $(eval $(call var_check,DEPLOYMENT_WEBROOT,Absolute pathname on DEPLOYMENT_SERVER of diretory to deploy to))
 
 # Programs used within this makefile:
-RSYNC := rsync -avz 
+RSYNC := rsync -avz --no-perms --omit-dir-times 
 SSH := ssh
 
 # To deploy the generated data on the server, we need to 

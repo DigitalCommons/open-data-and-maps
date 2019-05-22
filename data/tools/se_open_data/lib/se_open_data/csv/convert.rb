@@ -17,6 +17,10 @@ module SeOpenData
     def CSV.convert(output_io, output_headers, input_io, csv_row_reader, csv_opts = {})
       # The way this works is based on having column headings:
       csv_opts.merge!(headers: true, skip_blanks: true)
+
+      # If it's there, strip BOM from utf8
+      input_io.delete!("\xEF\xBB\xBF")
+
       csv_in = ::CSV.new(input_io, csv_opts)
       csv_out = ::CSV.new(output_io)
       csv_out << output_headers.values
@@ -34,20 +38,20 @@ module SeOpenData
         begin
           # An empty column in the first row of the CSV (the headers row) will
           # result in a header with value nil. So, use compact:
-          row.headers.compact.each {|h|
-            if row[h]
-              # Change encoding! This is a workaround for a problem that emerged when processing the orgs_csv file.
-              #row.headers.each {|h| row[h].encode!(Encoding::ASCII_8BIT) unless row[h].nil? }
-              # Why does it not work with UTF-8?  UPDATE - seems to work with UTF-8 for 2017 data.
-              #
-              # UPDATE: See issue https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/57
-              #         More investigation is needed to get to the bottom of this.
-              if row[h].encoding != Encoding::UTF_8
-                puts "ENCODING: #{row[h].encoding}"
-              end
-              row[h].encode!(Encoding::UTF_8) unless row[h].nil?
-            end
-          }
+          # row.headers.compact.each {|h|
+          #   if row[h]
+          #     # Change encoding! This is a workaround for a problem that emerged when processing the orgs_csv file.
+          #     #row.headers.each {|h| row[h].encode!(Encoding::ASCII_8BIT) unless row[h].nil? }
+          #     # Why does it not work with UTF-8?  UPDATE - seems to work with UTF-8 for 2017 data.
+          #     #
+          #     # UPDATE: See issue https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/57
+          #     #         More investigation is needed to get to the bottom of this.
+          #     if row[h].encoding != Encoding::UTF_8
+          #       puts "ENCODING: #{row[h].encoding}"
+          #     end
+          #     row[h].encode!(Encoding::UTF_8) unless row[h].nil?
+          #   end
+          # }
           # Create an object to read and transform the row.
           # It provides methods that have the same name as the keys in the output_headers Hash,
           # so that the output row can be populated by calling the method that corresponds
@@ -56,7 +60,9 @@ module SeOpenData
           if csv_row_reader.method_defined? :pre_flight_checks
             r.pre_flight_checks
           end
-          csv_out << output_headers.keys.map {|h| r.send(h) }
+          csv_out << output_headers.keys.map {
+            |h| r.send(h) 
+          }
 
         rescue SeOpenData::Exception::IgnoreCsvRow => e
           $stderr.puts "Ignoring row: #{e.message}:\n#{row}\n"

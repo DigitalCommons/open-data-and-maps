@@ -1,10 +1,12 @@
-# This is the Converter for Co-ops UK 'outlets' CSV.
+# This is the Converter for Oxford LimeSurvey raw output CSV.
 # It converts it into a CSV with standard column headings.
 
+# $LOAD_PATH.unshift '/Volumes/Extra/SEA-dev/open-data-and-maps/data/tools/se_open_data/lib'
 require 'se_open_data'
 
 # EXPECTS the name of the report CSV file to be provided as a simple argument:
 ReportCsv = ARGV.shift
+# ReportCsv = "/Volumes/Extra/SEA-dev/open-data-and-maps/data/oxford/pilot/generated-data/experimental/csv/report.csv"
 $stderr.puts "A report will be written to #{ReportCsv}"
 
 # This is the CSV standard that we're converting into:
@@ -40,25 +42,63 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
   # Headers in input CSV (with Hash key symbols matching Hash key symbols in output CSV Headers)
   InputHeaders = {
     # These symbols match symbols in OutputStandard::Headers.
-    # So the corresponding cells with be copied fro inpiut to output:
-    name: "Name",
-    street_address: "Street",
-    description: "Description from website",
-    postcode: "Postcode",
-    legal_forms: "Legal forms",
+    # So the corresponding cells with be copied from input to output:
+    id: "id",
+    name: "name",
+    description: "description",
+    legal_forms: "",
+    primary_activity: "activity",
+    activities: "secondaryActivities[SQ002]",
+    street_address: "address[a]",
+    locality: "address[d]",
+    postcode: "address[e]",
+    email: "email",
+    phone: "",
+    website: "website",
+    facebook: "facebook",
+    twitter: "twitter",
 
     # These symbols don't match symbols in OutputStandard::Headers.
     # But CSV::RowReader creates method using these symbol names to read that column from the row:
     #registrar: "Registrar",
     #registered_number: "Registered Number"
-    res_id: "Response ID",
-    town: "Town",
-    email: "Email",
-    phone: "Phone",
-    website: "Website",
-    facebook: "Facebook",
-    twitter: "Twitter",
-    activities: "Activities",
+
+    # street_address is made up of three cells
+    address1: "address[a]",
+    address2: "address[b]",
+    address3: "address[c]",
+
+    phone_raw: "phone",
+    twitter_raw: "twitter",
+    facebook_raw: "facebook",
+
+    arts: "secondaryActivities[SQ002]",
+    campaigning: "secondaryActivities[SQ003]",
+    community: "secondaryActivities[SQ004]",
+    education: "secondaryActivities[SQ005]",
+    energy: "secondaryActivities[SQ006]",
+    food: "secondaryActivities[SQ007]",
+    goods_services: "secondaryActivities[SQ008]",
+    health: "secondaryActivities[SQ009]",
+    housing: "secondaryActivities[SQ010]",
+    money: "secondaryActivities[SQ011]",
+    nature: "secondaryActivities[SQ012]",
+    reuse: "secondaryActivities[SQ013]",
+
+    community_group: "structure[SQ001]",
+    non_profit: "structure[SQ002]",
+    social_enterprise: "structure[SQ003]",
+    charity: "structure[SQ004]",
+    company: "structure[SQ005]",
+    workers_coop: "structure[SQ006]",
+    housing_coop: "structure[SQ007]",
+    consumer_coop: "structure[SQ008]",
+    producer_coop: "structure[SQ009]",
+    stakeholder_coop: "structure[SQ010]",
+    community_interest_company: "structure[SQ011]",
+    community_benefit_society: "structure[SQ012]",
+
+    consent: "websiteConsent"
   }
   def initialize(row)
     # Let CSV::RowReader provide methods for accessing columns described by InputHeaders, above:
@@ -72,14 +112,62 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
   # Some columns in the output are not simple copies of input columns:
   # Here are the methods for generating those output columns:
   # (So all method names below should aldo appear as keys in the output_headers Hash)
-  def id
-    #raise(SeOpenData::Exception::IgnoreCsvRow, "\"Name\" column is empty") unless name
-    #name.gsub(/[^0-9a-z]/i, '')
-    raise(SeOpenData::Exception::IgnoreCsvRow, "\"Response ID\" column is empty") if res_id.empty?
-    res_id
+  # def id
+  #   #raise(SeOpenData::Exception::IgnoreCsvRow, "\"Name\" column is empty") unless name
+  #   #name.gsub(/[^0-9a-z]/i, '')
+  #   raise(SeOpenData::Exception::IgnoreCsvRow, "\"Response ID\" column is empty") if res_id.empty?
+  #   res_id
+  # end
+  def street_address
+    [
+      !address1.empty? ? address1 : nil,
+      !address2.empty? ? address2 : nil,
+      !address3.empty? ? address3 : nil
+    ].compact.join(OutputStandard::SubFieldSeparator)
   end
+
+  def phone
+    phone_raw.delete! "(" ")" " "
+    phone_raw.sub!(/^\+?44/, "0")
+    phone_raw.sub!(/^00/, "0")
+    phone_raw.gsub!(/[^\d]/, "")
+    phone_raw
+  end
+
+  def twitter
+    twitter_raw.downcase!
+    twitter_raw.sub!(/https?:\/\/w?w?w?\.?twitter\.com\//, "")
+    twitter_raw.delete! "@" "#" "/"
+    twitter_raw
+  end
+
+  def facebook
+    facebook_raw.downcase!
+    facebook_raw.sub!(/h?t?t?p?s?:?\/?\/?w?w?w?\.?facebook\.com\//, "")
+    facebook_raw.sub!(/h?t?t?p?s?:?\/?\/?w?w?w?\.?fb\.com\//, "")
+    facebook_raw.delete! "@" "#" "/"
+    facebook_raw
+  end
+
+  def activities
+    [
+      arts == "Yes" ? "Arts, Media, Culture & Leisure" : nil,
+      campaigning == "Yes" ? "Campaigning, Activism & Advocacy" : nil,
+      community == "Yes" ? "Community & Collective Spaces" : nil,
+      education == "Yes" ? "Education" : nil,
+      energy == "Yes" ? "Energy" : nil,
+      food == "Yes" ? "Food" : nil,
+      goods_services == "Yes" ? "Goods & Services" : nil,
+      health == "Yes" ? "Health, Social Care & Wellbeing" : nil,
+      housing == "Yes" ? "Housing" : nil,
+      money == "Yes" ? "Money & Finance" : nil,
+      nature == "Yes" ? "Nature, Conservation & Environment" : nil,
+      reuse == "Yes" ? "Reduce, Reuse, Repair & Recycle" : nil
+    ].compact.join(OutputStandard::SubFieldSeparator)
+  end
+
   def homepage
-    if website && !website.empty?
+    if website && !website.empty? && website != "N/A"
       http_regex = /https?\S+/
       m = http_regex.match(website)
       if m
@@ -94,15 +182,9 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
           nil
         end
       end
-    else
-      if facebook && !facebook.empty?
-        add_comment("No Website. Using Facebook instead.");
-        facebook
-      else
-        nil
-      end
     end
   end
+
 #  def postcode
 #    if street_address.nil?
 #      add_comment("There's no Address, so we can't get the postcode in order to guess a location, so this won't appear on the map")
@@ -114,14 +196,28 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
 #      postcode
 #    end
 #  end
-  #def legal_forms       # UNUSED
+
+  def legal_forms
     ## Return a list of strings, separated by OutputStandard::SubFieldSeparator.
     ## Each item in the list is a prefLabel taken from essglobal/standard/legal-form.skos.
     ## See lib/se_open_data/essglobal/legal_form.rb
-    #[
-      #"Cooperative"
-    #].compact.join(OutputStandard::SubFieldSeparator)
-  #end
+    regEx = /Yes/
+
+    [
+      community_group == "Yes" ? "Community group (formal or informal)" : nil,
+      non_profit == "Yes" ? "Not-for-­profit organisation" : nil,
+      social_enterprise == "Yes" ? "Social enterprise" : nil,
+      charity == "Yes" ? "Charity" : nil,
+      company == "Yes" ? "Company (Other)" : nil,
+      workers_coop == "Yes" ? "Workers co-operative" : nil,
+      housing_coop == "Yes" ? "Housing co-operative" : nil,
+      consumer_coop == "Yes" ? "Consumer co-operative" : nil,
+      producer_coop == "Yes" ? "Producer co-operative" : nil,
+      stakeholder_coop == "Yes" ? "Multi-stakeholder co-operative" : nil,
+      community_interest_company == "Yes" ? "Community Interest Company (CIC)" : nil,
+      community_benefit_society == "Yes" ? "Community Benefit Society / Industrial and Provident Society (IPS)" : nil
+    ].compact.join(OutputStandard::SubFieldSeparator)
+  end
   
 end
 
@@ -132,6 +228,17 @@ end
 #   The return value of the method in SpecializedCsvReader whose name is symbol, or
 #   Empty if neither of the above apply.
  
+# For debugging 
+
+# input = File.open("/Volumes/Extra/SEA-dev/open-data-and-maps/data/oxford/pilot/original-data/2019-05-09.csv", "r:utf-8")
+# inputContent = input.read;
+# input.close
+# $stdout.reopen("/Volumes/Extra/SEA-dev/open-data-and-maps/data/oxford/pilot/generated-data/experimental/csv/initiatives.csv", "w")
+# $stderr.reopen("/Volumes/Extra/SEA-dev/open-data-and-maps/data/dotcoop/domains2018-04-24/generated-data/experimental-new-server/csv/ignored-duplicates.csv", "w")
+# $stdout.sync = true
+# $stderr.sync = true
+# SeOpenData::CSV.merge_and_de_duplicate(inputContent, $stdout, $stderr, keys, domainHeader, nameHeader)
+
 SeOpenData::CSV.set_csv_comment_filename(ReportCsv)
 SeOpenData::CSV.convert(
   # Output:
@@ -139,4 +246,5 @@ SeOpenData::CSV.convert(
   # Input:
   #ARGF.read, SpecializedCsvReader, encoding: "UTF-8"
   ARGF.read, SpecializedCsvReader, {}
+  # inputContent, SpecializedCsvReader, {}
 )

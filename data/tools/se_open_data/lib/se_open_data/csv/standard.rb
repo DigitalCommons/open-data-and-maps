@@ -22,6 +22,7 @@ module SeOpenData
           description: "Description",
           # The allowed values for legal_form are taken from essglobal.
           legal_forms: "Legal Forms",
+          primary_activity: "Primary Activity",
           activities: "Activities",
           street_address: "Street Address",
           locality: "Locality",
@@ -29,6 +30,10 @@ module SeOpenData
           postcode: "Postcode",
           country_name: "Country Name",
           homepage: "Website",
+          phone: "Phone",
+          email: "Email",
+          twitter: "Twitter",
+          facebook: "Facebook",
           companies_house_number: "Companies House Number",
 
           # latitude and longitude are for the exact geolocation of the SSE initiative,
@@ -46,7 +51,7 @@ module SeOpenData
           # This is used, for example, in the toolchain for generating the co-ops-uk 2017 RDF.
           geocontainer: "Geo Container",
           geocontainer_lat: "Geo Container Latitude",
-          geocontainer_lon: "Geo Container Longitide"
+          geocontainer_lon: "Geo Container Longitude"
         }
         # Sometimes a single column can take values that are in fact a list.
         # So we need to know the character used to separate the items in the list.

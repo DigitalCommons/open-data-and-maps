@@ -30,14 +30,20 @@ class DotCoopV1Reader < SeOpenData::CSV::RowReader
     # These symbols match symbols in OutputStandard::Headers.
     # So the corresponding cells with be copied fro inpiut to output:
     name: "Name",
-    postcode: "Postcode",
-    country_name: "UK Nation",
+    postcode: "PostCode",
+    country_name: "Country",
 
     # These symbols don't match symbols in OutputStandard::Headers.
     # But CSV::RowReader creates method using these symbol names to read that column from the row:
     #registrar: "Registrar",
     #registered_number: "Registered Number"
-    domain: "Domain",
+    street_address: "Street",
+    locality: "City 2",
+    region: "State 2",
+    homepage: "Domain",
+    latitude: "Latitude",
+    longitude: "Longitude",
+    id: "RegistrantId"
   }
   def initialize(row)
     # Let CSV::RowReader provide methods for accessing columns described by InputHeaders, above:
@@ -46,14 +52,14 @@ class DotCoopV1Reader < SeOpenData::CSV::RowReader
   # Some columns in the output are not simple copies of input columns:
   # Here are the methods for generating those output columns:
   # (So all method names below should aldo appear as keys in the output_headers Hash)
-  def id
-    raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
-    domain.sub(/\.coop$/, "")
-  end
-  def homepage
-    raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
-    domain_to_homepage(domain)
-  end
+  # def id
+  #   raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
+  #   domain.sub(/\.coop$/, "")
+  # end
+  # def homepage
+  #   raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
+  #   domain_to_homepage(domain)
+  # end
   def legal_forms
     # Return a list of strings, separated by OutputStandard::SubFieldSeparator.
     # Each item in the list is a prefLabel taken from essglobal/standard/legal-form.skos.
