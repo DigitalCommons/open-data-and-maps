@@ -3,13 +3,13 @@ PREFIX dc: <http://purl.org/dc/terms/>
 PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
 PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX essglobal: <http://purl.org/solidarityeconomics/experimental/essglobal/vocab/>
+PREFIX essglobal: <https://w3id2.solidarityeconomy.coop/essglobal/V2a/vocab/>
 PREFIX gr: <http://purl.org/goodrelations/v1#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX ospostcode: <http://data.ordnancesurvey.co.uk/id/postcodeunit/>
 PREFIX rov: <http://www.w3.org/ns/regorg#>
 PREFIX osspatialrelations: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
-PREFIX : <https://w3id.solidarityeconomy.coop/sea-lod/oxford-pilot/>
+PREFIX : <https://w3id2.solidarityeconomy.coop/sea-lod/oxford-pilot/>
 
 SELECT ?name ?uri ?within ?lat ?lng ?www ?regorg ?sameas ?desc
 WHERE {
@@ -24,4 +24,3 @@ WHERE {
 	?within geo:lat ?lat.
 	?within geo:long ?lng.
 }
-LIMIT 10

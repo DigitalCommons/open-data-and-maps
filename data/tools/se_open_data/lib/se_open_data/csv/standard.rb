@@ -21,7 +21,7 @@ module SeOpenData
           name: "Name",
           description: "Description",
           # The allowed values for legal_form are taken from essglobal.
-          legal_forms: "Legal Forms",
+          organisational_structure: "Organisational Structure",
           primary_activity: "Primary Activity",
           activities: "Activities",
           street_address: "Street Address",

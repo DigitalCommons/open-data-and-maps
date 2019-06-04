@@ -46,7 +46,7 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
     id: "id",
     name: "name",
     description: "description",
-    legal_forms: "",
+    organisational_structure: "",
     primary_activity: "activity",
     activities: "secondaryActivities[SQ002]",
     street_address: "address[a]",
@@ -197,7 +197,7 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
 #    end
 #  end
 
-  def legal_forms
+  def organisational_structure
     ## Return a list of strings, separated by OutputStandard::SubFieldSeparator.
     ## Each item in the list is a prefLabel taken from essglobal/standard/legal-form.skos.
     ## See lib/se_open_data/essglobal/legal_form.rb
@@ -205,7 +205,7 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
 
     [
       community_group == "Yes" ? "Community group (formal or informal)" : nil,
-      non_profit == "Yes" ? "Not-for-­profit organisation" : nil,
+      non_profit == "Yes" ? "Not-for-profit organisation" : nil,
       social_enterprise == "Yes" ? "Social enterprise" : nil,
       charity == "Yes" ? "Charity" : nil,
       company == "Yes" ? "Company (Other)" : nil,

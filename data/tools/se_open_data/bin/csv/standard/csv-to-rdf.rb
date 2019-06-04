@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift '/Volumes/Extra/SEA-dev/open-data-and-maps/data/tools/se_open_data/lib'
+
 require 'optparse'
 require 'ostruct'
 require 'se_open_data'
@@ -101,6 +103,7 @@ config = SeOpenData::Initiative::RDF::Config.new(
 
 # Load CSV into data structures, for this particular standard
 collection = SeOpenData::Initiative::Collection.new(config)
+ARGF.set_encoding(Encoding::UTF_8)
 collection.add_from_csv(ARGF.read)
 collection.serialize_everything($options.outdir)
 

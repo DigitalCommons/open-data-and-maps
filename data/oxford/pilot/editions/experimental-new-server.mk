@@ -29,6 +29,12 @@ DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
 DEPLOYMENT_RSYNC_FLAGS := --delete
 
 ###########################################
+# Set up for rdf/ttl gen:
+# Uses alpha version of ESSGlobal 2
+
+ESSGLOBAL_URI := https://w3id2.solidarityeconomy.coop/essglobal/V2a/
+
+###########################################
 # Set up the triplestore:
 #
 # virtuoso server name, typically this is configured in ~/.ssh/config:

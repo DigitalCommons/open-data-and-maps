@@ -42,7 +42,7 @@ all: | $(GEN_VIRTUOSO_DIR)
 	$(check_valid_edition)
 	@echo "Creating files for upload to Virtuoso..."
 	@$(call GET_RDFXML_FOR_VIRTUOSO,$(ESSGLOBAL_URI)vocab/,essglobal_vocab.rdf)
-	@$(call GET_RDFXML_FOR_VIRTUOSO,$(ESSGLOBAL_URI)standard/legal-form,legal-form.skos)
+	@$(call GET_RDFXML_FOR_VIRTUOSO,$(ESSGLOBAL_URI)standard/organisational-structure,organisational-structure.skos)
 	@echo "Creating $(VIRTUOSO_NAMED_GRAPH_FILE)..."
 	@echo "$(GRAPH_NAME)" > $(VIRTUOSO_NAMED_GRAPH_FILE)
 	@echo "Creating $(VIRTUOSO_SCRIPT_LOCAL)..."

@@ -1,5 +1,5 @@
 
-ESSGLOBAL_URI := http://purl.org/solidarityeconomics/experimental/essglobal/
+ESSGLOBAL_URI ?= http://purl.org/solidarityeconomics/experimental/essglobal/
 
 DATASET_URI_BASE := $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
 
