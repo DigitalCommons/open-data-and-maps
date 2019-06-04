@@ -30,14 +30,14 @@ module SeOpenData
           @csv_standard = csv_standard
 
           # keys are URIs in *this* dataset. values are arrays of URIs in other datasets.
-          # @sameas = Hash.new { |h, k| h[k] = [] }
-          # if sameas_csv
-          #   puts sameas_headers
-          #   raise("Expected 2 sameas_headers to be defined") unless sameas_headers && sameas_headers.size == 2
-          #   ::CSV.foreach(sameas_csv, headers: true) do |row|
-          #     @sameas[row[sameas_headers[0]]] << row[sameas_headers[1]]
-          #   end
-          # end
+          @sameas = Hash.new { |h, k| h[k] = [] }
+          if sameas_csv
+            puts sameas_headers
+            raise("Expected 2 sameas_headers to be defined") unless sameas_headers && sameas_headers.size == 2
+            ::CSV.foreach(sameas_csv, headers: true) do |row|
+              @sameas[row[sameas_headers[0]]] << row[sameas_headers[1]]
+            end
+          end
         end
         def prefixes
           {
