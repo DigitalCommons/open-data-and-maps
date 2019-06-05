@@ -1,87 +1,126 @@
 // Set up the various sidebars
-define(["d3", "view/base", "presenter/sidebar", "view/sidebar/mainmenu", "view/sidebar/initiatives", "view/sidebar/about"], function(d3, viewBase, presenter, mainMenu, initiatives, about) {
-	"use strict";
+define([
+  "d3",
+  "view/base",
+  "presenter/sidebar",
+  "view/sidebar/mainmenu",
+  "view/sidebar/initiatives",
+  "view/sidebar/about"
+], function(d3, viewBase, presenter, mainMenu, initiatives, about) {
+  "use strict";
 
-	// This deals with the view object that controls the sidebar
-	// It is not itself a sidebar/view object, but contains objects of that type
+  // This deals with the view object that controls the sidebar
+  // It is not itself a sidebar/view object, but contains objects of that type
 
-	function SidebarView(){}
-	// inherit from the standard view base object:
-	var proto = Object.create(viewBase.base.prototype);
+  function SidebarView() {}
+  // inherit from the standard view base object:
+  var proto = Object.create(viewBase.base.prototype);
 
-	proto.createOpenButton = function() {
-		// d3 selection redefines this, so hang onto it here:
-		var that = this;
-		var selection = this.d3selectAndClear('#map-app-sidebar-button').
-			append('button').
-			attr('class', 'w3-btn w3-teal w3-xlarge w3-opacity w3-display-topleft').
-			attr('title', 'Show sidebar').
-			on('click', function() { that.showSidebar(); }).
-			append('i').
-			attr('class', 'fa fa-angle-right');
-	};
-	proto.createButtonRow = function() {
-		// d3 selection redefines this, so hang onto it here:
-		var that = this;
-		var selection = this.d3selectAndClear('#map-app-sidebar-header').attr('class', 'w3-cell-row');
+  proto.createOpenButton = function() {
+    // d3 selection redefines this, so hang onto it here:
+    var that = this;
+    var selection = this.d3selectAndClear("#map-app-sidebar-button")
+      .append("button")
+      .attr("class", "w3-btn w3-display-topleft")
+      .attr("title", "Show sidebar")
+      .on("click", function() {
+        that.showSidebar();
+      })
+      .append("i")
+      .attr("class", "fa fa-angle-right");
+  };
+  proto.createButtonRow = function() {
+    // d3 selection redefines this, so hang onto it here:
+    var that = this;
+    var selection = this.d3selectAndClear("#map-app-sidebar-header").attr(
+      "class",
+      "w3-cell-row"
+    );
 
-		// Button for hiding the sidebar:
-		selection.append('button').
-			attr('class', 'w3-teal w3-cell w3-button w3-border-0').
-			attr('title', 'Hide sidebar').
-			on('click', function() { that.hideSidebar(); }).
-			append('i').
-			attr('class', 'fa fa-angle-left');
+    // Button for hiding the sidebar:
+    selection
+      .append("button")
+      .attr("class", "w3-teal w3-cell w3-button w3-border-0")
+      .attr("title", "Hide sidebar")
+      .on("click", function() {
+        that.hideSidebar();
+      })
+      .append("i")
+      .attr("class", "fa fa-angle-left");
 
-		// The sidebar has a button that cuases the main menu to be dispayed
-		selection.append('button').
-			attr('class', 'w3-teal w3-cell w3-button w3-border-0').
-			attr('title', 'Show main menu').
-			on('click', function() { console.log(this); that.changeSidebar('mainMenu'); }).
-			append('i').
-			attr('class', 'fa fa-bars');
+    // The sidebar has a button that cuases the main menu to be dispayed
+    selection
+      .append("button")
+      .attr("class", "w3-teal w3-cell w3-button w3-border-0")
+      .attr("title", "Show main menu")
+      .on("click", function() {
+        console.log(this);
+        that.changeSidebar("mainMenu");
+      })
+      .append("i")
+      .attr("class", "fa fa-bars");
 
-		// This is where the navigation buttons will go.
-		// These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
-		selection = selection.append("i").attr("id", "map-app-sidebar-history-navigation");
+    // This is where the navigation buttons will go.
+    // These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
+    selection = selection
+      .append("i")
+      .attr("id", "map-app-sidebar-history-navigation");
+  };
+  proto.createSidebars = function() {
+    this.sidebar = {
+      about: about.createSidebar(),
+      initiatives: initiatives.createSidebar(),
+      mainMenu: mainMenu.createSidebar()
+    };
+  };
+  proto.changeSidebar = function(name) {
+    this.sidebar[name].refresh();
+  };
+  proto.showSidebar = function() {
+    var that = this;
+    d3.select("#map-app-sidebar")
+      .classed("sea-sidebar-open", true)
+      .on("transitionend", function() {
+        if (event.propertyName === "transform")
+          d3.select("#map-app-sidebar-button").on("click", function() {
+            that.hideSidebar();
+          });
+      });
+    d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-left");
+  };
+  proto.hideSidebarIfItTakesWholeScreen = function() {
+    // @todo - improve this test -
+    // it is not really testing the predicate suggested by the name iof the function.
+    if (window.innerWidth <= 600) {
+      d3.select("#map-app-sidebar").classed("sea-sidebar-open", false);
+      d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
+    }
+  };
+  proto.hideSidebar = function() {
+    var that = this;
+    d3.select("#map-app-sidebar")
+      .classed("sea-sidebar-open", false)
+      .on("transitionend", function() {
+        if (event.propertyName === "transform")
+          d3.select("#map-app-sidebar-button").on("click", function() {
+            that.showSidebar();
+          });
+      });
+    d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
+  };
+  SidebarView.prototype = proto;
+  var view;
 
-	};
-	proto.createSidebars = function() {
-		this.sidebar = {
-			about: about.createSidebar(),
-			initiatives: initiatives.createSidebar(),
-			mainMenu: mainMenu.createSidebar()
-		};
-	};
-	proto.changeSidebar = function(name) {
-		this.sidebar[name].refresh();
-	};
-	proto.showSidebar = function() {
-		d3.select('#map-app-sidebar').style('display', 'flex');
-	};
-	proto.hideSidebarIfItTakesWholeScreen = function() {
-		// @todo - improve this test - 
-		// it is not really testing the predicate suggested by the name iof the function.
-		if (window.innerWidth <= 600) {
-			d3.select('#map-app-sidebar').style('display', 'none');
-		}
-	};
-	proto.hideSidebar = function() {
-		d3.select('#map-app-sidebar').style('display', 'none');
-	};
-	SidebarView.prototype = proto;
-	var view;
-
-	function init() {
-		view = new SidebarView();
-		view.setPresenter(presenter.createPresenter(view));
-		view.createOpenButton();
-		view.createButtonRow();
-		view.createSidebars();
-		view.changeSidebar('mainMenu');
-	}
-	var pub = {
-		init: init
-	};
-	return pub;
+  function init() {
+    view = new SidebarView();
+    view.setPresenter(presenter.createPresenter(view));
+    view.createOpenButton();
+    view.createButtonRow();
+    view.createSidebars();
+    view.changeSidebar("mainMenu");
+  }
+  var pub = {
+    init: init
+  };
+  return pub;
 });
