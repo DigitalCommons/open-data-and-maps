@@ -192,12 +192,12 @@ module SeOpenData
         
         if(initiative.phone && !initiative.phone.empty?)
           graph.insert([uri, ::RDF::Vocab::VCARD.hasTelephone, phone_uri])
-          graph.insert([phone_uri, ::RDF::Vocab::VCARD.hasValue, initiative.phone])
+          graph.insert([phone_uri, ::RDF::Vocab::VCARD.value, initiative.phone])
         end
         
         if(initiative.email && !initiative.email.empty?)
           graph.insert([uri, ::RDF::Vocab::VCARD.hasEmail, email_uri])
-          graph.insert([email_uri, ::RDF::Vocab::VCARD.hasValue, initiative.email])
+          graph.insert([email_uri, ::RDF::Vocab::VCARD.value, initiative.email])
         end
 
         # TODO: Need to work out how to add accounts in the following way (RDF)
