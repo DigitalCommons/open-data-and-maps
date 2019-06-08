@@ -9,23 +9,27 @@
 		<!-- Page Content -->
 		<div class="w3-teal map-app-content">
 			<!-- Sidebar -->
-			<div class="w3-sidebar sea-sidebar w3-teal w3-bar-block w3-border-right w3-mobile" style="flex-direction:column;" id="map-app-sidebar">
+			<div class="sea-sidebar" style="flex-direction:column;" id="map-app-sidebar">
 				<!--  Button to show sidebar -->
 				<div id="map-app-sidebar-button" class="map-app-sidebar-button">
 				</div>
-				<div style="flex: 0 1 auto;">
-					<div id="map-app-sidebar-header">
+				<div class="w3-black w3-bar-block w3-border-right w3-mobile sea-initiative-sidebar">
+				</div>
+				<div class="w3-white w3-bar-block w3-border-right w3-mobile sea-main-sidebar">
+					<div style="flex: 0 1 auto;">
+						<div id="map-app-sidebar-header" class="map-app-sidebar-header">
+						</div>
 					</div>
-				</div>
-				<!-- Fixed part of Sidebar that may change for different types of the sidebar (e.g. Search results) -->
-				<!-- If this is not a separate flex div, then it doesn't quite render properly on iPhone:
-						the bottom of the div slightly overlaps the scrollable section of the sidebar below -->
-				<div style="flex: 0 1 auto;">
-					<div id="map-app-sidebar-fixed-section"></div>
-				</div>
-				<!-- scrollable part of sidebar -->
-				<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
-				<div id="map-app-sidebar-scrollable-section" class="w3-white" style="flex: 1 1 auto;overflow-y:auto;height:100%">
+					<!-- Fixed part of Sidebar that may change for different types of the sidebar (e.g. Search results) -->
+					<!-- If this is not a separate flex div, then it doesn't quite render properly on iPhone:
+							the bottom of the div slightly overlaps the scrollable section of the sidebar below -->
+					<div style="flex: 0 1 auto;">
+						<div id="map-app-sidebar-fixed-section" class="map-app-sidebar-fixed-section "></div>
+					</div>
+					<!-- scrollable part of sidebar -->
+					<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
+					<div id="map-app-sidebar-scrollable-section" class="w3-white" style="flex: 1 1 auto;overflow-y:auto;height:100%">
+					</div>
 				</div>
 			</div>
 			<div class="map-app-map-container" id="map-app-leaflet-map">

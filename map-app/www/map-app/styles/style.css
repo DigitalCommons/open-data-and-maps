@@ -4,6 +4,66 @@
   --orange: #fb8b24;
   --grey: #8a8c8e;
   --dark: #363636;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* .map-app {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+} */
+
+.sea-sidebar {
+  position: absolute;
+  display: flex;
+  width: 296px;
+  height: 100%;
+  overflow: visible;
+  transform: translateX(-100%);
+  transition: transform 0.16s cubic-bezier(0.215, 0.61, 0.355, 1);
+  font-family: var(--font-family-sans-serif);
+  font-weight: 300;
+}
+
+.sea-sidebar-open {
+  transform: translateX(0);
+}
+
+.sea-main-sidebar,
+.sea-initiative-sidebar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.sea-initiative-sidebar {
+  right: 0;
+}
+
+.sea-sidebar h1 {
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.sea-sidebar h2 {
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.sea-sidebar h3 {
+  font-weight: 600;
+  font-size: 1.2rem;
 }
 
 .map-app-content,
@@ -32,38 +92,77 @@ div.map-app-map-container {
   z-index: 10;
 }
 
-.sea-sidebar {
-  overflow: visible;
-  transform: translateX(-300px);
-  transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-
-.sea-sidebar-open {
-  transform: translateX(0);
-}
-
 .map-app-sidebar-button {
   position: absolute;
-  right: 0;
+  left: 100%;
   z-index: -1;
   margin-top: 1em;
-}
-
-.sea-sidebar-open .map-app-sidebar-button button {
-  transform: translateX(0px);
 }
 
 .map-app-sidebar-button button {
   padding: 0 0.45em;
   font-size: 2.4em;
   background-color: var(--teal);
+  color: white;
   transition: all 0.16s;
-  transform: translateX(-6px);
+  transform: translateX(-3px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .w3-btn:hover {
-  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transform: translateX(0px);
+}
+
+.map-app-sidebar-header {
+  display: flex;
+  justify-content: flex-start;
+  background: white;
+  color: var(--dark);
+  font-size: 1.4em;
+}
+
+.w3-button:hover {
+  color: white !important;
+  background-color: black !important;
+}
+
+.w3-btn:focus,
+.w3-button:focus {
+  outline: none;
+}
+
+.map-app-sidebar-fixed-section {
+  background-color: white;
+}
+
+.sea-directory-list {
+  list-style: none;
+  font-size: 1.05em;
+  padding: 0;
+  margin: 0 0 1.6em;
+}
+
+.sea-directory-list li {
+  margin: 0;
+  padding: 0.4em 1em 0.4em 1.5em;
+}
+
+.sea-directory-list li:hover {
+  color: white;
+  background-color: var(--dark);
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.m-auto {
+  margin: auto;
 }
 
 .map-app-search-form {
@@ -73,14 +172,11 @@ div.map-app-map-container {
 /* @todo - can we avoid all this messing around with z-index, once the protecting vail has been removed?
  * It seems that leaflet uses z-index, as does w3.css. So we're having to weave a course between the two.
  */
-.w3-sidebar,
+.sea-sidebar,
 .w3-modal {
   z-index: 40;
 }
-.w3-sidebar {
-  width: 300px;
-  position: absolute !important;
-}
+
 div.leaflet-popup-content {
   /* NB also requires setting maxWidth in leaflet Marker bindpopup, to make popup wide enough for big text */
   /* 200% works well for presentations: */

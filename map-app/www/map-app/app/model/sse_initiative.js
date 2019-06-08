@@ -2,8 +2,9 @@
 define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   "use strict";
 
-  var objects = [];
-  var initiativesToLoad = [];
+  let loadedInitiatives = [];
+  let initiativesToLoad = [];
+  let registeredActivities = { loading: "Loading directory" };
 
   function Initiative(e) {
     Object.defineProperties(this, {
@@ -16,15 +17,38 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       lat: { value: e.lat, enumerable: true },
       lng: { value: e.lng, enumerable: true },
       www: { value: e.www, enumerable: true },
-      regorg: { value: e.regorg, enumerable: true }
+      regorg: { value: e.regorg, enumerable: true },
+      street: { value: e.street, enumerable: true },
+      locality: { value: e.locality, enumerable: true },
+      postcode: { value: e.postcode, enumerable: true },
+      primaryActivity: { value: e.primaryActivity, enumerable: true },
+      tel: { value: e.tel, enumerable: true },
+      email: { value: e.email, enumerable: true }
     });
-    objects.push(this);
+    let primaryActivitySplit = e.primaryActivity.split("/");
+    let primaryActivityCode =
+      primaryActivitySplit[primaryActivitySplit.length - 1];
+
+    registeredActivities.ALL
+      ? registeredActivities.ALL.push(this)
+      : (registeredActivities.ALL = [this]);
+
+    if (registeredActivities[primaryActivityCode])
+      registeredActivities[primaryActivityCode].push(this);
+    else {
+      delete registeredActivities.loading;
+      registeredActivities[primaryActivityCode] = [this];
+    }
+    loadedInitiatives.push(this);
     eventbus.publish({ topic: "Initiative.new", data: this });
   }
+  function getRegisteredActivities() {
+    return registeredActivities;
+  }
   function search(text) {
-    // returns an array of sse objkects whose name contains the search text
+    // returns an array of sse objects whose name contains the search text
     var up = text.toUpperCase();
-    return objects.filter(function(i) {
+    return loadedInitiatives.filter(function(i) {
       return i.name.toUpperCase().includes(up);
     });
   }
@@ -33,10 +57,10 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     // The first element is south-west, the second north east
     //
     // Careful: isNaN(null) returns false ...
-    const lats = objects
+    const lats = loadedInitiatives
       .filter(obj => obj.lat !== null && !isNaN(obj.lat))
       .map(obj => obj.lat);
-    const lngs = objects
+    const lngs = loadedInitiatives
       .filter(obj => obj.lng !== null && !isNaN(obj.lng))
       .map(obj => obj.lng);
     const west = Math.min.apply(Math, lngs);
@@ -149,7 +173,8 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   var pub = {
     loadFromWebService: loadFromWebService,
     search: search,
-    latLngBounds: latLngBounds
+    latLngBounds: latLngBounds,
+    getRegisteredActivities: getRegisteredActivities
   };
   // Automatically load the data when the app is ready:
   //eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});

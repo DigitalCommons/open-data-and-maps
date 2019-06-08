@@ -5,8 +5,9 @@ define([
   "presenter/sidebar",
   "view/sidebar/mainmenu",
   "view/sidebar/initiatives",
-  "view/sidebar/about"
-], function(d3, viewBase, presenter, mainMenu, initiatives, about) {
+  "view/sidebar/about",
+  "view/sidebar/directory"
+], function(d3, viewBase, presenter, mainMenu, initiatives, about, directory) {
   "use strict";
 
   // This deals with the view object that controls the sidebar
@@ -21,7 +22,7 @@ define([
     var that = this;
     var selection = this.d3selectAndClear("#map-app-sidebar-button")
       .append("button")
-      .attr("class", "w3-btn w3-display-topleft")
+      .attr("class", "w3-btn")
       .attr("title", "Show sidebar")
       .on("click", function() {
         that.showSidebar();
@@ -32,45 +33,50 @@ define([
   proto.createButtonRow = function() {
     // d3 selection redefines this, so hang onto it here:
     var that = this;
-    var selection = this.d3selectAndClear("#map-app-sidebar-header").attr(
-      "class",
-      "w3-cell-row"
-    );
+    var selection = this.d3selectAndClear("#map-app-sidebar-header");
 
     // Button for hiding the sidebar:
-    selection
-      .append("button")
-      .attr("class", "w3-teal w3-cell w3-button w3-border-0")
-      .attr("title", "Hide sidebar")
-      .on("click", function() {
-        that.hideSidebar();
-      })
-      .append("i")
-      .attr("class", "fa fa-angle-left");
+    // selection
+    //   .append("button")
+    //   .attr("class", "w3-teal w3-cell w3-button w3-border-0")
+    //   .attr("title", "Hide sidebar")
+    //   .on("click", function() {
+    //     that.hideSidebar();
+    //   })
+    //   .append("i")
+    //   .attr("class", "fa fa-angle-left");
+
+    // This is where the navigation buttons will go.
+    // These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
+    selection.append("i").attr("id", "map-app-sidebar-history-navigation");
 
     // The sidebar has a button that cuases the main menu to be dispayed
     selection
       .append("button")
-      .attr("class", "w3-teal w3-cell w3-button w3-border-0")
-      .attr("title", "Show main menu")
+      .attr("class", "w3-button w3-border-0 ml-auto")
+      .attr("title", "Show directory")
       .on("click", function() {
-        console.log(this);
-        that.changeSidebar("mainMenu");
+        that.changeSidebar("directory");
       })
       .append("i")
       .attr("class", "fa fa-bars");
 
-    // This is where the navigation buttons will go.
-    // These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
     selection = selection
+      .append("button")
+      .attr("class", "w3-button w3-border-0")
+      .attr("title", "Show info")
+      .on("click", function() {
+        that.changeSidebar("about");
+      })
       .append("i")
-      .attr("id", "map-app-sidebar-history-navigation");
+      .attr("class", "fa fa-info-circle");
   };
   proto.createSidebars = function() {
     this.sidebar = {
       about: about.createSidebar(),
       initiatives: initiatives.createSidebar(),
-      mainMenu: mainMenu.createSidebar()
+      mainMenu: mainMenu.createSidebar(),
+      directory: directory.createSidebar()
     };
   };
   proto.changeSidebar = function(name) {
@@ -117,7 +123,7 @@ define([
     view.createOpenButton();
     view.createButtonRow();
     view.createSidebars();
-    view.changeSidebar("mainMenu");
+    view.changeSidebar("directory");
   }
   var pub = {
     init: init
