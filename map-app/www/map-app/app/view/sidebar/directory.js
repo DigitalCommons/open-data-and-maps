@@ -30,7 +30,15 @@ define([
     let registeredActivities = this.presenter.getRegisteredActivities();
     let list = selection.append("ul").classed("sea-directory-list", true);
     let activityList = this.presenter.getActivityList();
-    for (let val in registeredActivities) {
+    const orderedActivities = {};
+    Object.keys(registeredActivities)
+      .sort(function(a, b) {
+        return parseInt(a.replace("AM", "")) - parseInt(b.replace("AM", ""));
+      })
+      .forEach(function(key) {
+        orderedActivities[key] = registeredActivities[key];
+      });
+    for (let val in orderedActivities) {
       list.append("li").text(activityList[val]);
     }
   };

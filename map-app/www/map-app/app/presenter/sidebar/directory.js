@@ -25,8 +25,8 @@ define([
 
   var proto = Object.create(sidebarPresenter.base.prototype);
 
-  const activities = {
-    ALL: "All Activities",
+  const activityList = {
+    AM00: "All Activities",
     AM10: "Arts, Media, Culture & Leisure",
     AM20: "Campaigning, Activism & Advocacy",
     AM30: "Community & Collective Spaces",
@@ -42,7 +42,7 @@ define([
   };
 
   proto.getActivityList = function() {
-    return activities;
+    return activityList;
   };
 
   proto.getRegisteredActivities = function() {

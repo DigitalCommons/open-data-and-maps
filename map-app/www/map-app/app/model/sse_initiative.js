@@ -29,9 +29,9 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     let primaryActivityCode =
       primaryActivitySplit[primaryActivitySplit.length - 1];
 
-    registeredActivities.ALL
-      ? registeredActivities.ALL.push(this)
-      : (registeredActivities.ALL = [this]);
+    registeredActivities.AM00
+      ? registeredActivities.AM00.push(this)
+      : (registeredActivities.AM00 = [this]);
 
     if (registeredActivities[primaryActivityCode])
       registeredActivities[primaryActivityCode].push(this);
