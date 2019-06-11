@@ -57,8 +57,6 @@ define([
     let sidebarButton = document.getElementById("map-app-sidebar-button");
     let initiativeSidebar = document.getElementById("sea-initative-sidebar");
     let selection = this.d3selectAndClear("#sea-initiative-sidebar-content");
-    // Move sidebar button into initiatives panel so it animates with it
-    // (if we add a way to close this sidebar we'll need to move it back)
     initiativeSidebar.insertBefore(sidebarButton, selection.node());
     let list = selection.append("ul").classed("sea-initiative-list", true);
     for (let value of initiatives) {

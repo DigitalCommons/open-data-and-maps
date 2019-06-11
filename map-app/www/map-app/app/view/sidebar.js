@@ -103,16 +103,24 @@ define([
     }
   };
   proto.hideSidebar = function() {
-    var that = this;
-    d3.select("#map-app-sidebar")
-      .classed("sea-sidebar-open", false)
-      .on("transitionend", function() {
-        if (event.propertyName === "transform")
-          d3.select("#map-app-sidebar-button").on("click", function() {
-            that.showSidebar();
-          });
-      });
-    d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
+    const that = this;
+    let sidebar = d3.select("#map-app-sidebar");
+
+    // Is the initiative sidebar open?
+    if (sidebar.classed("sea-sidebar-list-initiatives")) {
+      sidebar.classed("sea-sidebar-list-initiatives", false);
+      d3.select(".sea-activity-active").classed("sea-activity-active", false);
+    } else {
+      sidebar
+        .classed("sea-sidebar-open", false)
+        .on("transitionend", function() {
+          if (event.propertyName === "transform")
+            d3.select("#map-app-sidebar-button").on("click", function() {
+              that.showSidebar();
+            });
+        });
+      d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
+    }
   };
   SidebarView.prototype = proto;
   var view;

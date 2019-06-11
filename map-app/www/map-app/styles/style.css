@@ -157,6 +157,7 @@ div.map-app-map-container {
 }
 
 .map-app-sidebar-scrollable-section {
+  position: relative;
   flex: 1 1 auto;
   overflow-y: auto;
 }
