@@ -133,6 +133,16 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       //console.log(json);
       add(json.data);
       eventbus.publish({ topic: "Initiative.datasetLoaded" });
+      // Make sure the initiatives are alpabetised
+      for (let activity in registeredActivities) {
+        registeredActivities[activity].sort(function(a, b) {
+          const name1 = a.name.toLowerCase();
+          const name2 = b.name.toLowerCase();
+          if (name1 > name2) return 1;
+          else if (name1 < name2) return -1;
+          else return 0;
+        });
+      }
     });
     /*
 			d3.json(service, function(error, json) {

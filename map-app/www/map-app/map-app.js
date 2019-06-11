@@ -13,9 +13,11 @@
 				<!--  Button to show sidebar -->
 				<div id="map-app-sidebar-button" class="map-app-sidebar-button">
 				</div>
-				<div class="w3-black w3-bar-block w3-border-right w3-mobile sea-initiative-sidebar">
+        <div class="w3-bar-block sea-initiative-sidebar" id="sea-initative-sidebar">
+          <div class="sea-initiative-sidebar-content" id="sea-initiative-sidebar-content">
+          </div>
 				</div>
-				<div class="w3-white w3-bar-block w3-border-right w3-mobile sea-main-sidebar">
+				<div class="w3-bar-block sea-main-sidebar">
 					<div style="flex: 0 1 auto;">
 						<div id="map-app-sidebar-header" class="map-app-sidebar-header">
 						</div>
@@ -28,7 +30,7 @@
 					</div>
 					<!-- scrollable part of sidebar -->
 					<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
-					<div id="map-app-sidebar-scrollable-section" class="w3-white" style="flex: 1 1 auto;overflow-y:auto;height:100%">
+					<div id="map-app-sidebar-scrollable-section" class="map-app-sidebar-scrollable-section">
 					</div>
 				</div>
 			</div>

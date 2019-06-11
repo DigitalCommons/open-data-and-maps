@@ -7,6 +7,7 @@
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --sidebar-width: 296px;
 }
 
 html,
@@ -26,14 +27,16 @@ body {
 
 .sea-sidebar {
   position: absolute;
-  display: flex;
-  width: 296px;
+  width: var(--sidebar-width);
   height: 100%;
-  overflow: visible;
+  top: 0;
+  bottom: 0;
   transform: translateX(-100%);
   transition: transform 0.16s cubic-bezier(0.215, 0.61, 0.355, 1);
   font-family: var(--font-family-sans-serif);
   font-weight: 300;
+  color: var(--dark);
+  background: white;
 }
 
 .sea-sidebar-open {
@@ -45,10 +48,27 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.sea-initiative-sidebar-content {
+  background-color: var(--dark);
+  padding: 1.4em 0;
+  overflow-y: auto;
+}
+
+.sea-sidebar-open.sea-sidebar-list-initiatives .sea-initiative-sidebar {
+  transform: translateX(var(--sidebar-width));
 }
 
 .sea-initiative-sidebar {
   right: 0;
+  background-color: var(--dark);
+  color: white;
+  transition: transform 0.16s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 .sea-sidebar h1 {
@@ -124,7 +144,7 @@ div.map-app-map-container {
 
 .w3-button:hover {
   color: white !important;
-  background-color: black !important;
+  background-color: var(--dark) !important;
 }
 
 .w3-btn:focus,
@@ -136,21 +156,40 @@ div.map-app-map-container {
   background-color: white;
 }
 
-.sea-directory-list {
+.map-app-sidebar-scrollable-section {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.sea-directory-list,
+.sea-initiative-list {
   list-style: none;
   font-size: 1.05em;
   padding: 0;
   margin: 0 0 1.6em;
 }
 
-.sea-directory-list li {
+.sea-initiative-list {
+  margin: 0;
+}
+
+.sea-directory-list li,
+.sea-initiative-list li {
   margin: 0;
   padding: 0.4em 1em 0.4em 1.5em;
 }
 
-.sea-directory-list li:hover {
+.sea-directory-list li:hover,
+.sea-activity-active {
   color: white;
   background-color: var(--dark);
+  cursor: pointer;
+}
+
+.sea-initiative-list li:hover {
+  color: var(--dark);
+  background-color: white;
+  cursor: pointer;
 }
 
 .ml-auto {

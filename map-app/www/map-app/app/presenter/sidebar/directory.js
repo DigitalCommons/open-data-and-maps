@@ -53,6 +53,10 @@ define([
     this.view.refresh();
   };
 
+  proto.getInitiativesForActivityKey = function(key) {
+    return sseInitiative.getRegisteredActivities()[key];
+  };
+
   // proto.currentItem = function() {
   // 	return this.contentStack.current();
   // };
