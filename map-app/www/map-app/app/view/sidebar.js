@@ -17,6 +17,8 @@ define([
   // inherit from the standard view base object:
   var proto = Object.create(viewBase.base.prototype);
 
+  let sidebarWidth = 0;
+
   proto.createOpenButton = function() {
     // d3 selection redefines this, so hang onto it here:
     var that = this;
@@ -30,6 +32,7 @@ define([
       .append("i")
       .attr("class", "fa fa-angle-right");
   };
+
   proto.createButtonRow = function() {
     // d3 selection redefines this, so hang onto it here:
     var that = this;
@@ -50,7 +53,7 @@ define([
     // These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
     selection.append("i").attr("id", "map-app-sidebar-history-navigation");
 
-    // The sidebar has a button that cuases the main menu to be dispayed
+    // The sidebar has a button that causes the main menu to be dispayed
     selection
       .append("button")
       .attr("class", "w3-button w3-border-0 ml-auto")
@@ -71,6 +74,7 @@ define([
       .append("i")
       .attr("class", "fa fa-info-circle");
   };
+
   proto.createSidebars = function() {
     this.sidebar = {
       about: about.createSidebar(),
@@ -79,46 +83,60 @@ define([
       directory: directory.createSidebar()
     };
   };
+
   proto.changeSidebar = function(name) {
     this.sidebar[name].refresh();
   };
+
+  // proto.hideSidebarIfItTakesWholeScreen = function() {
+  //   // @todo - improve this test -
+  //   // it is not really testing the predicate suggested by the name iof the function.
+  //   if (window.innerWidth <= 600) {
+  //     d3.select("#map-app-sidebar").classed("sea-sidebar-open", false);
+  //     d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
+  //   }
+  // };
+
   proto.showSidebar = function() {
     var that = this;
     d3.select("#map-app-sidebar")
-      .classed("sea-sidebar-open", true)
       .on("transitionend", function() {
-        if (event.propertyName === "transform")
+        if (event.propertyName === "transform") {
           d3.select("#map-app-sidebar-button").on("click", function() {
             that.hideSidebar();
           });
-      });
+          that.sidebarWidth = this.clientWidth;
+        }
+      })
+      .classed("sea-sidebar-open", true);
     d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-left");
   };
-  proto.hideSidebarIfItTakesWholeScreen = function() {
-    // @todo - improve this test -
-    // it is not really testing the predicate suggested by the name iof the function.
-    if (window.innerWidth <= 600) {
-      d3.select("#map-app-sidebar").classed("sea-sidebar-open", false);
-      d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
-    }
-  };
+
   proto.hideSidebar = function() {
     const that = this;
     let sidebar = d3.select("#map-app-sidebar");
 
-    // Is the initiative sidebar open?
+    // If the initiative sidebar is open then hide that
     if (sidebar.classed("sea-sidebar-list-initiatives")) {
-      sidebar.classed("sea-sidebar-list-initiatives", false);
+      sidebar
+        .on("transitionend", function() {
+          if (event.propertyName === "transform") {
+            that.sidebarWidth = this.clientWidth;
+          }
+        })
+        .classed("sea-sidebar-list-initiatives", false);
       d3.select(".sea-activity-active").classed("sea-activity-active", false);
     } else {
       sidebar
-        .classed("sea-sidebar-open", false)
         .on("transitionend", function() {
-          if (event.propertyName === "transform")
+          if (event.propertyName === "transform") {
             d3.select("#map-app-sidebar-button").on("click", function() {
               that.showSidebar();
             });
-        });
+            that.sidebarWidth = 0;
+          }
+        })
+        .classed("sea-sidebar-open", false);
       d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
     }
   };

@@ -1,23 +1,23 @@
-define(["app/eventbus", "model/config", "presenter/sidebar/base"], function (
+define(["app/eventbus", "model/config", "presenter/sidebar/base"], function(
   eventbus,
   config,
   sidebarPresenter
 ) {
   "use strict";
 
-  function Presenter() { }
+  function Presenter() {}
 
   var proto = Object.create(sidebarPresenter.base.prototype);
 
-  proto.aboutButtonClicked = function () {
+  proto.aboutButtonClicked = function() {
     console.log("aboutButtonClicked");
     eventbus.publish({ topic: "Sidebar.showAbout" });
   };
-  proto.initiativesButtonClicked = function () {
+  proto.initiativesButtonClicked = function() {
     console.log("directoryButtonClicked");
     eventbus.publish({ topic: "Sidebar.showInitiatives" });
   };
-  proto.getButtons = function () {
+  proto.getButtons = function() {
     return [
       {
         label: "About",

@@ -1,91 +1,218 @@
-define(["app/eventbus", "presenter", "model/config"], function(eventbus, presenter, config) {
-	"use strict";
+define(["app/eventbus", "presenter", "model/config"], function(
+  eventbus,
+  presenter,
+  config
+) {
+  "use strict";
 
-	function Presenter(){}
+  function Presenter() {}
 
-	const proto = Object.create(presenter.base.prototype);
-	const serviceToDisplaySimilarCompanies = document.location.origin + document.location.pathname + 
-		config.getServicesPath() + "display_similar_companies/main.php";
+  const proto = Object.create(presenter.base.prototype);
+  const serviceToDisplaySimilarCompanies =
+    document.location.origin +
+    document.location.pathname +
+    config.getServicesPath() +
+    "display_similar_companies/main.php";
 
-	proto.notifySelectionToggled = function(initiative) {
-		eventbus.publish({topic: "Marker.SelectionToggled", data: initiative});
-	};
-	proto.notifySelectionSet = function(initiative) {
-		eventbus.publish({topic: "Marker.SelectionSet", data: initiative});
-	};
+  proto.notifySelectionToggled = function(initiative) {
+    eventbus.publish({ topic: "Marker.SelectionToggled", data: initiative });
+  };
+  proto.notifySelectionSet = function(initiative) {
+    eventbus.publish({ topic: "Marker.SelectionSet", data: initiative });
+  };
 
-	// We're now leaving for the view to set up its own eventhandlers, 
-	// so this is obsolete ... until we change our minds :-)
-//	proto.getEventHandlers = function(initiative) {
-//		return {
-//			click: function(e) {
-//				eventbus.publish({topic: "Initiative.clicked", data: {initiative: initiative, mouseEvent: e}});
-//			}
-//		};
-//	}
-	proto.getLatLng = function(initiative) {
-		return [initiative.lat, initiative.lng];
-	};
-	proto.getHoverText = function(initiative) {
-		return initiative.name + " (" + initiative.dataset + ")";
-	};
-	proto.getPopupText = function(initiative) {
-		// TODO - make obsolete
-		const hasWww = initiative.www && initiative.www.length > 0;
-		const hasReg = initiative.regorg && initiative.regorg.length > 0;
-		const hasWithin = initiative.within && initiative.within.length > 0;
-		// For info about rel="noopener noreferrer",
-		// see https://www.thesitewizard.com/html-tutorial/open-links-in-new-window-or-tab.shtml
-		function link(uri, text) {
-			return "<a title=\"" + uri + "\" href=\"" + uri +"\" rel=\"noopener noreferrer\" target=\"_blank\">" + text + "</a>";
-		}
-		const popupRows = [];
-		popupRows.push("View " + link(initiative.uri, "details") + " in a new tab");
-		if (hasWithin) {
-			popupRows.push("View " + link(initiative.within, "geographic information") + " in a new tab");
-		}
-		if (hasWww) {
-			popupRows.push("View " + link(initiative.www, "website") + " in a new tab");
-		}
-		if (hasReg) {
-			popupRows.push("View " + link(initiative.regorg, "company registration") + " in a new tab");
-			//console.log(document.location.origin + document.location.pathname + "services/" + "phpinfo.php");
-			const serviceToDisplaySimilarCompaniesURL = serviceToDisplaySimilarCompanies + "?company=" + encodeURIComponent(initiative.regorg);
-			//console.log(serviceToDisplaySimilarCompaniesURL);
-			popupRows.push("View " + link(serviceToDisplaySimilarCompaniesURL, "similar companies nearby") + " in a new tab");
-		}
+  // We're now leaving for the view to set up its own eventhandlers,
+  // so this is obsolete ... until we change our minds :-)
+  //	proto.getEventHandlers = function(initiative) {
+  //		return {
+  //			click: function(e) {
+  //				eventbus.publish({topic: "Initiative.clicked", data: {initiative: initiative, mouseEvent: e}});
+  //			}
+  //		};
+  //	}
+  proto.getLatLng = function(initiative) {
+    return [initiative.lat, initiative.lng];
+  };
+  proto.getHoverText = function(initiative) {
+    return initiative.name + " (" + initiative.dataset + ")";
+  };
+  proto.prettyPhone = function(tel) {
+    return tel.replace(/^(\d)(\d{4})\s*(\d{6})/, "$1$2 $3");
+  };
+  proto.getPopupText = function(initiative) {
+    let address,
+      street,
+      locality,
+      postcode,
+      popupHTML =
+        '<div class="sea-initiative-details">' +
+        '<h2 class="sea-initiative-name">{initiative.name}</h2>' +
+        "<p>{initiative.desc}</p>" +
+        "</div>" +
+        '<div class="sea-initiative-contact">' +
+        "<h3>Contact</h3>" +
+        "{initiative.address}" +
+        "{initiative.tel}" +
+        '<div class="sea-initiative-links">' +
+        "{initiative.www}" +
+        "{initiative.email}" +
+        "</div>" +
+        "</div>";
+    // All initiatives should have a name
+    popupHTML = popupHTML.replace("{initiative.name}", initiative.name);
+    // TODO Add org type
+    // All initiatives should have a description
+    popupHTML = popupHTML.replace("{initiative.desc}", initiative.desc);
+    // We want to add the whole address into a single para
+    // Not all orgs have an address
+    if (initiative.street) {
+      let streetArray = initiative.street.split(";");
+      for (let partial of streetArray) {
+        if (partial === initiative.name) continue;
+        if (street) street += "<br/>";
+        street = street ? (street += partial) : partial;
+      }
+    }
+    if (initiative.locality) {
+      locality = (street ? "<br/>" : "") + initiative.locality;
+    }
+    if (initiative.postcode) {
+      postcode = (street || locality ? "<br/>" : "") + initiative.postcode;
+    }
+    if (street || locality || postcode) {
+      address =
+        '<p class="sea-initiative-address">' +
+        street +
+        locality +
+        postcode +
+        "</p>";
+    }
+    popupHTML = popupHTML.replace("{initiative.address}", address);
 
-		const popuptext =
-			"<p>Dataset: " + initiative.dataset + "</p>" +
-			"<h4>" + initiative.name +  "</h4>" +
-			popupRows.join("<br>");
+    // Not all orgs have an email
+    if (initiative.email) {
+      popupHTML = popupHTML.replace(
+        "{initiative.email}",
+        '<a class="fa fa-at" href="mailto:' + initiative.email + '"></a>'
+      );
+    } else popupHTML = popupHTML.replace("{initiative.email}", "");
 
-		return popuptext;
-	};
-	proto.getMarkerColor = function(initiative) {
-		const hasWww = initiative.www && initiative.www.length > 0;
-		const hasReg = initiative.regorg && initiative.regorg.length > 0;
-		const markerColor = (hasWww && hasReg) ? 'purple' : hasWww ? 'blue' : hasReg ? 'red' : 'green';
-		return markerColor;
-	};
-	proto.getIconOptions = function(initiative) {
-		const icon = initiative.dataset == 'dotcoop' ? 'globe' : 'certificate';
-		return {icon: icon, popuptext: popuptext, hovertext: hovertext, cluster: true, markerColor: markerColor};
+    // Not all orgs have a phone number
+    popupHTML = popupHTML.replace(
+      "{initiative.tel}",
+      initiative.tel
+        ? '<p class="sea-initiative-tel">' +
+            this.prettyPhone(initiative.tel) +
+            "</p>"
+        : ""
+    );
+    // Not all orgs have a website
+    popupHTML = popupHTML.replace(
+      "{initiative.www}",
+      initiative.www
+        ? '<a class="fa fa-link" target="_blank" href="' +
+            initiative.www +
+            '"></a>'
+        : ""
+    );
 
-	};
-	proto.getIcon = function(initiative) {
-		return initiative.dataset == 'dotcoop' ? 'globe' : 'certificate';
-	};
+    return popupHTML;
+  };
 
-	Presenter.prototype = proto;
+  // TODO - make obsolete
+  // const hasWww = initiative.www && initiative.www.length > 0;
+  // const hasReg = initiative.regorg && initiative.regorg.length > 0;
+  // const hasWithin = initiative.within && initiative.within.length > 0;
+  // For info about rel="noopener noreferrer",
+  // see https://www.thesitewizard.com/html-tutorial/open-links-in-new-window-or-tab.shtml
+  // function link(uri, text) {
+  //   return (
+  //     '<a title="' +
+  //     uri +
+  //     '" href="' +
+  //     uri +
+  //     '" rel="noopener noreferrer" target="_blank">' +
+  //     text +
+  //     "</a>"
+  //   );
+  // }
+  // const popupRows = [];
+  // popupRows.push("View " + link(initiative.uri, "details") + " in a new tab");
+  // if (hasWithin) {
+  //   popupRows.push(
+  //     "View " +
+  //       link(initiative.within, "geographic information") +
+  //       " in a new tab"
+  //   );
+  // }
+  // if (hasWww) {
+  //   popupRows.push(
+  //     "View " + link(initiative.www, "website") + " in a new tab"
+  //   );
+  // }
+  // if (hasReg) {
+  //   popupRows.push(
+  //     "View " +
+  //       link(initiative.regorg, "company registration") +
+  //       " in a new tab"
+  //   );
+  //   //console.log(document.location.origin + document.location.pathname + "services/" + "phpinfo.php");
+  //   const serviceToDisplaySimilarCompaniesURL =
+  //     serviceToDisplaySimilarCompanies +
+  //     "?company=" +
+  //     encodeURIComponent(initiative.regorg);
+  //   //console.log(serviceToDisplaySimilarCompaniesURL);
+  //   popupRows.push(
+  //     "View " +
+  //       link(
+  //         serviceToDisplaySimilarCompaniesURL,
+  //         "similar companies nearby"
+  //       ) +
+  //       " in a new tab"
+  //   );
+  //   }
 
-	function createPresenter(view) {
-		const p = new Presenter();
-		p.registerView(view);
-		return p;
-	}
-	var pub = {
-		createPresenter: createPresenter
-	};
-	return pub;
+  //   const popuptext =
+  //     "<p>Dataset: " +
+  //     initiative.dataset +
+  //     "</p>" +
+  //     "<h4>" +
+  //     initiative.name +
+  //     "</h4>" +
+  //     popupRows.join("<br>");
+
+  //   return popuptext;
+  // };
+  proto.getMarkerColor = function(initiative) {
+    const hasWww = initiative.www && initiative.www.length > 0;
+    const hasReg = initiative.regorg && initiative.regorg.length > 0;
+    const markerColor =
+      hasWww && hasReg ? "purple" : hasWww ? "blue" : hasReg ? "red" : "green";
+    return markerColor;
+  };
+  proto.getIconOptions = function(initiative) {
+    const icon = initiative.dataset == "dotcoop" ? "globe" : "certificate";
+    return {
+      icon: icon,
+      popuptext: popuptext,
+      hovertext: hovertext,
+      cluster: true,
+      markerColor: markerColor
+    };
+  };
+  proto.getIcon = function(initiative) {
+    return initiative.dataset == "dotcoop" ? "globe" : "certificate";
+  };
+
+  Presenter.prototype = proto;
+
+  function createPresenter(view) {
+    const p = new Presenter();
+    p.registerView(view);
+    return p;
+  }
+  var pub = {
+    createPresenter: createPresenter
+  };
+  return pub;
 });

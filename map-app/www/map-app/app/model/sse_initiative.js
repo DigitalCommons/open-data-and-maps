@@ -5,6 +5,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   let loadedInitiatives = [];
   let initiativesToLoad = [];
   let registeredActivities = { loading: "Loading directory" };
+  let initiativesByUid = {};
 
   function Initiative(e) {
     Object.defineProperties(this, {
@@ -40,10 +41,14 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       registeredActivities[primaryActivityCode] = [this];
     }
     loadedInitiatives.push(this);
+    initiativesByUid[this.uniqueId] = this;
     eventbus.publish({ topic: "Initiative.new", data: this });
   }
   function getRegisteredActivities() {
     return registeredActivities;
+  }
+  function getInitiativeByUniqueId(uid) {
+    return initiativesByUid[uid];
   }
   function search(text) {
     // returns an array of sse objects whose name contains the search text
@@ -184,7 +189,8 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     loadFromWebService: loadFromWebService,
     search: search,
     latLngBounds: latLngBounds,
-    getRegisteredActivities: getRegisteredActivities
+    getRegisteredActivities: getRegisteredActivities,
+    getInitiativeByUniqueId: getInitiativeByUniqueId
   };
   // Automatically load the data when the app is ready:
   //eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});

@@ -2,6 +2,14 @@
   --teal: #0bb696;
   --pink: #d90368;
   --orange: #fb8b24;
+  --red: #b60b0b;
+  --blue: #0b77b6;
+  --purple: #a20bb6;
+  --yellow: #b6a50b;
+  --dark-blue: #0b0eb6;
+  --dark-green: #087917;
+  --sky: #59f0f5;
+  --brown: #b6330b;
   --grey: #8a8c8e;
   --dark: #363636;
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -24,6 +32,87 @@ body {
   left: 0;
   overflow: hidden;
 } */
+
+/* .sea-initiative-sidebar.sea-activity-am00,
+.sea-activity-am00:hover,
+.sea-activity-am00.sea-activity-active {
+  background: var(--dark) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am10,
+.sea-activity-am10:hover,
+.sea-activity-am10.sea-activity-active {
+  background: var(--pink) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am20,
+.sea-activity-am20:hover,
+.sea-activity-am20.sea-activity-active {
+  background: var(--orange) !important;
+  color: var(--dark) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am30,
+.sea-activity-am30:hover,
+.sea-activity-am30.sea-activity-active {
+  background: var(--grey) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am40,
+.sea-activity-am40:hover,
+.sea-activity-am40.sea-activity-active {
+  background: var(--teal) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am50,
+.sea-activity-am50:hover,
+.sea-activity-am50.sea-activity-active {
+  background: var(--red) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am60,
+.sea-activity-am60:hover,
+.sea-activity-am60.sea-activity-active {
+  background: var(--blue) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am70,
+.sea-activity-am70:hover,
+.sea-activity-am70.sea-activity-active {
+  background: var(--purple) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am80,
+.sea-activity-am80:hover,
+.sea-activity-am80.sea-activity-active {
+  background: var(--yellow) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am90,
+.sea-activity-am90:hover,
+.sea-activity-am90.sea-activity-active {
+  background: var(--dark-blue) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am100,
+.sea-activity-am100:hover,
+.sea-activity-am100.sea-activity-active {
+  background: var(--dark-green) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am110,
+.sea-activity-am110:hover,
+.sea-activity-am110.sea-activity-active {
+  background: var(--sky) !important;
+}
+
+.sea-initiative-sidebar.sea-activity-am120,
+.sea-activity-am120:hover,
+.sea-activity-am120.sea-activity-active {
+  background: var(--brown) !important;
+} */
+
+/* Sidebar */
 
 .sea-sidebar {
   position: absolute;
@@ -55,7 +144,7 @@ body {
 }
 
 .sea-initiative-sidebar-content {
-  background-color: var(--dark);
+  /* background-color: var(--dark); */
   padding: 1.4em 0;
   overflow-y: auto;
 }
@@ -85,6 +174,8 @@ body {
   font-weight: 600;
   font-size: 1.2rem;
 }
+
+/* Map */
 
 .map-app-content,
 #map {
@@ -193,6 +284,11 @@ div.map-app-map-container {
   cursor: pointer;
 }
 
+.sea-initiative-active {
+  color: var(--dark);
+  background-color: white;
+}
+
 .ml-auto {
   margin-left: auto;
 }
@@ -217,8 +313,71 @@ div.map-app-map-container {
   z-index: 40;
 }
 
+/* Popup */
+
 div.leaflet-popup-content {
   /* NB also requires setting maxWidth in leaflet Marker bindpopup, to make popup wide enough for big text */
   /* 200% works well for presentations: */
   /*font-size: 200%; */
+}
+
+.sea-initiative-popup .leaflet-popup-content-wrapper {
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 0;
+}
+
+.sea-initiative-popup .leaflet-popup-content {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+}
+
+.sea-initiative-popup .sea-initiative-details {
+  max-height: 400px;
+  width: 66%;
+  overflow-y: auto;
+  padding: 1em 1.5em;
+  border-radius: 6px 0 0 6px;
+  background: white;
+}
+
+.sea-initiative-popup .sea-initiative-contact {
+  flex-grow: 1;
+  padding: 1em 1.5em 1.5em;
+  border-radius: 0 6px 6px 0;
+  background: #f0f0f0;
+}
+
+.sea-initiative-popup h2,
+.sea-initiative-popup h3,
+.sea-initiative-popup h4,
+.sea-initiative-popup p {
+  font-family: var(--font-family-sans-serif);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.sea-initiative-popup h3 {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.sea-initiative-popup p {
+  font-weight: 300;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.sea-initiative-links a:link,
+.sea-initiative-links a:visited,
+.sea-initiative-links a:hover,
+.sea-initiative-links a:active {
+  text-decoration: none;
+  color: var(--dark);
+  font-size: 1.2rem;
+  padding-right: 0.5rem;
+  margin-top: 0.7rem;
 }

@@ -16,6 +16,7 @@ define([
 
   // And adds some overrides and new properties of it's own:
   proto.title = "Directory";
+  proto.hasHistoryNavigation = false;
 
   proto.populateFixedSelection = function(selection) {
     let sidebarTitle = proto.title;
@@ -30,7 +31,8 @@ define([
     let that = this;
     let registeredActivities = this.presenter.getRegisteredActivities();
     let list = selection.append("ul").classed("sea-directory-list", true);
-    let activityList = this.presenter.getActivityList();
+    let activities = this.presenter.getActivities();
+
     Object.keys(registeredActivities)
       .sort(function(a, b) {
         return parseInt(a.replace("AM", "")) - parseInt(b.replace("AM", ""));
@@ -38,9 +40,10 @@ define([
       .forEach(function(key) {
         list
           .append("li")
-          .text(activityList[key])
+          .text(activities[key])
+          .classed("sea-activity-" + key.toLowerCase(), true)
           .on("click", function() {
-            that.listInitiatives(key);
+            that.listInitiativesForActivity(key);
             d3.select(".sea-activity-active").classed(
               "sea-activity-active",
               false
@@ -50,24 +53,55 @@ define([
       });
   };
 
-  proto.listInitiatives = function(activityKey) {
-    // Get the list of initiatives from the presenter
+  proto.listInitiativesForActivity = function(activityKey) {
+    let that = this;
     let initiatives = this.presenter.getInitiativesForActivityKey(activityKey);
     let sidebar = d3.select("#map-app-sidebar");
     let sidebarButton = document.getElementById("map-app-sidebar-button");
     let initiativeSidebar = document.getElementById("sea-initative-sidebar");
     let selection = this.d3selectAndClear("#sea-initiative-sidebar-content");
     initiativeSidebar.insertBefore(sidebarButton, selection.node());
+    initiativeSidebar.className = initiativeSidebar.className.replace(
+      /sea-activity-am\d\d\d?/,
+      ""
+    );
+    initiativeSidebar.classList.add(
+      "sea-activity-" + activityKey.toLowerCase()
+    );
     let list = selection.append("ul").classed("sea-initiative-list", true);
-    for (let value of initiatives) {
+    for (let initiative of initiatives) {
       list
         .append("li")
-        .text(value.name)
+        .text(initiative.name)
+        .attr("data-uid", initiative.uniqueId)
         .on("click", function() {
-          console.log("that.showInitiative(value.uniqueId)", value.uniqueId);
+          that.presenter.initiativeClicked(
+            initiative,
+            sidebarView.sidebarWidth
+          );
+          // eventbus.publish({
+          //   topic: "Directory.initiativeClicked",
+          //   data: {
+          //     initiative: initiative,
+          //     sidebarWidth: sidebarView.sidebarWidth
+          //   }
+          // });
+          // that.presenter.initiativeClicked(initiative);
+          d3.select(".sea-initiative-active").classed(
+            "sea-initiative-active",
+            false
+          );
+          d3.select(this).classed("sea-initiative-active", true);
         });
     }
-    sidebar.classed("sea-sidebar-list-initiatives", true);
+    sidebar
+      .on("transitionend", function() {
+        if (event.propertyName === "transform") {
+          sidebarView.sidebarWidth =
+            this.clientWidth + sidebar.node().clientWidth;
+        }
+      })
+      .classed("sea-sidebar-list-initiatives", true);
   };
 
   Sidebar.prototype = proto;

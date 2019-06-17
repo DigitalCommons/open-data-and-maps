@@ -4,11 +4,11 @@ define([
   "app/eventbus",
   "presenter/sidebar/about",
   "view/sidebar/base"
-], function (d3, eventbus, presenter, sidebarView) {
+], function(d3, eventbus, presenter, sidebarView) {
   "use strict";
 
   // Our local Sidebar object:
-  function Sidebar() { }
+  function Sidebar() {}
 
   // Our local Sidebar inherits from sidebar:
   var proto = Object.create(sidebarView.base.prototype);
@@ -26,7 +26,7 @@ define([
     "w3-bar-item w3-tiny w3-light-grey w3-padding-small" + hoverColour;
   const sectionClasses = "w3-bar-item w3-small w3-white w3-padding-small";
 
-  proto.populateFixedSelection = function (selection) {
+  proto.populateFixedSelection = function(selection) {
     let textContent = "About";
     selection
       .append("div")
@@ -35,7 +35,7 @@ define([
       .text(textContent);
   };
 
-  proto.populateScrollableSelection = function (selection) {
+  proto.populateScrollableSelection = function(selection) {
     const that = this;
     //selection.append('div').attr("class", "w3-container w3-center").append('p').text("Information about this map will be available here soon.");
     //selection.append('div').attr("class", "w3-container w3-center").html(that.presenter.aboutHtml());
@@ -46,6 +46,8 @@ define([
   };
 
   Sidebar.prototype = proto;
+
+  proto.hasHistoryNavigation = false;
 
   function createSidebar() {
     var view = new Sidebar();
