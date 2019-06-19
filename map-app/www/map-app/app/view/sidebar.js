@@ -106,6 +106,7 @@ define([
             that.hideSidebar();
           });
           that.sidebarWidth = this.clientWidth;
+          console.log(that.sidebarWidth);
         }
       })
       .classed("sea-sidebar-open", true);
@@ -115,9 +116,28 @@ define([
   proto.hideSidebar = function() {
     const that = this;
     let sidebar = d3.select("#map-app-sidebar");
+    let sidebarButton = document.getElementById("map-app-sidebar-button");
+    let initiativeListSidebar = document.getElementById(
+      "sea-initiatives-list-sidebar"
+    );
+    let initiativeSidebar = d3.select("#sea-initiative-sidebar");
 
-    // If the initiative sidebar is open then hide that
-    if (sidebar.classed("sea-sidebar-list-initiatives")) {
+    // If the initiative sidebar is open, close it
+    if (initiativeSidebar.node().getBoundingClientRect().x === 0) {
+      // sidebar.node().insertBefore(sidebarButton, initiativeSidebar);
+      initiativeSidebar
+        // .on("transitionend", function() {
+        //   if (event.propertyName === "transform") {
+        //     that.sidebarWidth = this.clientWidth;
+        //     console.log(that.sidebarWidth);
+        //   }
+        // })
+        .classed("sea-initiative-sidebar-open", false);
+      // d3.select(".sea-activity-active").classed("sea-activity-active", false);
+    }
+    // If the initiatives list sidebar is open then hide that
+    else if (sidebar.classed("sea-sidebar-list-initiatives")) {
+      sidebar.node().insertBefore(sidebarButton, initiativeListSidebar);
       sidebar
         .on("transitionend", function() {
           if (event.propertyName === "transform") {
@@ -126,7 +146,9 @@ define([
         })
         .classed("sea-sidebar-list-initiatives", false);
       d3.select(".sea-activity-active").classed("sea-activity-active", false);
-    } else {
+    }
+    // Otherwise the main/directory sidebar is open so close it
+    else {
       sidebar
         .on("transitionend", function() {
           if (event.propertyName === "transform") {
@@ -134,6 +156,7 @@ define([
               that.showSidebar();
             });
             that.sidebarWidth = 0;
+            console.log(that.sidebarWidth);
           }
         })
         .classed("sea-sidebar-open", false);

@@ -19,13 +19,13 @@ WHERE {
 	OPTIONAL { ?uri owl:sameAs ?sameas . }
 	OPTIONAL { ?uri dc:description ?desc . }
 	OPTIONAL { ?uri dc:description ?desc . }
-	?uri vcard:hasTelephone ?hasTel .
+	OPTIONAL { ?uri vcard:hasTelephone ?hasTel . }
 	OPTIONAL { ?hasTel vcard:value ?tel . }
-	?uri vcard:hasEmail ?hasEmail .
+	OPTIONAL { ?uri vcard:hasEmail ?hasEmail . }
 	OPTIONAL { ?hasEmail vcard:value ?email . }
 	OPTIONAL { ?uri essglobal:primarySector ?primaryActivity . }
 	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
-	?uri essglobal:hasAddress ?addr .
+	OPTIONAL { ?uri essglobal:hasAddress ?addr . }
 	OPTIONAL { ?addr vcard:street-address ?street . }
 	OPTIONAL { ?addr vcard:postal-code ?postcode . }
 	OPTIONAL { ?addr vcard:locality ?locality . }

@@ -1,17 +1,29 @@
 :root {
   --teal: #0bb696;
   --pink: #d90368;
-  --orange: #fb8b24;
-  --red: #b60b0b;
-  --blue: #0b77b6;
-  --purple: #a20bb6;
-  --yellow: #b6a50b;
-  --dark-blue: #0b0eb6;
-  --dark-green: #087917;
-  --sky: #59f0f5;
+  /* --orange: #fb8b24; */
+  --navy: #001f3f;
+  --blue: #0074d9;
+  --aqua: #7fdbff;
+  --aqua-contrast: #004966;
+  --teal: #39cccc;
+  --olive: #3d9970;
+  --green: #2ecc40;
+  --lime: #01ff70;
+  --lime-contrast: #00662c;
+  --yellow: #ffdc00;
+  --yellow-contrast: #665800;
+  --orange: #ff851b;
+  --red: #ff4136;
+  --fuchsia: #f012be;
+  --purple: #b10dc9;
+  --maroon: #85144b;
+  --silver: #dddddd;
+  --gray: #aaaaaa;
   --brown: #b6330b;
   --grey: #8a8c8e;
   --dark: #363636;
+
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -33,84 +45,113 @@ body {
   overflow: hidden;
 } */
 
-/* .sea-initiative-sidebar.sea-activity-am00,
+/* All */
+.sea-initiatives-list-sidebar.sea-activity-am00,
+.sea-activity-am00 .sea-initiatives-list-sidebar-content,
 .sea-activity-am00:hover,
 .sea-activity-am00.sea-activity-active {
   background: var(--dark) !important;
 }
 
-.sea-initiative-sidebar.sea-activity-am10,
+/* Arts, Media, Culture & Leisure. */
+.sea-initiatives-list-sidebar.sea-activity-am10,
+.sea-activity-am10 .sea-initiatives-list-sidebar-content,
 .sea-activity-am10:hover,
 .sea-activity-am10.sea-activity-active {
   background: var(--pink) !important;
 }
 
-.sea-initiative-sidebar.sea-activity-am20,
+/* Campaigning, Activism & Advocacy. */
+.sea-initiatives-list-sidebar.sea-activity-am20,
+.sea-activity-am20 .sea-initiatives-list-sidebar-content,
 .sea-activity-am20:hover,
 .sea-activity-am20.sea-activity-active {
   background: var(--orange) !important;
-  color: var(--dark) !important;
+  /* color: var(--dark) !important; */
 }
 
-.sea-initiative-sidebar.sea-activity-am30,
+/* Community & Collective Spaces. */
+.sea-initiatives-list-sidebar.sea-activity-am30,
+.sea-activity-am30 .sea-initiatives-list-sidebar-content,
 .sea-activity-am30:hover,
 .sea-activity-am30.sea-activity-active {
-  background: var(--grey) !important;
+  background: var(--teal) !important;
+  /* color: var(--dark) !important; */
 }
 
-.sea-initiative-sidebar.sea-activity-am40,
+/* Education. */
+.sea-initiatives-list-sidebar.sea-activity-am40,
+.sea-activity-am40 .sea-initiatives-list-sidebar-content,
 .sea-activity-am40:hover,
 .sea-activity-am40.sea-activity-active {
-  background: var(--teal) !important;
+  background: var(--maroon) !important;
 }
 
-.sea-initiative-sidebar.sea-activity-am50,
+/* Energy. */
+.sea-initiatives-list-sidebar.sea-activity-am50,
+.sea-activity-am50 .sea-initiatives-list-sidebar-content,
 .sea-activity-am50:hover,
 .sea-activity-am50.sea-activity-active {
-  background: var(--red) !important;
-}
-
-.sea-initiative-sidebar.sea-activity-am60,
-.sea-activity-am60:hover,
-.sea-activity-am60.sea-activity-active {
   background: var(--blue) !important;
 }
 
-.sea-initiative-sidebar.sea-activity-am70,
+/* Food. */
+.sea-initiatives-list-sidebar.sea-activity-am60,
+.sea-activity-am60 .sea-initiatives-list-sidebar-content,
+.sea-activity-am60:hover,
+.sea-activity-am60.sea-activity-active {
+  background: var(--green) !important;
+}
+
+/* Goods & Services. */
+.sea-initiatives-list-sidebar.sea-activity-am70,
+.sea-activity-am70 .sea-initiatives-list-sidebar-content,
 .sea-activity-am70:hover,
 .sea-activity-am70.sea-activity-active {
+  background: var(--navy) !important;
+}
+
+/* Health, Social Care & Wellbeing. */
+.sea-initiatives-list-sidebar.sea-activity-am80,
+.sea-activity-am80 .sea-initiatives-list-sidebar-content,
+.sea-activity-am80:hover,
+.sea-activity-am80.sea-activity-active {
+  background: var(--red) !important;
+}
+
+/* Housing. */
+.sea-initiatives-list-sidebar.sea-activity-am90,
+.sea-activity-am90 .sea-initiatives-list-sidebar-content,
+.sea-activity-am90:hover,
+.sea-activity-am90.sea-activity-active {
+  background: var(--aqua) !important;
+  color: var(--aqua-contrast) !important;
+}
+
+/* Money & Finance. */
+.sea-initiatives-list-sidebar.sea-activity-am100,
+.sea-activity-am100 .sea-initiatives-list-sidebar-content,
+.sea-activity-am100:hover,
+.sea-activity-am100.sea-activity-active {
   background: var(--purple) !important;
 }
 
-.sea-initiative-sidebar.sea-activity-am80,
-.sea-activity-am80:hover,
-.sea-activity-am80.sea-activity-active {
-  background: var(--yellow) !important;
-}
-
-.sea-initiative-sidebar.sea-activity-am90,
-.sea-activity-am90:hover,
-.sea-activity-am90.sea-activity-active {
-  background: var(--dark-blue) !important;
-}
-
-.sea-initiative-sidebar.sea-activity-am100,
-.sea-activity-am100:hover,
-.sea-activity-am100.sea-activity-active {
-  background: var(--dark-green) !important;
-}
-
-.sea-initiative-sidebar.sea-activity-am110,
+/* Nature, Conservation & Environment. */
+.sea-initiatives-list-sidebar.sea-activity-am110,
+.sea-activity-am110 .sea-initiatives-list-sidebar-content,
 .sea-activity-am110:hover,
 .sea-activity-am110.sea-activity-active {
-  background: var(--sky) !important;
+  background: var(--purple) !important;
 }
 
-.sea-initiative-sidebar.sea-activity-am120,
+/* Reduce, Reuse, Repair & Recycle. */
+.sea-initiatives-list-sidebar.sea-activity-am120,
+.sea-activity-am120 .sea-initiatives-list-sidebar-content,
 .sea-activity-am120:hover,
 .sea-activity-am120.sea-activity-active {
-  background: var(--brown) !important;
-} */
+  background: var(--yellow) !important;
+  color: var(--yellow-contrast) !important;
+}
 
 /* Sidebar */
 
@@ -133,6 +174,7 @@ body {
 }
 
 .sea-main-sidebar,
+.sea-initiatives-list-sidebar,
 .sea-initiative-sidebar {
   position: absolute;
   top: 0;
@@ -143,20 +185,35 @@ body {
   background-color: white;
 }
 
+.sea-initiatives-list-sidebar-content,
 .sea-initiative-sidebar-content {
-  /* background-color: var(--dark); */
   padding: 1.4em 0;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  font-weight: 400;
 }
 
-.sea-sidebar-open.sea-sidebar-list-initiatives .sea-initiative-sidebar {
-  transform: translateX(var(--sidebar-width));
+.sea-initiative-sidebar-content {
+  padding: 0;
 }
 
 .sea-initiative-sidebar {
+  z-index: 200;
+  transform: translateX(-100%);
+}
+
+.sea-sidebar-open.sea-sidebar-list-initiatives .sea-initiatives-list-sidebar {
+  transform: translateX(var(--sidebar-width));
+}
+
+.sea-initiatives-list-sidebar {
   right: 0;
   background-color: var(--dark);
   color: white;
+}
+
+.sea-initiatives-list-sidebar,
+.sea-initiative-sidebar {
   transition: transform 0.16s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
@@ -168,6 +225,12 @@ body {
 .sea-sidebar h2 {
   font-weight: 700;
   font-size: 1.4rem;
+}
+
+.sea-sidebar h2.sea-activity {
+  margin: 0.5rem 1rem 0.7rem;
+  line-height: 1.3;
+  font-size: 1.3rem;
 }
 
 .sea-sidebar h3 {
@@ -251,6 +314,7 @@ div.map-app-map-container {
   position: relative;
   flex: 1 1 auto;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sea-directory-list,
@@ -268,7 +332,7 @@ div.map-app-map-container {
 .sea-directory-list li,
 .sea-initiative-list li {
   margin: 0;
-  padding: 0.4em 1em 0.4em 1.5em;
+  padding: 0.4rem 1rem 0.4rem 1.25rem;
 }
 
 .sea-directory-list li:hover,
@@ -276,6 +340,7 @@ div.map-app-map-container {
   color: white;
   background-color: var(--dark);
   cursor: pointer;
+  /* font-weight: 400; */
 }
 
 .sea-initiative-list li:hover {
@@ -313,6 +378,19 @@ div.map-app-map-container {
   z-index: 40;
 }
 
+/* Sidebar & Popup */
+.sea-initiative-popup .sea-initiative-details,
+.sea-initiative-sidebar .sea-initiative-details {
+  padding: 1em 1.5em;
+  background: white;
+}
+
+.sea-initiative-popup .sea-initiative-contact,
+.sea-initiative-sidebar .sea-initiative-contact {
+  padding: 1em 1.5em 1.5em;
+  background: #f0f0f0;
+}
+
 /* Popup */
 
 div.leaflet-popup-content {
@@ -337,6 +415,7 @@ div.leaflet-popup-content {
   max-height: 400px;
   width: 66%;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 1em 1.5em;
   border-radius: 6px 0 0 6px;
   background: white;
@@ -380,4 +459,25 @@ div.leaflet-popup-content {
   font-size: 1.2rem;
   padding-right: 0.5rem;
   margin-top: 0.7rem;
+}
+
+@media (max-width: 1080px) {
+  .sea-initiatives-list-sidebar {
+    transform: translateX(-100%);
+    z-index: 100;
+  }
+
+  .sea-sidebar-open.sea-sidebar-list-initiatives .sea-initiatives-list-sidebar {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 800px) {
+  .sea-initiative-popup {
+    display: none;
+  }
+
+  .sea-initiative-sidebar-open {
+    transform: translateX(0);
+  }
 }

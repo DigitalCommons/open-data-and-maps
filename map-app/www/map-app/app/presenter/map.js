@@ -1,8 +1,9 @@
-define(["app/eventbus", "model/sse_initiative", "presenter"], function(
-  eventbus,
-  sse_initiative,
-  presenter
-) {
+define([
+  "app/eventbus",
+  "model/sse_initiative",
+  "presenter",
+  "model/config"
+], function(eventbus, sse_initiative, presenter, config) {
   "use strict";
 
   function Presenter() {}
@@ -65,7 +66,7 @@ define(["app/eventbus", "model/sse_initiative", "presenter"], function(
         console.log("Map loaded");
       },
       resize: function(e) {
-        console.log("Map resize");
+        console.log("Map resize", window.innerWidth);
       }
     };
   };

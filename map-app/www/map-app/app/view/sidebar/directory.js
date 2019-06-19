@@ -58,17 +58,27 @@ define([
     let initiatives = this.presenter.getInitiativesForActivityKey(activityKey);
     let sidebar = d3.select("#map-app-sidebar");
     let sidebarButton = document.getElementById("map-app-sidebar-button");
-    let initiativeSidebar = document.getElementById("sea-initative-sidebar");
-    let selection = this.d3selectAndClear("#sea-initiative-sidebar-content");
-    initiativeSidebar.insertBefore(sidebarButton, selection.node());
-    initiativeSidebar.className = initiativeSidebar.className.replace(
+    let initiativeListSidebar = document.getElementById(
+      "sea-initiatives-list-sidebar"
+    );
+    let selection = this.d3selectAndClear(
+      "#sea-initiatives-list-sidebar-content"
+    );
+    let activities = this.presenter.getActivities();
+    let list;
+    initiativeListSidebar.insertBefore(sidebarButton, selection.node());
+    initiativeListSidebar.className = initiativeListSidebar.className.replace(
       /sea-activity-am\d\d\d?/,
       ""
     );
-    initiativeSidebar.classList.add(
+    initiativeListSidebar.classList.add(
       "sea-activity-" + activityKey.toLowerCase()
     );
-    let list = selection.append("ul").classed("sea-initiative-list", true);
+    selection
+      .append("h2")
+      .classed("sea-activity", true)
+      .text(activities[activityKey]);
+    list = selection.append("ul").classed("sea-initiative-list", true);
     for (let initiative of initiatives) {
       list
         .append("li")
@@ -97,11 +107,19 @@ define([
     sidebar
       .on("transitionend", function() {
         if (event.propertyName === "transform") {
-          sidebarView.sidebarWidth =
-            this.clientWidth + sidebar.node().clientWidth;
+          let boundingRect = initiativeListSidebar.getBoundingClientRect();
+          // Need to use el.getBoundingClientRect() because some the item has been animated using transforms
+          sidebarView.sidebarWidth = boundingRect.x + boundingRect.width;
         }
       })
       .classed("sea-sidebar-list-initiatives", true);
+  };
+
+  proto.populateInitiativeSidebar = function(initiative, initiativeContent) {
+    let initiativeSidebar = d3.select("#sea-initiative-sidebar");
+    let initiativeContentElement = d3.select("#sea-initiative-sidebar-content");
+    initiativeContentElement.html(initiativeContent);
+    initiativeSidebar.classed("sea-initiative-sidebar-open", true);
   };
 
   Sidebar.prototype = proto;

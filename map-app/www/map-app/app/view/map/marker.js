@@ -2,10 +2,19 @@ define([
   "leaflet",
   "leafletMarkerCluster",
   "leafletAwesomeMarkers",
+  "leafletBeautifyMarkers",
   "view/base",
   "presenter/map/marker",
   "app/eventbus"
-], function(leaflet, cluster, awesomeMarkers, viewBase, presenter, eventbus) {
+], function(
+  leaflet,
+  cluster,
+  awesomeMarkers,
+  beautifyMarkers,
+  viewBase,
+  presenter,
+  eventbus
+) {
   "use strict";
 
   // Keep a mapping between initiatives and their Markers:
@@ -33,6 +42,25 @@ define([
     cluster: false
   });
 
+  // const unselectedIcon = L.BeautifyIcon.icon({
+  //   // prefix: "fa",
+  //   // markerColor: "blue",
+  //   // iconColor: "white",
+  //   // icon: "certificate",
+  //   iconShape: "marker",
+  //   // backgroundColor: "var(--aqua)",
+  //   cluster: false
+  // });
+  // const selectedIcon = L.BeautifyIcon.icon({
+  //   // prefix: "fa",
+  //   // markerColor: "orange",
+  //   // iconColor: "black",
+  //   icon: "certificate",
+  //   // iconShape: "marker",
+  //   // backgroundColor: "var(--aqua)",
+  //   cluster: false
+  // });
+
   function MarkerView() {}
   // inherit from the standard view base object:
   var proto = Object.create(viewBase.base.prototype);
@@ -50,7 +78,7 @@ define([
     // options argument overrides our default options:
     const opts = Object.assign(dfltOptions, {
       icon: this.presenter.getIcon(initiative),
-      popuptext: this.presenter.getPopupText(initiative),
+      popuptext: this.presenter.getInitiativeContent(initiative),
       hovertext: this.presenter.getHoverText(initiative),
       cluster: true,
       markerColor: this.presenter.getMarkerColor(initiative)
@@ -66,7 +94,7 @@ define([
     // maxWidth:800 is needed if the font-size is set to 200% in CSS:
     this.marker.bindPopup(opts.popuptext, {
       minWidth: "472",
-      maxWidth: "572",
+      maxWidth: "472",
       closeButton: false,
       className: "sea-initiative-popup"
     });
@@ -179,6 +207,9 @@ define([
     this.marker.closeTooltip();
     this.marker.setZIndexOffset(0);
   };
+  proto.getInitiativeContent = function(initiative) {
+    return this.presenter.getInitiativeContent(initiative);
+  };
 
   function setSelected(initiative) {
     markerForInitiative[initiative.uniqueId].setSelected(initiative);
@@ -211,6 +242,13 @@ define([
     markerForInitiative[initiative.uniqueId].hideTooltip(initiative);
   }
 
+  function getInitiativeContent(initiative) {
+    // console.log(this.getInitiativeContent(initiative));
+    return markerForInitiative[initiative.uniqueId].getInitiativeContent(
+      initiative
+    );
+  }
+
   var pub = {
     createMarker: createMarker,
     setSelectedClusterGroup: setSelectedClusterGroup,
@@ -218,7 +256,8 @@ define([
     setSelected: setSelected,
     setUnselected: setUnselected,
     showTooltip: showTooltip,
-    hideTooltip: hideTooltip
+    hideTooltip: hideTooltip,
+    getInitiativeContent: getInitiativeContent
   };
   return pub;
 });

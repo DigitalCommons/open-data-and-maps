@@ -39,7 +39,7 @@ define(["app/eventbus", "presenter", "model/config"], function(
   proto.prettyPhone = function(tel) {
     return tel.replace(/^(\d)(\d{4})\s*(\d{6})/, "$1$2 $3");
   };
-  proto.getPopupText = function(initiative) {
+  proto.getInitiativeContent = function(initiative) {
     let address,
       street,
       locality,
@@ -211,6 +211,7 @@ define(["app/eventbus", "presenter", "model/config"], function(
     p.registerView(view);
     return p;
   }
+
   var pub = {
     createPresenter: createPresenter
   };

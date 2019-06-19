@@ -2,8 +2,9 @@ define([
   "app/eventbus",
   "model/config",
   "model/sse_initiative",
-  "presenter/sidebar/base"
-], function(eventbus, config, sseInitiative, sidebarPresenter) {
+  "presenter/sidebar/base",
+  "view/map/marker"
+], function(eventbus, config, sseInitiative, sidebarPresenter, markerView) {
   "use strict";
 
   function StackItem(initiatives) {
@@ -116,8 +117,10 @@ define([
     // });
     this.notifyMapNeedsToNeedsToBeZoomedAndPanned(sidebarWidth);
     initiative.marker.marker.openPopup();
-    // Select the initiative's marker
-    // Zoom and pan to it
+    this.view.populateInitiativeSidebar(
+      initiative,
+      markerView.getInitiativeContent(initiative)
+    );
     // initiative.marker.setSelected();
     // Need to get display an overlay containing the initiative info
   };

@@ -13,8 +13,8 @@
 				<!--  Button to show sidebar -->
 				<div id="map-app-sidebar-button" class="map-app-sidebar-button">
 				</div>
-        <div class="w3-bar-block sea-initiative-sidebar" id="sea-initative-sidebar">
-          <div class="sea-initiative-sidebar-content" id="sea-initiative-sidebar-content">
+        <div class="w3-bar-block sea-initiatives-list-sidebar" id="sea-initiatives-list-sidebar">
+          <div class="sea-initiatives-list-sidebar-content" id="sea-initiatives-list-sidebar-content">
           </div>
 				</div>
 				<div class="w3-bar-block sea-main-sidebar">
@@ -32,8 +32,12 @@
 					<!-- occupies the remaining vertical space, with scrollbar added if needed. -->
 					<div id="map-app-sidebar-scrollable-section" class="map-app-sidebar-scrollable-section">
 					</div>
-				</div>
-			</div>
+        </div>
+        <div class="w3-bar-block sea-initiative-sidebar" id="sea-initiative-sidebar">
+          <div class="sea-initiative-sidebar-content" id="sea-initiative-sidebar-content">
+          </div>
+        </div>
+      </div>
 			<div class="map-app-map-container" id="map-app-leaflet-map">
 			</div>
 			<div class="w3-display-container map-app-display-container">
