@@ -26,7 +26,7 @@ CSV_target := csv
 .DEFAULT_GOAL := $(CSV_target)
 
 # Source files:
-ORIGINAL_CSV := $(SRC_CSV_DIR)2019-05-28.csv
+ORIGINAL_CSV := $(SRC_CSV_DIR)2019-06-18.csv
 
 # Here's the directory where we generate intermediate csv files
 GEN_CSV_DIR := $(TOP_OUTPUT_DIR)csv/

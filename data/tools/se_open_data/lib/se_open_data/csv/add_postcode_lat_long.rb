@@ -4,6 +4,9 @@ def uk_postcode?(s)
   uk_postcode_regex.match(s)
 end
 
+# OX1 = 51.75207,-1.25769
+# OX2 = 
+
 module SeOpenData
   module CSV
     def CSV.add_postcode_lat_long(input_io, output_io, input_csv_postcode_header, new_headers, postcodeunit_cache, csv_opts = {})
