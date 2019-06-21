@@ -21,7 +21,6 @@
   --silver: #dddddd;
   --gray: #aaaaaa;
   --brown: #b6330b;
-  --grey: #8a8c8e;
   --dark: #363636;
 
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -292,12 +291,12 @@ body {
 .sea-activity-am120 .sea-initiatives-list-sidebar-content,
 .sea-activity-am120:hover,
 .sea-activity-am120.sea-activity-active {
-  background: var(--grey) !important;
+  background: var(--gray) !important;
   /* color: var(--yellow-contrast) !important; */
 }
 
 .sea-directory-list .sea-activity-am120 {
-  border-color: solid 4px var(--grey) !important;
+  border-color: var(--gray) !important;
 }
 
 .awesome-marker-icon-am120 {
