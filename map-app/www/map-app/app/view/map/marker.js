@@ -2,19 +2,10 @@ define([
   "leaflet",
   "leafletMarkerCluster",
   "leafletAwesomeMarkers",
-  "leafletBeautifyMarkers",
   "view/base",
   "presenter/map/marker",
   "app/eventbus"
-], function(
-  leaflet,
-  cluster,
-  awesomeMarkers,
-  beautifyMarkers,
-  viewBase,
-  presenter,
-  eventbus
-) {
+], function(leaflet, cluster, awesomeMarkers, viewBase, presenter, eventbus) {
   "use strict";
 
   // Keep a mapping between initiatives and their Markers:
@@ -27,18 +18,19 @@ define([
   // requireJS shim config in our main requireJS configuration.
   // It seems that all of our leaflet Markers can share the same AwesomeMarker icon,
   // they don't need to have one each:
-  const unselectedIcon = leaflet.AwesomeMarkers.icon({
-    prefix: "fa",
-    markerColor: "blue",
-    iconColor: "white",
-    icon: "certificate",
-    cluster: false
-  });
+  // const unselectedIcon = leaflet.AwesomeMarkers.icon({
+  //   prefix: "fa",
+  //   iconColor: "white",
+  //   icon: "certificate",
+  //   className: "awesome-marker sea-marker",
+  //   cluster: false
+  // });
   const selectedIcon = leaflet.AwesomeMarkers.icon({
     prefix: "fa",
-    markerColor: "orange",
+    markerColor: "am00",
     iconColor: "black",
     icon: "certificate",
+    className: "awesome-marker sea-marker",
     cluster: false
   });
 
@@ -71,7 +63,6 @@ define([
 
   proto.create = function(map, initiative) {
     this.initiative = initiative;
-    initiative.marker = this;
 
     const hovertext = this.presenter.getHoverText(initiative);
 
@@ -84,12 +75,23 @@ define([
       markerColor: this.presenter.getMarkerColor(initiative)
     });
 
-    const icon = unselectedIcon;
+    const icon = leaflet.AwesomeMarkers.icon({
+      prefix: "fa",
+      markerColor: this.initiative.primaryActivity.toLowerCase(),
+      iconColor: "white",
+      icon: "certificate",
+      className: "awesome-marker sea-marker",
+      cluster: false
+    });
+
     //this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {icon: icon, title: hovertext});
     this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {
       icon: icon,
       initiative: this.initiative
     });
+
+    initiative.marker = this.marker;
+
     // maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
     // maxWidth:800 is needed if the font-size is set to 200% in CSS:
     this.marker.bindPopup(opts.popuptext, {
@@ -100,6 +102,10 @@ define([
     });
     // this.marker.bindPopup(this.presenter.getPopupText(initiative));
     this.marker.bindTooltip(this.presenter.getHoverText(initiative));
+
+    this.marker.on("popupclose", e => {
+      // this.setUnselected(this.initiative);
+    });
 
     //const eventHandlers = this.presenter.getEventHandlers(initiative);
     //Object.keys(eventHandlers).forEach(function(k) {
@@ -155,7 +161,7 @@ define([
     }
   };
   proto.setUnselected = function(initiative) {
-    this.marker.setIcon(unselectedIcon);
+    this.marker.setIcon(initiative.marker.options.icon);
     this.marker.setZIndexOffset(0);
     this.cluster.removeLayer(this.marker);
     this.cluster = unselectedClusterGroup;
@@ -163,7 +169,7 @@ define([
   };
   proto.setSelected = function(initiative) {
     // const that = this;
-    this.marker.setIcon(selectedIcon);
+    // this.marker.setIcon(selectedIcon);
     this.marker.setZIndexOffset(1000);
     this.cluster.removeLayer(this.marker);
     // CAUTION: this may be either a ClusterGroup, or the map itself

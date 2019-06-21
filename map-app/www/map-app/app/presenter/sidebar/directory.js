@@ -116,7 +116,7 @@ define([
     //   L.openPopup(initiative.marker);
     // });
     this.notifyMapNeedsToNeedsToBeZoomedAndPanned(sidebarWidth);
-    initiative.marker.marker.openPopup();
+    initiative.marker.openPopup();
     this.view.populateInitiativeSidebar(
       initiative,
       markerView.getInitiativeContent(initiative)

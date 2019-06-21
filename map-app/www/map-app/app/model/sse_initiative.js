@@ -8,6 +8,10 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   let initiativesByUid = {};
 
   function Initiative(e) {
+    let primaryActivitySplit = e.primaryActivity.split("/");
+    let primaryActivityCode =
+      primaryActivitySplit[primaryActivitySplit.length - 1];
+
     Object.defineProperties(this, {
       name: { value: e.name, enumerable: true },
       desc: { value: e.desc, enumerable: true },
@@ -22,23 +26,25 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       street: { value: e.street, enumerable: true },
       locality: { value: e.locality, enumerable: true },
       postcode: { value: e.postcode, enumerable: true },
-      primaryActivity: { value: e.primaryActivity, enumerable: true },
+      primaryActivity: { value: primaryActivityCode, enumerable: true },
       tel: { value: e.tel, enumerable: true },
       email: { value: e.email, enumerable: true }
     });
-    let primaryActivitySplit = e.primaryActivity.split("/");
-    let primaryActivityCode =
-      primaryActivitySplit[primaryActivitySplit.length - 1];
+    // let primaryActivitySplit = e.primaryActivity.split("/");
+    // let primaryActivityCode =
+    //   primaryActivitySplit[primaryActivitySplit.length - 1];
+
+    // this.primaryActivity = primaryActivityCode;
 
     registeredActivities.AM00
       ? registeredActivities.AM00.push(this)
       : (registeredActivities.AM00 = [this]);
 
-    if (registeredActivities[primaryActivityCode])
-      registeredActivities[primaryActivityCode].push(this);
+    if (registeredActivities[this.primaryActivity])
+      registeredActivities[this.primaryActivity].push(this);
     else {
       delete registeredActivities.loading;
-      registeredActivities[primaryActivityCode] = [this];
+      registeredActivities[this.primaryActivity] = [this];
     }
     loadedInitiatives.push(this);
     initiativesByUid[this.uniqueId] = this;

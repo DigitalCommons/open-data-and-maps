@@ -19,8 +19,6 @@
     // Hopefully this fixes https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/24
     leafletAwesomeMarkers: "empty:",
 
-    leafletBeautifyMarkers: "empty:",
-
     // While we're at it, let's not optimize other stuff too :-)
     leafletMarkerCluster: "empty:"
   },

@@ -47,7 +47,6 @@ define([
       .tileLayer(osmUrl, { attribution: osmAttrib, maxZoom: 18 })
       .addTo(this.map);
 
-    // What's going n here?!
     this.unselectedClusterGroup = leaflet.markerClusterGroup({});
     this.map.addLayer(this.unselectedClusterGroup);
     if (config.putSelectedMarkersInClusterGroup) {

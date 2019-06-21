@@ -50,7 +50,6 @@ requirejs.config({
 
     leaflet: "leaflet",
     leafletAwesomeMarkers: "leaflet.awesome-markers.min",
-    leafletBeautifyMarkers: "leaflet-beautify-marker-icon",
     leafletMarkerCluster: "leaflet.markercluster-1.3.0",
 
     // For expressing dependencies on json files:
@@ -68,9 +67,6 @@ requirejs.config({
       exports: "L"
     },
     leafletAwesomeMarkers: {
-      deps: ["leaflet"]
-    },
-    leafletBeautifyMarkers: {
       deps: ["leaflet"]
     },
     leafletMarkerCluster: {

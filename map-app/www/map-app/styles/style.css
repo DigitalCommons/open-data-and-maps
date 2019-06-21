@@ -1,5 +1,5 @@
 :root {
-  --teal: #0bb696;
+  /* --teal: #0bb696; */
   --pink: #d90368;
   /* --orange: #fb8b24; */
   --navy: #001f3f;
@@ -45,6 +45,53 @@ body {
   overflow: hidden;
 } */
 
+/* Override default Awesome Markers image */
+
+.sea-marker {
+  background: url(../images/markers-sea.png) no-repeat 0 0;
+  width: 35px;
+  height: 46px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  text-align: center;
+}
+
+.sea-marker {
+  background-image: url(../lib/images/markers-sea.png);
+}
+
+.awesome-marker-shadow {
+  background-image: url(../lib/images/markers-shadow.png);
+  background-size: 35px 16px;
+}
+
+@media (min--moz-device-pixel-ratio: 1.5),
+  (-o-min-device-pixel-ratio: 3/2),
+  (-webkit-min-device-pixel-ratio: 1.5),
+  (min-device-pixel-ratio: 1.5),
+  (min-resolution: 1.5dppx) {
+  .sea-marker {
+    background-image: url(../lib/images/markers-sea@2x.png);
+    background-size: 720px 46px;
+  }
+
+  .awesome-marker-shadow {
+    background-image: url(../lib/images/markers-shadow@2x.png);
+    background-size: 35px 16px;
+  }
+}
+
+/* ul.sea-directory-list {
+  margin-left: 0.5rem;
+} */
+
+.sea-directory-list li {
+  border-left-style: solid;
+  border-left-width: 6px;
+}
+
 /* All */
 .sea-initiatives-list-sidebar.sea-activity-am00,
 .sea-activity-am00 .sea-initiatives-list-sidebar-content,
@@ -53,12 +100,28 @@ body {
   background: var(--dark) !important;
 }
 
+.sea-directory-list .sea-activity-am00 {
+  border-color: var(--dark) !important;
+}
+
+.awesome-marker-icon-am00 {
+  background-position: -648px 0;
+}
+
 /* Arts, Media, Culture & Leisure. */
 .sea-initiatives-list-sidebar.sea-activity-am10,
 .sea-activity-am10 .sea-initiatives-list-sidebar-content,
 .sea-activity-am10:hover,
 .sea-activity-am10.sea-activity-active {
   background: var(--pink) !important;
+}
+
+.sea-directory-list .sea-activity-am10 {
+  border-color: var(--pink) !important;
+}
+
+.awesome-marker-icon-am10 {
+  background-position: 0 0;
 }
 
 /* Campaigning, Activism & Advocacy. */
@@ -70,6 +133,14 @@ body {
   /* color: var(--dark) !important; */
 }
 
+.sea-directory-list .sea-activity-am20 {
+  border-color: var(--orange) !important;
+}
+
+.awesome-marker-icon-am20 {
+  background-position: -324px 0;
+}
+
 /* Community & Collective Spaces. */
 .sea-initiatives-list-sidebar.sea-activity-am30,
 .sea-activity-am30 .sea-initiatives-list-sidebar-content,
@@ -77,6 +148,14 @@ body {
 .sea-activity-am30.sea-activity-active {
   background: var(--teal) !important;
   /* color: var(--dark) !important; */
+}
+
+.sea-directory-list .sea-activity-am30 {
+  border-color: var(--teal) !important;
+}
+
+.awesome-marker-icon-am30 {
+  background-position: -144px 0;
 }
 
 /* Education. */
@@ -87,12 +166,28 @@ body {
   background: var(--maroon) !important;
 }
 
+.sea-directory-list .sea-activity-am40 {
+  border-color: var(--maroon) !important;
+}
+
+.awesome-marker-icon-am40 {
+  background-position: -468px 0;
+}
+
 /* Energy. */
 .sea-initiatives-list-sidebar.sea-activity-am50,
 .sea-activity-am50 .sea-initiatives-list-sidebar-content,
 .sea-activity-am50:hover,
 .sea-activity-am50.sea-activity-active {
   background: var(--blue) !important;
+}
+
+.sea-directory-list .sea-activity-am50 {
+  border-color: var(--blue) !important;
+}
+
+.awesome-marker-icon-am50 {
+  background-position: -72px 0;
 }
 
 /* Food. */
@@ -103,12 +198,28 @@ body {
   background: var(--green) !important;
 }
 
+.sea-directory-list .sea-activity-am60 {
+  border-color: var(--green) !important;
+}
+
+.awesome-marker-icon-am60 {
+  background-position: -216px 0;
+}
+
 /* Goods & Services. */
 .sea-initiatives-list-sidebar.sea-activity-am70,
 .sea-activity-am70 .sea-initiatives-list-sidebar-content,
 .sea-activity-am70:hover,
 .sea-activity-am70.sea-activity-active {
-  background: var(--navy) !important;
+  background: var(--red) !important;
+}
+
+.sea-directory-list .sea-activity-am70 {
+  border-color: var(--red) !important;
+}
+
+.awesome-marker-icon-am70 {
+  background-position: -360px 0;
 }
 
 /* Health, Social Care & Wellbeing. */
@@ -116,7 +227,15 @@ body {
 .sea-activity-am80 .sea-initiatives-list-sidebar-content,
 .sea-activity-am80:hover,
 .sea-activity-am80.sea-activity-active {
-  background: var(--red) !important;
+  background: var(--navy) !important;
+}
+
+.sea-directory-list .sea-activity-am80 {
+  border-color: var(--navy) !important;
+}
+
+.awesome-marker-icon-am80 {
+  background-position: -36px 0;
 }
 
 /* Housing. */
@@ -124,8 +243,16 @@ body {
 .sea-activity-am90 .sea-initiatives-list-sidebar-content,
 .sea-activity-am90:hover,
 .sea-activity-am90.sea-activity-active {
-  background: var(--aqua) !important;
-  color: var(--aqua-contrast) !important;
+  background: var(--brown) !important;
+  /* color: var(--aqua-contrast) !important; */
+}
+
+.sea-directory-list .sea-activity-am90 {
+  border-color: var(--brown) !important;
+}
+
+.awesome-marker-icon-am90 {
+  background-position: -576px 0;
 }
 
 /* Money & Finance. */
@@ -136,12 +263,28 @@ body {
   background: var(--purple) !important;
 }
 
+.sea-directory-list .sea-activity-am100 {
+  border-color: var(--purple) !important;
+}
+
+.awesome-marker-icon-am100 {
+  background-position: -432px 0;
+}
+
 /* Nature, Conservation & Environment. */
 .sea-initiatives-list-sidebar.sea-activity-am110,
 .sea-activity-am110 .sea-initiatives-list-sidebar-content,
 .sea-activity-am110:hover,
 .sea-activity-am110.sea-activity-active {
-  background: var(--purple) !important;
+  background: var(--olive) !important;
+}
+
+.sea-directory-list .sea-activity-am110 {
+  border-color: var(--olive) !important;
+}
+
+.awesome-marker-icon-am110 {
+  background-position: -180px 0;
 }
 
 /* Reduce, Reuse, Repair & Recycle. */
@@ -149,8 +292,16 @@ body {
 .sea-activity-am120 .sea-initiatives-list-sidebar-content,
 .sea-activity-am120:hover,
 .sea-activity-am120.sea-activity-active {
-  background: var(--yellow) !important;
-  color: var(--yellow-contrast) !important;
+  background: var(--grey) !important;
+  /* color: var(--yellow-contrast) !important; */
+}
+
+.sea-directory-list .sea-activity-am120 {
+  border-color: solid 4px var(--grey) !important;
+}
+
+.awesome-marker-icon-am120 {
+  background-position: -612px 0;
 }
 
 /* Sidebar */

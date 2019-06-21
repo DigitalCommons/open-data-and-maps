@@ -60,7 +60,7 @@ define([
   proto.getMapEventHandlers = function() {
     return {
       click: function(e) {
-        console.log("Map clicked" + e.latlng);
+        // Deselect any selected markers
       },
       load: function(e) {
         console.log("Map loaded");
