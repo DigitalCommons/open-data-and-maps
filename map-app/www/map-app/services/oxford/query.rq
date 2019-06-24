@@ -29,7 +29,7 @@ WHERE {
 	OPTIONAL { ?addr vcard:street-address ?street . }
 	OPTIONAL { ?addr vcard:postal-code ?postcode . }
 	OPTIONAL { ?addr vcard:locality ?locality . }
-	?addr osspatialrelations:within ?within .
-	?within geo:lat ?lat.
-	?within geo:long ?lng.
+	OPTIONAL { ?addr osspatialrelations:within ?within . }
+	OPTIONAL { ?within geo:lat ?lat. }
+	OPTIONAL { ?within geo:long ?lng. }
 }

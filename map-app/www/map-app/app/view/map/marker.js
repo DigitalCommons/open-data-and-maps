@@ -11,7 +11,7 @@ define([
   // Keep a mapping between initiatives and their Markers:
   const markerForInitiative = {};
   // CAUTION: this may be either a ClusterGroup, or the map itself
-  let selectedClusterGroup = null;
+  let hiddenClusterGroup = null;
   let unselectedClusterGroup = null;
 
   function MarkerView() {}
@@ -25,82 +25,97 @@ define([
   proto.create = function(map, initiative) {
     this.initiative = initiative;
 
-    const hovertext = this.presenter.getHoverText(initiative);
-
     // options argument overrides our default options:
     const opts = Object.assign(dfltOptions, {
-      icon: this.presenter.getIcon(initiative),
-      popuptext: this.presenter.getInitiativeContent(initiative),
-      hovertext: this.presenter.getHoverText(initiative),
-      cluster: true,
-      markerColor: this.presenter.getMarkerColor(initiative)
+      // icon: this.presenter.getIcon(initiative),
+      popuptext: this.presenter.getInitiativeContent(initiative)
+      // hovertext: this.presenter.getHoverText(initiative),
+      // cluster: true,
+      // markerColor: this.presenter.getMarkerColor(initiative)
     });
 
-    const icon = leaflet.AwesomeMarkers.icon({
-      prefix: "fa",
-      markerColor: this.initiative.primaryActivity.toLowerCase(),
-      iconColor: "white",
-      icon: "certificate",
-      className: "awesome-marker sea-marker",
-      cluster: false
-    });
+    // For non-geo initiatives we don't need a marker but still want to get the initiativeContent
+    // TODO: Content generation should live somewhere else.
+    // const ukPostcode = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/;
+    if (!initiative.lat || !initiative.lng) {
+      initiative.nongeo = 1;
 
-    //this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {icon: icon, title: hovertext});
-    this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {
-      icon: icon,
-      initiative: this.initiative
-    });
+      // HACK: set to Oxford for now
+      initiative.lat = "51.75207";
+      initiative.lng = "-1.25769";
 
-    initiative.marker = this.marker;
+      const icon = leaflet.AwesomeMarkers.icon({
+        prefix: "fa",
+        markerColor: "red",
+        iconColor: "white",
+        icon: "certificate",
+        className: "awesome-marker sea-non-geo-marker",
+        cluster: false
+      });
 
-    // maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
-    // maxWidth:800 is needed if the font-size is set to 200% in CSS:
-    this.marker.bindPopup(opts.popuptext, {
-      minWidth: "472",
-      maxWidth: "472",
-      closeButton: false,
-      className: "sea-initiative-popup"
-    });
-    // this.marker.bindPopup(this.presenter.getPopupText(initiative));
-    this.marker.bindTooltip(this.presenter.getHoverText(initiative));
+      this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {
+        icon: icon,
+        initiative: this.initiative
+      });
 
-    this.marker.on("popupclose", e => {
-      // this.setUnselected(this.initiative);
-    });
+      initiative.marker = this.marker;
 
-    //const eventHandlers = this.presenter.getEventHandlers(initiative);
-    //Object.keys(eventHandlers).forEach(function(k) {
-    //this.marker.on(k, eventHandlers[k]);
-    //}, this);
-    const that = this;
-    // this.marker.on("click", function(e) {
-    //   that.onClick(e);
+      this.marker.bindPopup(opts.popuptext, {
+        minWidth: "472",
+        maxWidth: "472",
+        closeButton: false,
+        className: "sea-initiative-popup sea-non-geo-initiative"
+      });
+
+      this.cluster = hiddenClusterGroup;
+      this.cluster.addLayer(this.marker);
+    } else {
+      const hovertext = this.presenter.getHoverText(initiative);
+
+      const icon = leaflet.AwesomeMarkers.icon({
+        prefix: "fa",
+        markerColor: this.initiative.primaryActivity.toLowerCase(),
+        iconColor: "white",
+        icon: "certificate",
+        className: "awesome-marker sea-marker",
+        cluster: false
+      });
+
+      //this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {icon: icon, title: hovertext});
+      this.marker = leaflet.marker(this.presenter.getLatLng(initiative), {
+        icon: icon,
+        initiative: this.initiative
+      });
+
+      initiative.marker = this.marker;
+
+      // maxWidth helps to accomodate big font, for presentation purpose, set up in CSS
+      // maxWidth:800 is needed if the font-size is set to 200% in CSS:
+      this.marker.bindPopup(opts.popuptext, {
+        minWidth: "472",
+        maxWidth: "472",
+        closeButton: false,
+        className: "sea-initiative-popup"
+      });
+      this.marker.bindTooltip(this.presenter.getHoverText(initiative));
+      const that = this;
+      this.marker.on("click", function(e) {
+        that.onClick(e);
+      });
+      this.cluster = unselectedClusterGroup;
+      this.cluster.addLayer(this.marker);
+    }
+    // this.marker.on("popupclose", e => {
+    //   eventbus.publish({
+    //     topic: "Directory.InitiativeClicked",
+    //     data: ""
+    //   });
     // });
-    // this.marker.on("mouseover", function(e) {
-    //   console.log("mouseover");
-    //   console.log(that.initiative);
-    // });
-    // this.marker.on("mouseout", function(e) {
-    //   console.log("mouseout");
-    //   console.log(that.initiative);
-    // });
 
-    this.cluster = unselectedClusterGroup;
-    this.cluster.addLayer(this.marker);
     markerForInitiative[initiative.uniqueId] = this;
-    // this.cluster.on("mouseover", function(e) {
-    //   console.log("mouseover");
-    //   // console.log(that.initiative);
-    // });
-    // unselectedClusterGroup.on("mouseover", function(e) {
-    //   console.log("marker", e.layer);
-    // });
-    // unselectedClusterGroup.on("clustermouseover", function(e) {
-    //   console.log("cluster ", e.layer.getAllChildMarkers()[0]);
-    // });
   };
   proto.onClick = function(e) {
-    console.log("MarkerView.onclick");
+    // console.log("MarkerView.onclick");
     // Browser seems to consume the ctrl key: ctrl-click is like right-buttom-click (on Chrome)
     if (e.originalEvent.ctrlKey) {
       console.log("ctrl");
@@ -118,19 +133,44 @@ define([
       this.presenter.notifySelectionToggled(this.initiative);
     } else {
       console.log(this.initiative);
-      this.presenter.notifySelectionSet(this.initiative);
+      // this.presenter.notifySelectionSet(this.initiative);
+      eventbus.publish({
+        topic: "Directory.InitiativeClicked",
+        data: this.initiative
+      });
     }
   };
   proto.setUnselected = function(initiative) {
-    // this.marker.setIcon(initiative.marker.options.icon);
-    // this.marker.setZIndexOffset(0);
-    // this.cluster.removeLayer(this.marker);
-    // this.cluster = unselectedClusterGroup;
-    // this.cluster.addLayer(this.marker);
+    if (!initiative.nongeo) {
+      this.marker.setIcon(
+        leaflet.AwesomeMarkers.icon({
+          prefix: "fa",
+          markerColor: initiative.primaryActivity.toLowerCase(),
+          iconColor: "white",
+          icon: "certificate",
+          className: "awesome-marker sea-marker",
+          cluster: false
+        })
+      );
+    }
   };
   proto.setSelected = function(initiative) {
     var that = this;
-    if (unselectedClusterGroup._inZoomAnimation) {
+    if (!initiative.nongeo) {
+      this.marker.setIcon(
+        leaflet.AwesomeMarkers.icon({
+          prefix: "fa",
+          markerColor: initiative.primaryActivity.toLowerCase(),
+          iconColor: "white",
+          icon: "certificate",
+          className: "awesome-marker sea-marker sea-selected",
+          cluster: false
+        })
+      );
+    }
+    if (initiative.nongeo) {
+      initiative.marker.openPopup();
+    } else if (unselectedClusterGroup._inZoomAnimation) {
       unselectedClusterGroup.on("animationend", e => {
         if (
           unselectedClusterGroup.getVisibleParent(initiative.marker) !==
@@ -150,30 +190,6 @@ define([
       }
       initiative.marker.openPopup();
     }
-
-    // const that = this;
-    // this.marker.setIcon(selectedIcon);
-    // this.marker.setZIndexOffset(1000);
-    // this.cluster.removeLayer(this.marker);
-    // // CAUTION: this may be either a ClusterGroup, or the map itself
-    // this.cluster = selectedClusterGroup;
-    // this.cluster.addLayer(this.marker);
-    // eventbus.publish({
-    //   topic: "Map.needsToBeZoomedAndPanned",
-    //   data: {
-    //     latlngBounds: [
-    //       [arrayMin(lats), arrayMin(lngs)],
-    //       [arrayMax(lats), arrayMax(lngs)]
-    //     ],
-    //     marker: this.marker
-    //   }
-    // });
-    // if (
-    //   this.marker.__parent &&
-    //   typeof this.marker.__parent.spiderfy === "function"
-    // ) {
-    // this.marker.__parent.spiderfy();
-    // }
   };
   proto.showTooltip = function(initiative) {
     // This variation zooms the map, and makes sure the marker can
@@ -218,7 +234,7 @@ define([
   }
   function setSelectedClusterGroup(clusterGroup) {
     // CAUTION: this may be either a ClusterGroup, or the map itself
-    selectedClusterGroup = clusterGroup;
+    hiddenClusterGroup = clusterGroup;
   }
   function setUnselectedClusterGroup(clusterGroup) {
     unselectedClusterGroup = clusterGroup;

@@ -2,9 +2,17 @@ define([
   "app/eventbus",
   "model/config",
   "model/sse_initiative",
+  "view/sidebar/base",
   "presenter/sidebar/base",
   "view/map/marker"
-], function(eventbus, config, sseInitiative, sidebarPresenter, markerView) {
+], function(
+  eventbus,
+  config,
+  sseInitiative,
+  sidebarView,
+  sidebarPresenter,
+  markerView
+) {
   "use strict";
 
   function StackItem(initiatives) {
@@ -77,13 +85,10 @@ define([
     return array.reduce((a, b) => Math.min(a, b));
   }
 
-  proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function(
-    initiative,
-    sidebarWidth
-  ) {
+  proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function(initiative) {
     // const initiatives = this.contentStack.current().initiatives;
     const initiatives = [initiative];
-    sidebarWidth = sidebarWidth || 0;
+    let sidebarWidth = sidebarView.sidebarWidth || 0;
     const lats = initiatives.map(x => x.lat);
     const lngs = initiatives.map(x => x.lng);
 
@@ -104,25 +109,37 @@ define([
     }
   };
 
-  proto.initiativeClicked = function(initiative, sidebarWidth) {
-    // console.log(initiative.name);
-    // const lastContent = this.contentStack.current();
-    // this.contentStack.append(new StackItem([initiative]));
-    // Move the window to the right position first
-    this.notifyMapNeedsToNeedsToBeZoomedAndPanned(initiative, sidebarWidth);
-    // Update selection
-    eventbus.publish({
-      topic: "Markers.needToShowLatestSelection",
-      data: {
-        unselected: [], //lastContent ? lastContent.initiatives : [],
-        selected: [initiative] //this.contentStack.current().initiatives
-      }
-    });
-    // initiative.marker.openPopup();
-    this.view.populateInitiativeSidebar(
-      initiative,
-      markerView.getInitiativeContent(initiative)
-    );
+  proto.initiativeClicked = function(initiative) {
+    const lastContent = this.contentStack.current();
+    if (initiative) {
+      this.contentStack.append(new StackItem([initiative]));
+      // Move the window to the right position first
+      this.notifyMapNeedsToNeedsToBeZoomedAndPanned(initiative);
+      // Update selection
+      eventbus.publish({
+        topic: "Markers.needToShowLatestSelection",
+        data: {
+          unselected: lastContent ? lastContent.initiatives : [],
+          selected: this.contentStack.current().initiatives
+        }
+      });
+      // Populate the sidebar and hoghlight the iitiative in the directory
+      this.view.populateInitiativeSidebar(
+        initiative,
+        markerView.getInitiativeContent(initiative)
+      );
+    } else {
+      // User has deselected
+      eventbus.publish({
+        topic: "Markers.needToShowLatestSelection",
+        data: {
+          unselected: lastContent ? lastContent.initiatives : [],
+          selected: []
+        }
+      });
+      // Deselect the sidebar and hoghlight the iitiative in the directory
+      this.view.deselectInitiativeSidebar();
+    }
   };
 
   Presenter.prototype = proto;
@@ -139,6 +156,12 @@ define([
     });
     // eventbus.subscribe({topic: "Marker.SelectionToggled", callback: function(data) { p.onMarkerSelectionToggled(data); } });
     // eventbus.subscribe({topic: "Marker.SelectionSet", callback: function(data) { p.onMarkerSelectionSet(data); } });
+    eventbus.subscribe({
+      topic: "Directory.InitiativeClicked",
+      callback: function(data) {
+        p.initiativeClicked(data);
+      }
+    });
 
     return p;
   }

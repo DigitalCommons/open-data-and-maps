@@ -80,28 +80,24 @@ define([
       .text(activities[activityKey]);
     list = selection.append("ul").classed("sea-initiative-list", true);
     for (let initiative of initiatives) {
+      let activeClass = "";
+      if (
+        this.presenter.contentStack.current() &&
+        this.presenter.contentStack.current().initiatives[0] === initiative
+      ) {
+        activeClass = "sea-initiative-active";
+      }
       list
         .append("li")
         .text(initiative.name)
         .attr("data-uid", initiative.uniqueId)
+        .classed(activeClass, true)
         .on("click", function() {
-          that.presenter.initiativeClicked(
-            initiative,
-            sidebarView.sidebarWidth
-          );
-          // eventbus.publish({
-          //   topic: "Directory.initiativeClicked",
-          //   data: {
-          //     initiative: initiative,
-          //     sidebarWidth: sidebarView.sidebarWidth
-          //   }
-          // });
           // that.presenter.initiativeClicked(initiative);
-          d3.select(".sea-initiative-active").classed(
-            "sea-initiative-active",
-            false
-          );
-          d3.select(this).classed("sea-initiative-active", true);
+          eventbus.publish({
+            topic: "Directory.InitiativeClicked",
+            data: initiative
+          });
         });
     }
     sidebar
@@ -116,10 +112,24 @@ define([
   };
 
   proto.populateInitiativeSidebar = function(initiative, initiativeContent) {
+    // Highlight the correct initiative in the directory
+    d3.select(".sea-initiative-active").classed("sea-initiative-active", false);
+    d3.select('[data-uid="' + initiative.uniqueId + '"]').classed(
+      "sea-initiative-active",
+      true
+    );
     let initiativeSidebar = d3.select("#sea-initiative-sidebar");
     let initiativeContentElement = d3.select("#sea-initiative-sidebar-content");
     initiativeContentElement.html(initiativeContent);
     initiativeSidebar.classed("sea-initiative-sidebar-open", true);
+  };
+
+  proto.deselectInitiativeSidebar = function() {
+    d3.select(".sea-initiative-active").classed("sea-initiative-active", false);
+    let initiativeSidebar = d3.select("#sea-initiative-sidebar");
+    // let initiativeContentElement = d3.select("#sea-initiative-sidebar-content");
+    // initiativeContentElement.html(initiativeContent);
+    initiativeSidebar.classed("sea-initiative-sidebar-open", false);
   };
 
   Sidebar.prototype = proto;

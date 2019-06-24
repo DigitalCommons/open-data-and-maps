@@ -40,7 +40,7 @@ define(["app/eventbus", "presenter", "model/config"], function(
     return tel.replace(/^(\d)(\d{4})\s*(\d{6})/, "$1$2 $3");
   };
   proto.getInitiativeContent = function(initiative) {
-    let address,
+    let address = "",
       street,
       locality,
       postcode,
@@ -77,14 +77,23 @@ define(["app/eventbus", "presenter", "model/config"], function(
       locality = (street ? "<br/>" : "") + initiative.locality;
     }
     if (initiative.postcode) {
-      postcode = (street || locality ? "<br/>" : "") + initiative.postcode;
+      const ukPostcode = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/;
+      if (initiative.postcode.match(ukPostcode))
+        postcode = (street || locality ? "<br/>" : "") + initiative.postcode;
+      else {
+        street = locality = "";
+        postcode = "No address";
+      }
+    } else {
+      street = locality = "";
+      postcode = "No address";
     }
     if (street || locality || postcode) {
       address =
         '<p class="sea-initiative-address">' +
-        street +
-        locality +
-        postcode +
+        (street ? street : "") +
+        (locality ? locality : "") +
+        (postcode ? postcode : "") +
         "</p>";
     }
     popupHTML = popupHTML.replace("{initiative.address}", address);

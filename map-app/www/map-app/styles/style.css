@@ -61,6 +61,18 @@ body {
   background-image: url("../lib/images/markers-sea.png");
 }
 
+.sea-non-geo-marker {
+  visibility: hidden;
+}
+
+.sea-non-geo-initiative .leaflet-popup-tip-container {
+  visibility: hidden;
+}
+
+.sea-selected {
+  filter: brightness(0.8);
+}
+
 .awesome-marker-shadow {
   background-image: url("../lib/images/markers-shadow.png");
   background-size: 35px 16px;

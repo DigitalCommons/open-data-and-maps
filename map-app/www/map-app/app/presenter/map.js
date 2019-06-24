@@ -61,6 +61,12 @@ define([
     return {
       click: function(e) {
         // Deselect any selected markers
+        // this.marker.on("popupclose", e => {
+        eventbus.publish({
+          topic: "Directory.InitiativeClicked",
+          data: ""
+        });
+        // });
       },
       load: function(e) {
         console.log("Map loaded");
