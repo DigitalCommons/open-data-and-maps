@@ -14,45 +14,6 @@ define([
   let selectedClusterGroup = null;
   let unselectedClusterGroup = null;
 
-  // Note that the dependency between AwesomeMarkers and leaflet is expressed as a
-  // requireJS shim config in our main requireJS configuration.
-  // It seems that all of our leaflet Markers can share the same AwesomeMarker icon,
-  // they don't need to have one each:
-  // const unselectedIcon = leaflet.AwesomeMarkers.icon({
-  //   prefix: "fa",
-  //   iconColor: "white",
-  //   icon: "certificate",
-  //   className: "awesome-marker sea-marker",
-  //   cluster: false
-  // });
-  const selectedIcon = leaflet.AwesomeMarkers.icon({
-    prefix: "fa",
-    markerColor: "am00",
-    iconColor: "black",
-    icon: "certificate",
-    className: "awesome-marker sea-marker",
-    cluster: false
-  });
-
-  // const unselectedIcon = L.BeautifyIcon.icon({
-  //   // prefix: "fa",
-  //   // markerColor: "blue",
-  //   // iconColor: "white",
-  //   // icon: "certificate",
-  //   iconShape: "marker",
-  //   // backgroundColor: "var(--aqua)",
-  //   cluster: false
-  // });
-  // const selectedIcon = L.BeautifyIcon.icon({
-  //   // prefix: "fa",
-  //   // markerColor: "orange",
-  //   // iconColor: "black",
-  //   icon: "certificate",
-  //   // iconShape: "marker",
-  //   // backgroundColor: "var(--aqua)",
-  //   cluster: false
-  // });
-
   function MarkerView() {}
   // inherit from the standard view base object:
   var proto = Object.create(viewBase.base.prototype);
@@ -161,21 +122,42 @@ define([
     }
   };
   proto.setUnselected = function(initiative) {
-    this.marker.setIcon(initiative.marker.options.icon);
-    this.marker.setZIndexOffset(0);
-    this.cluster.removeLayer(this.marker);
-    this.cluster = unselectedClusterGroup;
-    this.cluster.addLayer(this.marker);
+    // this.marker.setIcon(initiative.marker.options.icon);
+    // this.marker.setZIndexOffset(0);
+    // this.cluster.removeLayer(this.marker);
+    // this.cluster = unselectedClusterGroup;
+    // this.cluster.addLayer(this.marker);
   };
   proto.setSelected = function(initiative) {
+    var that = this;
+    if (unselectedClusterGroup._inZoomAnimation) {
+      unselectedClusterGroup.on("animationend", e => {
+        if (
+          unselectedClusterGroup.getVisibleParent(initiative.marker) !==
+          initiative.marker
+        ) {
+          initiative.marker.__parent.spiderfy();
+        }
+        initiative.marker.openPopup();
+        unselectedClusterGroup.off("animationend");
+      });
+    } else {
+      if (
+        unselectedClusterGroup.getVisibleParent(initiative.marker) !==
+        initiative.marker
+      ) {
+        initiative.marker.__parent.spiderfy();
+      }
+      initiative.marker.openPopup();
+    }
+
     // const that = this;
     // this.marker.setIcon(selectedIcon);
-    this.marker.setZIndexOffset(1000);
-    this.cluster.removeLayer(this.marker);
-    // CAUTION: this may be either a ClusterGroup, or the map itself
-    this.cluster = selectedClusterGroup;
-    this.cluster.addLayer(this.marker);
-
+    // this.marker.setZIndexOffset(1000);
+    // this.cluster.removeLayer(this.marker);
+    // // CAUTION: this may be either a ClusterGroup, or the map itself
+    // this.cluster = selectedClusterGroup;
+    // this.cluster.addLayer(this.marker);
     // eventbus.publish({
     //   topic: "Map.needsToBeZoomedAndPanned",
     //   data: {

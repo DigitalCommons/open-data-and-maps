@@ -47,7 +47,7 @@ body {
 /* Override default Awesome Markers image */
 
 .sea-marker {
-  background: url(../images/markers-sea.png) no-repeat 0 0;
+  background: url("../images/markers-sea.png") no-repeat 0 0;
   width: 35px;
   height: 46px;
   position: absolute;
@@ -58,11 +58,11 @@ body {
 }
 
 .sea-marker {
-  background-image: url(../lib/images/markers-sea.png);
+  background-image: url("../lib/images/markers-sea.png");
 }
 
 .awesome-marker-shadow {
-  background-image: url(../lib/images/markers-shadow.png);
+  background-image: url("../lib/images/markers-shadow.png");
   background-size: 35px 16px;
 }
 
@@ -483,6 +483,7 @@ div.map-app-map-container {
 .sea-initiative-list li {
   margin: 0;
   padding: 0.4rem 1rem 0.4rem 1.25rem;
+  user-select: none;
 }
 
 .sea-directory-list li:hover,

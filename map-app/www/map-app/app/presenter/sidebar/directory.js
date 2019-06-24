@@ -77,8 +77,12 @@ define([
     return array.reduce((a, b) => Math.min(a, b));
   }
 
-  proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function(sidebarWidth) {
-    const initiatives = this.contentStack.current().initiatives;
+  proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function(
+    initiative,
+    sidebarWidth
+  ) {
+    // const initiatives = this.contentStack.current().initiatives;
+    const initiatives = [initiative];
     sidebarWidth = sidebarWidth || 0;
     const lats = initiatives.map(x => x.lat);
     const lngs = initiatives.map(x => x.lng);
@@ -102,27 +106,23 @@ define([
 
   proto.initiativeClicked = function(initiative, sidebarWidth) {
     // console.log(initiative.name);
-    const lastContent = this.contentStack.current();
-    this.contentStack.append(new StackItem([initiative]));
+    // const lastContent = this.contentStack.current();
+    // this.contentStack.append(new StackItem([initiative]));
+    // Move the window to the right position first
+    this.notifyMapNeedsToNeedsToBeZoomedAndPanned(initiative, sidebarWidth);
+    // Update selection
     eventbus.publish({
       topic: "Markers.needToShowLatestSelection",
       data: {
-        unselected: lastContent ? lastContent.initiatives : [],
-        selected: this.contentStack.current().initiatives
+        unselected: [], //lastContent ? lastContent.initiatives : [],
+        selected: [initiative] //this.contentStack.current().initiatives
       }
     });
-    // let marker = this.notifyMarkersNeedToShowNewSelection(lastContent);
-    // L.on("moveend", function() {
-    //   L.openPopup(initiative.marker);
-    // });
-    this.notifyMapNeedsToNeedsToBeZoomedAndPanned(sidebarWidth);
-    initiative.marker.openPopup();
+    // initiative.marker.openPopup();
     this.view.populateInitiativeSidebar(
       initiative,
       markerView.getInitiativeContent(initiative)
     );
-    // initiative.marker.setSelected();
-    // Need to get display an overlay containing the initiative info
   };
 
   Presenter.prototype = proto;
