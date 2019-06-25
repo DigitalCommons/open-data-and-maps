@@ -115,12 +115,6 @@ define([
       this.contentStack.append(new StackItem([initiative]));
       // Move the window to the right position first
       this.notifyMapNeedsToNeedsToBeZoomedAndPanned(initiative);
-      // if (initiative.nongeo) {
-      //   eventbus.publish({
-      //     topic: "Map.setZoom",
-      //     data: 14
-      //   });
-      // }
       // Update selection
       eventbus.publish({
         topic: "Markers.needToShowLatestSelection",
@@ -136,6 +130,7 @@ define([
       );
     } else {
       // User has deselected
+      // TODO: This probably shouldn\t be here
       eventbus.publish({
         topic: "Markers.needToShowLatestSelection",
         data: {

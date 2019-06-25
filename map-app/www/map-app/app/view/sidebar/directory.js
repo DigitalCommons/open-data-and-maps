@@ -123,6 +123,10 @@ define([
     let initiativeContentElement = d3.select("#sea-initiative-sidebar-content");
     initiativeContentElement.html(initiativeContent);
     initiativeSidebar.classed("sea-initiative-sidebar-open", true);
+    if (document.getElementById("map-app-leaflet-map").clientWidth < 800)
+      eventbus.publish({
+        topic: "Sidebar.showSidebar"
+      });
   };
 
   proto.deselectInitiativeSidebar = function() {

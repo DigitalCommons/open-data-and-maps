@@ -12,8 +12,11 @@ define(["app/eventbus", "model/config", "presenter"], function(
 
   var proto = Object.create(presenter.base.prototype);
   proto.changeSidebar = function(name) {
-    //console.log("presenter/sidebar/changeSidebar");
     this.view.changeSidebar(name);
+    this.view.showSidebar();
+  };
+
+  proto.showSidebar = function(name) {
     this.view.showSidebar();
   };
 
@@ -34,6 +37,13 @@ define(["app/eventbus", "model/config", "presenter"], function(
       topic: "Sidebar.showAbout",
       callback: function() {
         p.changeSidebar("about");
+      }
+    });
+
+    eventbus.subscribe({
+      topic: "Sidebar.showSidebar",
+      callback: function() {
+        p.showSidebar();
       }
     });
 
