@@ -25,7 +25,7 @@ define([
     var selection = this.d3selectAndClear("#map-app-sidebar-button")
       .append("button")
       .attr("class", "w3-btn")
-      .attr("title", "Show sidebar")
+      .attr("title", "Show directory")
       .on("click", function() {
         that.showSidebar();
       })
@@ -99,17 +99,19 @@ define([
 
   proto.showSidebar = function() {
     var that = this;
-    d3.select("#map-app-sidebar")
+    let sidebar = d3.select("#map-app-sidebar");
+    sidebar
       .on("transitionend", function() {
         if (event.propertyName === "transform") {
           d3.select("#map-app-sidebar-button").on("click", function() {
             that.hideSidebar();
           });
           that.sidebarWidth = this.clientWidth;
-          console.log(that.sidebarWidth);
         }
       })
       .classed("sea-sidebar-open", true);
+    if (!sidebar.classed("sea-sidebar-list-initiatives"))
+      d3.select(".w3-btn").attr("title", "Hide directory");
     d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-left");
   };
 
@@ -124,16 +126,7 @@ define([
 
     // If the initiative sidebar is open, close it
     if (initiativeSidebar.node().getBoundingClientRect().x === 0) {
-      // sidebar.node().insertBefore(sidebarButton, initiativeSidebar);
-      initiativeSidebar
-        // .on("transitionend", function() {
-        //   if (event.propertyName === "transform") {
-        //     that.sidebarWidth = this.clientWidth;
-        //     console.log(that.sidebarWidth);
-        //   }
-        // })
-        .classed("sea-initiative-sidebar-open", false);
-      // d3.select(".sea-activity-active").classed("sea-activity-active", false);
+      initiativeSidebar.classed("sea-initiative-sidebar-open", false);
     }
     // If the initiatives list sidebar is open then hide that
     else if (sidebar.classed("sea-sidebar-list-initiatives")) {
@@ -145,6 +138,7 @@ define([
           }
         })
         .classed("sea-sidebar-list-initiatives", false);
+      d3.select(".w3-btn").attr("title", "Hide directory");
       d3.select(".sea-activity-active").classed("sea-activity-active", false);
     }
     // Otherwise the main/directory sidebar is open so close it
@@ -156,10 +150,10 @@ define([
               that.showSidebar();
             });
             that.sidebarWidth = 0;
-            console.log(that.sidebarWidth);
           }
         })
         .classed("sea-sidebar-open", false);
+      d3.select(".w3-btn").attr("title", "Show directory");
       d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
     }
   };

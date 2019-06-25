@@ -82,6 +82,9 @@ define([
   //d3.select("#protectingVeil").style("display", "inline");
   //d3.select("#protectingVeilMessage").text(msg);
   //}
+  proto.setZoom = function(zoom) {
+    this.map.setZoom(zoom);
+  };
   proto.fitBounds = function(data) {
     let bounds = data,
       options = {};

@@ -35,6 +35,10 @@ body {
   padding: 0;
 }
 
+.map-app-content {
+  background-color: var(--teal);
+}
+
 /* .map-app {
   position: absolute;
   width: 100%;

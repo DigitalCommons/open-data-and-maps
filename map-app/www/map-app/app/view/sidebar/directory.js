@@ -58,6 +58,7 @@ define([
     let initiatives = this.presenter.getInitiativesForActivityKey(activityKey);
     let sidebar = d3.select("#map-app-sidebar");
     let sidebarButton = document.getElementById("map-app-sidebar-button");
+    d3.select(".w3-btn").attr("title", "Hide initiatives");
     let initiativeListSidebar = document.getElementById(
       "sea-initiatives-list-sidebar"
     );

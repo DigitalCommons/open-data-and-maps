@@ -34,7 +34,7 @@ define(["app/eventbus", "presenter", "model/config"], function(
     return [initiative.lat, initiative.lng];
   };
   proto.getHoverText = function(initiative) {
-    return initiative.name + " (" + initiative.dataset + ")";
+    return initiative.name;
   };
   proto.prettyPhone = function(tel) {
     return tel.replace(/^(\d)(\d{4})\s*(\d{6})/, "$1$2 $3");

@@ -126,6 +126,12 @@ define([
     this.view.fitBounds(latLngBounds);
   };
 
+  proto.setZoom = function(data) {
+    console.log("Zooming to ", data);
+    const zoom = data;
+    this.view.setZoom(zoom);
+  };
+
   Presenter.prototype = proto;
 
   function createPresenter(view) {
@@ -170,6 +176,12 @@ define([
       topic: "Map.needToHideInitiativeTooltip",
       callback: function(data) {
         p.onNeedToHideInitiativeTooltip(data);
+      }
+    });
+    eventbus.subscribe({
+      topic: "Map.setZoom",
+      callback: function(data) {
+        p.setZoom(data);
       }
     });
     return p;
