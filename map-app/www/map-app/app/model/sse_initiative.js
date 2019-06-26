@@ -8,9 +8,8 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   let initiativesByUid = {};
 
   function Initiative(e) {
-    let primaryActivitySplit = e.primaryActivity.split("/");
-    let primaryActivityCode =
-      primaryActivitySplit[primaryActivitySplit.length - 1];
+    const that = this;
+    let primaryActivityCode = getSkosCode(e.primaryActivity);
 
     Object.defineProperties(this, {
       name: { value: e.name, enumerable: true },
@@ -27,6 +26,8 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       locality: { value: e.locality, enumerable: true },
       postcode: { value: e.postcode, enumerable: true },
       primaryActivity: { value: primaryActivityCode, enumerable: true },
+      activity: { value: [], enumerable: true, writable: true },
+      orgStructure: { value: [], enumerable: true, writable: true },
       tel: { value: e.tel, enumerable: true },
       email: { value: e.email, enumerable: true }
     });
@@ -40,15 +41,21 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       ? registeredActivities.AM00.push(this)
       : (registeredActivities.AM00 = [this]);
 
-    if (registeredActivities[this.primaryActivity])
-      registeredActivities[this.primaryActivity].push(this);
-    else {
-      delete registeredActivities.loading;
-      registeredActivities[this.primaryActivity] = [this];
-    }
+    // if (registeredActivities[this.primaryActivity])
+    //   registeredActivities[this.primaryActivity].push(this);
+    // else {
+    //   delete registeredActivities.loading;
+    //   registeredActivities[this.primaryActivity] = [this];
+    // }
+    registerActivity(this.primaryActivity, this);
     loadedInitiatives.push(this);
     initiativesByUid[this.uniqueId] = this;
-    eventbus.publish({ topic: "Initiative.new", data: this });
+    // Run new query to get activities
+    loadPluralObjects("activities", this.uniqueId);
+    // Run new query to get organisational structure
+    loadPluralObjects("orgStructure", this.uniqueId, function() {
+      eventbus.publish({ topic: "Initiative.new", data: that });
+    });
   }
   function getRegisteredActivities() {
     return registeredActivities;
@@ -101,6 +108,21 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   function add(json) {
     initiativesToLoad = initiativesToLoad.concat(json);
     loadNextInitiatives();
+  }
+
+  function getSkosCode(originalValue) {
+    let split = originalValue.split("/");
+    return split[split.length - 1];
+  }
+
+  function registerActivity(activity, initiative) {
+    activity = getSkosCode(activity);
+    if (registeredActivities[activity])
+      registeredActivities[activity].push(initiative);
+    else {
+      delete registeredActivities.loading;
+      registeredActivities[activity] = [initiative];
+    }
   }
   function errorMessage(response) {
     // Extract error message from parsed JSON response.
@@ -155,41 +177,35 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
         });
       }
     });
-    /*
-			d3.json(service, function(error, json) {
-			// This is the old version based on xmlHttpRequest
-				if (error) {
-					console.warn(error);
-					try {
-						response = JSON.parse(error.responseText);
-						message = errorMessage(response);
-					}
-					catch(e) {
-						message = "Response contained no JSON."
-					}
-					eventbus.publish({
-						topic: "Initiative.loadFailed",
-						data: {message: error.status + ": " + error.statusText + ": " + error.responseURL + ": " + message}
-					});
-				}
-				else {
-					// API response uses JSend: https://labs.omniti.com/labs/jsend
-					message = errorMessage(json);
-					if (message === null) {
-						console.log(json);
-						add(json.data);
-						eventbus.publish({topic: "Initiative.loadComplete"});
-					}
-					else {
-						eventbus.publish({
-							topic: "Initiative.loadFailed",
-							data: {message: "Error from service: " + message}
-						});
-					}
-				}
-			});
-		}, 0);
-		*/
+  }
+  function loadPluralObjects(query, uid, callback) {
+    var ds = config.namedDatasets();
+    for (let i in ds) {
+      var service =
+        config.getServicesPath() +
+        "get_dataset.php?dataset=" +
+        ds[i] +
+        "&q=" +
+        query +
+        "&uid=" +
+        uid;
+      var response = null;
+      var message = null;
+      d3.json(service).then(function(json) {
+        for (let result of json.data) {
+          let initiative;
+          for (let key in result) {
+            if (!initiative) initiative = result[key];
+            else if (key !== "dataset") {
+              initiativesByUid[initiative][key].push(getSkosCode(result[key]));
+              if (key === "activity")
+                registerActivity(result[key], initiativesByUid[initiative]);
+            }
+          }
+        }
+        if (callback) callback();
+      });
+    }
   }
   var pub = {
     loadFromWebService: loadFromWebService,
