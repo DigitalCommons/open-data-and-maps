@@ -50,25 +50,6 @@ define([
     AM120: "Reduce, Reuse, Repair & Recycle"
   };
 
-  const orgStructures = {
-    OS10: "Community group (formal or informal)",
-    OS20: "Not-for-profit organisation",
-    OS30: "Social enterprise",
-    OS40: "Charity",
-    OS50: "Company (Other)",
-    OS60: "Workers co-operative",
-    OS70: "Housing co-operative",
-    OS80: "Consumer co-operative",
-    OS90: "Producer co-operative",
-    OS100: "Multi-stakeholder co-operative",
-    OS110: "Secondary co-operative",
-    OS120: "Community Interest Company (CIC)",
-    OS130: "Community Benefit Society / Industrial and Provident Society (IPS)",
-    OS140: "Employee trust",
-    OS150: "Self-employed",
-    OS160: "Unincorporated"
-  };
-
   proto.currentItem = function() {
     return this.contentStack.current();
   };
@@ -80,10 +61,6 @@ define([
   proto.getAllActivities = function() {
     return activities;
   };
-
-  function getAllOrgStructures() {
-    return orgStructures;
-  }
 
   proto.getRegisteredActivities = function() {
     return sseInitiative.getRegisteredActivities();
@@ -190,8 +167,7 @@ define([
     return p;
   }
   var pub = {
-    createPresenter: createPresenter,
-    getAllOrgStructures: getAllOrgStructures
+    createPresenter: createPresenter
   };
   return pub;
 });

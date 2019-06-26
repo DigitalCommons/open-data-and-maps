@@ -31,7 +31,7 @@ define([
     let that = this;
     let registeredActivities = this.presenter.getRegisteredActivities();
     let list = selection.append("ul").classed("sea-directory-list", true);
-    let activities = this.presenter.getActivities();
+    let activities = this.presenter.getAllActivities();
 
     Object.keys(registeredActivities)
       .sort(function(a, b) {
@@ -65,7 +65,7 @@ define([
     let selection = this.d3selectAndClear(
       "#sea-initiatives-list-sidebar-content"
     );
-    let activities = this.presenter.getActivities();
+    let activities = this.presenter.getAllActivities();
     let list;
     initiativeListSidebar.insertBefore(sidebarButton, selection.node());
     initiativeListSidebar.className = initiativeListSidebar.className.replace(

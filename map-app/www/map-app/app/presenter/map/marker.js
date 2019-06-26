@@ -7,6 +7,25 @@ define(["app/eventbus", "presenter", "model/config"], function(
 
   function Presenter() {}
 
+  const orgStructures = {
+    OS10: "Community group (formal or informal)",
+    OS20: "Not-for-profit organisation",
+    OS30: "Social enterprise",
+    OS40: "Charity",
+    OS50: "Company (Other)",
+    OS60: "Workers co-operative",
+    OS70: "Housing co-operative",
+    OS80: "Consumer co-operative",
+    OS90: "Producer co-operative",
+    OS100: "Multi-stakeholder co-operative",
+    OS110: "Secondary co-operative",
+    OS120: "Community Interest Company (CIC)",
+    OS130: "Community Benefit Society / Industrial and Provident Society (IPS)",
+    OS140: "Employee trust",
+    OS150: "Self-employed",
+    OS160: "Unincorporated"
+  };
+
   const proto = Object.create(presenter.base.prototype);
   const serviceToDisplaySimilarCompanies =
     document.location.origin +
@@ -39,6 +58,9 @@ define(["app/eventbus", "presenter", "model/config"], function(
   proto.prettyPhone = function(tel) {
     return tel.replace(/^(\d)(\d{4})\s*(\d{6})/, "$1$2 $3");
   };
+  // proto.getAllOrgStructures = function() {
+  //   return orgStructures;
+  // };
   proto.getInitiativeContent = function(initiative) {
     let address = "",
       street,
@@ -47,6 +69,7 @@ define(["app/eventbus", "presenter", "model/config"], function(
       popupHTML =
         '<div class="sea-initiative-details">' +
         '<h2 class="sea-initiative-name">{initiative.name}</h2>' +
+        '<h4 class="sea-initiative-org-structure">{initiative.org-structure}</h4>' +
         "<p>{initiative.desc}</p>" +
         "</div>" +
         '<div class="sea-initiative-contact">' +
@@ -61,6 +84,10 @@ define(["app/eventbus", "presenter", "model/config"], function(
     // All initiatives should have a name
     popupHTML = popupHTML.replace("{initiative.name}", initiative.name);
     // TODO Add org type
+    popupHTML = popupHTML.replace(
+      "{initiative.org-structure}",
+      initiative.orgStructure.map(OS => orgStructures[OS]).join(", ")
+    );
     // All initiatives should have a description
     popupHTML = popupHTML.replace("{initiative.desc}", initiative.desc);
     // We want to add the whole address into a single para
