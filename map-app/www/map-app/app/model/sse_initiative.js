@@ -51,7 +51,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     loadedInitiatives.push(this);
     initiativesByUid[this.uniqueId] = this;
     // Run new query to get activities
-    loadPluralObjects("activities", this.uniqueId);
+    // loadPluralObjects("activities", this.uniqueId);
     // Run new query to get organisational structure
     loadPluralObjects("orgStructure", this.uniqueId, function() {
       eventbus.publish({ topic: "Initiative.new", data: that });
