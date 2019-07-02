@@ -1,5 +1,5 @@
 # open-data-and-maps
-[Matt Wallis](https://github.com/matt-wallis) is reponsible for this repository.
+[Joe Billings](https://github.com/joebillings) and [Colm Massey](https://github.com/colmmassey) are reponsible for this repository.
 
 Linked Open Data and geographic maps for the Solidarity Economy produced by the [Solidarity Economy Association](https://www.solidarityeconomy.coop/).
 
