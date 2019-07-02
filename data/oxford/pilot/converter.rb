@@ -136,7 +136,7 @@ class SpecializedCsvReader < SeOpenData::CSV::RowReader
 
   def twitter
     twitter_raw.downcase!
-    twitter_raw.sub!(/https?:\/\/w?w?w?\.?twitter\.com\//, "")
+    twitter_raw.sub!(/h?t?t?p?s?:?\/?\/?w?w?w?\.?twitter\.com\//, "")
     twitter_raw.delete! "@" "#" "/"
     twitter_raw
   end

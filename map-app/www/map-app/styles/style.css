@@ -36,6 +36,12 @@ body {
   padding: 0;
 }
 
+#map-app {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
 .map-app-content {
   background-color: var(--teal) !important;
 }
@@ -406,20 +412,6 @@ body {
 }
 
 /* Map */
-
-.map-app-content,
-#map {
-  height: 100%;
-  width: 100%;
-}
-.map-app-content {
-  /* The map, and some of its controls have an absolute position, relative to the
-	 * map-app-content element.
-	 * Without this, the absolute position of the map would be relative to the <body> of the document.
-	 */
-  position: relative;
-  overflow: hidden;
-}
 .map-app-display-container {
   z-index: 30;
 }
