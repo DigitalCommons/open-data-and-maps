@@ -40,9 +40,8 @@ define([
     if (!initiative.lat || !initiative.lng) {
       initiative.nongeo = 1;
 
-      // HACK: set to Oxford for now
-      initiative.lat = "51.75207";
-      initiative.lng = "-1.25769";
+      initiative.lat = initiative.nongeoLat;
+      initiative.lng = initiative.nongeoLng;
 
       const icon = leaflet.AwesomeMarkers.icon({
         prefix: "fa",

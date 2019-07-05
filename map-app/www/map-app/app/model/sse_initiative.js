@@ -29,7 +29,9 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       activity: { value: [], enumerable: true, writable: true },
       orgStructure: { value: [], enumerable: true, writable: true },
       tel: { value: e.tel, enumerable: true },
-      email: { value: e.email, enumerable: true }
+      email: { value: e.email, enumerable: true },
+      nongeoLat: { value: config.getNongeoLatLng().lat, enumerable: true },
+      nongeoLng: { value: config.getNongeoLatLng().lng, enumerable: true }
     });
     // let primaryActivitySplit = e.primaryActivity.split("/");
     // let primaryActivityCode =

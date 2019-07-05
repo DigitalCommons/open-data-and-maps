@@ -45,6 +45,9 @@ define([
   function getServicesPath() {
     return "map-app/services/";
   }
+  function getNongeoLatLng() {
+    return config_json.defaultNongeoLatLng;
+  }
   var pub = {
     getSoftwareTimestamp: getSoftwareTimestamp,
     getSoftwareVariant: getSoftwareVariant,
@@ -52,7 +55,8 @@ define([
     getServicesPath: getServicesPath,
     namedDatasets: namedDatasets,
     htmlTitle: htmlTitle,
-    aboutHtml: aboutHtml
+    aboutHtml: aboutHtml,
+    getNongeoLatLng: getNongeoLatLng
   };
   return pub;
 });
