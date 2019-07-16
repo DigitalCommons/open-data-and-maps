@@ -9,7 +9,7 @@ SRC_CSV_DIR := original-data/
 # Generated URIs will datrt with: $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
 URI_SCHEME := https
 URI_HOST := w3id.org
-URI_PATH_PREFIX := sea-lod/oxford/2019-06-26/
+URI_PATH_PREFIX := sea-lod/oxford/
 
 ###########################################
 # To where are the Linked Data to be deployed?
@@ -32,7 +32,7 @@ DEPLOYMENT_RSYNC_FLAGS := --delete
 # Set up for rdf/ttl gen:
 # Uses alpha version of ESSGlobal 2
 
-ESSGLOBAL_URI := https://w3id2.solidarityeconomy.coop/essglobal/V2a/
+ESSGLOBAL_URI := https://w3id.solidarityeconomy.coop/essglobal/V2a/
 
 ###########################################
 # Set up the triplestore:

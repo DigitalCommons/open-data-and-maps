@@ -1,4 +1,4 @@
-PREFIX essglobal: <https://w3id2.solidarityeconomy.coop/essglobal/V2a/vocab/>
+PREFIX essglobal: <https://w3id.solidarityeconomy.coop/essglobal/V2a/vocab/>
 
 SELECT ?uri ?orgStructure
 WHERE {

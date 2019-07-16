@@ -129,5 +129,6 @@ foreach($res["results"]["bindings"] as $item) {
 	$obj["dataset"] = $dataset;
 	array_push($result, $obj);
 }
+// echo json_encode($requestURL);
 report_success($result);
 ?>
