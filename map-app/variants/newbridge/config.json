@@ -1,8 +1,8 @@
 {
   "namedDatasets_comment": "These names correspond to directories in www/services which contain: default-graph-uri.txt, endpoint.txt, query.rq",
-  "namedDatasets": ["newcastle-mapjam"],
+  "namedDatasets": ["newbridge"],
   "htmlTitle_comment": "This will override the default value for the htmp <title> tag",
-  "htmlTitle": "Newcastle Mapjam",
+  "htmlTitle": "For Solidarity",
   "defaultNongeoLatLng_comment": "The default latitude and longitude values for initiatives with no address",
   "defaultNongeoLatLng": { "lat": "54.97328", "lng": "-1.61396" }
 }

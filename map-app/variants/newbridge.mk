@@ -1,6 +1,6 @@
 
 # Server to deploy to:
-SERVER := ise-0-admin
+SERVER := sea-map-joe
 
 # Base deployment directory on server (must pre-exist):
 SERVER_BASE_DIR := /var/www/html/maps/

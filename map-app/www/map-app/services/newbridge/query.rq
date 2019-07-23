@@ -9,7 +9,7 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX ospostcode: <http://data.ordnancesurvey.co.uk/id/postcodeunit/>
 PREFIX rov: <http://www.w3.org/ns/regorg#>
 PREFIX osspatialrelations: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
-PREFIX : <https://w3id.solidarityeconomy.coop/sea-lod/newcastle-mapjam/>
+PREFIX : <https://w3id.org/sea-lod/newbridge/>
 
 SELECT ?name ?uri ?within ?lat ?lng ?www ?tel ?email ?regorg ?sameas ?desc ?primaryActivity ?street ?locality ?postcode
 WHERE {
