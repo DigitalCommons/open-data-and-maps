@@ -26,7 +26,7 @@ CSV_target := csv
 .DEFAULT_GOAL := $(CSV_target)
 
 # Source files:
-CLEAN_UK_CSV := $(SRC_CSV_DIR)2019-04-12-original.csv
+CLEAN_UK_CSV := $(SRC_CSV_DIR)2019-04-12-original-subset.csv
 
 # Here's the directory where we generate intermediate csv files
 GEN_CSV_DIR := $(TOP_OUTPUT_DIR)csv/

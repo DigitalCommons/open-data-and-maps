@@ -73,7 +73,9 @@ define([
 
       const icon = leaflet.AwesomeMarkers.icon({
         prefix: "fa",
-        markerColor: this.initiative.primaryActivity.toLowerCase(),
+        markerColor: this.initiative.primaryActivity
+          ? this.initiative.primaryActivity.toLowerCase()
+          : "AM00",
         iconColor: "white",
         icon: "certificate",
         className: "awesome-marker sea-marker",
@@ -144,7 +146,9 @@ define([
       this.marker.setIcon(
         leaflet.AwesomeMarkers.icon({
           prefix: "fa",
-          markerColor: initiative.primaryActivity.toLowerCase(),
+          markerColor: this.initiative.primaryActivity
+            ? this.initiative.primaryActivity.toLowerCase()
+            : "AM00",
           iconColor: "white",
           icon: "certificate",
           className: "awesome-marker sea-marker",
@@ -159,7 +163,9 @@ define([
       this.marker.setIcon(
         leaflet.AwesomeMarkers.icon({
           prefix: "fa",
-          markerColor: initiative.primaryActivity.toLowerCase(),
+          markerColor: this.initiative.primaryActivity
+            ? this.initiative.primaryActivity.toLowerCase()
+            : "AM00",
           iconColor: "white",
           icon: "certificate",
           className: "awesome-marker sea-marker sea-selected",

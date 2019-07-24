@@ -4,12 +4,33 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 
   let loadedInitiatives = [];
   let initiativesToLoad = [];
-  let registeredActivities = { loading: "Loading directory" };
   let initiativesByUid = {};
+
+  // Need to record all instances of any of the fields that are specified in the config
+  /* Format will be: 
+    [{
+      "field": field,
+      "label": label
+    }]
+  */
+  const filterableFields = config.getFilterableFields();
+
+  /* Format will be:
+    {
+      { field1: [ val1, val2 ... valN ] }
+      ...
+      { fieldN: [ ... ] }
+    }
+  */
+  let registeredValues = {};
 
   function Initiative(e) {
     const that = this;
-    let primaryActivityCode = getSkosCode(e.primaryActivity);
+
+    // Not all initiatives have activities
+    let primaryActivityCode = e.primaryActivity
+      ? getSkosCode(e.primaryActivity)
+      : undefined;
 
     Object.defineProperties(this, {
       name: { value: e.name, enumerable: true },
@@ -25,6 +46,10 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       street: { value: e.street, enumerable: true },
       locality: { value: e.locality, enumerable: true },
       postcode: { value: e.postcode, enumerable: true },
+      country: {
+        value: e.country ? e.country.toUpperCase() : undefined,
+        enumerable: true
+      },
       primaryActivity: { value: primaryActivityCode, enumerable: true },
       activity: { value: [], enumerable: true, writable: true },
       orgStructure: { value: [], enumerable: true, writable: true },
@@ -33,34 +58,54 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       nongeoLat: { value: config.getNongeoLatLng().lat, enumerable: true },
       nongeoLng: { value: config.getNongeoLatLng().lng, enumerable: true }
     });
-    // let primaryActivitySplit = e.primaryActivity.split("/");
-    // let primaryActivityCode =
-    //   primaryActivitySplit[primaryActivitySplit.length - 1];
 
-    // this.primaryActivity = primaryActivityCode;
+    // loop through the filterable fields and register
+    filterableFields.forEach(filterable => {
+      let field = filterable.field;
+      let label = filterable.label;
+      // Create the object that holds the registered values for the current field if it hasn't already been created
+      if (!registeredValues[label]) {
+        registeredValues[label] = { ALL: [this] };
+        registeredValues[label][this[field]] = [this];
+      } else {
+        registeredValues[label]["ALL"].push(this);
+        registeredValues[label]["ALL"].sort(function(a, b) {
+          return sortInitiatives(a, b);
+        });
+        if (registeredValues[label][this[field]]) {
+          registeredValues[label][this[field]].push(this);
+          registeredValues[label][this[field]].sort(function(a, b) {
+            return sortInitiatives(a, b);
+          });
+        } else {
+          registeredValues[label][this[field]] = [this];
+        }
+      }
+    });
 
-    registeredActivities.AM00
-      ? registeredActivities.AM00.push(this)
-      : (registeredActivities.AM00 = [this]);
-
-    // if (registeredActivities[this.primaryActivity])
-    //   registeredActivities[this.primaryActivity].push(this);
-    // else {
-    //   delete registeredActivities.loading;
-    //   registeredActivities[this.primaryActivity] = [this];
-    // }
-    registerActivity(this.primaryActivity, this);
     loadedInitiatives.push(this);
     initiativesByUid[this.uniqueId] = this;
+
     // Run new query to get activities
     // loadPluralObjects("activities", this.uniqueId);
     // Run new query to get organisational structure
-    loadPluralObjects("orgStructure", this.uniqueId, function() {
-      eventbus.publish({ topic: "Initiative.new", data: that });
-    });
+    // loadPluralObjects("orgStructure", this.uniqueId, function() {
+
+    eventbus.publish({ topic: "Initiative.new", data: that });
+
+    // });
   }
-  function getRegisteredActivities() {
-    return registeredActivities;
+
+  function sortInitiatives(a, b) {
+    const name1 = a.name.toLowerCase();
+    const name2 = b.name.toLowerCase();
+    if (name1 > name2) return 1;
+    else if (name1 < name2) return -1;
+    else return 0;
+  }
+
+  function getRegisteredValues() {
+    return registeredValues;
   }
   function getInitiativeByUniqueId(uid) {
     return initiativesByUid[uid];
@@ -92,7 +137,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   }
   function loadNextInitiatives() {
     var i, e;
-    var maxInitiativesToLoadPerFrame = 100;
+    var maxInitiativesToLoadPerFrame = 500;
     // By loading the initiatives in chunks, we keep the UI responsive
     for (i = 0; i < maxInitiativesToLoadPerFrame; ++i) {
       e = initiativesToLoad.pop();
@@ -168,16 +213,6 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       //console.log(json);
       add(json.data);
       eventbus.publish({ topic: "Initiative.datasetLoaded" });
-      // Make sure the initiatives are alpabetised
-      for (let activity in registeredActivities) {
-        registeredActivities[activity].sort(function(a, b) {
-          const name1 = a.name.toLowerCase();
-          const name2 = b.name.toLowerCase();
-          if (name1 > name2) return 1;
-          else if (name1 < name2) return -1;
-          else return 0;
-        });
-      }
     });
   }
   function loadPluralObjects(query, uid, callback) {
@@ -213,7 +248,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     loadFromWebService: loadFromWebService,
     search: search,
     latLngBounds: latLngBounds,
-    getRegisteredActivities: getRegisteredActivities,
+    getRegisteredValues: getRegisteredValues,
     getInitiativeByUniqueId: getInitiativeByUniqueId
   };
   // Automatically load the data when the app is ready:

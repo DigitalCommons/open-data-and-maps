@@ -132,6 +132,12 @@ define([
     this.view.setZoom(zoom);
   };
 
+  proto.getInitialBounds = function() {
+    return config.getInitialBounds();
+  };
+
+  proto.getInitialZoom = function() {};
+
   Presenter.prototype = proto;
 
   function createPresenter(view) {

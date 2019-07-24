@@ -3,7 +3,7 @@
 PARENT_VARIANT := dotcoop
 
 # Server to deploy to:
-SERVER := ise-0-matt
+SERVER := sea-0-joe
 
 # Base deployment directory on server (must pre-exist):
 SERVER_BASE_DIR := /var/www/html/internal/maps/
@@ -15,5 +15,5 @@ SERVER_APP_SUBDIR := $(PARENT_VARIANT)/
 DEPLOYED_MAP_URL := https://internal.solidarityeconomy.coop/maps/$(SERVER_APP_SUBDIR)
 
 # Directory for config files to be used for this variant of the map:
-SRC_CONFIG_DIR := variants/$(PARENT_VARIANT)/
+SRC_CONFIG_DIR := variants/$(variant)/
 

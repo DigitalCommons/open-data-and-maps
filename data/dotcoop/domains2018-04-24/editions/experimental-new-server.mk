@@ -7,8 +7,8 @@ SRC_CSV_DIR := original-data/
 ###########################################
 # Components of the URIs used in this dataset:
 # Generated URIs will datrt with: $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
-URI_SCHEME := http
-URI_HOST := w3id2.solidarityeconomy.coop
+URI_SCHEME := https
+URI_HOST := w3id.solidarityeconomy.coop
 URI_PATH_PREFIX := dotcoop/
 
 ###########################################
@@ -28,6 +28,12 @@ DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
 DEPLOYMENT_RSYNC_FLAGS := --delete
 
 ###########################################
+# Set up for rdf/ttl gen:
+# Uses alpha version of ESSGlobal 2
+
+ESSGLOBAL_URI := https://w3id.solidarityeconomy.coop/essglobal/V2a/
+
+###########################################
 # Set up the triplestore:
 #
 # virtuoso server name, typically this is configured in ~/.ssh/config:
@@ -35,4 +41,4 @@ VIRTUOSO_SERVER := sea-0-admin
 # Directory on virtuoso server which has been configured (DirsAllowed in virtuoso.ini)
 # ready for Bulk data loading:
 VIRTUOSO_ROOT_DATA_DIR := /home/admin/Virtuoso/BulkLoading/Data/
-SPARQL_ENDPOINT := http://store2.solidarityeconomy.coop:8890/sparql
+SPARQL_ENDPOINT := http://store1.solidarityeconomy.coop:8890/sparql

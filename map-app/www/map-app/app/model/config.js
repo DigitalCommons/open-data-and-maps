@@ -46,7 +46,19 @@ define([
     return "map-app/services/";
   }
   function getNongeoLatLng() {
-    return config_json.defaultNongeoLatLng;
+    return config_json.defaultNongeoLatLng
+      ? config_json.defaultNongeoLatLng
+      : { lat: undefined, lng: undefined };
+  }
+  function getInitialBounds() {
+    // It's ok if this returns undefined – Leaflet will set the bounds automatically
+    return config_json.initialBounds;
+  }
+  function getFilterableFields() {
+    return config_json.filterableFields;
+  }
+  function doesDirectoryHaveColours() {
+    return config_json.doesDirectoryHaveColours;
   }
   var pub = {
     getSoftwareTimestamp: getSoftwareTimestamp,
@@ -56,7 +68,10 @@ define([
     namedDatasets: namedDatasets,
     htmlTitle: htmlTitle,
     aboutHtml: aboutHtml,
-    getNongeoLatLng: getNongeoLatLng
+    getNongeoLatLng: getNongeoLatLng,
+    getInitialBounds: getInitialBounds,
+    getFilterableFields: getFilterableFields,
+    doesDirectoryHaveColours: doesDirectoryHaveColours
   };
   return pub;
 });

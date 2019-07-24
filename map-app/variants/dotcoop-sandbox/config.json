@@ -1,0 +1,8 @@
+{
+  "namedDatasets_comment": "These names correspond to directories in www/services which contain: default-graph-uri.txt, endpoint.txt, query.rq",
+  "namedDatasets": ["dotcoop-sandbox"],
+  "filterableFields_comment": "A list of the fields that can populate the directory",
+  "filterableFields": [{ "field": "country", "label": "Countries" }]
+  // "initialBounds_comment": "The initial bounds of a newly loaded map",
+  // "initialBounds": [[40, -120], [-40, 120]]
+}

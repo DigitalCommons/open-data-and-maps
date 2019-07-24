@@ -33,11 +33,10 @@ define([
       // contextmenuItems: this.presenter.getContextmenuItems()
     });
     this.map.zoomControl.setPosition("bottomright");
-    // Lat/long box for Scotland, England and Wales
-    // (part of a nation that was called the United Kingdom before it voted for Brexit,
-    // which led to Scotland becoming independent):
-    this.map.fitBounds([[49.5, 9], [61, -2]]);
-    // TODO: Add that to the config 👆
+
+    // Get the initial bounds from config
+    let initialBounds = this.presenter.getInitialBounds();
+    if (initialBounds) this.map.fitBounds(initialBounds);
 
     for (i = 0; i < k.length; ++i) {
       this.map.on(k[i], eventHandlers[k[i]]);
@@ -74,14 +73,6 @@ define([
   proto.hideTooltip = function(initiative) {
     markerView.hideTooltip(initiative);
   };
-  /* The protecting veil is now obsolete. */
-  //function clearProtectingVeil() {
-  //d3.select("#protectingVeil").style("display", "none");
-  //}
-  //function showProtectingVeil(msg) {
-  //d3.select("#protectingVeil").style("display", "inline");
-  //d3.select("#protectingVeilMessage").text(msg);
-  //}
   proto.setZoom = function(zoom) {
     this.map.setZoom(zoom);
   };
@@ -98,11 +89,9 @@ define([
     console.log("zoomAndPanTo");
     this.map.setView(latLng, 16, { animate: true });
   };
-  //proto.makeSelectedIcon = function() {
-  //// TODO: This should not be here (in view/map.js)
-  ////       Probably better in view/map/Marker.js.
-  //return leaflet.AwesomeMarkers.icon({prefix: 'fa', markerColor: 'orange', iconColor: 'black', icon: 'certificate', cluster: false});
-  //};
+  proto.getMap = function() {
+    return this.map;
+  };
   MapView.prototype = proto;
   function init() {
     const view = new MapView();

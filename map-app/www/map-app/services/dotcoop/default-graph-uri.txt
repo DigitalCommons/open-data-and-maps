@@ -1,1 +1,1 @@
-http://w3id2.solidarityeconomy.coop/dotcoop/
+https://w3id.solidarityeconomy.coop/dotcoop/

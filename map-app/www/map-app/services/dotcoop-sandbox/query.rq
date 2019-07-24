@@ -8,15 +8,20 @@ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX ospostcode: <http://data.ordnancesurvey.co.uk/id/postcodeunit/>
 PREFIX rov: <http://www.w3.org/ns/regorg#>
 PREFIX osspatialrelations: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
-PREFIX : <https://w3id.solidarityeconomy.coop/dotcoop/>
+PREFIX : <https://w3id.solidarityeconomy.coop/dotcoop-sandbox/>
 
-SELECT ?name ?uri ?lat ?lng ?www
+SELECT ?name ?uri ?lat ?lng ?www ?street ?locality ?region ?postcode ?country
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
 	OPTIONAL { ?uri foaf:homepage ?www . }
 	OPTIONAL { ?uri owl:sameAs ?sameas . }
 	?uri essglobal:hasAddress ?hasAddress .
+	OPTIONAL { ?hasAddress vcard:street-address ?street . }
+	OPTIONAL { ?hasAddress vcard:postal-code ?postcode . }
+	OPTIONAL { ?hasAddress vcard:locality ?locality . }
+	OPTIONAL { ?hasAddress vcard:region ?region . }
+	OPTIONAL { ?hasAddress vcard:country-name ?country . }
 	?hasAddress geo:lat ?lat.
 	?hasAddress geo:long ?lng.
 }

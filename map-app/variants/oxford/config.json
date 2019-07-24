@@ -4,5 +4,9 @@
   "htmlTitle_comment": "This will override the default value for the htmp <title> tag",
   "htmlTitle": "Solidarity Oxford",
   "defaultNongeoLatLng_comment": "The default latitude and longitude values for initiatives with no address",
-  "defaultNongeoLatLng": { "lat": "51.7520", "lng": "1.2577" }
+  "defaultNongeoLatLng": { "lat": "51.7520", "lng": "1.2577" },
+  "filterableFields_comment": "A list of the fields that can populate the directory",
+  "filterableFields": [{ "field": "primaryActivity", "label": "Activities" }],
+  "doesDirectoryHaveColours_comment": "Does the directory feature coloured entries",
+  "doesDirectoryHaveColours": true
 }

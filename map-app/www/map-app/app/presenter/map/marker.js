@@ -88,8 +88,8 @@ define(["app/eventbus", "presenter", "model/config"], function(
       "{initiative.org-structure}",
       initiative.orgStructure.map(OS => orgStructures[OS]).join(", ")
     );
-    // All initiatives should have a description
-    popupHTML = popupHTML.replace("{initiative.desc}", initiative.desc);
+    // All initiatives should have a description (this isn't true with dotcoop)
+    popupHTML = popupHTML.replace("{initiative.desc}", initiative.desc || "");
     // We want to add the whole address into a single para
     // Not all orgs have an address
     if (initiative.street) {
@@ -99,29 +99,22 @@ define(["app/eventbus", "presenter", "model/config"], function(
         if (street) street += "<br/>";
         street = street ? (street += partial) : partial;
       }
+      address += street;
     }
     if (initiative.locality) {
-      locality = (street ? "<br/>" : "") + initiative.locality;
+      address += (address.length ? "<br/>" : "") + initiative.locality;
+    }
+    if (initiative.region) {
+      address += (address.length ? "<br/>" : "") + initiative.region;
     }
     if (initiative.postcode) {
-      const ukPostcode = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/;
-      if (initiative.postcode.match(ukPostcode))
-        postcode = (street || locality ? "<br/>" : "") + initiative.postcode;
-      else {
-        street = locality = "";
-        postcode = "No address";
-      }
-    } else {
-      street = locality = "";
-      postcode = "No address";
+      address += (address.length ? "<br/>" : "") + initiative.postcode;
     }
-    if (street || locality || postcode) {
-      address =
-        '<p class="sea-initiative-address">' +
-        (street ? street : "") +
-        (locality ? locality : "") +
-        (postcode ? postcode : "") +
-        "</p>";
+    if (initiative.country) {
+      address += (address.length ? "<br/>" : "") + initiative.country;
+    }
+    if (address.length) {
+      address = '<p class="sea-initiative-address">' + address + "</p>";
     }
     popupHTML = popupHTML.replace("{initiative.address}", address);
 

@@ -103,6 +103,7 @@ switch ($_GET['q']) {
 		break;
 }
 
+// Add a uid to get the values for a specific initiative (currently used for activities and org structure)
 // TODO: Need to make more secure
 $uid = isset($_GET["uid"]) ? $_GET["uid"] : "";
 
@@ -113,7 +114,7 @@ $res = json_decode($response, true);
 // The keys correspond to two things:
 //   1. The names of the variables used in the SPARQL query (see Initiative::create_sparql_files in generate-triples.rb)
 //   2. The names used in the JSON that is returned to the map-app
-$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg", "sameas", "desc", "street", "locality", "postcode", "primaryActivity", "activity", "orgStructure", "tel", "email");
+$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg", "sameas", "desc", "street", "locality", "region", "postcode", "country", "primaryActivity", "activity", "orgStructure", "tel", "email");
 
 $result = array();
 foreach($res["results"]["bindings"] as $item) {

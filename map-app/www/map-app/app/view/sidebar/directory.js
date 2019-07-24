@@ -3,9 +3,8 @@ define([
   "d3",
   "app/eventbus",
   "presenter/sidebar/directory",
-  "view/sidebar/base",
-  "model/config"
-], function(d3, eventbus, presenter, sidebarView, config) {
+  "view/sidebar/base"
+], function(d3, eventbus, presenter, sidebarView) {
   "use strict";
 
   // Our local Sidebar object:
@@ -29,33 +28,57 @@ define([
 
   proto.populateScrollableSelection = function(selection) {
     let that = this;
-    let registeredActivities = this.presenter.getRegisteredActivities();
-    let list = selection.append("ul").classed("sea-directory-list", true);
-    let activities = this.presenter.getAllActivities();
+    let list = selection
+      .append("ul")
+      .classed("sea-directory-list", true)
+      .classed("colours", this.presenter.doesDirectoryHaveColours());
 
-    Object.keys(registeredActivities)
-      .sort(function(a, b) {
-        return parseInt(a.replace("AM", "")) - parseInt(b.replace("AM", ""));
-      })
-      .forEach(function(key) {
-        list
-          .append("li")
-          .text(activities[key])
-          .classed("sea-activity-" + key.toLowerCase(), true)
-          .on("click", function() {
-            that.listInitiativesForActivity(key);
-            d3.select(".sea-activity-active").classed(
-              "sea-activity-active",
-              false
+    let registeredValues = this.presenter.getRegisteredValues();
+
+    // Just run om the first property for now
+    // TODO: Support user selectable fields
+    for (let field in registeredValues) {
+      let directoryField = field;
+      let valuesByName = this.presenter.getAllValuesByName(directoryField);
+      Object.keys(registeredValues[field])
+        .sort(function(a, b) {
+          // Check if we're working numerically or alpabetically
+          if (parseInt(a.replace(/[^\d]/g, "")) === "NaN") {
+            if (a.replace(/\d/gi, "") < b.replace(/d/gi, "")) {
+              return -1;
+            }
+            if (a.replace(/\d/gi, "") > b.replace(/d/gi, "")) {
+              return 1;
+            }
+            return 0;
+          } else {
+            return (
+              parseInt(a.replace(/[^\d]/g, "")) -
+              parseInt(b.replace(/[^\d]/g, ""))
             );
-            d3.select(this).classed("sea-activity-active", true);
-          });
-      });
+          }
+        })
+        .forEach(key => {
+          list
+            .append("li")
+            .text(valuesByName[key])
+            .classed("sea-field-" + key.toLowerCase(), true)
+            .on("click", function() {
+              that.listInitiativesForSelection(directoryField, key);
+              d3.select(".sea-field-active").classed("sea-field-active", false);
+              d3.select(this).classed("sea-field-active", true);
+            });
+        });
+      break;
+    }
   };
 
-  proto.listInitiativesForActivity = function(activityKey) {
+  proto.listInitiativesForSelection = function(directoryField, selectionKey) {
     let that = this;
-    let initiatives = this.presenter.getInitiativesForActivityKey(activityKey);
+    let initiatives = this.presenter.getInitiativesForFieldAndSelectionKey(
+      directoryField,
+      selectionKey
+    );
     let sidebar = d3.select("#map-app-sidebar");
     let sidebarButton = document.getElementById("map-app-sidebar-button");
     d3.select(".w3-btn").attr("title", "Hide initiatives");
@@ -65,20 +88,20 @@ define([
     let selection = this.d3selectAndClear(
       "#sea-initiatives-list-sidebar-content"
     );
-    let activities = this.presenter.getAllActivities();
+    let values = this.presenter.getAllValuesByName("Countries");
     let list;
     initiativeListSidebar.insertBefore(sidebarButton, selection.node());
     initiativeListSidebar.className = initiativeListSidebar.className.replace(
-      /sea-activity-am\d\d\d?/,
+      /sea-field-[^\s]*/,
       ""
     );
     initiativeListSidebar.classList.add(
-      "sea-activity-" + activityKey.toLowerCase()
+      "sea-field-" + selectionKey.toLowerCase()
     );
     selection
       .append("h2")
-      .classed("sea-activity", true)
-      .text(activities[activityKey]);
+      .classed("sea-field", true)
+      .text(values[selectionKey]);
     list = selection.append("ul").classed("sea-initiative-list", true);
     for (let initiative of initiatives) {
       let activeClass = "";
