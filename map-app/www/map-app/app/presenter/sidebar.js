@@ -1,8 +1,9 @@
-define(["app/eventbus", "model/config", "presenter"], function(
-  eventbus,
-  config,
-  presenter
-) {
+define([
+  "app/eventbus",
+  "model/config",
+  "presenter",
+  "presenter/sidebar/base"
+], function(eventbus, config, presenter, sidebarPresenter) {
   "use strict";
 
   // This is the presenter for the view/sidebar object.
@@ -44,6 +45,13 @@ define(["app/eventbus", "model/config", "presenter"], function(
       topic: "Sidebar.showSidebar",
       callback: function() {
         p.showSidebar();
+      }
+    });
+
+    eventbus.subscribe({
+      topic: "Sidebar.updateSidebarWidth",
+      callback: function(data) {
+        sidebarPresenter.updateSidebarWidth(data);
       }
     });
 

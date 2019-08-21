@@ -47,6 +47,15 @@ body {
   background-color: var(--teal) !important;
 }
 
+.sea-active-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+}
+
 /* .map-app {
   position: absolute;
   width: 100%;

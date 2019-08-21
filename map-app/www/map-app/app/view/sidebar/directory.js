@@ -43,7 +43,7 @@ define([
       Object.keys(registeredValues[field])
         .sort(function(a, b) {
           // Check if we're working numerically or alpabetically
-          if (parseInt(a.replace(/[^\d]/g, "")) === "NaN") {
+          if (isNaN(parseInt(a.replace(/[^\d]/g, "")))) {
             if (a.replace(/\d/gi, "") < b.replace(/d/gi, "")) {
               return -1;
             }
@@ -117,7 +117,6 @@ define([
         .attr("data-uid", initiative.uniqueId)
         .classed(activeClass, true)
         .on("click", function() {
-          // that.presenter.initiativeClicked(initiative);
           eventbus.publish({
             topic: "Directory.InitiativeClicked",
             data: initiative
@@ -128,8 +127,15 @@ define([
       .on("transitionend", function() {
         if (event.propertyName === "transform") {
           let boundingRect = initiativeListSidebar.getBoundingClientRect();
-          // Need to use el.getBoundingClientRect() because some the item has been animated using transforms
-          sidebarView.sidebarWidth = boundingRect.x + boundingRect.width;
+          // Need to use el.getBoundingClientRect() because the item has been animated using transforms
+          // which doesn't alter the physical size of the container
+          eventbus.publish({
+            topic: "Sidebar.updateSidebarWidth",
+            data: {
+              target: event.target,
+              sidebarWidth: boundingRect.x + boundingRect.width
+            }
+          });
         }
       })
       .classed("sea-sidebar-list-initiatives", true);

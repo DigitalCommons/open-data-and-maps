@@ -29,18 +29,21 @@ class DotCoopV1Reader < SeOpenData::CSV::RowReader
   InputHeaders = {
     # These symbols match symbols in OutputStandard::Headers.
     # So the corresponding cells with be copied fro inpiut to output:
-    name: "Name",
+    name: "",
     postcode: "PostCode",
     country_name: "Country",
+    organisational_structure: "",
 
     # These symbols don't match symbols in OutputStandard::Headers.
     # But CSV::RowReader creates method using these symbol names to read that column from the row:
     #registrar: "Registrar",
     #registered_number: "Registered Number"
+    tempName: "Name",
     street_address: "Street",
     locality: "City 2",
     region: "State 2",
-    homepage: "Domain",
+    domain: "Domain",
+    homepage: "",
     latitude: "Latitude",
     longitude: "Longitude",
     id: "RegistrantId"
@@ -56,16 +59,35 @@ class DotCoopV1Reader < SeOpenData::CSV::RowReader
   #   raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
   #   domain.sub(/\.coop$/, "")
   # end
-  # def homepage
-  #   raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
-  #   domain_to_homepage(domain)
-  # end
+  def homepage
+    #raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
+    #domain_to_homepage(domain)
+    "http://" + domain
+  end
+
+  def name
+    if(tempName)
+      tempName
+    else
+      "No Name"
+    end
+  end
+
   def legal_forms
     # Return a list of strings, separated by OutputStandard::SubFieldSeparator.
     # Each item in the list is a prefLabel taken from essglobal/standard/legal-form.skos.
     # See lib/se_open_data/essglobal/legal_form.rb
     [
       "Cooperative"
+    ].compact.join(OutputStandard::SubFieldSeparator)
+  end
+
+  def organisational_structure
+    ## Return a list of strings, separated by OutputStandard::SubFieldSeparator.
+    ## Each item in the list is a prefLabel taken from essglobal/standard/legal-form.skos.
+    ## See lib/se_open_data/essglobal/legal_form.rb
+    [
+      "Co-operative"
     ].compact.join(OutputStandard::SubFieldSeparator)
   end
   

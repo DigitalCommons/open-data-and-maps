@@ -59,10 +59,20 @@ define(["app/eventbus", "model/config", "presenter"], function(
   // All sidebar presenters are derived from the base presenter:
   var proto = Object.create(presenter.base.prototype);
 
+  proto.sidebarWidth = 0;
+
   // Sidebars can manage a stack of content.
   // For example, a sidebar for Search Results may maintain a stack of search results,
   // allowing the possilility of going back/forward through previous/next search results.
   proto.contentStack = new Stack();
+
+  function updateSidebarWidth(width) {
+    this.sidebarWidth = width;
+  }
+
+  function getSidebarWidth() {
+    return this.sidebarWidth;
+  }
 
   proto.backButtonClicked = function() {
     // Closure to retain reference to this
@@ -118,7 +128,9 @@ define(["app/eventbus", "model/config", "presenter"], function(
   base.prototype = proto;
 
   var pub = {
-    base: base
+    base: base,
+    updateSidebarWidth: updateSidebarWidth,
+    getSidebarWidth: getSidebarWidth
   };
   return pub;
 });

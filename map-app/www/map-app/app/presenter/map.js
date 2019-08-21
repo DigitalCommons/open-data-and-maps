@@ -62,6 +62,7 @@ define([
       click: function(e) {
         // Deselect any selected markers
         // this.marker.on("popupclose", e => {
+        // console.log("Unselecting");
         eventbus.publish({
           topic: "Directory.InitiativeClicked",
           data: ""
@@ -121,9 +122,11 @@ define([
   //		this.view.zoomAndPanTo({lon: initiative.lng, lat: initiative.lat});
   //	};
   proto.onMapNeedsToBeZoomedAndPanned = function(data) {
-    console.log("onMapNeedsToBeZoomedAndPanned");
+    console.log("onMapNeedsToBeZoomedAndPanned ", data);
     const latLngBounds = data;
-    this.view.fitBounds(latLngBounds);
+    this.view.flyToBounds(latLngBounds);
+    // this.view.flyTo(data);
+    // this.view.setView(data);
   };
 
   proto.setZoom = function(data) {
@@ -137,6 +140,10 @@ define([
   };
 
   proto.getInitialZoom = function() {};
+
+  proto.setActiveArea = function(data) {
+    this.view.setActiveArea(data);
+  };
 
   Presenter.prototype = proto;
 
@@ -190,6 +197,14 @@ define([
         p.setZoom(data);
       }
     });
+
+    eventbus.subscribe({
+      topic: "Sidebar.updateSidebarWidth",
+      callback: function(data) {
+        p.setActiveArea(data);
+      }
+    });
+
     return p;
   }
   var pub = {

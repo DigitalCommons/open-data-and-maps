@@ -1,5 +1,6 @@
 // Set up the various sidebars
 define([
+  "app/eventbus",
   "d3",
   "view/base",
   "presenter/sidebar",
@@ -7,7 +8,16 @@ define([
   "view/sidebar/initiatives",
   "view/sidebar/about",
   "view/sidebar/directory"
-], function(d3, viewBase, presenter, mainMenu, initiatives, about, directory) {
+], function(
+  eventbus,
+  d3,
+  viewBase,
+  presenter,
+  mainMenu,
+  initiatives,
+  about,
+  directory
+) {
   "use strict";
 
   // This deals with the view object that controls the sidebar
@@ -16,8 +26,6 @@ define([
   function SidebarView() {}
   // inherit from the standard view base object:
   var proto = Object.create(viewBase.base.prototype);
-
-  let sidebarWidth = 0;
 
   proto.createOpenButton = function() {
     // d3 selection redefines this, so hang onto it here:
@@ -106,7 +114,13 @@ define([
           d3.select("#map-app-sidebar-button").on("click", function() {
             that.hideSidebar();
           });
-          that.sidebarWidth = this.clientWidth;
+          eventbus.publish({
+            topic: "Sidebar.updateSidebarWidth",
+            data: {
+              target: event.target,
+              sidebarWidth: this.clientWidth
+            }
+          });
         }
       })
       .classed("sea-sidebar-open", true);
@@ -134,7 +148,13 @@ define([
       sidebar
         .on("transitionend", function() {
           if (event.propertyName === "transform") {
-            that.sidebarWidth = this.clientWidth;
+            eventbus.publish({
+              topic: "Sidebar.updateSidebarWidth",
+              data: {
+                target: event.target,
+                sidebarWidth: this.clientWidth
+              }
+            });
           }
         })
         .classed("sea-sidebar-list-initiatives", false);
@@ -149,7 +169,13 @@ define([
             d3.select("#map-app-sidebar-button").on("click", function() {
               that.showSidebar();
             });
-            that.sidebarWidth = 0;
+            eventbus.publish({
+              topic: "Sidebar.updateSidebarWidth",
+              data: {
+                target: event.target,
+                sidebarWidth: 0
+              }
+            });
           }
         })
         .classed("sea-sidebar-open", false);

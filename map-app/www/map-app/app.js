@@ -51,6 +51,7 @@ requirejs.config({
     leaflet: "leaflet",
     leafletAwesomeMarkers: "leaflet.awesome-markers.min",
     leafletMarkerCluster: "leaflet.markercluster-src-1.4.1",
+    leafletActiveArea: "leaflet.activearea",
 
     // For expressing dependencies on json files:
     json: "require/json",
@@ -70,6 +71,9 @@ requirejs.config({
       deps: ["leaflet"]
     },
     leafletMarkerCluster: {
+      deps: ["leaflet"]
+    },
+    leafletActiveArea: {
       deps: ["leaflet"]
     }
   }

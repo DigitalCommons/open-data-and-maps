@@ -90,9 +90,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     // loadPluralObjects("activities", this.uniqueId);
     // Run new query to get organisational structure
     // loadPluralObjects("orgStructure", this.uniqueId, function() {
-
     eventbus.publish({ topic: "Initiative.new", data: that });
-
     // });
   }
 

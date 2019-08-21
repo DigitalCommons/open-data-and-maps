@@ -18,12 +18,15 @@ define([
   // inherit from the standard view base object:
   var proto = Object.create(viewBase.base.prototype);
 
+  var mapObj;
+
   // Using font-awesome icons, the available choices can be seen here:
   // http://fortawesome.github.io/Font-Awesome/icons/
   const dfltOptions = { prefix: "fa" }; // "fa" selects the font-awesome icon set (we have no other)
 
   proto.create = function(map, initiative) {
     this.initiative = initiative;
+    mapObj = map;
 
     // options argument overrides our default options:
     const opts = Object.assign(dfltOptions, {
@@ -75,7 +78,7 @@ define([
         prefix: "fa",
         markerColor: this.initiative.primaryActivity
           ? this.initiative.primaryActivity.toLowerCase()
-          : "AM00",
+          : "ALL",
         iconColor: "white",
         icon: "certificate",
         className: "awesome-marker sea-marker",
@@ -106,12 +109,6 @@ define([
       this.cluster = unselectedClusterGroup;
       this.cluster.addLayer(this.marker);
     }
-    // this.marker.on("popupclose", e => {
-    //   eventbus.publish({
-    //     topic: "Directory.InitiativeClicked",
-    //     data: ""
-    //   });
-    // });
 
     markerForInitiative[initiative.uniqueId] = this;
   };
@@ -142,6 +139,8 @@ define([
     }
   };
   proto.setUnselected = function(initiative) {
+    mapObj.selectedInitiative = undefined;
+    mapObj.off("zoomend", selectInitiative);
     if (!initiative.nongeo) {
       this.marker.setIcon(
         leaflet.AwesomeMarkers.icon({
@@ -158,14 +157,22 @@ define([
     }
   };
   proto.setSelected = function(initiative) {
-    var that = this;
+    mapObj.selectedInitiative = initiative;
+    mapObj.on("zoomend", selectInitiative);
+    unselectedClusterGroup.once("clusterclick", e => {
+      this.setUnselected(initiative);
+    });
+  };
+
+  function selectInitiative({ target }) {
+    let initiative = target.selectedInitiative;
     if (!initiative.nongeo) {
-      this.marker.setIcon(
+      initiative.marker.setIcon(
         leaflet.AwesomeMarkers.icon({
           prefix: "fa",
-          markerColor: this.initiative.primaryActivity
-            ? this.initiative.primaryActivity.toLowerCase()
-            : "AM00",
+          markerColor: initiative.primaryActivity
+            ? initiative.primaryActivity.toLowerCase()
+            : "ALL",
           iconColor: "white",
           icon: "certificate",
           className: "awesome-marker sea-marker sea-selected",
@@ -175,7 +182,9 @@ define([
     }
     if (initiative.nongeo) {
       initiative.marker.openPopup();
-    } else if (unselectedClusterGroup._inZoomAnimation) {
+    }
+    // If the marker is in a clustergroup that's currently animating then wait until the animation has ended
+    else if (unselectedClusterGroup._inZoomAnimation) {
       unselectedClusterGroup.on("animationend", e => {
         if (
           unselectedClusterGroup.getVisibleParent(initiative.marker) !==
@@ -186,7 +195,9 @@ define([
         initiative.marker.openPopup();
         unselectedClusterGroup.off("animationend");
       });
-    } else {
+    }
+    // Otherwise the marker is in a clustergroup so it'll need to be spiderfied
+    else {
       if (
         unselectedClusterGroup.getVisibleParent(initiative.marker) !==
         initiative.marker
@@ -195,7 +206,8 @@ define([
       }
       initiative.marker.openPopup();
     }
-  };
+  }
+
   proto.showTooltip = function(initiative) {
     // This variation zooms the map, and makes sure the marker can
     // be seen, spiderifying if needed.

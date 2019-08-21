@@ -1,5 +1,7 @@
-# Merge domains and de-duplicate rows of CSV.
+# Merge domains and de-duplicate rows of CSV (primarily for dotcoop).
 # A duplicate is defined as having the same keys as a previous row.
+# TODO - this should really take the field to merge as an argument so 
+# it can be used by any other project that needs fields merging
 
 require 'csv'
 
@@ -36,7 +38,7 @@ module SeOpenData
           domain = row.field(domainHeader)
           existingDomain = csv_map[key][domainHeader]
           if !domain.include?(existingDomain)
-            csv_map[key][domainHeader] += "," + domain
+            csv_map[key][domainHeader] += SeOpenData::CSV::Standard::V1::SubFieldSeparator + domain
           end
           # csv_err << row
         else

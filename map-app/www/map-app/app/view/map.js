@@ -1,11 +1,20 @@
 define([
   "d3",
   "leaflet",
+  "leafletActiveArea",
   "leaflet.contextmenu",
   "view/base",
   "presenter/map",
   "view/map/marker"
-], function(d3, leaflet, contextmenu, viewBase, presenter, markerView) {
+], function(
+  d3,
+  leaflet,
+  activeArea,
+  contextmenu,
+  viewBase,
+  presenter,
+  markerView
+) {
   "use strict";
 
   const config = {
@@ -46,7 +55,11 @@ define([
       .tileLayer(osmUrl, { attribution: osmAttrib, maxZoom: 18 })
       .addTo(this.map);
 
-    this.unselectedClusterGroup = leaflet.markerClusterGroup({});
+    this.unselectedClusterGroup = leaflet.markerClusterGroup({
+      disableClusteringAtZoom: 8,
+      chunkedLoading: true
+    });
+    // Look at https://github.com/Leaflet/Leaflet.markercluster#bulk-adding-and-removing-markers for chunk loading
     this.map.addLayer(this.unselectedClusterGroup);
     if (config.putSelectedMarkersInClusterGroup) {
       this.selectedClusterGroup = leaflet.markerClusterGroup();
@@ -57,6 +70,14 @@ define([
     }
     markerView.setSelectedClusterGroup(this.selectedClusterGroup);
     markerView.setUnselectedClusterGroup(this.unselectedClusterGroup);
+
+    // var that = this;
+
+    // this.map.on("zoomend", e => {
+    //   console.log(this.map.selectedInitiative);
+    //   if (this.map.selectedInitiative)
+    //     markerView.setSelected(this.map.selectedInitiative);
+    // });
   };
   proto.addMarker = function(initiative) {
     return markerView.createMarker(this.map, initiative);
@@ -85,13 +106,78 @@ define([
     }
     this.map.fitBounds(bounds, options);
   };
+
+  proto.setView = function(data) {
+    let latlng = data,
+      zoom = this.map.getZoom(),
+      options = {
+        duration: 0.25
+        // maxZoom: this.map.getZoom()
+      };
+    if (!Array.isArray(data)) {
+      latlng = data.latlng;
+      options = Object.assign(options, data.options);
+    }
+    // if (data.offset) {
+    //   let targetPoint = this.map
+    //     .project(data.latlng, zoom)
+    //     .subtract([data.offset / 2, 0]);
+    //   latlng = this.map.unproject(targetPoint, zoom);
+    // }
+    this.map.setView(latlng);
+  };
+
+  proto.flyTo = function(data) {
+    let latlng = data,
+      options = {
+        duration: 0.25
+        // maxZoom: this.map.getZoom()
+      };
+    if (!Array.isArray(data)) {
+      latlng = data.latlng;
+      options = Object.assign(options, data.options);
+    }
+    this.map.flyTo(latlng, this.map.getZoom(), options);
+  };
+
+  proto.flyToBounds = function(data) {
+    let bounds = data,
+      options = { duration: 0.25, maxZoom: this.map.getZoom() };
+    if (!Array.isArray(data)) {
+      bounds = data.bounds;
+      options = Object.assign(options, data.options);
+    }
+    this.map.flyToBounds(bounds, options);
+  };
+
   proto.zoomAndPanTo = function(latLng) {
     console.log("zoomAndPanTo");
     this.map.setView(latLng, 16, { animate: true });
   };
-  proto.getMap = function() {
-    return this.map;
+
+  proto.setActiveArea = function(data) {
+    // let mapSize = this.map.getSize().subtract([sidebarWidth]);
+
+    if (!data.target.id) return;
+
+    const refocusMap = true,
+      animateRefocus = true;
+
+    this.map.setActiveArea(
+      {
+        position: "absolute",
+        top: 0,
+        left: data.sidebarWidth + "px",
+        right: 0,
+        bottom: 0
+      },
+      refocusMap,
+      animateRefocus
+    );
   };
+  // proto.getMap = function() {
+  //   return this.map;
+  // };
   MapView.prototype = proto;
   function init() {
     const view = new MapView();
