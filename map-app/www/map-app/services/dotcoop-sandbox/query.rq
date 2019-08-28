@@ -25,3 +25,4 @@ WHERE {
 	?hasAddress geo:lat ?lat.
 	?hasAddress geo:long ?lng.
 }
+ORDER BY DESC(?country) DESC(UCASE(?name))

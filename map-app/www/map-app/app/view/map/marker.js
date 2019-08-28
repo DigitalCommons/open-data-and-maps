@@ -70,7 +70,7 @@ define([
       });
 
       this.cluster = hiddenClusterGroup;
-      this.cluster.addLayer(this.marker);
+      // this.cluster.addLayer(this.marker);
     } else {
       const hovertext = this.presenter.getHoverText(initiative);
 
@@ -107,7 +107,7 @@ define([
         that.onClick(e);
       });
       this.cluster = unselectedClusterGroup;
-      this.cluster.addLayer(this.marker);
+      // this.cluster.addLayer(this.marker);
     }
 
     markerForInitiative[initiative.uniqueId] = this;
@@ -270,6 +270,10 @@ define([
     );
   }
 
+  function getClusterGroup() {
+    return this.unselectedClusterGroup;
+  }
+
   var pub = {
     createMarker: createMarker,
     setSelectedClusterGroup: setSelectedClusterGroup,
@@ -278,7 +282,8 @@ define([
     setUnselected: setUnselected,
     showTooltip: showTooltip,
     hideTooltip: hideTooltip,
-    getInitiativeContent: getInitiativeContent
+    getInitiativeContent: getInitiativeContent,
+    getClusterGroup: getClusterGroup
   };
   return pub;
 });

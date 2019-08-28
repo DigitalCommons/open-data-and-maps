@@ -115,6 +115,7 @@ $res = json_decode($response, true);
 //   1. The names of the variables used in the SPARQL query (see Initiative::create_sparql_files in generate-triples.rb)
 //   2. The names used in the JSON that is returned to the map-app
 $keys = array("name", "uri", "within", "lat", "lng", "www", "regorg", "sameas", "desc", "street", "locality", "region", "postcode", "country", "primaryActivity", "activity", "orgStructure", "tel", "email");
+// $keys = array("name", "uri", "lat", "lng", "country");
 
 $result = array();
 foreach($res["results"]["bindings"] as $item) {

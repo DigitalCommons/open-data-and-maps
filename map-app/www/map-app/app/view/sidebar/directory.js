@@ -39,29 +39,29 @@ define([
     // TODO: Support user selectable fields
     for (let field in registeredValues) {
       let directoryField = field;
-      let valuesByName = this.presenter.getAllValuesByName(directoryField);
+      // let valuesByName = this.presenter.getAllValuesByName(directoryField);
       Object.keys(registeredValues[field])
-        .sort(function(a, b) {
-          // Check if we're working numerically or alpabetically
-          if (isNaN(parseInt(a.replace(/[^\d]/g, "")))) {
-            if (a.replace(/\d/gi, "") < b.replace(/d/gi, "")) {
-              return -1;
-            }
-            if (a.replace(/\d/gi, "") > b.replace(/d/gi, "")) {
-              return 1;
-            }
-            return 0;
-          } else {
-            return (
-              parseInt(a.replace(/[^\d]/g, "")) -
-              parseInt(b.replace(/[^\d]/g, ""))
-            );
-          }
-        })
+        // .sort(function(a, b) {
+        //   // Check if we're working numerically or alpabetically
+        //   if (isNaN(parseInt(a.replace(/[^\d]/g, "")))) {
+        //     if (a.replace(/\d/gi, "") < b.replace(/d/gi, "")) {
+        //       return -1;
+        //     }
+        //     if (a.replace(/\d/gi, "") > b.replace(/d/gi, "")) {
+        //       return 1;
+        //     }
+        //     return 0;
+        //   } else {
+        //     return (
+        //       parseInt(a.replace(/[^\d]/g, "")) -
+        //       parseInt(b.replace(/[^\d]/g, ""))
+        //     );
+        //   }
+        // })
         .forEach(key => {
           list
             .append("li")
-            .text(valuesByName[key])
+            .text(key)
             .classed("sea-field-" + key.toLowerCase(), true)
             .on("click", function() {
               that.listInitiativesForSelection(directoryField, key);
@@ -88,7 +88,7 @@ define([
     let selection = this.d3selectAndClear(
       "#sea-initiatives-list-sidebar-content"
     );
-    let values = this.presenter.getAllValuesByName("Countries");
+    // let values = this.presenter.getAllValuesByName("Countries");
     let list;
     initiativeListSidebar.insertBefore(sidebarButton, selection.node());
     initiativeListSidebar.className = initiativeListSidebar.className.replace(
@@ -101,7 +101,7 @@ define([
     selection
       .append("h2")
       .classed("sea-field", true)
-      .text(values[selectionKey]);
+      .text(selectionKey);
     list = selection.append("ul").classed("sea-initiative-list", true);
     for (let initiative of initiatives) {
       let activeClass = "";

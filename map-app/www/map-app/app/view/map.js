@@ -106,6 +106,9 @@ define([
     }
     this.map.fitBounds(bounds, options);
   };
+  proto.getClusterGroup = function() {
+    return markerView.getClusterGroup();
+  };
 
   proto.setView = function(data) {
     let latlng = data,

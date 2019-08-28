@@ -47,7 +47,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       locality: { value: e.locality, enumerable: true },
       postcode: { value: e.postcode, enumerable: true },
       country: {
-        value: e.country ? e.country.toUpperCase() : undefined,
+        value: e.country ? e.country : undefined,
         enumerable: true
       },
       primaryActivity: { value: primaryActivityCode, enumerable: true },
@@ -65,24 +65,23 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       let label = filterable.label;
       // Create the object that holds the registered values for the current field if it hasn't already been created
       if (!registeredValues[label]) {
-        registeredValues[label] = { ALL: [this] };
+        registeredValues[label] = { All: [this] };
         registeredValues[label][this[field]] = [this];
       } else {
-        registeredValues[label]["ALL"].push(this);
-        registeredValues[label]["ALL"].sort(function(a, b) {
-          return sortInitiatives(a, b);
-        });
+        registeredValues[label]["All"].push(this);
+        // registeredValues[label]["ALL"].sort(function(a, b) {
+        //   return sortInitiatives(a, b);
+        // });
         if (registeredValues[label][this[field]]) {
           registeredValues[label][this[field]].push(this);
-          registeredValues[label][this[field]].sort(function(a, b) {
-            return sortInitiatives(a, b);
-          });
+          // registeredValues[label][this[field]].sort(function(a, b) {
+          //   return sortInitiatives(a, b);
+          // });
         } else {
           registeredValues[label][this[field]] = [this];
         }
       }
     });
-
     loadedInitiatives.push(this);
     initiativesByUid[this.uniqueId] = this;
 
@@ -135,7 +134,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   }
   function loadNextInitiatives() {
     var i, e;
-    var maxInitiativesToLoadPerFrame = 500;
+    var maxInitiativesToLoadPerFrame = 100;
     // By loading the initiatives in chunks, we keep the UI responsive
     for (i = 0; i < maxInitiativesToLoadPerFrame; ++i) {
       e = initiativesToLoad.pop();
@@ -148,6 +147,15 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       setTimeout(function() {
         loadNextInitiatives();
       });
+    } else {
+      performance.mark("endProcessing");
+      // var marks = performance.getEntriesByType("mark");
+      console.info(
+        `Time took to process all initiatives 
+        ${performance.getEntriesByName("endProcessing")[0].startTime -
+          performance.getEntriesByName("startProcessing")[0].startTime}`
+      );
+      eventbus.publish({ topic: "Initiative.complete" });
     }
   }
   function add(json) {
@@ -208,7 +216,9 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       // TODO - error handling
       // TODO - publish events (e.g. loading, success, failure)
       //        so that the UI can display info about datasets.
-      //console.log(json);
+      // console.log(json);
+      console.info("Recording entire process");
+      performance.mark("startProcessing");
       add(json.data);
       eventbus.publish({ topic: "Initiative.datasetLoaded" });
     });

@@ -10,6 +10,8 @@ define([
 
   var proto = Object.create(presenter.base.prototype);
 
+  let allMarkers = [];
+
   proto.getContextmenuItems = function() {
     // The context menu has been disabled (in www/app/view/map.js), in accordance with
     // https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/78
@@ -77,22 +79,36 @@ define([
       }
     };
   };
-  proto.onInitiativeNew = function(data /*, envelope*/) {
+  proto.onInitiativeNew = function(data) {
     var initiative = data;
-    this.view.addMarker(initiative);
+    allMarkers.push(this.view.addMarker(initiative).marker);
+  };
+  proto.onInitiativeComplete = function() {
+    // Load the markers into the clustergroup
+    // this.view.fitBounds(sse_initiative.latLngBounds());
+    this.view.unselectedClusterGroup.addLayers(allMarkers);
+    console.log("onInitiativeComplete");
+    // eventbus.publish({
+    //   topic: "Markers.completed",
+    //   data: { markers: allMarkers }
+    // });
+    // eventbus.publish({
+    //   topic: "Markers.",
+    //   data: ""
+    // });
   };
   proto.onInitiativeDatasetLoaded = function(data) {
-    //console.log("onInitiativeDatasetLoaded");
+    console.log("onInitiativeDatasetLoaded");
     //console.log(data);
     //console.log(data.latLngBounds());
-    this.view.fitBounds(sse_initiative.latLngBounds());
+    this.view.fitBounds([[-45.87859, -162.60022], [76.47861, 176.84446]]);
   };
   proto.onInitiativeLoadComplete = function() {
     /* The protecting veil is now obsolete. */
     //view.clearProtectingVeil();
     // TODO - hook this up to a log?
   };
-  proto.onInitiativeLoadMessage = function(data /*, envelope*/) {
+  proto.onInitiativeLoadMessage = function(data) {
     /* The protecting veil is now obsolete. */
     //view.showProtectingVeil(data.message);
     // TODO - hook this up to a log?
@@ -162,6 +178,14 @@ define([
         p.onInitiativeNew(data);
       }
     });
+
+    eventbus.subscribe({
+      topic: "Initiative.complete",
+      callback: function() {
+        p.onInitiativeComplete();
+      }
+    });
+
     //eventbus.subscribe({topic: "Initiative.loadComplete", callback: function(data) { p.onInitiativeLoadComplete(data); } });
     //eventbus.subscribe({topic: "Initiative.loadStarted", callback: function(data) { p.onInitiativeLoadMessage(data); } });
     //eventbus.subscribe({topic: "Initiative.loadFailed", callback: function(data) { p.onInitiativeLoadMessage(data); } });
