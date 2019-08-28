@@ -34,7 +34,7 @@ define([
 
   var proto = Object.create(sidebarPresenter.base.prototype);
 
-  // TODO: We should get these values programatically or from the config
+  // TODO: We should get these values from the vocab, from config or from the source data
   const values = {
     Activities: {
       ALL: "All Activities",
@@ -153,6 +153,10 @@ define([
     }
   };
 
+  function latLngBounds(initiatives) {
+    return sseInitiative.latLngBounds(initiatives);
+  }
+
   Presenter.prototype = proto;
 
   function createPresenter(view) {
@@ -177,7 +181,8 @@ define([
     return p;
   }
   var pub = {
-    createPresenter: createPresenter
+    createPresenter: createPresenter,
+    latLngBounds: latLngBounds
   };
   return pub;
 });

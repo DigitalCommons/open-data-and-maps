@@ -145,6 +145,10 @@ define([
     // this.view.setView(data);
   };
 
+  proto.onBoundsRequested = function(data) {
+    this.view.fitBounds(data);
+  };
+
   proto.setZoom = function(data) {
     console.log("Zooming to ", data);
     const zoom = data;
@@ -226,6 +230,13 @@ define([
       topic: "Sidebar.updateSidebarWidth",
       callback: function(data) {
         p.setActiveArea(data);
+      }
+    });
+
+    eventbus.subscribe({
+      topic: "Map.fitBounds",
+      callback: function(data) {
+        p.onBoundsRequested(data);
       }
     });
 

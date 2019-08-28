@@ -62,7 +62,7 @@ define([
           list
             .append("li")
             .text(key)
-            .classed("sea-field-" + key.toLowerCase(), true)
+            .classed("sea-field-" + key.toLowerCase().replace(/ /g, "-"), true)
             .on("click", function() {
               that.listInitiativesForSelection(directoryField, key);
               d3.select(".sea-field-active").classed("sea-field-active", false);
@@ -96,12 +96,22 @@ define([
       ""
     );
     initiativeListSidebar.classList.add(
-      "sea-field-" + selectionKey.toLowerCase()
+      "sea-field-" + selectionKey.toLowerCase().replace(/ /g, "-")
     );
     selection
       .append("h2")
       .classed("sea-field", true)
-      .text(selectionKey);
+      .text(selectionKey)
+      .on("click", function() {
+        const bounds = presenter.latLngBounds(initiatives);
+        eventbus.publish({
+          topic: "Directory.InitiativeClicked"
+        });
+        eventbus.publish({
+          topic: "Map.fitBounds",
+          data: bounds
+        });
+      });
     list = selection.append("ul").classed("sea-initiative-list", true);
     for (let initiative of initiatives) {
       let activeClass = "";

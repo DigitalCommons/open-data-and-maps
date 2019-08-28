@@ -114,15 +114,15 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       return i.name.toUpperCase().includes(up);
     });
   }
-  function latLngBounds() {
+  function latLngBounds(initiatives) {
     // @returns an a pair of lat-long pairs that define the bounding box of all the initiatives,
     // The first element is south-west, the second north east
     //
     // Careful: isNaN(null) returns false ...
-    const lats = loadedInitiatives
+    const lats = (initiatives || loadedInitiatives)
       .filter(obj => obj.lat !== null && !isNaN(obj.lat))
       .map(obj => obj.lat);
-    const lngs = loadedInitiatives
+    const lngs = (initiatives || loadedInitiatives)
       .filter(obj => obj.lng !== null && !isNaN(obj.lng))
       .map(obj => obj.lng);
     const west = Math.min.apply(Math, lngs);
