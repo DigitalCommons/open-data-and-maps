@@ -60,6 +60,9 @@ define([
   function doesDirectoryHaveColours() {
     return config_json.doesDirectoryHaveColours;
   }
+  function getDisableClusteringAtZoom() {
+    return config_json.disableClusteringAtZoom;
+  }
   var pub = {
     getSoftwareTimestamp: getSoftwareTimestamp,
     getSoftwareVariant: getSoftwareVariant,
@@ -71,7 +74,8 @@ define([
     getNongeoLatLng: getNongeoLatLng,
     getInitialBounds: getInitialBounds,
     getFilterableFields: getFilterableFields,
-    doesDirectoryHaveColours: doesDirectoryHaveColours
+    doesDirectoryHaveColours: doesDirectoryHaveColours,
+    getDisableClusteringAtZoom: getDisableClusteringAtZoom
   };
   return pub;
 });

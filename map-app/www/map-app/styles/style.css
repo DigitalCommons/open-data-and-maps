@@ -411,7 +411,8 @@ body {
 }
 
 .sea-sidebar h2.sea-field {
-  margin: 0.5rem 1rem 0.7rem;
+  padding: 0.5rem 1rem 0.7rem;
+  margin: 0;
   line-height: 1.3;
   font-size: 1.3rem;
 }
@@ -513,7 +514,8 @@ div.map-app-map-container {
   /* font-weight: 400; */
 }
 
-.sea-initiative-list li:hover {
+.sea-initiative-list li:hover,
+.sea-sidebar h2.sea-field:hover {
   color: var(--dark);
   background-color: white;
   cursor: pointer;

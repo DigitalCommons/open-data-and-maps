@@ -70,7 +70,8 @@ define([
       });
 
       this.cluster = hiddenClusterGroup;
-      // this.cluster.addLayer(this.marker);
+      this.cluster.addLayer(this.marker);
+      this.marker.hasPhysicalLocation = false;
     } else {
       const hovertext = this.presenter.getHoverText(initiative);
 
@@ -108,6 +109,7 @@ define([
       });
       this.cluster = unselectedClusterGroup;
       // this.cluster.addLayer(this.marker);
+      this.marker.hasPhysicalLocation = true;
     }
 
     markerForInitiative[initiative.uniqueId] = this;
@@ -139,6 +141,7 @@ define([
     }
   };
   proto.setUnselected = function(initiative) {
+    mapObj.closePopup();
     mapObj.selectedInitiative = undefined;
     mapObj.off("zoomend", selectInitiative);
     if (!initiative.nongeo) {

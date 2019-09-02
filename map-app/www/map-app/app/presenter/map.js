@@ -80,12 +80,14 @@ define([
     };
   };
   proto.onInitiativeNew = function(data) {
-    var initiative = data;
-    allMarkers.push(this.view.addMarker(initiative).marker);
+    const initiative = data,
+      marker = this.view.addMarker(initiative).marker;
+
+    if (marker.hasPhysicalLocation) allMarkers.push(marker);
   };
   proto.onInitiativeComplete = function() {
     // Load the markers into the clustergroup
-    // this.view.fitBounds(sse_initiative.latLngBounds());
+    this.view.fitBounds(sse_initiative.latLngBounds());
     this.view.unselectedClusterGroup.addLayers(allMarkers);
     console.log("onInitiativeComplete");
     // eventbus.publish({
@@ -101,7 +103,7 @@ define([
     console.log("onInitiativeDatasetLoaded");
     //console.log(data);
     //console.log(data.latLngBounds());
-    this.view.fitBounds([[-45.87859, -162.60022], [76.47861, 176.84446]]);
+    // this.view.fitBounds([[-45.87859, -162.60022], [76.47861, 176.84446]]);
   };
   proto.onInitiativeLoadComplete = function() {
     /* The protecting veil is now obsolete. */
@@ -163,6 +165,10 @@ define([
 
   proto.setActiveArea = function(data) {
     this.view.setActiveArea(data);
+  };
+
+  proto.getDisableClusteringAtZoomFromConfig = function() {
+    return config.getDisableClusteringAtZoom() || false;
   };
 
   Presenter.prototype = proto;

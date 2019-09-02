@@ -55,10 +55,16 @@ define([
       .tileLayer(osmUrl, { attribution: osmAttrib, maxZoom: 18 })
       .addTo(this.map);
 
-    this.unselectedClusterGroup = leaflet.markerClusterGroup({
-      disableClusteringAtZoom: 8,
-      chunkedLoading: true
-    });
+    let options = {},
+      disableClusteringAtZoom = this.presenter.getDisableClusteringAtZoomFromConfig();
+    if (disableClusteringAtZoom)
+      options.disableClusteringAtZoom = disableClusteringAtZoom;
+
+    this.unselectedClusterGroup = leaflet.markerClusterGroup(
+      Object.assign(options, {
+        chunkedLoading: true
+      })
+    );
     // Look at https://github.com/Leaflet/Leaflet.markercluster#bulk-adding-and-removing-markers for chunk loading
     this.map.addLayer(this.unselectedClusterGroup);
     if (config.putSelectedMarkersInClusterGroup) {
@@ -169,10 +175,11 @@ define([
     this.map.setActiveArea(
       {
         position: "absolute",
-        top: 0,
-        left: data.sidebarWidth + "px",
+        top: "20px",
+        // left: data.sidebarWidth + "px",
         right: 0,
-        bottom: 0
+        bottom: 0,
+        width: this.map.getSize().subtract([data.sidebarWidth, 0]).x + "px"
       },
       refocusMap,
       animateRefocus

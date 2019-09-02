@@ -33,3 +33,6 @@ WHERE {
 	OPTIONAL { ?within geo:lat ?lat. }
 	OPTIONAL { ?within geo:long ?lng. }
 }
+ORDER BY DESC(UCASE(?name))
+
+LIMIT 100
