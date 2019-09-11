@@ -99,6 +99,20 @@ define([
       "sea-field-" + selectionKey.toLowerCase().replace(/ /g, "-")
     );
     selection
+      .append("button")
+      .attr("class", "w3-button w3-border-0 ml-auto sidebar-button")
+      .attr(
+        "title",
+        "Close " + (values[selectionKey] || selectionKey + " " + directoryField)
+      )
+      .on("click", function() {
+        eventbus.publish({
+          topic: "Sidebar.hideInitiativeList"
+        });
+      })
+      .append("i")
+      .attr("class", "fa " + "fa-times");
+    selection
       .append("h2")
       .classed("sea-field", true)
       .text(values[selectionKey] || selectionKey + " " + directoryField)
@@ -134,20 +148,31 @@ define([
         });
     }
     sidebar
-      .on("transitionend", function() {
-        if (event.propertyName === "transform") {
-          let boundingRect = initiativeListSidebar.getBoundingClientRect();
-          // Need to use el.getBoundingClientRect() because the item has been animated using transforms
-          // which doesn't alter the physical size of the container
-          eventbus.publish({
-            topic: "Sidebar.updateSidebarWidth",
-            data: {
-              target: event.target,
-              sidebarWidth: boundingRect.x + boundingRect.width
-            }
-          });
-        }
-      })
+      .on(
+        "transitionend",
+        function() {
+          if (event.target.className === "w3-btn") return;
+          if (event.propertyName === "transform") {
+            // let initiativeListBounds = initiativeListSidebar.getBoundingClientRect();
+            // Need to use el.getBoundingClientRect() because the item has been animated using transforms
+            // which doesn't alter the physical size of the container
+            eventbus.publish({
+              topic: "Sidebar.updateSidebarWidth",
+              data: {
+                target: event.target,
+                // sidebarWidth:
+                // boundingRect.x +
+                // boundingRect.width -
+                // window.seaMap.getContainer().getBoundingClientRect().x
+                // initiativeListBounds.width + this.getBoundingClientRect().width
+                directoryBounds: this.getBoundingClientRect(),
+                initiativeListBounds: initiativeListSidebar.getBoundingClientRect()
+              }
+            });
+          }
+        },
+        false
+      )
       .classed("sea-sidebar-list-initiatives", true);
   };
 
@@ -159,8 +184,31 @@ define([
       true
     );
     let initiativeSidebar = d3.select("#sea-initiative-sidebar");
-    let initiativeContentElement = d3.select("#sea-initiative-sidebar-content");
-    initiativeContentElement.html(initiativeContent);
+    let initiativeContentElement = this.d3selectAndClear(
+      "#sea-initiative-sidebar-content"
+    );
+    initiativeContentElement
+      .append("button")
+      .attr("class", "w3-button w3-border-0 ml-auto sidebar-button")
+      .attr("title", "Close " + initiative.name)
+      .on("click", function() {
+        eventbus.publish({
+          topic: "Directory.InitiativeClicked"
+        });
+      })
+      .append("i")
+      .attr("class", "fa " + "fa-times");
+    initiativeContentElement
+      .node()
+      .appendChild(
+        document.importNode(
+          new DOMParser().parseFromString(
+            "<div>" + initiativeContent + "</div>",
+            "text/html"
+          ).body.childNodes[0],
+          true
+        )
+      );
     initiativeSidebar.classed("sea-initiative-sidebar-open", true);
     if (document.getElementById("map-app-leaflet-map").clientWidth < 800)
       eventbus.publish({

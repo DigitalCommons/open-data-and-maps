@@ -21,6 +21,18 @@ define([
     this.view.showSidebar();
   };
 
+  proto.hideSidebar = function(name) {
+    this.view.hideSidebar();
+  };
+
+  proto.hideInitiativeSidebar = function(name) {
+    this.view.hideInitiativeSidebar();
+  };
+
+  proto.hideInitiativeList = function(name) {
+    this.view.hideInitiativeList();
+  };
+
   Presenter.prototype = proto;
 
   function createPresenter(view) {
@@ -45,6 +57,27 @@ define([
       topic: "Sidebar.showSidebar",
       callback: function() {
         p.showSidebar();
+      }
+    });
+
+    eventbus.subscribe({
+      topic: "Sidebar.hideSidebar",
+      callback: function() {
+        p.hideSidebar();
+      }
+    });
+
+    eventbus.subscribe({
+      topic: "Sidebar.hideInitiativeSidebar",
+      callback: function() {
+        p.hideInitiativeSidebar();
+      }
+    });
+
+    eventbus.subscribe({
+      topic: "Sidebar.hideInitiativeList",
+      callback: function() {
+        p.hideInitiativeList();
       }
     });
 

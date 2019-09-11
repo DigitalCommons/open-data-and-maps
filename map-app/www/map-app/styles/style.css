@@ -370,7 +370,9 @@ body {
 
 .sea-initiatives-list-sidebar-content,
 .sea-initiative-sidebar-content {
-  padding: 1.4em 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 1.4em;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   font-weight: 400;
@@ -466,6 +468,11 @@ div.map-app-map-container {
   font-size: 1.4em;
 }
 
+.sidebar-button {
+  flex-shrink: 0;
+  font-size: 1.4rem;
+}
+
 .w3-button:hover {
   color: white !important;
   background-color: var(--dark) !important;
@@ -542,9 +549,7 @@ div.map-app-map-container {
   max-width: 500px;
   width: 50%;
 }
-/* @todo - can we avoid all this messing around with z-index, once the protecting vail has been removed?
- * It seems that leaflet uses z-index, as does w3.css. So we're having to weave a course between the two.
- */
+
 .sea-sidebar,
 .w3-modal {
   z-index: 40;
@@ -561,6 +566,11 @@ div.map-app-map-container {
 .sea-initiative-sidebar .sea-initiative-contact {
   padding: 1em 1.5em 1.5em;
   background: #f0f0f0;
+}
+
+/* Sidebar */
+.sea-initiative-sidebar .sea-initiative-details {
+  padding-top: 0;
 }
 
 /* Popup */
@@ -647,6 +657,10 @@ div.leaflet-popup-content {
   .sea-initiatives-list-sidebar {
     transform: translateX(-100%);
     z-index: 100;
+  }
+
+  .sea-sidebar-list-initiatives .sea-initiatives-list-sidebar {
+    transform: translateX(0%);
   }
 
   .sea-sidebar-open.sea-sidebar-list-initiatives .sea-initiatives-list-sidebar {

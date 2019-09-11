@@ -1,5 +1,5 @@
 // Set up the various sidebars
-define(["d3", "view/base"], function(d3, view) {
+define(["app/eventbus", "d3", "view/base"], function(eventbus, d3, view) {
   "use strict";
 
   // base is the "base class" of all sidebars:
@@ -11,6 +11,7 @@ define(["d3", "view/base"], function(d3, view) {
   // add properties to sidebar:
   proto.title = "Untitled";
   proto.hasHistoryNavigation = true; // by default - change this in derived sidebar view objects if necessary.
+  proto.hasCloseButton = true;
 
   proto.populateScrollableSelection = function(selection) {
     // override this default in derived view objects:
@@ -29,6 +30,7 @@ define(["d3", "view/base"], function(d3, view) {
       this.d3selectAndClear("#map-app-sidebar-scrollable-section")
     );
   };
+  proto.loadCloseButton = function() {};
   proto.loadHistoryNavigation = function() {
     // Fwd/back navigation for moving around the contentStack of a particular sidebar
     // (e.g. moving between different search results)

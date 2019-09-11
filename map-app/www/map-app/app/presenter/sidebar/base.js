@@ -66,8 +66,21 @@ define(["app/eventbus", "model/config", "presenter"], function(
   // allowing the possilility of going back/forward through previous/next search results.
   proto.contentStack = new Stack();
 
-  function updateSidebarWidth(width) {
-    this.sidebarWidth = width;
+  function updateSidebarWidth(data) {
+    const directoryBounds = data.directoryBounds,
+      initiativeListBounds = data.initiativeListBounds;
+    this.sidebarWidth =
+      directoryBounds.x -
+      window.seaMap.getContainer().getBoundingClientRect().x +
+      directoryBounds.width +
+      (initiativeListBounds.x > 0 ? initiativeListBounds.width : 0);
+
+    eventbus.publish({
+      topic: "Map.setActiveArea",
+      data: {
+        offset: this.sidebarWidth
+      }
+    });
   }
 
   function getSidebarWidth() {

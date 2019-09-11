@@ -233,7 +233,7 @@ define([
     });
 
     eventbus.subscribe({
-      topic: "Sidebar.updateSidebarWidth",
+      topic: "Map.setActiveArea",
       callback: function(data) {
         p.setActiveArea(data);
       }

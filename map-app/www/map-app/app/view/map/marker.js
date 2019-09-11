@@ -142,6 +142,12 @@ define([
   };
   proto.setUnselected = function(initiative) {
     mapObj.closePopup();
+    eventbus.publish({
+      topic: "Sidebar.hideInitiative"
+    });
+    try {
+      initiative.marker.__parent.unspiderfy();
+    } catch (e) {}
     mapObj.selectedInitiative = undefined;
     mapObj.off("zoomend", selectInitiative);
     if (!initiative.nongeo) {

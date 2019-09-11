@@ -80,7 +80,7 @@
       // <script data-main="app" src="lib/require.js"></script>
       const loader = document.createElement("script");
       const dataMain = document.createAttribute("data-main");
-      dataMain.value = "map-app/app.js?v=1.0.0";
+      dataMain.value = "map-app/app.js";
       loader.setAttributeNode(dataMain);
       const src = document.createAttribute("src");
       src.value = "map-app/lib/require.js";

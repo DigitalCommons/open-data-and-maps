@@ -93,9 +93,7 @@ define([
   };
 
   proto.notifyMapNeedsToNeedsToBeZoomedAndPanned = function(initiative) {
-    // const initiatives = this.contentStack.current().initiatives;
     const initiatives = [initiative];
-    let sidebarWidth = sidebarPresenter.getSidebarWidth();
     const lats = initiatives.map(x => x.lat);
     const lngs = initiatives.map(x => x.lng);
 
@@ -106,14 +104,7 @@ define([
           bounds: [
             [arrayMin(lats), arrayMin(lngs)],
             [arrayMax(lats), arrayMax(lngs)]
-          ],
-          // latlng: [initiative.lat, initiative.lng],
-          offset: sidebarWidth
-          // }
-          // options: {
-          //   paddingTopLeft: [sidebarWidth, window.innerHeight / 2],
-          //   paddingBottomRight: [0, 0]
-          // }
+          ]
         }
       });
     }

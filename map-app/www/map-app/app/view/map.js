@@ -43,6 +43,8 @@ define([
     });
     this.map.zoomControl.setPosition("bottomright");
 
+    window.seaMap = this.map;
+
     // Get the initial bounds from config
     let initialBounds = this.presenter.getInitialBounds();
     if (initialBounds) this.map.fitBounds(initialBounds);
@@ -127,12 +129,6 @@ define([
       latlng = data.latlng;
       options = Object.assign(options, data.options);
     }
-    // if (data.offset) {
-    //   let targetPoint = this.map
-    //     .project(data.latlng, zoom)
-    //     .subtract([data.offset / 2, 0]);
-    //   latlng = this.map.unproject(targetPoint, zoom);
-    // }
     this.map.setView(latlng);
   };
 
@@ -165,29 +161,28 @@ define([
   };
 
   proto.setActiveArea = function(data) {
-    // let mapSize = this.map.getSize().subtract([sidebarWidth]);
+    if (this._settingActiveArea) return;
+    window.seaMap.once("moveend", () => {
+      this._settingActiveArea = undefined;
+    });
+    this._settingActiveArea = true;
+    let css = {
+      position: "absolute",
+      top: "20px",
+      left: data.offset + "px",
+      right: 0,
+      bottom: 0
+    };
 
-    if (!data.target.id) return;
+    // Hovering the sidebar open/close button seems to trigger this to. Check for this and return
+    // if (!data.target.id) return;
 
     const refocusMap = true,
       animateRefocus = true;
-
-    this.map.setActiveArea(
-      {
-        position: "absolute",
-        top: "20px",
-        // left: data.sidebarWidth + "px",
-        right: 0,
-        bottom: 0,
-        width: this.map.getSize().subtract([data.sidebarWidth, 0]).x + "px"
-      },
-      refocusMap,
-      animateRefocus
-    );
+    // console.log(data.target, css);
+    this.map.setActiveArea(css, refocusMap, animateRefocus);
   };
-  // proto.getMap = function() {
-  //   return this.map;
-  // };
+
   MapView.prototype = proto;
   function init() {
     const view = new MapView();

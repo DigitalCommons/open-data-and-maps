@@ -4,20 +4,10 @@ define([
   "d3",
   "view/base",
   "presenter/sidebar",
-  "view/sidebar/mainmenu",
   "view/sidebar/initiatives",
   "view/sidebar/about",
   "view/sidebar/directory"
-], function(
-  eventbus,
-  d3,
-  viewBase,
-  presenter,
-  mainMenu,
-  initiatives,
-  about,
-  directory
-) {
+], function(eventbus, d3, viewBase, presenter, initiatives, about, directory) {
   "use strict";
 
   // This deals with the view object that controls the sidebar
@@ -45,17 +35,6 @@ define([
     // d3 selection redefines this, so hang onto it here:
     var that = this;
     var selection = this.d3selectAndClear("#map-app-sidebar-header");
-
-    // Button for hiding the sidebar:
-    // selection
-    //   .append("button")
-    //   .attr("class", "w3-teal w3-cell w3-button w3-border-0")
-    //   .attr("title", "Hide sidebar")
-    //   .on("click", function() {
-    //     that.hideSidebar();
-    //   })
-    //   .append("i")
-    //   .attr("class", "fa fa-angle-left");
 
     // This is where the navigation buttons will go.
     // These are recreated when the sidebar is changed, e.g. from MainMenu to initiatives.
@@ -87,7 +66,7 @@ define([
     this.sidebar = {
       about: about.createSidebar(),
       initiatives: initiatives.createSidebar(),
-      mainMenu: mainMenu.createSidebar(),
+      // mainMenu: mainMenu.createSidebar(),
       directory: directory.createSidebar()
     };
   };
@@ -108,63 +87,50 @@ define([
   proto.showSidebar = function() {
     var that = this;
     let sidebar = d3.select("#map-app-sidebar");
+    let initiativeListSidebar = document.getElementById(
+      "sea-initiatives-list-sidebar"
+    );
     sidebar
-      .on("transitionend", function() {
-        if (event.propertyName === "transform") {
-          d3.select("#map-app-sidebar-button").on("click", function() {
-            that.hideSidebar();
-          });
-          eventbus.publish({
-            topic: "Sidebar.updateSidebarWidth",
-            data: {
-              target: event.target,
-              sidebarWidth: this.clientWidth
-            }
-          });
-        }
-      })
+      .on(
+        "transitionend",
+        function() {
+          if (event.target.className === "w3-btn") return;
+          if (event.propertyName === "transform") {
+            d3.select("#map-app-sidebar-button").on("click", function() {
+              that.hideSidebar();
+            });
+            eventbus.publish({
+              topic: "Sidebar.updateSidebarWidth",
+              data: {
+                target: event.target,
+                // sidebarWidth: this.clientWidth
+                directoryBounds: this.getBoundingClientRect(),
+                initiativeListBounds: initiativeListSidebar.getBoundingClientRect()
+              }
+            });
+          }
+        },
+        false
+      )
       .classed("sea-sidebar-open", true);
     if (!sidebar.classed("sea-sidebar-list-initiatives"))
       d3.select(".w3-btn").attr("title", "Hide directory");
     d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-left");
   };
 
+  // This should be split into three functions:
+  // 1. Close the sidebar regardless of current view
+  // 2. Close the Initiatives list
+  // 3. Close the Initiative sidebar
   proto.hideSidebar = function() {
     const that = this;
     let sidebar = d3.select("#map-app-sidebar");
-    let sidebarButton = document.getElementById("map-app-sidebar-button");
-    let initiativeListSidebar = document.getElementById(
-      "sea-initiatives-list-sidebar"
-    );
-    let initiativeSidebar = d3.select("#sea-initiative-sidebar");
 
-    // If the initiative sidebar is open, close it
-    if (initiativeSidebar.node().getBoundingClientRect().x === 0) {
-      initiativeSidebar.classed("sea-initiative-sidebar-open", false);
-    }
-    // If the initiatives list sidebar is open then hide that
-    else if (sidebar.classed("sea-sidebar-list-initiatives")) {
-      sidebar.node().insertBefore(sidebarButton, initiativeListSidebar);
-      sidebar
-        .on("transitionend", function() {
-          if (event.propertyName === "transform") {
-            eventbus.publish({
-              topic: "Sidebar.updateSidebarWidth",
-              data: {
-                target: event.target,
-                sidebarWidth: this.clientWidth
-              }
-            });
-          }
-        })
-        .classed("sea-sidebar-list-initiatives", false);
-      d3.select(".w3-btn").attr("title", "Hide directory");
-      d3.select(".sea-activity-active").classed("sea-activity-active", false);
-    }
-    // Otherwise the main/directory sidebar is open so close it
-    else {
-      sidebar
-        .on("transitionend", function() {
+    sidebar
+      .on(
+        "transitionend",
+        function() {
+          if (event.target.className === "w3-btn") return;
           if (event.propertyName === "transform") {
             d3.select("#map-app-sidebar-button").on("click", function() {
               that.showSidebar();
@@ -173,15 +139,60 @@ define([
               topic: "Sidebar.updateSidebarWidth",
               data: {
                 target: event.target,
-                sidebarWidth: 0
+                directoryBounds: this.getBoundingClientRect(),
+                initiativeListBounds: this.getBoundingClientRect()
+              }
+            });
+            window._seaSidebarClosing = true;
+          }
+        },
+        false
+      )
+      .classed("sea-sidebar-open", false);
+    d3.select(".w3-btn").attr("title", "Show directory");
+    d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
+  };
+
+  proto.hideInitiativeSidebar = function() {
+    let initiativeSidebar = d3.select("#sea-initiative-sidebar");
+
+    if (initiativeSidebar.node().getBoundingClientRect().x === 0) {
+      initiativeSidebar.classed("sea-initiative-sidebar-open", false);
+    }
+  };
+
+  proto.hideInitiativeList = function() {
+    const that = this;
+    let sidebar = d3.select("#map-app-sidebar");
+    let sidebarButton = document.getElementById("map-app-sidebar-button");
+    let initiativeListSidebar = document.getElementById(
+      "sea-initiatives-list-sidebar"
+    );
+    sidebar.node().insertBefore(sidebarButton, initiativeListSidebar);
+    sidebar
+      .on(
+        "transitionend",
+        function() {
+          if (event.target.className === "w3-btn") return;
+          if (event.propertyName === "transform") {
+            // let initiativeListBounds = initiativeListSidebar.getBoundingClientRect();
+            eventbus.publish({
+              topic: "Sidebar.updateSidebarWidth",
+              data: {
+                target: event.target,
+                // sidebarWidth:
+                //   initiativeListBounds.width + this.getBoundingClientRect().width
+                directoryBounds: this.getBoundingClientRect(),
+                initiativeListBounds: initiativeListSidebar.getBoundingClientRect()
               }
             });
           }
-        })
-        .classed("sea-sidebar-open", false);
-      d3.select(".w3-btn").attr("title", "Show directory");
-      d3.select("#map-app-sidebar i").attr("class", "fa fa-angle-right");
-    }
+        },
+        false
+      )
+      .classed("sea-sidebar-list-initiatives", false);
+    d3.select(".w3-btn").attr("title", "Hide directory");
+    d3.select(".sea-field-active").classed("sea-field-active", false);
   };
   SidebarView.prototype = proto;
   var view;
