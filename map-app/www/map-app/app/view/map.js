@@ -179,7 +179,7 @@ define([
 
     const refocusMap = true,
       animateRefocus = true;
-    // console.log(data.target, css);
+    console.log(css);
     this.map.setActiveArea(css, refocusMap, animateRefocus);
   };
 

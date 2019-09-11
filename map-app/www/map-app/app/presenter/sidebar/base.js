@@ -73,7 +73,11 @@ define(["app/eventbus", "model/config", "presenter"], function(
       directoryBounds.x -
       window.seaMap.getContainer().getBoundingClientRect().x +
       directoryBounds.width +
-      (initiativeListBounds.x > 0 ? initiativeListBounds.width : 0);
+      (initiativeListBounds.x -
+        window.seaMap.getContainer().getBoundingClientRect().x >
+      0
+        ? initiativeListBounds.width
+        : 0);
 
     eventbus.publish({
       topic: "Map.setActiveArea",

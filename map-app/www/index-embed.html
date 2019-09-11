@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="title"
+      content="Solidarity Oxford - Explore the map and add your initiative"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:400,900|Merriweather:300,300i,700"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+    <link rel="stylesheet" href="map-app/map-app.css" />
+    <link rel="stylesheet" href="css/main.css?134" />
+    <script src="map-app/map-app.js"></script>
+  </head>
+  <body>
+    <div class="w3-row divider section-row hero">
+      <div class="w3-quarter intro-sidebar-container">
+        <div class="intro-sidebar">
+          <p>
+            We’re mapping our city’s <strong>solidarity economy</strong> to show
+            all the ways people are meeting their needs – from swap shops and
+            childcare groups, to housing co-ops and community farms – in ethical
+            and sustainable ways.
+          </p>
+          <p>Explore the map and support local initiatives.</p>
+          <p>
+            <a
+              href="https://solidarityeconomyassociation.limequery.com/899558?lang=en"
+              target="_blank"
+              >Add your project to the map</a
+            >
+            and connect with others around you.
+          </p>
+          <p>
+            Together, we are creating an
+            <a href="about.html">alternative economy</a> that’s based on
+            cooperation and self-determination; empowers everyone, regardless of
+            their race, sexual orientation, gender, or background; and that has
+            the health and wellbeing of people and planet at its core.
+          </p>
+          <div class="w3-center map-button">
+            <a
+              href="map.html"
+              target="_blank"
+              class="cta-btn primary w3-align-center"
+              >View the map</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="w3-threequarter map-container">
+        <div class="sea-map-embed" id="map-box">
+          <div id="map-app"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function myFunction() {
+        var x = document.getElementById("mobile-nav");
+        if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+        } else {
+          x.className = x.className.replace(" w3-show", "");
+        }
+      }
+    </script>
+  </body>
+</html>
