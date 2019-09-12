@@ -121,6 +121,11 @@ define([
         eventbus.publish({
           topic: "Directory.InitiativeClicked"
         });
+        if (window.innerWidth <= 800) {
+          eventbus.publish({
+            topic: "Sidebar.hideSidebar"
+          });
+        }
         eventbus.publish({
           topic: "Map.fitBounds",
           data: bounds
@@ -153,18 +158,10 @@ define([
         function() {
           if (event.target.className === "w3-btn") return;
           if (event.propertyName === "transform") {
-            // let initiativeListBounds = initiativeListSidebar.getBoundingClientRect();
-            // Need to use el.getBoundingClientRect() because the item has been animated using transforms
-            // which doesn't alter the physical size of the container
             eventbus.publish({
               topic: "Sidebar.updateSidebarWidth",
               data: {
                 target: event.target,
-                // sidebarWidth:
-                // boundingRect.x +
-                // boundingRect.width -
-                // window.seaMap.getContainer().getBoundingClientRect().x
-                // initiativeListBounds.width + this.getBoundingClientRect().width
                 directoryBounds: this.getBoundingClientRect(),
                 initiativeListBounds: initiativeListSidebar.getBoundingClientRect()
               }
