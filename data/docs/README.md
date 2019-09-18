@@ -184,7 +184,7 @@ The text to the left of the colon is the key or symbol that's used to reference 
 | Identifier | Name | Description | ... | Geo Container Latitude | Geo Container Longitude |
 ```
 
-Within each project there is a script called `converter.tb`. These can be found in each of the `data/[project_name]/[project_version]/ folders.
+Within each project there is a script called `converter.rb`. These can be found in each of the `data/[project_name]/[project_version]/ folders.
 
 `converter.rb` takes the values from the input CSV and pipes them into the output CSV. The data can either be passed straight through to the output or it can be processed before passing it on.
 
