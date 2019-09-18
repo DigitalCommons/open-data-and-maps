@@ -312,8 +312,10 @@ class DotCoopV1Reader < SeOpenData::CSV::RowReader
   #   domain.sub(/\.coop$/, "")
   # end
   def homepage
-    #raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
-    #domain_to_homepage(domain)
+    # Turn on validation of domains
+    # raise(SeOpenData::Exception::IgnoreCsvRow, "\"Domain\" column is empty") unless domain
+    # domain_to_homepage(domain)
+    # Turn off validation of domains
     "http://" + domain
   end
 
