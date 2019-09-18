@@ -9,7 +9,9 @@ There are four main parts to generating Linked Open Data for SEA projects.
 
 ### Use a Unix/Linux environment (Mac, Ubuntu, etc)
 
-Our processes heavily rely on [Gnu Make](https://www.gnu.org/software/make/) which requires a unix based operating system. If you're running Windows then [we recommend installing Ubuntu](https://www.microsoft.com/en-gb/p/ubuntu/9nblggh4msv6).
+Our processes heavily rely on [Gnu Make](https://www.gnu.org/software/make/) which requires a unix based operating system. 
+
+If you're running Windows 10 then [we recommend installing Ubuntu](https://www.microsoft.com/en-gb/p/ubuntu/9nblggh4msv6). Files on Windows can be accessed from within Ubuntu via the path `/mnt/c`
 
 ### Install required development tools
 
@@ -19,7 +21,7 @@ Our processes heavily rely on [Gnu Make](https://www.gnu.org/software/make/) whi
 2. In the terminal window, run the command `xcode-select --install`
 3. In the windows that pops up, click **Install**, and agree to the _Terms of Service_.
 
-macOS is Unix based so its cli works a lot like Linux. It doesn't, however, come with a package manager. There are two popular options, [Homebrew](https://brew.sh/) and [MacPorts](https://www.macports.org/). Both are great and will do what you need but what you use will come down to personal preference. Personally I chose Homebrew due to its ease of use.
+macOS is Unix based so it's similar to Linux. It doesn't, however, come with a package manager. There are two popular options, [Homebrew](https://brew.sh/) and [MacPorts](https://www.macports.org/). Both are great and will do what you need but what you use will come down to personal preference. Personally I chose Homebrew due to its ease of use.
 
 To install Homebrew, run the command
 `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
@@ -62,9 +64,11 @@ Development work happens on the `development` branch, so run
 cd open-data-and-maps
 git checkout development
 ```
+### Access to the server and Virtuoso
 
-**TODO**
-There are a few remaining requirements that we need to iron out before adding them to the list. They are getting admin access to the deployment server and getting the password to Virtuoso (the triplestore) to remove existing graphs and upload new ones.
+In order to deploy the files to the web server you will need SSH access to the server. This will require you to generate an SSH Key and have someone with server access add the public key to ~/.ssh/authorised_keys for each account you need access to.
+
+A username and password will also be required to access Virtuoso Conductor (the triplestore).
 
 ## Converting data into standard format.
 
@@ -92,7 +96,7 @@ Now run the csv.mk Makefile
 make -f csv.mk edition=experimental
 ```
 
-The -f flag tells make you want it to run a named Makefile, in this case csv.mk. The editions=experimental variable provides us with a way to work in multiple environments depending on our needs. We might, for instance, wan to try something new out without overwriting existing data. The options for each edition are stored in `editions/[name].mk`.
+The -f flag tells make you want it to run a named Makefile, in this case csv.mk. The editions=experimental variable provides us with a way to work in multiple environments depending on our needs. We might, for instance, want to try something new out without overwriting existing data. The options for each edition are stored in `editions/[name].mk`.
 
 Once run, a csv file called `standard.csv` will be placed in the `generated-data/[edition]/` folder.
 
@@ -188,7 +192,7 @@ Within each project there is a script called `converter.rb`. These can be found 
 
 `converter.rb` takes the values from the input CSV and pipes them into the output CSV. The data can either be passed straight through to the output or it can be processed before passing it on.
 
-To pass the data through just assign the header name to the symbol from the standard. For instance, if the filed that we want to use as the Identifier is in a field called ID in the source data then `InputHeaders` should contain a key of id (the symbol for Identifier in the output) with a value of ID (the header of the field containing the Identifier in the source). E.g.:
+To pass the data through just assign the header name to the symbol from the standard. For instance, if the files that we want to use as the Identifier is in a field called ID in the source data then `InputHeaders` should contain a key of id (the symbol for Identifier in the output) with a value of ID (the header of the field containing the Identifier in the source). E.g.:
 
 ```
 InputHeaders = {
