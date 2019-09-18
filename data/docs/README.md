@@ -1,3 +1,5 @@
+# Generating and deploying Linked Open Data
+
 There are four main parts to generating Linked Open Data for SEA projects.
 
 1. Converting data into standard format
@@ -9,7 +11,7 @@ There are four main parts to generating Linked Open Data for SEA projects.
 
 ### Use a Unix/Linux environment (Mac, Ubuntu, etc)
 
-Our processes heavily rely on [Gnu Make](https://www.gnu.org/software/make/) which requires a unix based operating system. 
+Our processes heavily rely on [Gnu Make](https://www.gnu.org/software/make/) which requires a unix based operating system.
 
 If you're running Windows 10 then [we recommend installing Ubuntu](https://www.microsoft.com/en-gb/p/ubuntu/9nblggh4msv6). Files on Windows can be accessed from within Ubuntu via the path `/mnt/c`
 
@@ -64,6 +66,7 @@ Development work happens on the `development` branch, so run
 cd open-data-and-maps
 git checkout development
 ```
+
 ### Access to the server and Virtuoso
 
 In order to deploy the files to the web server you will need SSH access to the server. This will require you to generate an SSH Key and have someone with server access add the public key to ~/.ssh/authorised_keys for each account you need access to.
@@ -98,7 +101,14 @@ make -f csv.mk edition=experimental
 
 The -f flag tells make you want it to run a named Makefile, in this case csv.mk. The editions=experimental variable provides us with a way to work in multiple environments depending on our needs. We might, for instance, want to try something new out without overwriting existing data. The options for each edition are stored in `editions/[name].mk`.
 
-Once run, a csv file called `standard.csv` will be placed in the `generated-data/[edition]/` folder.
+Once run, `standard.csv` will be placed in the `generated-data/[edition]/` folder and `initiatives.csv` and `report.csv` will be placed in `generated-data/[edition]/csv/`. `initiatives.csv` is used as an intermediate when generating `standard.csv`. `report.csv` will contain any notes generated in the process – these will appear in the final column alongside the initiative the note relates to.
+
+In the case of an error, you will need to manually remove these files to run the Makefile again:
+
+```
+rm -rf generated-data/[edition]/csv
+rm generated-data/[edition]/standard.csv
+```
 
 ## Generate RDF/TTL/HTML files from standard CSV
 
@@ -108,7 +118,7 @@ The following step is to generate the RDF, TTL, HTML represetnations of the data
 make -f ../../tools/se_open_data/makefiles/generate.mk edition=experimental
 ```
 
-The generated files will have been placed in the `generated-data/[edition]/www` folder.
+The generated files will have been placed in the `generated-data/[edition]/www` folder. Like the CSV files, you may occasionally need to manually remove this folder to run the Makefile again.
 
 ## Deploy files to server
 
@@ -137,10 +147,9 @@ make -f ../../tools/se_open_data/makefiles/triplestore.mk edition=experimental
 Once this is complete you should see the following message at the bottom of the output:
 
 ```
-**** IMPORTANT! ****
-**** The final step is to load the data into Virtuoso with graph named https://w3id.solidarityeconomy.coop/sea-lod/[graph]/:
-**** Execute the following command, providing the password for the Virtuoso dba user:
-****	ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql'
+\***\* IMPORTANT! \*\*** \***\* The final step is to load the data into Virtuoso with graph named https://w3id.solidarityeconomy.coop/sea-lod/[graph]/:
+\*\*** Execute the following command, providing the password for the Virtuoso dba user:
+\*\*\*\* ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql'
 ```
 
 Before you run the last command, you need to open up the [Graph view in Virtuoso Conductor](http://store1.solidarityeconomy.coop:8890/conductor/sparql_graph.vspx?sid=b1d624245c8092f7b246d8fa1da05743&realm=virtuoso_admin) (requires login) and remove the existing graph (beware - this is irreversible so make sure you remove the right one. The one you're looking for is listed in the message above after the text "\*\*\*\* The final step is to load the data into Virtuoso with graph named").
@@ -150,6 +159,8 @@ Once you've deleted the graph, come back to your command line, copy and paste th
 ```
 ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql
 ```
+
+When this has finished, check that it has been added to the list of graphs in Virtuoso. Very occasionally it doesn't appear in the list and will need to be added again. In this situation, just run the last command in your terminal again.
 
 ## Further reading/explanations
 
@@ -196,9 +207,9 @@ To pass the data through just assign the header name to the symbol from the stan
 
 ```
 InputHeaders = {
-  id: "ID",
-  name: "Name",
-  description: "Description"
+id: "ID",
+name: "Name",
+description: "Description"
 }
 ```
 
@@ -208,21 +219,23 @@ If we need to change any of the source data or process it in some other way – 
 
 ```
 InputHeaders = {
-  id: "ID",
-  name: "Name",
-  description: "Description"
-  # ... Other headers
-  address1: "Address1",
-  address2: "Address2",
-  address3: "Address3"
+id: "ID",
+name: "Name",
+description: "Description"
+
+# ... Other headers
+
+address1: "Address1",
+address2: "Address2",
+address3: "Address3"
 }
 
 def street_address
-  [
-    !address1.empty? ? address1 : nil,
-    !address2.empty? ? address2 : nil,
-    !address3.empty? ? address3 : nil
-  ].compact.join(OutputStandard::SubFieldSeparator)
+[
+!address1.empty? ? address1 : nil,
+!address2.empty? ? address2 : nil,
+!address3.empty? ? address3 : nil
+].compact.join(OutputStandard::SubFieldSeparator)
 end
 ```
 
