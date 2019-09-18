@@ -154,7 +154,7 @@ ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoadi
 This standard format is defined in the module [SeOpenData::CSV::Standard::V1](../tools/se_open_data/csv/standard.rb). At the time of writing, this contains the following:
 
 ```
-`id: "Identifier",
+id: "Identifier",
 name: "Name",
 description: "Description",
 organisational_structure: "Organisational Structure",
@@ -223,8 +223,3 @@ end
 ```
 
 This method returns a string made up of the three fields address1, address2 and address3 (if they're populated). Each of these fields have been added to the InputHeader map so they can be referenced in the method.
-``
-
-```
-
-```
