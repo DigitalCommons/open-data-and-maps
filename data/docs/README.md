@@ -71,7 +71,110 @@ git checkout development
 
 In order to deploy the files to the web server you will need SSH access to the server. This will require you to generate an SSH Key and have someone with server access add the public key to ~/.ssh/authorised_keys for each account you need access to.
 
-A username and password will also be required to access Virtuoso Conductor (the triplestore).
+If you already have access to the server, you can grant new machines access.
+
+#### Generating SSH keys
+
+To generate SSH keys, follow these steps:
+
+In macOS, enter the following command in the Terminal window.
+
+```
+ssh-keygen -t rsa
+```
+
+In Ubuntu, enter the following command.
+
+```
+ssh-keygen
+```
+
+This starts the key generation process. When you execute this command, the ssh-keygen utility prompts you to indicate where to store the key.
+
+Press the ENTER key to accept the default location. The ssh-keygen utility prompts you for a passphrase.
+
+Type in a passphrase. You can also hit the ENTER key to accept the default (no passphrase). However, this is not recommended.
+Warning! You will need to enter the passphrase a second time to continue.
+
+After you confirm the passphrase, the system generates the key pair.
+
+```
+Your identification has been saved in /Users/myname/.ssh/id_rsa.
+Your public key has been saved in /Users/myname/.ssh/id_rsa.pub.
+The key fingerprint is:
+ae:89:72:0b:85:da:5a:f4:7c:1f:c2:43:fd:c6:44:38 myname@mymac.local
+The key's randomart image is:
++--[ RSA 2048]----+
+|                 |
+|         .       |
+|        E .      |
+|   .   . o       |
+|  o . . S .      |
+| + + o . +       |
+|. + o = o +      |
+| o...o * o       |
+|.  oo.o .        |
++-----------------+
+Your private key is saved to the id_rsa file in the .ssh directory and is used to verify the public key you use belongs to the same account.
+```
+
+⚠️ Never share your **private** key with anyone!
+
+Your public key is saved to the id_rsa.pub;file and is the key you upload to your Triton Compute Service account.
+
+On macOS, you can save this key to the clipboard by running this:
+
+```
+pbcopy < ~/.ssh/id_rsa.pub
+```
+
+On Ubuntu, you will need to `cat` the key and copy it manually:
+
+```
+cat ~/.ssh/id_rsa.pub
+```
+
+#### Authorising keys on the remote server
+
+To be able to log into the remote server via `ssh` from a new machine, the machine needs to be whitelisted. This is done by adding the public key from the machine to a file called `authorized_keys` that's found in the .ssh folder in the home folder of the user account that you want access to (`/home/user/.ssh` or `~/.ssh` if you're currently logged in to that account).
+
+Assuming you still have the public key copied to your clipboard, run the following on the remote server:
+
+```
+nano ~/.ssh/authorized_keys
+```
+
+And paste the public key on a new line at the end of the file. You can add a space and an identifier to the end of the key if you like (anything after the space is ignored and can be used as a note).
+
+To be able to use the scripts in this document you'll need to do this on the accounts `joe` and `admin`.
+
+On the machine you're running the scripts from, add the following to a file called `config` in your local `.ssh` folder.
+
+```
+nano ~/.ssh/config
+```
+
+```
+Host sea-0-joe
+ Hostname 51.15.116.30
+ Port 22
+ IdentityFile ~/.ssh/id_rsa
+ HostbasedAuthentication yes
+ PubkeyAuthentication yes
+ PasswordAuthentication no
+ User joe
+
+Host sea-0-admin
+ Hostname 51.15.116.30
+ Port 22
+ IdentityFile ~/.ssh/id_rsa
+ HostbasedAuthentication yes
+ PubkeyAuthentication yes
+ PasswordAuthentication no
+ User admin
+```
+
+A username and password will also be required to access Virtuoso Conductor (the triplestore). I've put this on the wiki.
 
 ## Converting data into standard format.
 
