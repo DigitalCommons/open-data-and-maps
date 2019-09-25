@@ -48,7 +48,7 @@ class RdfCache
 	@cache_hash = JSON.parse(f.read)
       }
     rescue => e
-      $stderr.puts "Failed to read #{cache_file}: #{e.message}"
+      $stderr.puts "Couldn't read #{cache_file}: #{e.message}"
       $stderr.puts "Creating empty cache."
       @cache_hash = {}
     end
@@ -106,7 +106,7 @@ class RdfCache
 	#pp result
 	@cache_hash[key] = result
       rescue => e
-	$stderr.puts "Failed to load resource #{key}: #{e.message}"
+	$stderr.puts "Couldn't load resource #{key}: #{e.message}"
 	@cache_hash[key] = Failure_value
       end
     end
