@@ -250,9 +250,9 @@ make -f ../../tools/se_open_data/makefiles/triplestore.mk edition=experimental
 Once this is complete you should see the following message at the bottom of the output:
 
 ```
-\***\* IMPORTANT! \*\*** \***\* The final step is to load the data into Virtuoso with graph named https://w3id.solidarityeconomy.coop/sea-lod/[graph]/:
-\*\*** Execute the following command, providing the password for the Virtuoso dba user:
-\*\*\*\* ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql'
+**** IMPORTANT! **** **** The final step is to load the data into Virtuoso with graph named https://w3id.solidarityeconomy.coop/sea-lod/[graph]/:
+**** Execute the following command, providing the password for the Virtuoso dba user:
+**** ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql'
 ```
 
 Before you run the last command, you need to open up the [Graph view in Virtuoso Conductor](http://store1.solidarityeconomy.coop:8890/conductor/sparql_graph.vspx?sid=b1d624245c8092f7b246d8fa1da05743&realm=virtuoso_admin) (requires login) and remove the existing graph (beware - this is irreversible so make sure you remove the right one. The one you're looking for is listed in the message above after the text "\*\*\*\* The final step is to load the data into Virtuoso with graph named").
@@ -260,7 +260,7 @@ Before you run the last command, you need to open up the [Graph view in Virtuoso
 Once you've deleted the graph, come back to your command line, copy and paste the line starting `ssh sea-0-admin` from the message. Now replace ,password. with the virtuoso password and run the command.
 
 ```
-ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql
+ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql'
 ```
 
 When this has finished, check that it has been added to the list of graphs in Virtuoso. Very occasionally it doesn't appear in the list and will need to be added again. In this situation, just run the last command in your terminal again.
