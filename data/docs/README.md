@@ -263,6 +263,11 @@ Once you've deleted the graph, come back to your command line, copy and paste th
 ssh sea-0-admin 'isql-vt localhost dba <password> /home/admin/Virtuoso/BulkLoading/Data/[some_numbers]/loaddata.sql'
 ```
 
+### Known Issues: 
+1 You can probably ignore this Conductor logged [error message](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/172).  
+2 Don't use browser refresh to see if a graph has been deleted or uploaded to the triple store. It can be fatal. See [here](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/173).
+
+
 When this has finished, check that it has been added to the list of graphs in Virtuoso. Very occasionally it doesn't appear in the list and will need to be added again. In this situation, just run the last command in your terminal again.
 
 ## Further reading/explanations
