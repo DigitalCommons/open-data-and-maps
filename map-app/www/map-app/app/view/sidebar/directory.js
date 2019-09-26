@@ -61,7 +61,7 @@ define([
         .forEach(key => {
           list
             .append("li")
-            .text(valuesByName[key.toUpperCase()])
+            .text(valuesByName ? valuesByName[key.toUpperCase()] : key)
             .classed("sea-field-" + key.toLowerCase().replace(/ /g, "-"), true)
             .on("click", function() {
               that.listInitiativesForSelection(directoryField, key);
@@ -81,7 +81,7 @@ define([
     );
     let sidebar = d3.select("#map-app-sidebar");
     let sidebarButton = document.getElementById("map-app-sidebar-button");
-    d3.select(".w3-btn").attr("title", "Hide initiatives");
+    d3.select(".w3-btn").attr("title", "Hide directory");
     let initiativeListSidebar = document.getElementById(
       "sea-initiatives-list-sidebar"
     );
@@ -98,13 +98,22 @@ define([
     initiativeListSidebar.classList.add(
       "sea-field-" + selectionKey.toLowerCase().replace(/ /g, "-")
     );
+
+    // Add the heading (we need to determine the title as this may be stored in the data or
+    // in the list of values in the presenter)
+    let title;
+    if (values) {
+      // If values exists and there's nothing in it for this selectionKey then we're looking at All
+      title = values[selectionKey] || selectionKey + " " + directoryField;
+    } else {
+      // If values doesn't exist then the values are coming from the data directly
+      title = selectionKey;
+    }
+
     selection
       .append("button")
       .attr("class", "w3-button w3-border-0 ml-auto sidebar-button")
-      .attr(
-        "title",
-        "Close " + (values[selectionKey] || selectionKey + " " + directoryField)
-      )
+      .attr("title", "Close " + title)
       .on("click", function() {
         eventbus.publish({
           topic: "Sidebar.hideInitiativeList"
@@ -115,7 +124,7 @@ define([
     selection
       .append("h2")
       .classed("sea-field", true)
-      .text(values[selectionKey] || selectionKey + " " + directoryField)
+      .text(title)
       .on("click", function() {
         const bounds = presenter.latLngBounds(initiatives);
         eventbus.publish({

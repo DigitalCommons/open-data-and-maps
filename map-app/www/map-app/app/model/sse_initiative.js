@@ -88,9 +88,10 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     // Run new query to get activities
     // loadPluralObjects("activities", this.uniqueId);
     // Run new query to get organisational structure
-    // loadPluralObjects("orgStructure", this.uniqueId, function() {
+    // loadPluralObjects("orgStructure", this.uniqueId); //, function() {
     eventbus.publish({ topic: "Initiative.new", data: that });
     // });
+    // loadPluralObjects("orgStructure", this.uniqueId);
   }
 
   function sortInitiatives(a, b) {
