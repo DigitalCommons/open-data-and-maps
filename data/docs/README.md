@@ -211,6 +211,7 @@ In the case of an error, you will need to manually remove these files to run the
 ```
 rm -rf generated-data/[edition]/csv
 rm generated-data/[edition]/standard.csv
+rm generated-data/[edition]/www/doc/*.*
 ```
 
 ## Generate RDF/TTL/HTML files from standard CSV
