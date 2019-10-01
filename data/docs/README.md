@@ -238,7 +238,13 @@ Since running the script will delete live files, the `dry-run` flag allows you t
 
 ```
 make -f ../../tools/se_open_data/makefiles/deploy.mk edition=experimental
+
 ```
+
+
+### Known Issues: 
+When deploying a large number of files, the process which synchronises the local directory with the one on the remote server can hang, perhaps due to printing out large amounts of log information. If this is observed you may need to manually run the rsync command and disable the -v option. See [issue](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/174). 
+
 
 ## Generate graph and upload to triplestore
 
