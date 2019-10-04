@@ -1,3 +1,4 @@
+# DEPRICATED SEE [here](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/tree/development/data).
 # NewBridge MapJam data
 
 ## Creating and deploying the Linked Data
