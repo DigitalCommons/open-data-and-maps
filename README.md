@@ -1,5 +1,5 @@
 # open-data-and-maps
-[Colm Massey](https://github.com/COlmMassey) is reponsible for this repository.
+[Colm Massey](https://github.com/ColmMassey) is reponsible for this repository.
 
 Linked Open Data and geographic maps for the Solidarity Economy produced by the [Solidarity Economy Association](https://www.solidarityeconomy.coop/).
 
