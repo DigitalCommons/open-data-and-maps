@@ -1,5 +1,3 @@
-This page is out of date. Bringing it up to date is the subject of [this issue](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/32)
-
 # map-app
 The web application in this directory is a geographical map and directory visualisation of Linked Databases of solidarity economy initiatives, e.g. [Solidarity Oxford](https://oxford.solidarityeconomy.coop/map.html). 
 
