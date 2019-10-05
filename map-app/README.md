@@ -9,7 +9,8 @@ The '>' tab opens a side panel displaying the directory. The directory presents 
 The application is responsive and will behave differently and appropriately depending on the size of the screen available to the application.
 
 ## About
-The side panel has a clickable information icon which open an About dialog. The dialog displays link links to a simple html view of the linked data used to populate this instance of the map-app. For example the Oxford SE map uses data that can be seen [here](https://w3id.org/sea-lod/oxford/)
+The side panel has a clickable information icon which open an About dialog. The dialog displays link links to a simple html view of the linked data used to populate this instance of the map-app. For example the Oxford SE map uses data that can be seen [here](https://w3id.org/sea-lod/oxford/).
+
 However the map-app actually gets its information directly from a Linked database using a SPARQL query. 
 
 When the map-app runs:
@@ -23,10 +24,12 @@ The data is still limited -
 It is intended to achieve the following goals:
 
 * Basic use of the original [ESS Global DCAP-SSE](http://purl.org/essglobal/wiki).
-* The data contains links to external datasets. e.g. [Ordnance Survey postcode](http://data.ordnancesurvey.co.uk/id/postcodeunit/OX2 6TP).
+* The data contains links to external datasets. e.g. [Ordnance Survey postcode](http://data.ordnancesurvey.co.uk/id/postcodeunit/OX26TP).
 * Data is retrieved from external datasets via the SPARQL query (we get lat/long from Ordnance Survey via the co-op's postcode URI).
-The latest version of ESS Global DCAP-SSE is now hosted [here](https://github.com/essglobal-linked-open-data/map-sse)
+The latest version of ESS Global DCAP-SSE is now hosted [here](https://github.com/essglobal-linked-open-data/map-sse).
+
 The map-app can currently diplay the following fields for each initiative.
+
 Unique Resource Identifier, Name, Description, Organisational Structure, Primary Activity, Street Address, Locality, Region, 	
 Postcode, Country Name, Website, Phone, Email, Companies House Number, Geo Container URI, Latitude & Longitude.
 
@@ -34,9 +37,9 @@ Postcode, Country Name, Website, Phone, Email, Companies House Number, Geo Conta
 The URI for the index into a dataset looks like https://w3id.org/sea-lod/oxford/.  
 URIs for individual co-ops look like this: https://w3id.org/sea-lod/oxford/65
 at one of those URIs, you'll get back HTML;
-if you ask for RDF/XML, then that is what you'll get - try this:
+
+If you ask for RDF/XML, then that is what you'll get - try this:
 
 ```
 curl  -H "Accept: application/rdf+xml" -L https://w3id.org/sea-lod/oxford/65
 ```
-
