@@ -40,19 +40,6 @@ define(["app/eventbus", "presenter", "model/config"], function(
     eventbus.publish({ topic: "Marker.SelectionSet", data: initiative });
   };
 
-  // We're now leaving for the view to set up its own eventhandlers,
-  // so this is obsolete ... until we change our minds :-)
-  // proto.getEventHandlers = function(initiative) {
-  //   return {
-  //     click: function(e) {
-  //       // eventbus.publish({topic: "Initiative.clicked", data: {initiative: initiative, mouseEvent: e}});
-  //       console.log("marker clicked");
-  //     },
-  //     clusterclick: function(e) {
-  //       console.log("cluster clicked");
-  //     }
-  //   };
-  // };
   proto.getLatLng = function(initiative) {
     return [initiative.lat, initiative.lng];
   };
@@ -70,11 +57,15 @@ define(["app/eventbus", "presenter", "model/config"], function(
       street,
       locality,
       postcode,
+      dotcoop =
+        config.namedDatasets().indexOf("dotcoop") > -1 ||
+        config.namedDatasets().indexOf("dotcoop-sandbox") > -1,
       popupHTML =
         '<div class="sea-initiative-details">' +
         '<h2 class="sea-initiative-name">{initiative.name}</h2>' +
         '<h4 class="sea-initiative-org-structure">{initiative.org-structure}</h4>' +
         "<p>{initiative.desc}</p>" +
+        "{dotcoop.domains}" +
         "</div>" +
         '<div class="sea-initiative-contact">' +
         "<h3>Contact</h3>" +
@@ -94,6 +85,21 @@ define(["app/eventbus", "presenter", "model/config"], function(
     );
     // All initiatives should have a description (this isn't true with dotcoop)
     popupHTML = popupHTML.replace("{initiative.desc}", initiative.desc || "");
+
+    // If we're building a dotcoop map then list the domains
+    if (initiative.www && dotcoop) {
+      let domains = initiative.www.split(";");
+      var domainsList = "<p>Domains</p><ul>";
+      for (let domain of domains) {
+        domainsList += '<li><a href="' + domain + '">' + domain + "</li>";
+      }
+      domainsList += "</ul>";
+    }
+    popupHTML = popupHTML.replace(
+      "{dotcoop.domains}",
+      domainsList ? domainsList : ""
+    );
+
     // We want to add the whole address into a single para
     // Not all orgs have an address
     if (initiative.street) {
@@ -142,7 +148,7 @@ define(["app/eventbus", "presenter", "model/config"], function(
     // Not all orgs have a website
     popupHTML = popupHTML.replace(
       "{initiative.www}",
-      initiative.www
+      initiative.www && !dotcoop
         ? '<a class="fa fa-link" target="_blank" href="' +
             initiative.www +
             '"></a>'

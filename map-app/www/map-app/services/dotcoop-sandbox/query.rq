@@ -14,7 +14,8 @@ SELECT ?name ?uri ?lat ?lng ?www ?street ?locality ?region ?postcode ?country
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
-	OPTIONAL { ?uri foaf:homepage ?www . }
+	OPTIONAL { ?uri foaf:homepage ?www .  
+  filter (bif:length(str(?www)) <= 1024) }
 	OPTIONAL { ?uri owl:sameAs ?sameas . }
 	?uri essglobal:hasAddress ?hasAddress .
 	OPTIONAL { ?hasAddress vcard:street-address ?street . }
