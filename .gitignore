@@ -2,6 +2,10 @@
 *.swp
 *.swo
 
+# For emacs users:
+*~
+*#
+
 # For VSCode users
 *.vscode
 
