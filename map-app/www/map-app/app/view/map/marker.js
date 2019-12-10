@@ -9,7 +9,7 @@ define([
   "use strict";
 
   // Keep a mapping between initiatives and their Markers:
-  const markerForInitiative = {};
+  let markerForInitiative = {};
   // CAUTION: this may be either a ClusterGroup, or the map itself
   let hiddenClusterGroup = null;
   let unselectedClusterGroup = null;
@@ -244,12 +244,25 @@ define([
   function setSelected(initiative) {
     markerForInitiative[initiative.uniqueId].setSelected(initiative);
   }
-  function setUnselected(initiative) {
+  function setUnselected(initiative) {                                                          
     markerForInitiative[initiative.uniqueId].setUnselected(initiative);
   }
   proto.destroy = function() {
     this.cluster.removeLayer(this.marker);
   };
+  function destroyAll(){                                                          
+    let that = this;
+    let initiatives = Object.keys(markerForInitiative);
+    initiatives.forEach(initiative => {
+      markerForInitiative[initiative].destroy();
+    });
+    
+    
+
+    markerForInitiative = {};
+
+    
+  }
   MarkerView.prototype = proto;
 
   function createMarker(map, initiative) {
@@ -292,7 +305,8 @@ define([
     showTooltip: showTooltip,
     hideTooltip: hideTooltip,
     getInitiativeContent: getInitiativeContent,
-    getClusterGroup: getClusterGroup
+    getClusterGroup: getClusterGroup,
+    destroyAll: destroyAll
   };
   return pub;
 });

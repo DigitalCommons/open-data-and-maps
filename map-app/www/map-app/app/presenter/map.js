@@ -85,6 +85,16 @@ define([
 
     if (marker.hasPhysicalLocation) allMarkers.push(marker);
   };
+
+  proto.onInitiativeReset = function(data) {
+    this.view.removeAllMarkers();
+    allMarkers = [];
+    console.log("removing all");
+    //rm markers 
+    
+
+  };
+
   proto.onInitiativeComplete = function() {
     // Load the markers into the clustergroup
     this.view.fitBounds(sse_initiative.latLngBounds());
@@ -188,7 +198,12 @@ define([
         p.onInitiativeNew(data);
       }
     });
-
+    eventbus.subscribe({
+      topic: "Initiative.reset",
+      callback: function(data) {
+        p.onInitiativeReset(data);
+      }
+    });
     eventbus.subscribe({
       topic: "Initiative.complete",
       callback: function() {

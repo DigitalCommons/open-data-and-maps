@@ -1,0 +1,11 @@
+
+select ?name ?spa ?lat ?long
+where {
+	?x rdf:type <http://purl.org/solidarityeconomics/experimental/essglobal/vocab/SSEInitiative> .
+	?x <http://purl.org/goodrelations/v1#name> ?name .
+	?x <http://purl.org/solidarityeconomics/experimental/essglobal/vocab/hasAddress> ?addr .
+	?addr  <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/within> ?spa .
+	?spa  <http://www.w3.org/2003/01/geo/wgs84_pos#lat> ?lat.
+	?spa  <http://www.w3.org/2003/01/geo/wgs84_pos#long> ?long.
+}
+
