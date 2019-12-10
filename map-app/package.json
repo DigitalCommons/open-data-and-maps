@@ -1,0 +1,30 @@
+{
+  "name": "sea-map",
+  "version": "0.1.0",
+  "description": "A web application for mapping initiatives in the Solidarity Economy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/SolidarityEconomyAssociation/open-data-and-maps.git"
+  },
+  "keywords": [
+    "mapping",
+    "solidarity",
+    "economy",
+    "semantic",
+    "web"
+  ],
+  "author": "Solidarity Economy Association",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues"
+  },
+  "homepage": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
