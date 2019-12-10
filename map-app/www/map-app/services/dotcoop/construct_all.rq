@@ -1,2 +1,0 @@
-# Example from https://www.w3.org/TR/rdf-sparql-query/#accessingRdfGraphs
-CONSTRUCT { ?s ?p ?o } WHERE { GRAPH <https://w3id.solidarityeconomy.coop/dotcoop> { ?s ?p ?o } . }
