@@ -44,20 +44,21 @@ define([
     const that = this;
 
     //create new div for buttons
-    const datasetBtns = selection.append("div")
-    .attr("class","dataset-buttons");
+    const datasetBtns = selection.append("ul")
+        .attr("class","sea-directory-list colours capitalized");
 
-    datasets.forEach(dataset => {
+    const color_class = function(i) {
+        return "sea-field-am"+Math.floor(((i+1) % 12) * 10);
+    };
+    datasets.forEach((dataset, i) => {
       let btn = datasetBtns
-        .append("button")
-        .attr("class", "btn-datasets")
+        .append("li")
+        .attr("class", color_class(i))
         .attr("id",dataset+"-btn")
         .attr("title", "load " + dataset + " dataset")
         .text(dataset);
       btn.on("click",()=>{
-          let a = selection.select(".active")
-          .attr("class","btn-datasets");
-          btn.attr("class","btn-datasets active");
+          btn.classed("sea-field-active", true);
           that.presenter.changeDatasets(dataset,false);
           
         });
@@ -65,22 +66,20 @@ define([
     //add mixed btn
     if(datasets.length > 1){
       let btn = datasetBtns
-          .append("button")
-          .attr("class", "btn-datasets")
+          .append("li")
+          .attr("class", color_class(datasets.length))
           .attr("id",`${defaultIdMixed}-btn`)
           .attr("title", "load mixed dataset")
           .text("Mixed Sources");
       btn.on("click",()=>{
-            let a = selection.select(".active")
-            .attr("class","btn-datasets");
-            btn.attr("class","btn-datasets active");
-            that.presenter.changeDatasets("",true);
-          });
+          btn.classed("sea-field-active", true);
+          that.presenter.changeDatasets("",true);
+      });
       }
 
       //set the default active button (currently loaded dataset)
       selection.select(`#${defaultActive}-btn`)
-      .attr("class","btn-datasets active");
+          .classed("sea-field-active", true);
   };
 
 
