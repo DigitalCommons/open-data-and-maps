@@ -92,6 +92,13 @@ switch ($_GET['q']) {
 	case "main":
 		$q = "query.rq";
 		break;
+	case "mixed":
+		$q = "mixed.rq";
+	    break;
+	case "nosameas":
+		$q = "querynosameas.rq";
+		//TODO in the future build framework for mixed requests
+		break;
 	case "activities":
 		$q = "activities.rq";
 		break;

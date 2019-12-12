@@ -1,0 +1,1 @@
+http://store1.solidarityeconomy.coop:8890/sparql

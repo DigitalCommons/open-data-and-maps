@@ -254,16 +254,32 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   function loadFromWebService() {
     var ds = config.namedDatasets();
     var i;
-    for (i = 0; i < ds.length; i++) {
-      loadDataset(ds[i]);
+    //load all of them
+    //load all from the begining if there are more than one
+    if (ds.length>1){
+      loadDataset(ds[0],true);
+      ds.forEach(dataset => {
+        loadDataset(dataset,false,false);
+      });
+
+
     }
+    else if (ds.length==1)
+      loadDataset(ds[0]);
 
   }
 
 
-  function loadDataset(dataset) {
-    var service =
-      config.getServicesPath() + "get_dataset.php?dataset=" + dataset;
+  function loadDataset(dataset,mixed=false,sameas=true) {
+
+    var service = mixed
+    ? config.getServicesPath() + "get_dataset.php?dataset=" + dataset + "&q=mixed" 
+    : 
+    (sameas? 
+      config.getServicesPath() + "get_dataset.php?dataset=" + dataset
+      :config.getServicesPath() + "get_dataset.php?dataset=" + dataset + "&q=nosameas");
+
+    console.log(service);
     var response = null;
     var message = null;
     eventbus.publish({
