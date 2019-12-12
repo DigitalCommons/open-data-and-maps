@@ -37,6 +37,7 @@ module SeOpenData
             ::CSV.foreach(sameas_csv, headers: true) do |row|
               @sameas[row[1]] << row[0] 
               '''temporary fix to
+second row is where its coming from i.e. will write to the one on the left
               first one is dotcoop second one is cuk
               @sameas[row[sameas_headers[0]]] << row[sameas_headers[1]]
               '''
