@@ -199,7 +199,8 @@ define([
           unselectedClusterGroup.getVisibleParent(initiative.marker) !==
           initiative.marker
         ) {
-          initiative.marker.__parent.spiderfy();
+          if(initiative.marker.__parent) //if it has a parent
+            initiative.marker.__parent.spiderfy();
         }
         initiative.marker.openPopup();
         unselectedClusterGroup.off("animationend");
@@ -244,9 +245,12 @@ define([
   function setSelected(initiative) {
     markerForInitiative[initiative.uniqueId].setSelected(initiative);
   }
-  function setUnselected(initiative) {                                                          
-    markerForInitiative[initiative.uniqueId].setUnselected(initiative);
+  function setUnselected(initiative) {       
+    if(markerForInitiative[initiative.uniqueId])                                                   
+      markerForInitiative[initiative.uniqueId].setUnselected(initiative);
   }
+
+  
   proto.destroy = function() {
     this.cluster.removeLayer(this.marker);
   };
