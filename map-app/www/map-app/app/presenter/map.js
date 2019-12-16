@@ -87,6 +87,7 @@ define([
   };
 
   proto.onInitiativeReset = function(data) {
+    
     this.view.removeAllMarkers();
     allMarkers = [];
     console.log("removing all");

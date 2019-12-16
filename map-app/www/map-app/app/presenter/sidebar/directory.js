@@ -160,9 +160,19 @@ define([
         p.notifyViewToBuildDirectory();
       }
     });
+    const lastContent = Presenter.prototype.contentStack.current();
     eventbus.subscribe({
       topic: "Initiative.reset",
       callback: function(data) {
+        // User has deselected
+        // TODO: This probably shouldn\t be here
+        eventbus.publish({
+          topic: "Markers.needToShowLatestSelection",
+          data: {
+            unselected: lastContent ? lastContent.initiatives : [],
+            selected: []
+          }
+        });
         //todo reload new ones inside instead (without closing)
         console.log("should close");
         eventbus.publish({
