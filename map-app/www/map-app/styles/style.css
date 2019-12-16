@@ -678,26 +678,6 @@ div.leaflet-popup-content {
   }
 }
 
-/*need to add media*/
-.dataset-buttons{
-  display: inline-block;
+.capitalized {
+    text-transform: capitalize;
 }
-
-.btn-datasets {
-  border: none;
-  outline: none;
-  padding: 10px 16px;
-  background-color: #f1f1f1;
-  cursor: pointer;
-  margin-bottom: 10px;
-  height: 40px;
-  display: block;
-  width:100%;
-}
-
-.active, .btn-datasets:hover {
-  background-color: #666;
-  color: white;
-}
-
-
