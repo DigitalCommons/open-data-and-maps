@@ -160,6 +160,16 @@ define([
         p.notifyViewToBuildDirectory();
       }
     });
+    eventbus.subscribe({
+      topic: "Initiative.reset",
+      callback: function(data) {
+        //todo reload new ones inside instead (without closing)
+        console.log("should close");
+        eventbus.publish({
+          topic: "Sidebar.hideInitiativeList"
+        });
+      }
+    });
     // eventbus.subscribe({topic: "Marker.SelectionToggled", callback: function(data) { p.onMarkerSelectionToggled(data); } });
     // eventbus.subscribe({topic: "Marker.SelectionSet", callback: function(data) { p.onMarkerSelectionSet(data); } });
     eventbus.subscribe({

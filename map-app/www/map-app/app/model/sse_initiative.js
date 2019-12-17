@@ -5,9 +5,15 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
   let loadedInitiatives = [];
   let initiativesToLoad = [];
   let initiativesByUid = {};
+  let allDatasets = config.namedDatasets();
+
+  //true means all available datasets from config are loaded
+  //otherwise a string to indicate which dataset is loaded
+  let currentDatasets = true;
+
 
   // Need to record all instances of any of the fields that are specified in the config
-  /* Format will be: 
+  /* Format will be:
     [{
       "field": field,
       "label": label
@@ -26,7 +32,6 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
 
   function Initiative(e) {
     const that = this;
-
     // Not all initiatives have activities
     let primaryActivityCode = e.primaryActivity
       ? getSkosCode(e.primaryActivity)
@@ -82,6 +87,8 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
         }
       }
     });
+
+
     loadedInitiatives.push(this);
     initiativesByUid[this.uniqueId] = this;
 
@@ -115,6 +122,30 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       return i.name.toUpperCase().includes(up);
     });
   }
+
+  function filterDatabases(dbSource,all) {
+    // returns an array of sse objects whose dataset is the same as dbSource
+    //if boolean all is set to true returns all instead
+    if (all)
+      return loadedInitiatives;
+    else {
+      let up = dbSource.toUpperCase();
+      return loadedInitiatives.filter(function(i) {
+        return i.dataset.toUpperCase() === up;
+      });
+    }
+    
+  }
+
+  function getDatasets(){
+    return allDatasets;
+  }
+
+  function getCurrentDatasets(){
+    return currentDatasets;
+  }
+
+
   function latLngBounds(initiatives) {
     // @returns an a pair of lat-long pairs that define the bounding box of all the initiatives,
     // The first element is south-west, the second north east
@@ -152,7 +183,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       performance.mark("endProcessing");
       // var marks = performance.getEntriesByType("mark");
       console.info(
-        `Time took to process all initiatives 
+        `Time took to process all initiatives
         ${performance.getEntriesByName("endProcessing")[0].startTime -
           performance.getEntriesByName("startProcessing")[0].startTime}`
       );
@@ -193,13 +224,43 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
         return "Unexpected JSON error message - cannot be extracted.";
     }
   }
+  function reset(dataset){
+    loadedInitiatives = [];
+    initiativesToLoad = [];
+    initiativesByUid = {};
+    registeredValues = {};
+    
+
+    //publish reset to map markers
+    eventbus.publish({
+      topic: "Initiative.reset",
+      data: { dataset:"all"}
+    });
+
+    if(allDatasets.includes(dataset)){
+      currentDatasets = dataset;
+      loadDataset(dataset);
+    }
+    else {
+      //return true to signal that all datasets are loaded
+      currentDatasets = true;
+      loadFromWebService();
+      console.log("loading mixed dataset" );
+
+    }
+
+  }
+
   function loadFromWebService() {
     var ds = config.namedDatasets();
     var i;
     for (i = 0; i < ds.length; i++) {
       loadDataset(ds[i]);
     }
+
   }
+
+
   function loadDataset(dataset) {
     var service =
       config.getServicesPath() + "get_dataset.php?dataset=" + dataset;
@@ -218,6 +279,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       // TODO - publish events (e.g. loading, success, failure)
       //        so that the UI can display info about datasets.
       // console.log(json);
+      console.log(json);
       console.info("Recording entire process");
       performance.mark("startProcessing");
       add(json.data);
@@ -258,7 +320,11 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
     search: search,
     latLngBounds: latLngBounds,
     getRegisteredValues: getRegisteredValues,
-    getInitiativeByUniqueId: getInitiativeByUniqueId
+    getInitiativeByUniqueId: getInitiativeByUniqueId,
+    filterDatabases:filterDatabases,
+    getAllDatasets:getDatasets,
+    reset:reset,
+    getCurrentDatasets:getCurrentDatasets
   };
   // Automatically load the data when the app is ready:
   //eventbus.subscribe({topic: "Main.ready", callback: loadFromWebService});
