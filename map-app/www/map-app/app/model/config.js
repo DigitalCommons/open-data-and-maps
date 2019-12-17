@@ -63,6 +63,9 @@ define([
   function getDisableClusteringAtZoom() {
     return config_json.disableClusteringAtZoom;
   }
+  function showDatasetsPanel() {
+    return !!config_json.showDatasetsPanel;
+  }  
   var pub = {
     getSoftwareTimestamp: getSoftwareTimestamp,
     getSoftwareVariant: getSoftwareVariant,
@@ -75,7 +78,8 @@ define([
     getInitialBounds: getInitialBounds,
     getFilterableFields: getFilterableFields,
     doesDirectoryHaveColours: doesDirectoryHaveColours,
-    getDisableClusteringAtZoom: getDisableClusteringAtZoom
+    getDisableClusteringAtZoom: getDisableClusteringAtZoom,
+    showDatasetsPanel: showDatasetsPanel,
   };
   return pub;
 });
