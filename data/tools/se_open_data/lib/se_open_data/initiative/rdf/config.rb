@@ -35,8 +35,14 @@ module SeOpenData
             puts sameas_headers
             raise("Expected 2 sameas_headers to be defined") unless sameas_headers && sameas_headers.size == 2
             ::CSV.foreach(sameas_csv, headers: true) do |row|
+              @sameas[row[1]] << row[0] 
+              '''temporary fix to
+              first one is dotcoop second one is cuk
               @sameas[row[sameas_headers[0]]] << row[sameas_headers[1]]
+              '''
             end
+            puts "test at config csvtordf"
+            puts @sameas
           end
         end
         def prefixes
