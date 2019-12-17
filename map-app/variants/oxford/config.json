@@ -10,5 +10,7 @@
   "doesDirectoryHaveColours_comment": "Does the directory feature coloured entries",
   "doesDirectoryHaveColours": true,
   "disableClusteringAtZoom_comment": "Zoom level to stop clustering at (false for off)",
-  "disableClusteringAtZoom": false
+  "disableClusteringAtZoom": false,
+  "showDatasetsPanel_comment": "Display the datasets panel",
+  "showDatasetsPanel": true
 }
