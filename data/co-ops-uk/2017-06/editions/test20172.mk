@@ -9,7 +9,7 @@ SRC_CSV_DIR := co-ops-uk-csv-test-data/
 # Generated URIs will datrt with: $(URI_SCHEME)://$(URI_HOST)/$(URI_PATH_PREFIX)
 URI_SCHEME := https
 URI_HOST := w3id.solidarityeconomy.coop
-URI_PATH_PREFIX := coops-uk/test2017/
+URI_PATH_PREFIX := coops-uk/test20172/
 
 ###########################################
 # To where are the Linked Data to be deployed?
@@ -18,7 +18,6 @@ URI_PATH_PREFIX := coops-uk/test2017/
 # The value of DEPLOYMENT_SERVER should be the name of a host set up in an ssh config file. 
 #     (See http://nerderati.com/2011/03/17/simplify-your-life-with-an-ssh-config-file/)
 DEPLOYMENT_SERVER ?= sea-0-admin
-ESSGLOBAL_URI	 := https://w3id.solidarityeconomy.coop/essglobal/V2a/
 
 # The directory on the deployment server where the RDF and HTML is to be deployed:
 DEPLOYMENT_WEBROOT := /var/www/html/data1.solidarityeconomy.coop/
