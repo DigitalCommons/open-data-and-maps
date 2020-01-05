@@ -10,16 +10,15 @@ module SeOpenData
         # https://github.com/essglobal-linked-open-data/map-sse/tree/develop/vocabs/standard
         uri = "#{essglobal_uri}standard/#{taxonomy}"
 
-	puts uri
-	#follow redirects until you reach the final one
-	'''olduri = ''
-	while uri!=olduri do
-	olduri = uri
-        uri = get_redirect_url(uri)
-	puts uri
-	puts "last was redir"
-	end'''
-	#hardcode to test -- error looking at old url
+        #follow redirects until you reach the final one
+        '''olduri = ''
+        while uri!=olduri do
+        olduri = uri
+              uri = get_redirect_url(uri)
+        puts uri
+        puts "last was redir"
+        end'''
+        #hardcode to test -- error looking at old url
         graph = ::RDF::Graph.load(uri, format: :rdfxml)
         query = ::RDF::Query.new do
           pattern [:concept, ::RDF.type, ::RDF::Vocab::SKOS.Concept]
@@ -43,7 +42,7 @@ module SeOpenData
 	    else
 		return url
       	    end
-	end
+	    end
 
       def has_label? (label)
         @lookup.has_key?(to_key(label))
