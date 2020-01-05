@@ -1,0 +1,22 @@
+# This query copied from Virtuoso SPARQL query page.
+# It is work in progress, exploring searches across graphs at the
+# same SPARL endpoint. 
+# In particular, where a URI is the sameAs another URI in a different graph.
+PREFIX rov: <http://www.w3.org/ns/regorg#>
+PREFIX gr: <http://purl.org/goodrelations/v1#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT distinct ?s ?o ?regorg ?name1 ?homepage1 ?name2 ?homepage2
+WHERE { 
+	GRAPH ?g1 { 
+		?s owl:sameAs ?o .
+			OPTIONAL {?s rov:hasRegisteredOrganization ?regorg . }
+		?s gr:name ?name1 .
+			OPTIONAL { ?s foaf:homepage ?homepage1 }
+	}
+	GRAPH ?g2 {
+		?o owl:sameAs ?s .
+			?o gr:name ?name2 .
+			OPTIONAL { ?s foaf:homepage ?homepage2 }
+	}
+}

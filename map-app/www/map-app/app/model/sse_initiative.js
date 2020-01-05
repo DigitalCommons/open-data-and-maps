@@ -300,7 +300,7 @@ define(["d3", "app/eventbus", "model/config"], function(d3, eventbus, config) {
       performance.mark("startProcessing");
       add(json.data);
       eventbus.publish({ topic: "Initiative.datasetLoaded" });
-    });
+    }).catch(err => console.log(err));
   }
   function loadPluralObjects(query, uid, callback) {
     var ds = config.namedDatasets();

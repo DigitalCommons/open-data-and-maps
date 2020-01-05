@@ -61,7 +61,7 @@ module SeOpenData
             r.pre_flight_checks
           end
           csv_out << output_headers.keys.map {
-            |h| r.send(h) 
+            |h| r.send(h)
           }
 
         rescue SeOpenData::Exception::IgnoreCsvRow => e

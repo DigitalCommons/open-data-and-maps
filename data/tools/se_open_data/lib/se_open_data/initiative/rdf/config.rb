@@ -42,8 +42,6 @@ second row is where its coming from i.e. will write to the one on the left
               @sameas[row[sameas_headers[0]]] << row[sameas_headers[1]]
               '''
             end
-            puts "test at config csvtordf"
-            puts @sameas
           end
         end
         def prefixes
