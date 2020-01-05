@@ -39,12 +39,12 @@ define([
     var p = new Presenter();
     p.registerView(view);
 
-    // eventbus.subscribe({
-    //   topic: "Sidebar.showInitiatives",
-    //   callback: function() {
-    //     p.changeSidebar("initiatives");
-    //   }
-    // });
+     eventbus.subscribe({
+       topic: "Sidebar.showInitiatives",
+       callback: function() {
+         p.changeSidebar("initiatives");
+       }
+     });
 
     eventbus.subscribe({
       topic: "Sidebar.showAbout",

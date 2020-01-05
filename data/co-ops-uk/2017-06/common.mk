@@ -11,8 +11,8 @@ STANDARD_CSV := $(TOP_OUTPUT_DIR)standard.csv
 
 # This has been worked out for the dotcoop dataset
 # TODO - sort out this hack
-SAMEAS_CSV := ../../dotcoop/domains2018-04-24/generated-data/experimental/sameas.csv
-SAMEAS_HEADERS := "cuk uri","dot uri"
+#SAMEAS_CSV := ../../dotcoop/domains2018-04-24/generated-data/experimental/sameas.csv
+#SAMEAS_HEADERS := "cuk uri","dot uri"
 
 # bin directory for se_open_data scripts.
 # If the bin derectory is on your PATH, you don't this:
