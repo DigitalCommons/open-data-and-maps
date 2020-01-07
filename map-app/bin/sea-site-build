@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Builds a sea-map site from config, sea-map and sea-dataserver assets
+# supplied in separate directories (by separate packages, allowing
+# your choice of site variants to be composed).
+#
+# Creates a `version.json` file, then links these components into
+# `$dest/in` and then runs the RequireJS optimiser on it, putting the
+# optimised result in `$dest/out`
+#
+# Assumes an NPM environment - specifically, that `generate-version`
+# is in the path, and `$package_name` is defined, containing the name
+# of the NPM package.
+
+config=${1?Please supply the config directory}
+sea_map=${2?Please supply the sea-map directory}
+sea_dataserver=${3?Please supply the sea-dataserver directory}
+dest=${4?Please supply a destination directory}
+
+script=$(readlink -f "$0")
+scriptpath=$(dirname "$script")
+
+rm -rf "$dest"/* &&
+mkdir -p "$dest/in/www" &&
+ln -sfrn "$sea_map/www"/* "$dest/in/www" &&
+generate-version "$npm_package_name" >config/version.json &&
+ln -sfrn "$config" "$dest/in/www/configuration" &&
+ln -sfrn "$sea_dataserver/www" "$dest/in/www/services" &&
+cp -f "$sea_map/build.js" "$dest/in/build.js" &&
+"$sea_map/node_modules/.bin/r.js" -o "$dest/in/build.js" "dir=$dest/out"

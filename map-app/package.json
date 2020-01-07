@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "description": "A web application for mapping initiatives in the Solidarity Economy",
   "main": "www/map-app/app.js",
-  "config": {
-    "variant": "experimental"
+  "config": {},
+  "bin": {
+    "generate-version": "bin/generate-version",
+    "sea-site-build": "bin/sea-site-build"
   },
   "scripts": {
-    "build": "mkdir -p build; node bin/r.js -o build.js dir=build",
-    "clean": "rm -f www/map-app/configuration/{{config,version}.json,about.html}; rm -rf build configuration",
-    "configure": "mkdir -p configuration; node bin/generate-version $npm_package_config_variant > configuration/version.json",
     "lint": "eslint www/map-app/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,7 +29,9 @@
     "url": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues"
   },
   "homepage": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps#readme",
-  "dependencies": {},
+  "dependencies": {
+    "requirejs": "^2.3.6"
+  },
   "devDependencies": {
     "eslint": "^6.7.2"
   }

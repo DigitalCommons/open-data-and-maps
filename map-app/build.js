@@ -22,7 +22,7 @@
     // While we're at it, let's not optimize other stuff too :-)
     leafletMarkerCluster: "empty:",
 
-    leafletActiveArea: "empty:"
+    leafletActiveArea: "empty:",
   },
 
   // Our web app source is in www:
