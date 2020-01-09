@@ -1,0 +1,7 @@
+# NOTE: npm generated package-lock.json *should* be committed
+
+# NPM installs libraries here (and in subdirs)
+node_modules
+
+# Transient build files go here:
+/build
