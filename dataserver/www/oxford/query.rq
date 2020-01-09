@@ -1,0 +1,38 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dc: <http://purl.org/dc/terms/>
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX essglobal: <https://w3id.solidarityeconomy.coop/essglobal/V2a/vocab/>
+PREFIX gr: <http://purl.org/goodrelations/v1#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX ospostcode: <http://data.ordnancesurvey.co.uk/id/postcodeunit/>
+PREFIX rov: <http://www.w3.org/ns/regorg#>
+PREFIX osspatialrelations: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX : <https://w3id.org/sea-lod/oxford/>
+
+SELECT ?name ?uri ?within ?lat ?lng ?www ?tel ?email ?regorg ?sameas ?desc ?primaryActivity ?street ?locality ?postcode
+WHERE {
+	?uri rdf:type essglobal:SSEInitiative .
+	?uri gr:name ?name .
+	OPTIONAL { ?uri foaf:homepage ?www . }
+	OPTIONAL { ?uri owl:sameAs ?sameas . }
+	OPTIONAL { ?uri dc:description ?desc . }
+	OPTIONAL { ?uri dc:description ?desc . }
+	OPTIONAL { ?uri vcard:hasTelephone ?hasTel . }
+	OPTIONAL { ?hasTel vcard:value ?tel . }
+	OPTIONAL { ?uri vcard:hasEmail ?hasEmail . }
+	OPTIONAL { ?hasEmail vcard:value ?email . }
+	OPTIONAL { ?uri essglobal:primarySector ?primaryActivity . }
+	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
+	OPTIONAL { ?uri essglobal:hasAddress ?addr . }
+	OPTIONAL { ?addr vcard:street-address ?street . }
+	OPTIONAL { ?addr vcard:postal-code ?postcode . }
+	OPTIONAL { ?addr vcard:locality ?locality . }
+	OPTIONAL { ?addr osspatialrelations:within ?within . }
+	OPTIONAL { ?within geo:lat ?lat. }
+	OPTIONAL { ?within geo:long ?lng. }
+}
+ORDER BY DESC(UCASE(?name))
+
+LIMIT 100
