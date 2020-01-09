@@ -32,7 +32,7 @@ define([
     return version_json.gitcommit;
   }
   function getServicesPath() {
-    return "map-app/services/";
+    return "services/";
   }
   function getNongeoLatLng() {
     return config_json.defaultNongeoLatLng
