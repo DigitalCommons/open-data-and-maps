@@ -2,8 +2,15 @@
   "name": "sea-map",
   "version": "0.1.0",
   "description": "A web application for mapping initiatives in the Solidarity Economy",
-  "main": "index.js",
+  "main": "www/map-app/app.js",
+  "config": {
+    "variant": "experimental"
+  },
   "scripts": {
+    "build": "mkdir -p build; node bin/r.js -o build.js dir=build",
+    "clean": "rm -f www/map-app/configuration/{{config,version}.json,about.html}; rm -rf build configuration",
+    "configure": "mkdir -p configuration; node bin/generate-version $npm_package_config_variant > configuration/version.json",
+    "lint": "eslint www/map-app/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,8 +30,8 @@
     "url": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues"
   },
   "homepage": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "eslint": "^6.7.2"
   }
 }
