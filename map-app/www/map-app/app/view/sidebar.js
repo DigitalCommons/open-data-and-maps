@@ -1,13 +1,15 @@
 // Set up the various sidebars
 define([
+  "model/config",
   "app/eventbus",
   "d3",
   "view/base",
   "presenter/sidebar",
   "view/sidebar/initiatives",
   "view/sidebar/about",
-  "view/sidebar/directory"
-], function(eventbus, d3, viewBase, presenter, initiatives, about, directory) {
+  "view/sidebar/directory",
+  "view/sidebar/datasets"
+], function(config, eventbus, d3, viewBase, presenter, initiatives, about, directory,datasets) {
   "use strict";
 
   // This deals with the view object that controls the sidebar
@@ -51,7 +53,7 @@ define([
       .append("i")
       .attr("class", "fa fa-bars");
 
-    selection = selection
+    selection
       .append("button")
       .attr("class", "w3-button w3-border-0")
       .attr("title", "Show info")
@@ -60,6 +62,18 @@ define([
       })
       .append("i")
       .attr("class", "fa fa-info-circle");
+
+    if (config.showDatasetsPanel()) {
+      selection = selection
+        .append("button")
+        .attr("class", "w3-button w3-border-0 ml-auto")
+        .attr("title", "Show Datasets")
+        .on("click", function() {
+          that.changeSidebar("datasets");
+        })
+        .append("i")
+        .attr("class", "fa fa-database");
+    }
   };
 
   proto.createSidebars = function() {
@@ -67,7 +81,8 @@ define([
       about: about.createSidebar(),
       initiatives: initiatives.createSidebar(),
       // mainMenu: mainMenu.createSidebar(),
-      directory: directory.createSidebar()
+      directory: directory.createSidebar(),
+      datasets: datasets.createSidebar()
     };
   };
 

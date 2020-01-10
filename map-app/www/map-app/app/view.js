@@ -26,7 +26,7 @@ define([
       });
 
     map.init();
-    // searchbox.init();
+    searchbox.init();
     sidebar.init();
   }
   var pub = {

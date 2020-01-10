@@ -155,6 +155,14 @@ define([
         p.onInitiativeResults(data);
       }
     });
+    /*
+    eventbus.subscribe({
+      topic: "Datasets.filterDataset",
+      callback: function(data) {
+        //p.onInitiativeResults(data);
+      }
+    });
+    */
     eventbus.subscribe({
       topic: "Marker.SelectionToggled",
       callback: function(data) {
