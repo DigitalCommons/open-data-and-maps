@@ -4,6 +4,9 @@
   "description": "A web application for mapping initiatives in the Solidarity Economy",
   "main": "www/map-app/app.js",
   "config": {},
+  "engines": {
+    "npm": "~6.5.0"
+  },
   "bin": {
     "generate-version": "bin/generate-version",
     "sea-site-build": "bin/sea-site-build"
