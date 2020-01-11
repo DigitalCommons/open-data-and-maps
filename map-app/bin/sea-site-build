@@ -16,6 +16,7 @@ config=${1?Please supply the config directory}
 sea_map=${2?Please supply the sea-map directory}
 sea_dataserver=${3?Please supply the sea-dataserver directory}
 dest=${4?Please supply a destination directory}
+shift 4 # subsequent params are optional
 
 script=$(readlink -f "$0")
 scriptpath=$(dirname "$script")
@@ -27,4 +28,5 @@ generate-version "$npm_package_name" >config/version.json &&
 ln -sfrn "$config" "$dest/in/www/configuration" &&
 ln -sfrn "$sea_dataserver/www" "$dest/in/www/services" &&
 cp -f "$sea_map/build.js" "$dest/in/build.js" &&
+{ if [ -n "$*" ]; then ln -vsfrn "$@" "$dest/in/www/"; fi } &&
 "$sea_map/node_modules/.bin/r.js" -o "$dest/in/build.js" "dir=$dest/out"
