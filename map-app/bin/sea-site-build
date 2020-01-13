@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Builds a sea-map site from config, sea-map and sea-dataserver assets
 # supplied in separate directories (by separate packages, allowing
@@ -12,11 +12,35 @@
 # is in the path, and `$package_name` is defined, containing the name
 # of the NPM package.
 
-config=${1?Please supply the config directory}
-sea_map=${2?Please supply the sea-map directory}
-sea_dataserver=${3?Please supply the sea-dataserver directory}
-dest=${4?Please supply a destination directory}
-shift 4 # subsequent params are optional
+while getopts “c:m:d:” OPTION
+do
+     case $OPTION in
+         c)
+	     config="$OPTARG"
+             ;;
+         m)
+	     sea_map="$OPTARG"
+             ;;
+         d)
+	     dest="$OPTARG"
+             ;;
+         ?)
+             echo "invalid option '$OPTION', stopping" >&2
+             exit 1
+             ;;
+     esac
+done
+
+# check mandatory params are set
+for param in config sea_map dest; do
+    [[ -n "${!$param}" ]] || continue
+    echo "Please supply the $param directory" >&2
+    exit -1
+done
+
+# remove the options from the argument list
+shift $((OPTIND-1))
+
 
 script=$(readlink -f "$0")
 scriptpath=$(dirname "$script")
@@ -26,7 +50,6 @@ mkdir -p "$dest/in/www" &&
 ln -sfrn "$sea_map/www"/* "$dest/in/www" &&
 generate-version "$npm_package_name" >config/version.json &&
 ln -sfrn "$config" "$dest/in/www/configuration" &&
-ln -sfrn "$sea_dataserver/www" "$dest/in/www/services" &&
 cp -f "$sea_map/build.js" "$dest/in/build.js" &&
 { if [ -n "$*" ]; then ln -vsfrn "$@" "$dest/in/www/"; fi } &&
 "$sea_map/node_modules/.bin/r.js" -o "$dest/in/build.js" "dir=$dest/out"
