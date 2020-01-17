@@ -25,22 +25,32 @@ do
 	     dest="$OPTARG"
              ;;
          ?)
-             echo "invalid option '$OPTION', stopping" >&2
+             printf "invalid option '$OPTION', stopping\n" >&2
              exit 1
              ;;
      esac
 done
 
+declare -A params=(
+    [config]=-c
+    [sea_map]=-m
+    [dest]=-d
+)
+
 # check mandatory params are set
-for param in config sea_map dest; do
-    [[ -n "${!$param}" ]] || continue
-    echo "Please supply the $param directory" >&2
+for param in ${!params[@]}; do
+    printf "param $param\t${params[$param]}='${!param}'\n"
+    [[ -n "${!param}" ]] && continue
+
+    printf "Please supply the '${params[$param]} <$param path>' directory option" >&2
     exit -1
 done
 
 # remove the options from the argument list
 shift $((OPTIND-1))
 
+printf "supplemental assets:\n"
+printf "  %s\n" "$@"
 
 script=$(readlink -f "$0")
 scriptpath=$(dirname "$script")
