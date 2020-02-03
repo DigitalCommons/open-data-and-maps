@@ -4,6 +4,7 @@ module SeOpenData
   module CSV
     def CSV.create_sameas_from_csv(input_io, output_io, headers, csv_opts = {})
       csv_opts.merge!(headers: true)
+	print csv_opts
       csv_in = ::CSV.new(input_io, csv_opts)
 
       pairs = csv_in.map { |row| [row[headers[0]], row[headers[1]]] }
@@ -19,4 +20,3 @@ module SeOpenData
     end
   end
 end
-

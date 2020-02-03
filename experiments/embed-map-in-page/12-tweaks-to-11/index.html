@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+
+		<!-- See https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag -->
+		<!-- Setting the viewport like this is essential for the map-app to work correctly,
+		     and it also means that the rest of the site needs to be responsive -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="lib/map-app.css">
+		<link rel="stylesheet" href="styles/style.css">
+
+		<style type="text/css">
+			body {
+				padding: 0;
+				margin: 0;
+			}
+			html, body {
+				height: 100%;
+				width: 100vw;
+			}
+			.page-content, map-app {
+				height: 100%;
+				width: 100%;
+			}
+			#site {
+				height: 100%;
+				width: 100%;
+			}
+			#map-box {
+				display: none;
+				height: 100%;
+				width: 100%;
+			}
+			#site-box {
+				display: none;
+				flex-direction: row;
+
+				justify-content: flex-start; /* align items in Main Axis */
+				align-items: stretch; /* align items in Cross Axis */
+				align-content: stretch; /* Extra space in Cross Axis */
+				overflow: auto;
+			}
+			/* flexbox CSS taken from https://jsfiddle.net/MadLittleMods/LmYay/ */
+			.flexbox-column {
+				width: 100%;
+				height: 100%;
+
+				display: flex;
+				flex-direction: column;
+
+				/* Not sure if we need these: */
+				justify-content: flex-start; /* align items in Main Axis */
+				align-items: stretch; /* align items in Cross Axis */
+				align-content: stretch; /* Extra space in Cross Axis */
+			}
+			.flexbox-item {
+				/* Nothing here: The default behaviour seems to be fine :-) */
+			}
+			.flexbox-item-grow {
+				flex: 1; /* same as flex: 1 1 auto; */
+			}
+
+		</style>
+		<script>
+			function navbarMapClicked(btn) {
+				console.log("Map");
+				document.getElementById("site-box").style.display = "none";
+				document.getElementById("map-box").style.display = "flex";
+			}	
+			function navbarSiteClicked(btn) {
+				console.log("Site");
+				document.getElementById("map-box").style.display = "none";
+				document.getElementById("site-box").style.display = "flex";
+			}	
+			function pageLoaded() {
+				console.log("pageLoaded");
+				document.getElementById("map-box").style.display = "none";
+				document.getElementById("site-box").style.display = "none";
+			}
+		</script>
+		<script src="web-component-loader.js"></script>
+
+	</head>
+	</body onload="pageLoaded()">
+		<div class="w3-teal page-content flexbox-column">
+			<div class="w3-bar w3-black">
+				<a href="#" class="w3-bar-item w3-button" onclick="navbarMapClicked(this)">Map</a>
+				<a href="#" class="w3-bar-item w3-button" onclick="navbarSiteClicked(this)">Site</a>
+			</div>
+			
+			<div class="flexbox-item-grow" id="map-box">
+				<map-app></map-app>
+			</div>
+			<div class="flexbox-item-grow" id="site-box">
+				<div class="w3-blue" id="site">
+					<div class="w3-indigo w3-center">
+						<h2>Learn about Solid from Time Berners-Lee</h2>
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/elfSzMATcB4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</div>
+					<hr />
+					<div class="w3-indigo w3-center">
+						<h2>Tom and Jerry</h2>
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/cqyziA30whE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</div>
+
+					<div class="w3-blue">
+						<p>Foo!</p> <p>Foo!</p> <p>Foo!</p> <p>Foo!</p> <p>Foo!</p> <p>Foo!</p>
+						<p>Foo!</p> <p>Foo!</p> <p>Foo!</p> <p>Foo!</p> <p>Foo!</p> <p>Foo!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

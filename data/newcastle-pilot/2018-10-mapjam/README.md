@@ -129,6 +129,54 @@ Test the data in the triplestore:
 
 You should see chosen fields from the entire dataset being dumped out.
 
+### Ensure the map-app uses the correct SPARQL query
 
+A SPARQL query will have been generated for this dataset:
+
+```
+~/SEA/open-data-and-maps/data/newcastle-pilot/2018-10-mapjam$ cat generated-data/experimental/sparql/query.rq 
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dc: <http://purl.org/dc/terms/>
+PREFIX vcard: <http://www.w3.org/2006/vcard/ns#>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX essglobal: <http://purl.org/solidarityeconomics/experimental/essglobal/vocab/>
+PREFIX gr: <http://purl.org/goodrelations/v1#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX ospostcode: <http://data.ordnancesurvey.co.uk/id/postcodeunit/>
+PREFIX rov: <http://www.w3.org/ns/regorg#>
+PREFIX osspatialrelations: <http://data.ordnancesurvey.co.uk/ontology/spatialrelations/>
+PREFIX : <https://w3id.solidarityeconomy.coop/sea-lod/newcastle-mapjam/>
+
+SELECT ?name ?uri ?within ?lat ?lng ?www ?regorg ?sameas ?desc
+WHERE {
+	?uri rdf:type essglobal:SSEInitiative .
+	?uri gr:name ?name .
+	OPTIONAL { ?uri foaf:homepage ?www . }
+	OPTIONAL { ?uri owl:sameAs ?sameas . }
+	OPTIONAL { ?uri dc:description ?desc . }
+	?uri essglobal:hasAddress ?addr .
+	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
+	?addr osspatialrelations:within ?within .
+	?within geo:lat ?lat.
+	?within geo:long ?lng.
+}
+LIMIT 179
+```
+
+Note in particular that the `LIMIT` corresponds to the number of initiatives in the dataset.
+You must ensure that the sparql query used by the map-app matches this.
+For example:
+```
+~/SEA/open-data-and-maps/data/newcastle-pilot/2018-10-mapjam$ find ../../../map-app/www -name query.rq
+../../../map-app/www/map-app/services/newcastle-pilot/query.rq
+../../../map-app/www/map-app/services/newcastle-mapjam/query.rq
+../../../map-app/www/map-app/services/coops-uk2016/query.rq
+../../../map-app/www/map-app/services/coops-uk2017/query.rq
+../../../map-app/www/map-app/services/dotcoop/query.rq
+
+~/SEA/open-data-and-maps/data/newcastle-pilot/2018-10-mapjam$ diff generated-data/experimental/sparql/query.rq ../../../map-app/www/map-app/services/newcastle-mapjam/query.rq
+~/SEA/open-data-and-maps/data/newcastle-pilot/2018-10-mapjam$
+```
 
 

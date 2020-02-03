@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body onload="loaded()">
+		<p class="w3-green">This para is not styled because the linked stylesheet's scope is limited to the shadow DOM for my-component</p>
+		<div style="width:400px;height:400px;">
+			<my-component>
+				<p>Foo</p>
+				<p slot="foo">Foo sdkjfh askdjhf kasdhjf jakshdfk sa</p>
+				<p>Foo</p>
+				<p>Foo</p>
+			</my-component>
+		</div>
+		<dir id="log" style="height:200px;">
+		</dir>
+		<script type="text/javascript" src="main.js"></script>
+		<script>
+			function logIt(txt) {
+				const log = document.getElementById('log');
+				const p = document.createElement('p');
+				log.appendChild(p).innerText = txt;
+			}
+			function loaded() {
+				if (!customElements) {
+					logIt("No customElements");
+				}
+				if ('registerElement' in document) {
+					logIt("v0 customElements");
+				}
+				if ('customElements' in window) {
+					logIt("v1 customElements");
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -22,6 +22,7 @@ module SeOpenData
           xml(:html) {
           xml(:head) {
             xml(:title) { initiative.name } +
+            xml(:meta, charset: "UTF-8") +
             config.css_files.map {|f|
               xml(:link, rel: "stylesheet", href: f)
             }.join

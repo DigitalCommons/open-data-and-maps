@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+/** Generates a version.json file for use by a map-app consumer site 
+ *
+ * invoke like this:
+ *
+ *      generate-version $variant_name > version.json
+ *
+ * Where `$variant_name` is a variant name to use as the `variant`
+ * property value.
+ */
+
+const spawn = require('child_process').spawnSync;
+const exec = (str) => {
+    const [ cmd, ...args ] = str.split(/ +/)
+    return spawn(cmd, args)
+}
+const shell = (str) => {
+    const result = exec(str);
+    if (result.status == 0)
+        return String(result.stdout).replace(/\n$/, '');
+    
+    console.error(`command failed: ${str}`);
+    process.exit(1)
+}
+
+const timestamp = shell(`/bin/date +%Y-%m-%dT%H:%M:%S%z`);
+var commit = shell(`git rev-parse --short HEAD`);
+
+if (exec(`git diff-index --quiet HEAD`).status)
+    commit += "-modified";
+
+const config = {
+    variant: process.argv[2] || 'experimental',
+    timestamp: timestamp,
+    gitcommit: commit,
+};
+console.log(JSON.stringify(config))

@@ -1,4 +1,0 @@
-{
-	"namedDatasets_comment": "These names correspond to directories in www/services which contain: default-graph-uri.txt, endpoint.txt, query.rq",
-	"namedDatasets": [ "dotcoop" ]
-}

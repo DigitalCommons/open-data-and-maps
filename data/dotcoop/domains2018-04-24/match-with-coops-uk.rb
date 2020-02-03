@@ -1,4 +1,4 @@
-
+#
 # To assist matching coops UK data with dotcoop data
 #
 require 'pp'
@@ -162,11 +162,11 @@ class Comparer
 end
 
 # @todo - these should be passed to script as arguments
-COOPS_UK_CSV = "../../co-ops-uk/2017-06/generated-data/final/csv/uri-name-postcode.csv"
-DOTCOOP_CSV = "generated-data/experimental/csv/uri-name-postcode.csv"
-PERFECT_MATCH_CSV = "generated-data/experimental/sameas.csv"
-CANDIDATE_MATCH_CSV = "generated-data/experimental/csv/candidate_match.csv"
-NO_MATCH_CSV = "generated-data/experimental/csv/no_match.csv"
+COOPS_UK_CSV = "../../co-ops-uk/2019-06/generated-data/test2019/csv/uri-name-postcode.csv"
+DOTCOOP_CSV = "generated-data/test/csv/uri-name-postcode.csv"
+PERFECT_MATCH_CSV = "generated-data/test/sameas.csv"
+CANDIDATE_MATCH_CSV = "generated-data/test/csv/candidate_match.csv"
+NO_MATCH_CSV = "generated-data/test/csv/no_match.csv"
 
 comp = Comparer.new(Dataset.new("dot", DOTCOOP_CSV), Dataset.new("cuk", COOPS_UK_CSV))
 comp.save_perfect_matches(PERFECT_MATCH_CSV)

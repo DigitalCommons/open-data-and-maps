@@ -26,7 +26,7 @@ CSV_target := csv
 .DEFAULT_GOAL := $(CSV_target)
 
 # Source files:
-CLEAN_UK_CSV := $(SRC_CSV_DIR)Clean-UK.csv
+CLEAN_UK_CSV := $(SRC_CSV_DIR)2019-04-12-original.csv
 
 # Here's the directory where we generate intermediate csv files
 GEN_CSV_DIR := $(TOP_OUTPUT_DIR)csv/
@@ -50,6 +50,7 @@ CLEAN_UK_CONVERTER := converter.rb
 # Scripts to be used in the pipeline:
 CSV_DUP_FIXER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/fix-duplicates.rb
 CSV_DE_DUPER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/remove-duplicates.rb
+CSV_MERGE_AND_DE_DUPE := $(SE_OPEN_DATA_BIN_DIR)csv/standard/merge-domains-and-remove-duplicates.rb
 CSV_POSTCODEUNIT_ADDER := $(SE_OPEN_DATA_BIN_DIR)csv/standard/add-postcode-lat-long.rb
 URI_NAME_POSTCODE_RUBY := $(SE_OPEN_DATA_BIN_DIR)csv/standard/make-uri-name-postcode.rb
 
@@ -68,17 +69,26 @@ $(STD_CLEAN_UK_CSV) : $(CLEAN_UK_CSV) $(CLEAN_UK_CONVERTER) | $(GEN_CSV_DIR)
 	$(RUBY) $(CLEAN_UK_CONVERTER) $< > $@
 
 # Where duplicate id values are found, add a number in order to de-duplicate them:
-$(STD_FIXED_DUPS_CSV) : $(STD_CLEAN_UK_CSV)  | $(GEN_CSV_DIR)
-	$(RUBY) $(CSV_DUP_FIXER) $(STD_CLEAN_UK_CSV) > $@
+# $(STD_FIXED_DUPS_CSV) : $(STD_CLEAN_UK_CSV)  | $(GEN_CSV_DIR)
+# 	$(RUBY) $(CSV_DUP_FIXER) $(STD_CLEAN_UK_CSV) > $@
 
 # Remove any remaining rows with duplicate id values (there should be none, due to the above):
-$(STD_DE_DUPED_CSV) : $(STD_FIXED_DUPS_CSV)  | $(GEN_CSV_DIR)
-	$(RUBY) $(CSV_DE_DUPER) $(STD_FIXED_DUPS_CSV) > $@ 2> $(STD_DUPS_CSV)
+# $(STD_DE_DUPED_CSV) : $(STD_FIXED_DUPS_CSV)  | $(GEN_CSV_DIR)
+# 	$(RUBY) $(CSV_DE_DUPER) $(STD_FIXED_DUPS_CSV) > $@ 2> $(STD_DUPS_CSV)
+# 	@echo "Ignored duplicates have been written to $(STD_DUPS_CSV)"
+# 	@echo Total ignored: `wc -l $(STD_DUPS_CSV)`
+
+
+# Look for duplicate id values and move their domains into the first occurence.
+$(STD_DE_DUPED_CSV) : $(STD_CLEAN_UK_CSV)  | $(GEN_CSV_DIR)
+	$(RUBY) $(CSV_MERGE_AND_DE_DUPE) $(STD_CLEAN_UK_CSV) > $@ 2> $(STD_DUPS_CSV)
 	@echo "Ignored duplicates have been written to $(STD_DUPS_CSV)"
 	@echo Total ignored: `wc -l $(STD_DUPS_CSV)`
+	@echo "gets here"
 
 # Populate the container lat/long fields, where the postcodeunit is the container:
 $(STANDARD_CSV) : $(STD_DE_DUPED_CSV) | $(GEN_CSV_DIR)
+#$(STANDARD_CSV) : $(STD_CLEAN_UK_CSV) | $(GEN_CSV_DIR)
 	$(RUBY) $(CSV_POSTCODEUNIT_ADDER) --postcodeunit-cache $(POSTCODE_LAT_LNG_CACHE) $< > $@
 
 # Create a CSV file from the STANDARD one with just a few columns: URI, Name and Normalized postcode

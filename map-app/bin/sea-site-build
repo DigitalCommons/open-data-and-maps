@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Builds a sea-map site from config, sea-map and sea-dataserver assets
+# supplied in separate directories (by separate packages, allowing
+# your choice of site variants to be composed).
+#
+# Creates a `version.json` file, then links these components into
+# `$dest/in` and then runs the RequireJS optimiser on it, putting the
+# optimised result in `$dest/out`
+#
+# Assumes an NPM environment - specifically, that `generate-version`
+# is in the path, and `$package_name` is defined, containing the name
+# of the NPM package.
+
+while getopts “c:m:d:” OPTION
+do
+     case $OPTION in
+         c)
+	     config="$OPTARG"
+             ;;
+         m)
+	     sea_map="$OPTARG"
+             ;;
+         d)
+	     dest="$OPTARG"
+             ;;
+         ?)
+             printf "invalid option '$OPTION', stopping\n" >&2
+             exit 1
+             ;;
+     esac
+done
+
+declare -A params=(
+    [config]=-c
+    [sea_map]=-m
+    [dest]=-d
+)
+
+# check mandatory params are set
+for param in ${!params[@]}; do
+    printf "param $param\t${params[$param]}='${!param}'\n"
+    [[ -n "${!param}" ]] && continue
+
+    printf "Please supply the '${params[$param]} <$param path>' directory option" >&2
+    exit -1
+done
+
+# remove the options from the argument list
+shift $((OPTIND-1))
+
+printf "supplemental assets:\n"
+printf "  %s\n" "$@"
+
+script=$(readlink -f "$0")
+scriptpath=$(dirname "$script")
+
+rm -rf "$dest"/* &&
+mkdir -p "$dest/in/www" &&
+ln -sfrn "$sea_map/www"/* "$dest/in/www" &&
+generate-version "$npm_package_name" >config/version.json &&
+ln -sfrn "$config" "$dest/in/www/configuration" &&
+cp -f "$sea_map/build.js" "$dest/in/build.js" &&
+{ if [ -n "$*" ]; then ln -vsfrn "$@" "$dest/in/www/"; fi } &&
+"$sea_map/node_modules/.bin/r.js" -o "$dest/in/build.js" "dir=$dest/out"

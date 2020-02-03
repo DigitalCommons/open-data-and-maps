@@ -1,59 +1,100 @@
-This page is out of date. Bringing it up to date is the subject of [this issue](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues/32)
+# PACKAGE
 
-# map-app
+map-app - A web application for mapping initiatives in the Solidarity Economy
 
-This [web application](http://data.solidarityeconomics.org/map-app/) displays Solidarity Economy initiatives on a map. It is provided as an experimental demonstration platform to exercise linked open data being developed as part of the [P6Data](https://github.com/p6data-coop) project.
-This version displays information taken from the [Co-ops UK open dataset 2016](http://www.uk.coop/resources/co-operative-economy-open-dataset-2016). 
-The data has been converted into Linked Open Data; see [software for LOD conversion on GitHub](https://github.com/p6data-coop/ise-linked-open-data/tree/master/data/co-ops-uk/2016-06).
+# USAGE
 
-## Using the map-app
+This package is designed to supply the basic source and web assets for
+a Solidarity Economy Association map website.  This is tailored for a
+particular case by a configuration file, and an about.html page,
+supplied by the consumer site package.
 
-[Run it](http://data.solidarityeconomics.org/map-app/), and it will start up, then load the data. This may take a short time, depending on the usual set of things that influence web speed.
-Once the data has loaded, you'll see a UK map, with a bunch of numbers in circles.
-Each circle is a cluster of co-ops, the number tells you how many co-ops are in the cluster.
-Click on numbered circles until you get down to icons without numbers. 
-These are the individual co-ops.
-Click on a co-op to see some information in a pop-up. 
-The pop-up includes a link that will open up the full data (HTML version) for that co-op.
+The consumer package should supply a script target to build itself
+like this, which uses the `sea-site-build` script exported by this
+package.
 
-## Where does the app get its data?
-
-The [data](http://data.solidarityeconomics.org/id/experimental/co-ops-uk) has been loaded into an [Ontowiki](http://aksw.org/Projects/OntoWiki.html) instance. 
-Ontowiki provides a [triple store](https://en.wikipedia.org/wiki/Triplestore), and supports [SPARQL](https://en.wikipedia.org/wiki/SPARQL) queries. 
-When the map-app runs:
-
-1. The map-app requests data from the web server. 
-1. On receiving this request, the web server issues a SPARQL query to the OntoWiki instance.
-3. The web server returns the results of the SPARQL query to the map-app (as JSON). 
-
-## What's in the data?
-
-The data is limited - it does not (yet) contain much that expresses what an SSE Initiative actually does.
-Instead, it is intended to achieve the following goals:
-
-* Basic use of the [ESS Global DCAP-SSE](http://purl.org/essglobal/wiki).
-* The data contains links to external datasets. e.g. [Ordnance Survey postcode](http://data.ordnancesurvey.co.uk/id/postcodeunit/OX11BP).
-* Data is retrieved from external datasets via the SPARQL query (we get lat/long from Ordnance Survey via the co-op's postcode URI).
-* The dataset is big enough to explore basic performance issues, with over 10,000 co-ops.
-
-## The Linked Open Data
-The URI for the index into the dataset is http://data.solidarityeconomics.org/id/experimental/co-ops-uk.
-URIs for individual co-ops look like this: http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807.
-If you point a browser [there](http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807), you'll get back HTML;
-if you ask for RDF/XML, then that is what you'll get - try this:
+The "dev" package is a suggestion for allowing local hosting of the
+site for development, using the command-line PHP executable's facility
+to launch a web server. (On Debian and related distros, you'll need
+the `php-cli` and `php-curl` packages.)
 
 ```
-curl  -H "Accept: application/rdf+xml" -L http://data.solidarityeconomics.org/id/experimental/co-ops-uk/R008807
+  "scripts": {
+    "build": "generate-version $npm_package_name >config/version.json && sea-site-build config node_modules/sea-map node_modules/sea-dataserver build",
+    "dev": "php -t build/out -S localhost:8080"
+  },
 ```
 
-## Limitations
+Given these, basic usage of a consuming NPM package therefore would
+look like this:
 
-Although the Co-ops UK dataset includes co-ops in Northern Ireland, the map-app does not show them, because Ordnance Survey doesn't publish data for Northern Ireland free of charge.
+    npm install         # Download the dependencies
+	npm run build       # Build and minify the source into builds/out
+    npm run def         # Launch a development web server on http://localhost:8080
 
-Other co-ops have also been omitted. 
-The most common cause for this is URI clashes - we're constructing URIs by concatenating `Co-ops UK Organization ID` and `Postcode`.
-These two fields are not sufficient to guarantee uniqueness.
+# CONSUMING PACKAGE REQUIREMENTS
 
-The URIs for the Linked Open Data should not be regarded as persistent. They will definitely change (see previous point).
+These need to have a configuration directory containing:
 
-There is currently no taxonomical information in the data. That will come later, hopefully by collaborating with others, to continue to evolve standards.
+ - `about.html` - containing mark-up which will be displayed on the about tab in the sidebar
+ - `config.json` - configuration parameters, see beloow
+ - *<dataset>*/ - a directory for each dataset named in the config, containing parameters for the SPARQL query to send to Virtuoso (these will be url-encoded):
+   - `query.rq` - the `query` parameter to pass
+   - `default-graph-uri.txt` - the `default-graph-uri` parameter to pass
+   - `endpoint.txt` - the base URL to the Virtuoso server
+
+The NPM `sea-map` package needs to be a dependency, which exports the
+`sea-site-build` script.
+
+The package needs to invoke it like this(typically as an npm build
+script target):
+
+     sea-site-build $config_dir node_modules/sea-map node_modules/sea-dataserver $build_dir",
+
+Where:
+
+  - `$config_dir` is the path to the configuration directory mentioned above
+  - `node_modules/sea-map` is the path to the `sea-map` package directory
+  - `node_modules/sea-dataserver` is the path to the `sea-dataserver` package directory
+  - `$build_dir` is the path in which to build the site.
+  
+`$build_dir` will be populated with two directories:
+
+ - `in` - which contains a RequireJS `build.js` script and the assets
+   it needs (linked from eleewhere)
+ - `out` - the generated site content
+
+`build/out` can then be served by a (PHP enabled) web server directly,
+or packaged for deployment.
+
+ ## CONFIG.JSON
+ 
+ This is not currently properly documented, but here is an example:
+
+```
+ {
+  "namedDatasets_comment": "These names correspond to directories in www/services which contain: default-graph-uri.txt, endpoint.txt, query.rq",
+  "namedDatasets": ["oxford"],
+  "htmlTitle_comment": "This will override the default value for the htmp <title> tag",
+  "htmlTitle": "Solidarity Oxford",
+  "defaultNongeoLatLng_comment": "The default latitude and longitude values for initiatives with no address",
+  "defaultNongeoLatLng": { "lat": "51.7520", "lng": "-1.2577" },
+  "filterableFields_comment": "A list of the fields that can populate the directory",
+  "filterableFields": [{ "field": "primaryActivity", "label": "Activities" }],
+  "doesDirectoryHaveColours_comment": "Does the directory feature coloured entries",
+  "doesDirectoryHaveColours": true,
+  "disableClusteringAtZoom_comment": "Zoom level to stop clustering at (false for off)",
+  "disableClusteringAtZoom": false
+}
+```
+
+# SCRIPT TARGETS
+
+This package does little in its own right. The following are the
+script targets it supports.
+
+    npm lint
+	
+Runs a static analysis of the source, highlighting possible improvements
+
+

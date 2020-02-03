@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-
+# $LOAD_PATH.unshift '/Volumes/Extra/SEA-dev/open-data-and-maps/data/tools/se_open_data/lib'
 require 'optparse'
 require 'ostruct'
 require 'se_open_data'
@@ -57,6 +57,8 @@ class OptParse
   end  # parse()
 end
 
+# Production
+
 $options = OptParse.parse(ARGV)
 SeOpenData::CSV.add_postcode_lat_long(
   ARGF.read,
@@ -65,3 +67,20 @@ SeOpenData::CSV.add_postcode_lat_long(
   $options.new_headers,
   $options.postcodeunit_cache
 )
+
+# For debugging 
+
+# input = File.open("/Volumes/Extra/SEA-dev/open-data-and-maps/data/dotcoop/domains2018-04-24/generated-data/experimental-new-server/csv/de-duplicated.csv", "r:utf-8")
+# inputContent = input.read;
+# input.close
+# $stdout.reopen("/Volumes/Extra/SEA-dev/open-data-and-maps/data/dotcoop/domains2018-04-24/generated-data/experimental-new-server/standard.csv", "w")
+# $stdout.sync = true
+
+# $options = OptParse.parse(ARGV)
+# SeOpenData::CSV.add_postcode_lat_long(
+#   inputContent,
+#   $stdout,
+#   $options.input_csv_postcode_header,
+#   $options.new_headers,
+#   $options.postcodeunit_cache
+# )

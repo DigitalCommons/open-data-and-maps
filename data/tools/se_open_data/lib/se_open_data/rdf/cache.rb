@@ -41,7 +41,7 @@ module SeOpenData
             @cache_hash = JSON.parse(f.read)
           }
         rescue => e
-          $stderr.puts "Failed to read #{cache_file}: #{e.message}"
+          $stderr.puts "No #{cache_file}: #{e.message}"
           $stderr.puts "Creating empty cache."
           @cache_hash = {}
         end
@@ -99,7 +99,7 @@ module SeOpenData
             #pp result
             @cache_hash[key] = result
           rescue => e
-            $stderr.puts "Failed to load resource #{key}: #{e.message}"
+            $stderr.puts "Couldn't load resource #{key}: #{e.message}"
             @cache_hash[key] = Failure_value
           end
         end

@@ -16,12 +16,13 @@ module SeOpenData
 	    f.puts <<ENDSPARQL
 PREFIX : <#{config.uri_prefix}>
 
-SELECT ?name ?uri ?within ?lat ?lng ?www ?regorg ?sameas
+SELECT ?name ?uri ?within ?lat ?lng ?www ?regorg ?sameas ?desc
 WHERE {
 	?uri rdf:type essglobal:SSEInitiative .
 	?uri gr:name ?name .
 	OPTIONAL { ?uri foaf:homepage ?www . }
 	OPTIONAL { ?uri owl:sameAs ?sameas . }
+	OPTIONAL { ?uri dc:description ?desc . }
 	?uri essglobal:hasAddress ?addr .
 	OPTIONAL { ?uri rov:hasRegisteredOrganization ?regorg . }
 	?addr osspatialrelations:within ?within .

@@ -19,7 +19,8 @@ module SeOpenData
 	  "<!DOCTYPE html>\n" + 
 	    xml(:html) {
 	    xml(:head) {
-	      xml(:title) { Title } +
+        xml(:title) { Title } +
+        xml(:meta, charset: "UTF-8") +
 	      config.css_files.map {|f|
 		xml(:link, rel: "stylesheet", href: f)
 	      }.join

@@ -1,5 +1,5 @@
 # open-data-and-maps
-[Joe Billings](https://github.com/joebillings) and [Colm Massey](https://github.com/colmmassey) are reponsible for this repository.
+[Colm Massey](https://github.com/ColmMassey) is reponsible for this repository.
 
 Linked Open Data and geographic maps for the Solidarity Economy produced by the [Solidarity Economy Association](https://www.solidarityeconomy.coop/).
 
@@ -8,11 +8,11 @@ Implementing this strategy is work in progress, documented here in this reposito
 
 ## Data
 
-The source is in the [data directory](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/tree/master/data).
+The currently deployed source is in the [data directory](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/tree/development/data).
 It contains raw data for some datasets, together with the tools for tunning it into Linked Data, and deploying it to a website from which its URIs can be dereferenced, and deploying it to a Virtuoso database, with a SPARQL endpoint.
 
 ## Maps
-The source for the map application is in the [map-app directory](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/tree/master/map-app).
+The source for the map application is in the [map-app directory](https://github.com/SolidarityEconomyAssociation/open-data-and-maps/tree/development/map-app).
 
 ## DCAP-SSE and ESS Global
 

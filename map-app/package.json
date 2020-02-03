@@ -1,0 +1,41 @@
+{
+  "name": "sea-map",
+  "version": "0.1.0",
+  "description": "A web application for mapping initiatives in the Solidarity Economy",
+  "main": "www/map-app/app.js",
+  "config": {},
+  "engines": {
+    "npm": ">=6.5.0"
+  },
+  "bin": {
+    "generate-version": "bin/generate-version",
+    "sea-site-build": "bin/sea-site-build"
+  },
+  "scripts": {
+    "lint": "eslint www/map-app/**/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/SolidarityEconomyAssociation/open-data-and-maps.git"
+  },
+  "keywords": [
+    "mapping",
+    "solidarity",
+    "economy",
+    "semantic",
+    "web"
+  ],
+  "author": "Solidarity Economy Association",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps/issues"
+  },
+  "homepage": "https://github.com/SolidarityEconomyAssociation/open-data-and-maps#readme",
+  "dependencies": {
+    "requirejs": "^2.3.6"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2"
+  }
+}

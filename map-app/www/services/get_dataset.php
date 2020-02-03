@@ -4,6 +4,8 @@
 // Website: http://johnwright.me/blog
 // This code is live @ 
 // http://johnwright.me/code-examples/sparql-query-in-code-rest-php-and-json-tutorial.php
+$base_url = __DIR__ . "/../configuration";
+
 function report_success($response) 
 {
 	$result = array();
@@ -27,14 +29,16 @@ function report_error_and_die($msg)
 	echo json_encode($result);
 	exit(1);
 }
-function getSparqlUrl($dataset)
+function getSparqlUrl($dataset, $q, $uid)
 {
 	// TODO - pass in SPARQL parameters as script arguments?
 
-	$query = file_get_contents(__DIR__ . '/' . $dataset.'/query.rq');
-	$endpoint = trim(file_get_contents(__DIR__ . '/' . $dataset.'/endpoint.txt'));
-	$default_graph_uri = trim(file_get_contents(__DIR__ . '/' . $dataset.'/default-graph-uri.txt'));
-
+	global $base_url;
+	$query = file_get_contents("$base_url/$dataset/$q");
+	$endpoint = trim(file_get_contents("$base_url/$dataset/endpoint.txt"));
+	$default_graph_uri = trim(file_get_contents("$base_url/$dataset/default-graph-uri.txt"));
+	
+	$query=str_replace("__UID__", addslashes($uid), $query);
 	// TODO - Consider using HTTP POST?
 	$searchUrl = $endpoint.'?'
 		.'default-graph-uri='.urlencode($default_graph_uri)
@@ -81,18 +85,37 @@ function request($url){
 
 	return $response;
 }
-//$debug_out = '/Users/matt/SEA/open-data-and-maps/map-app/www/services/debug.txt';
-//file_put_contents($debug_out, print_r($_GET, TRUE), FILE_APPEND);
-$dataset = $_GET["dataset"];
 
-$requestURL = getSparqlUrl($dataset);
+// TODO: Need to make more secure
+$dataset = $_GET["dataset"];
+$q = "query.rq";
+if (isset($_GET["uid"])) {
+	switch ($_GET['q']) {
+		case "main":
+			break;
+		case "activities":
+			$q = "activities.rq";
+			break;
+		case "orgStructure":
+			$q = "org-structure.rq";
+			break;
+		default: 
+			break;
+	}
+}
+// Add a uid to get the values for a specific initiative (currently used for activities and org structure)
+// TODO: Need to make more secure
+$uid = isset($_GET["uid"]) ? $_GET["uid"] : "";
+
+$requestURL = getSparqlUrl($dataset, $q, $uid);
 $response = request($requestURL);
 $res = json_decode($response, true);
 
 // The keys correspond to two things:
 //   1. The names of the variables used in the SPARQL query (see Initiative::create_sparql_files in generate-triples.rb)
 //   2. The names used in the JSON that is returned to the map-app
-$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg", "sameas");
+$keys = array("name", "uri", "within", "lat", "lng", "www", "regorg", "sameas", "desc", "street", "locality", "region", "postcode", "country", "primaryActivity", "activity", "orgStructure", "tel", "email");
+// $keys = array("name", "uri", "lat", "lng", "country");
 
 $result = array();
 foreach($res["results"]["bindings"] as $item) {
@@ -108,5 +131,6 @@ foreach($res["results"]["bindings"] as $item) {
 	$obj["dataset"] = $dataset;
 	array_push($result, $obj);
 }
+// echo json_encode($requestURL);
 report_success($result);
 ?>
