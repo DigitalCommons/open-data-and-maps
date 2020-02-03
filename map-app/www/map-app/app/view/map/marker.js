@@ -9,7 +9,7 @@ define([
   "use strict";
 
   // Keep a mapping between initiatives and their Markers:
-  let markerForInitiative = {};
+  const markerForInitiative = {};
   // CAUTION: this may be either a ClusterGroup, or the map itself
   let hiddenClusterGroup = null;
   let unselectedClusterGroup = null;
@@ -199,8 +199,7 @@ define([
           unselectedClusterGroup.getVisibleParent(initiative.marker) !==
           initiative.marker
         ) {
-          if(initiative.marker.__parent) //if it has a parent
-            initiative.marker.__parent.spiderfy();
+          initiative.marker.__parent.spiderfy();
         }
         initiative.marker.openPopup();
         unselectedClusterGroup.off("animationend");
@@ -245,28 +244,12 @@ define([
   function setSelected(initiative) {
     markerForInitiative[initiative.uniqueId].setSelected(initiative);
   }
-  function setUnselected(initiative) {       
-    if(markerForInitiative[initiative.uniqueId])                                                   
-      markerForInitiative[initiative.uniqueId].setUnselected(initiative);
+  function setUnselected(initiative) {
+    markerForInitiative[initiative.uniqueId].setUnselected(initiative);
   }
-
-  
   proto.destroy = function() {
     this.cluster.removeLayer(this.marker);
   };
-  function destroyAll(){                                                          
-    let that = this;
-    let initiatives = Object.keys(markerForInitiative);
-    initiatives.forEach(initiative => {
-      markerForInitiative[initiative].destroy();
-    });
-    
-    
-
-    markerForInitiative = {};
-
-    
-  }
   MarkerView.prototype = proto;
 
   function createMarker(map, initiative) {
@@ -309,8 +292,7 @@ define([
     showTooltip: showTooltip,
     hideTooltip: hideTooltip,
     getInitiativeContent: getInitiativeContent,
-    getClusterGroup: getClusterGroup,
-    destroyAll: destroyAll
+    getClusterGroup: getClusterGroup
   };
   return pub;
 });

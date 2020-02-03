@@ -87,10 +87,6 @@ define([
     //     markerView.setSelected(this.map.selectedInitiative);
     // });
   };
-  proto.removeAllMarkers = function() {
-    
-    markerView.destroyAll();
-  };
   proto.addMarker = function(initiative) {
     return markerView.createMarker(this.map, initiative);
   };

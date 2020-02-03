@@ -677,7 +677,3 @@ div.leaflet-popup-content {
     transform: translateX(0);
   }
 }
-
-.capitalized {
-    text-transform: capitalize;
-}

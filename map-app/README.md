@@ -1,45 +1,100 @@
-# map-app
-The web application in this directory is a geographical map and directory visualisation of Linked Databases of solidarity economy initiatives, e.g. [Solidarity Oxford](https://oxford.solidarityeconomy.coop/map.html). 
+# PACKAGE
 
-## Using the map-app
-The map can be explored using conventional mouse and touch methods to zoom and pan the map. Each icon on the map is an initiative. Touching/clicking on an initiative opens up a dialog displaying the available information found in the database about the initiative.
-The '>' tab opens a side panel displaying the directory. The directory presents the data as a menu, based on a preconfigured primary characteristic. At time of writing, Activities and Countries are supported. The option All is also provided. Selecting from this menu opens up another menu off all the initiatives with this characteristic. Selecting an initiative from the list pans the map to centre the initiative on the map and opens a dialog displaying the available information found in the database about the initiative. 
+map-app - A web application for mapping initiatives in the Solidarity Economy
 
-## Responsive
-The application is responsive and will behave differently and appropriately depending on the size of the screen available to the application.
+# USAGE
 
-## About
-The side panel has a clickable information icon which open an About dialog. The dialog displays link links to a simple html view of the linked data used to populate this instance of the map-app. For example the Oxford SE map uses data that can be seen [here](https://w3id.org/sea-lod/oxford/).
+This package is designed to supply the basic source and web assets for
+a Solidarity Economy Association map website.  This is tailored for a
+particular case by a configuration file, and an about.html page,
+supplied by the consumer site package.
 
-However the map-app actually gets its information directly from a Linked database using a SPARQL query. 
+The consumer package should supply a script target to build itself
+like this, which uses the `sea-site-build` script exported by this
+package.
 
-When the map-app runs:
-
-1. The map-app requests data from the web server. 
-1. On receiving this request, the web server issues a SPARQL query to the Virtuoso database (currently hosted by SEA).
-3. The web server returns the results of the SPARQL query to the map-app (as JSON). 
-
-## What's in the data?
-The data is still limited - 
-It is intended to achieve the following goals:
-
-* Basic use of the original [ESS Global DCAP-SSE](http://purl.org/essglobal/wiki).
-* The data contains links to external datasets. e.g. [Ordnance Survey postcode](http://data.ordnancesurvey.co.uk/id/postcodeunit/OX26TP).
-* Data is retrieved from external datasets via the SPARQL query (we get lat/long from Ordnance Survey via the co-op's postcode URI).
-The latest version of ESS Global DCAP-SSE is now hosted [here](https://github.com/essglobal-linked-open-data/map-sse).
-
-The map-app can currently diplay the following fields for each initiative.
-
-Unique Resource Identifier, Name, Description, Organisational Structure, Primary Activity, Street Address, Locality, Region, 	
-Postcode, Country Name, Website, Phone, Email, Companies House Number, Geo Container URI, Latitude & Longitude.
-
-## The Linked Open Data
-The URI for the index into a dataset looks like https://w3id.org/sea-lod/oxford/.  
-URIs for individual co-ops look like this: https://w3id.org/sea-lod/oxford/65
-at one of those URIs, you'll get back HTML;
-
-If you ask for RDF/XML, then that is what you'll get - try this:
+The "dev" package is a suggestion for allowing local hosting of the
+site for development, using the command-line PHP executable's facility
+to launch a web server. (On Debian and related distros, you'll need
+the `php-cli` and `php-curl` packages.)
 
 ```
-curl  -H "Accept: application/rdf+xml" -L https://w3id.org/sea-lod/oxford/65
+  "scripts": {
+    "build": "generate-version $npm_package_name >config/version.json && sea-site-build config node_modules/sea-map node_modules/sea-dataserver build",
+    "dev": "php -t build/out -S localhost:8080"
+  },
 ```
+
+Given these, basic usage of a consuming NPM package therefore would
+look like this:
+
+    npm install         # Download the dependencies
+	npm run build       # Build and minify the source into builds/out
+    npm run def         # Launch a development web server on http://localhost:8080
+
+# CONSUMING PACKAGE REQUIREMENTS
+
+These need to have a configuration directory containing:
+
+ - `about.html` - containing mark-up which will be displayed on the about tab in the sidebar
+ - `config.json` - configuration parameters, see beloow
+ - *<dataset>*/ - a directory for each dataset named in the config, containing parameters for the SPARQL query to send to Virtuoso (these will be url-encoded):
+   - `query.rq` - the `query` parameter to pass
+   - `default-graph-uri.txt` - the `default-graph-uri` parameter to pass
+   - `endpoint.txt` - the base URL to the Virtuoso server
+
+The NPM `sea-map` package needs to be a dependency, which exports the
+`sea-site-build` script.
+
+The package needs to invoke it like this(typically as an npm build
+script target):
+
+     sea-site-build $config_dir node_modules/sea-map node_modules/sea-dataserver $build_dir",
+
+Where:
+
+  - `$config_dir` is the path to the configuration directory mentioned above
+  - `node_modules/sea-map` is the path to the `sea-map` package directory
+  - `node_modules/sea-dataserver` is the path to the `sea-dataserver` package directory
+  - `$build_dir` is the path in which to build the site.
+  
+`$build_dir` will be populated with two directories:
+
+ - `in` - which contains a RequireJS `build.js` script and the assets
+   it needs (linked from eleewhere)
+ - `out` - the generated site content
+
+`build/out` can then be served by a (PHP enabled) web server directly,
+or packaged for deployment.
+
+ ## CONFIG.JSON
+ 
+ This is not currently properly documented, but here is an example:
+
+```
+ {
+  "namedDatasets_comment": "These names correspond to directories in www/services which contain: default-graph-uri.txt, endpoint.txt, query.rq",
+  "namedDatasets": ["oxford"],
+  "htmlTitle_comment": "This will override the default value for the htmp <title> tag",
+  "htmlTitle": "Solidarity Oxford",
+  "defaultNongeoLatLng_comment": "The default latitude and longitude values for initiatives with no address",
+  "defaultNongeoLatLng": { "lat": "51.7520", "lng": "-1.2577" },
+  "filterableFields_comment": "A list of the fields that can populate the directory",
+  "filterableFields": [{ "field": "primaryActivity", "label": "Activities" }],
+  "doesDirectoryHaveColours_comment": "Does the directory feature coloured entries",
+  "doesDirectoryHaveColours": true,
+  "disableClusteringAtZoom_comment": "Zoom level to stop clustering at (false for off)",
+  "disableClusteringAtZoom": false
+}
+```
+
+# SCRIPT TARGETS
+
+This package does little in its own right. The following are the
+script targets it supports.
+
+    npm lint
+	
+Runs a static analysis of the source, highlighting possible improvements
+
+

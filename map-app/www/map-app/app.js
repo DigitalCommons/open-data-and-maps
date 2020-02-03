@@ -17,8 +17,8 @@ requirejs.config({
     presenter: "../app/presenter",
     data: "../app/data",
 
-    configuration: "../configuration",
-
+    configuration: "../../configuration",
+    
     //jQuery: "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min",
     //topojson: "http://d3js.org/topojson.v1.min",
     //topojson: "https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min",
@@ -56,7 +56,7 @@ requirejs.config({
     // For expressing dependencies on json files:
     json: "require/json",
     // json uses the text module, se we need it too:
-    text: "require/text"
+    text: "require/text",
   },
   shim: {
     // leaflet must be loaded before leafletAwesomeMarkers.

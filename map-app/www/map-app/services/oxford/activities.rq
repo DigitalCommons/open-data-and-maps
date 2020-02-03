@@ -1,8 +1,0 @@
-PREFIX essglobal: <https://w3id.solidarityeconomy.coop/essglobal/V2a/vocab/>
-
-SELECT ?uri ?activity
-WHERE {
-	?uri rdf:type essglobal:SSEInitiative .
-	OPTIONAL { ?uri essglobal:economicSector ?activity . }
-    FILTER (regex(str(?uri), "^__UID__$"))
-}

@@ -1,13 +1,16 @@
 {
+    "ignorePatterns": [
+        "node_modules/"
+    ],
     "env": {
         "browser": true,
         "node": false
     },
-	"globals" : {
-		"requirejs": true,
-		"define": true
-	},
-	"rules": {
-		"no-console": 0
-	}
+    "globals" : {
+        "requirejs": true,
+        "define": true
+    },
+    "rules": {
+        "no-console": 0
+    }
 }
