@@ -1,4 +1,6 @@
-# open-data-and-maps
+# open-data-and-maps - THIS REPOSITORY IS BEING DEPRICATED
+LOOK AT https://github.com/SolidarityEconomyAssociation/sea-map/wiki for latest code and documentation.
+
 [Colm Massey](https://github.com/ColmMassey) is reponsible for this repository.
 
 Linked Open Data and geographic maps for the Solidarity Economy produced by the [Solidarity Economy Association](https://www.solidarityeconomy.coop/).
